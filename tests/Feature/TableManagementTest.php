@@ -1,0 +1,264 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\MenuItem;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\RestaurantTable;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class TableManagementTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_authenticated_user_can_view_tables_screen(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get(route('tables.index'));
+
+        $response->assertOk();
+        $response->assertSee('Tables Overview');
+    }
+
+    public function test_user_can_create_and_manage_table_order_items(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('tables.store'), [
+            'number' => 15,
+        ]);
+
+        $table = RestaurantTable::where('number', 15)->firstOrFail();
+        $response->assertRedirect(route('tables.order', $table));
+
+        $this->actingAs($user)->post(route('tables.items.store', $table), [
+            'name' => 'Burger Menu',
+            'quantity' => 2,
+            'unit_price' => 12.50,
+        ])->assertRedirect(route('tables.order', $table));
+
+        $order = Order::where('restaurant_table_id', $table->id)->firstOrFail();
+        $this->assertEquals(25.00, (float) $order->total);
+
+        $item = OrderItem::where('order_id', $order->id)->firstOrFail();
+
+        $this->actingAs($user)->put(route('tables.items.update', [$table, $item]), [
+            'name' => 'Burger Menu XL',
+            'quantity' => 1,
+            'unit_price' => 15.00,
+        ])->assertRedirect(route('tables.order', $table));
+
+        $order->refresh();
+        $this->assertEquals(15.00, (float) $order->total);
+
+        $this->actingAs($user)->delete(route('tables.items.destroy', [$table, $item]))->assertRedirect(route('tables.order', $table));
+
+        $order->refresh();
+        $this->assertEquals(0.00, (float) $order->total);
+
+        $this->actingAs($user)->post(route('tables.close-order', $table))->assertRedirect(route('tables.index'));
+
+        $this->assertDatabaseMissing('orders', ['id' => $order->id]);
+    }
+
+    public function test_store_table_uses_existing_table_number_instead_of_failing(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 1]);
+
+        $response = $this->actingAs($user)->post(route('tables.store'), [
+            'number' => 1,
+        ]);
+
+        $response->assertRedirect(route('tables.index'));
+        $response->assertSessionHas('focus_table_id', $table->id);
+        $response->assertSessionHas('info');
+        $this->assertEquals(1, RestaurantTable::where('number', 1)->count());
+    }
+
+    public function test_user_can_quick_add_menu_item_without_typing(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 3]);
+        $menuItem = MenuItem::create([
+            'name' => 'Tap Burger',
+            'category' => 'Burgers',
+            'price' => 13.50,
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $this->actingAs($user)->post(route('tables.menu-items.quick-add', $table), [
+            'menu_item_id' => $menuItem->id,
+            'quantity' => 1,
+        ])->assertRedirect(route('tables.order', $table));
+
+        $order = Order::where('restaurant_table_id', $table->id)->firstOrFail();
+        $item = OrderItem::where('order_id', $order->id)->firstOrFail();
+
+        $this->assertEquals('Tap Burger', $item->name);
+        $this->assertEquals(13.50, (float) $item->unit_price);
+        $this->assertEquals(13.50, (float) $order->total);
+    }
+
+    public function test_quick_add_increments_quantity_instead_of_creating_duplicate_rows(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 7]);
+        $menuItem = MenuItem::create([
+            'name' => 'Fries Tap',
+            'category' => 'Sides',
+            'price' => 4.00,
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $payload = [
+            'menu_item_id' => $menuItem->id,
+            'quantity' => 1,
+        ];
+
+        $this->actingAs($user)->post(route('tables.menu-items.quick-add', $table), $payload)->assertRedirect(route('tables.order', $table));
+        $this->actingAs($user)->post(route('tables.menu-items.quick-add', $table), $payload)->assertRedirect(route('tables.order', $table));
+
+        $order = Order::where('restaurant_table_id', $table->id)->firstOrFail();
+        $items = OrderItem::where('order_id', $order->id)->get();
+
+        $this->assertCount(1, $items);
+        $this->assertEquals(2, (int) $items->first()->quantity);
+        $this->assertEquals(8.00, (float) $order->total);
+    }
+
+    public function test_user_can_open_dedicated_order_page(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 9]);
+
+        $response = $this->actingAs($user)->get(route('tables.order', $table));
+
+        $response->assertOk();
+        $response->assertSee('Order Page');
+        $response->assertSee('Table #9');
+    }
+
+    public function test_close_order_deletes_order_and_items_automatically(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 10]);
+
+        $this->actingAs($user)->post(route('tables.items.store', $table), [
+            'name' => 'Auto Clear Burger',
+            'quantity' => 2,
+            'unit_price' => 9.50,
+        ]);
+
+        $order = Order::where('restaurant_table_id', $table->id)->firstOrFail();
+        $this->assertDatabaseHas('order_items', ['order_id' => $order->id]);
+
+        $this->actingAs($user)->post(route('tables.close-order', $table))->assertRedirect(route('tables.index'));
+
+        $this->assertDatabaseMissing('orders', ['id' => $order->id]);
+        $this->assertDatabaseMissing('order_items', ['order_id' => $order->id]);
+    }
+
+    public function test_waiter_sync_endpoint_processes_batch_and_returns_fresh_order(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 11]);
+        $menuItem = MenuItem::create([
+            'name' => 'Sync Burger',
+            'category' => 'Smash Burgers',
+            'price' => 11.50,
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->postJson(route('tables.order.sync', $table), [
+            'device_id' => 'device-a',
+            'actions' => [
+                [
+                    'id' => 'act-1',
+                    'type' => 'add_menu_item',
+                    'payload' => [
+                        'menu_item_id' => $menuItem->id,
+                        'quantity' => 1,
+                        'local_ref' => 'loc-item-1',
+                    ],
+                ],
+                [
+                    'id' => 'act-2',
+                    'type' => 'set_item_note',
+                    'payload' => [
+                        'item_ref' => 'loc-item-1',
+                        'note' => 'No onions',
+                    ],
+                ],
+                [
+                    'id' => 'act-3',
+                    'type' => 'set_item_quantity',
+                    'payload' => [
+                        'item_ref' => 'loc-item-1',
+                        'quantity' => 2,
+                    ],
+                ],
+            ],
+        ]);
+
+        $response->assertOk()
+            ->assertJsonPath('order.items.0.name', 'Sync Burger')
+            ->assertJsonPath('order.items.0.quantity', 2)
+            ->assertJsonPath('order.items.0.note', 'No onions')
+            ->assertJsonCount(3, 'processed_action_ids');
+
+        $order = Order::where('restaurant_table_id', $table->id)->firstOrFail();
+        $this->assertEquals(23.00, (float) $order->total);
+        $this->assertDatabaseHas('order_items', [
+            'order_id' => $order->id,
+            'name' => 'Sync Burger',
+            'quantity' => 2,
+            'note' => 'No onions',
+        ]);
+    }
+
+    public function test_waiter_sync_endpoint_is_idempotent_for_retried_actions(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 12]);
+        $menuItem = MenuItem::create([
+            'name' => 'Retry Coke',
+            'category' => 'Drinks',
+            'price' => 3.25,
+            'is_active' => true,
+            'sort_order' => 1,
+        ]);
+
+        $payload = [
+            'device_id' => 'device-retry',
+            'actions' => [
+                [
+                    'id' => 'retry-act-1',
+                    'type' => 'add_menu_item',
+                    'payload' => [
+                        'menu_item_id' => $menuItem->id,
+                        'quantity' => 1,
+                        'local_ref' => 'loc-retry-1',
+                    ],
+                ],
+            ],
+        ];
+
+        $this->actingAs($user)->postJson(route('tables.order.sync', $table), $payload)->assertOk();
+        $this->actingAs($user)->postJson(route('tables.order.sync', $table), $payload)->assertOk();
+
+        $order = Order::where('restaurant_table_id', $table->id)->firstOrFail();
+        $items = OrderItem::where('order_id', $order->id)->get();
+
+        $this->assertCount(1, $items);
+        $this->assertEquals(1, (int) $items->first()->quantity);
+        $this->assertEquals(3.25, (float) $order->total);
+    }
+}
