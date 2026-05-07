@@ -7,7 +7,7 @@
     <title>{{ $restaurantName }} | Takeaway</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
@@ -15,7 +15,7 @@
             theme: {
                 extend: {
                     colors: {
-                        koya: { DEFAULT: '#FF5C00' }
+                        koya: { DEFAULT: '#c89b3c' }
                     },
                     fontFamily: {
                         sans: ['Outfit', 'sans-serif'],
@@ -26,26 +26,30 @@
     </script>
     <style>
         :root {
-            --koya: #FF5C00;
-            --bg: #0A0A0A;
+            --koya: #c89b3c;
+            --bg: #17110c;
         }
         body {
-            background: var(--bg);
-            color: #fff;
+            background:
+                radial-gradient(circle at 10% 0%, rgba(200,155,60,0.18), transparent 28rem),
+                radial-gradient(circle at 100% 10%, rgba(124,47,40,0.16), transparent 26rem),
+                linear-gradient(145deg, #120d09, #211915 52%, #100c09);
+            color: #fff7eb;
             margin: 0;
             font-family: 'Outfit', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
         .glass {
-            background: rgba(20, 20, 20, 0.75);
+            background: linear-gradient(180deg, rgba(48, 37, 29, 0.9), rgba(29, 22, 18, 0.86));
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(244, 222, 183, 0.14);
+            box-shadow: 0 22px 70px -34px rgba(0, 0, 0, 0.88);
         }
         .btn-koya {
-            background-color: var(--koya);
-            color: #fff;
-            border-radius: 16px;
+            background: linear-gradient(135deg, #d9b45f 0%, #b98627 100%);
+            color: #17110c;
+            border-radius: 12px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.1em;
@@ -54,17 +58,24 @@
         }
         input {
             width: 100%;
-            color: white !important;
-            background: rgba(255, 255, 255, 0.03) !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #fff7eb !important;
+            background: rgba(255, 247, 235, 0.075) !important;
+            border: 1px solid rgba(244, 222, 183, 0.16) !important;
             border-radius: 12px !important;
             padding: 0.8rem 0.9rem !important;
             outline: none !important;
         }
         input:focus {
-            border-color: var(--koya) !important;
-            background: rgba(255, 255, 255, 0.05) !important;
+            border-color: rgba(217, 180, 95, 0.76) !important;
+            background: rgba(255, 247, 235, 0.1) !important;
+            box-shadow: 0 0 0 4px rgba(217, 180, 95, 0.14) !important;
         }
+        .font-black { letter-spacing: 0 !important; }
+        h1, h2 { font-family: 'Cormorant Garamond', serif; }
+        .text-koya { color: #d9b45f !important; }
+        .bg-koya { background-color: #c89b3c !important; }
+        .rounded-3xl { border-radius: 18px !important; }
+        .rounded-2xl { border-radius: 14px !important; }
         [x-cloak] { display: none !important; }
     </style>
 </head>
@@ -84,7 +95,7 @@
             <div class="flex items-center justify-between gap-3">
                 <div class="min-w-0 flex items-center gap-3">
                     <template x-if="brandLogoUrl">
-                        <img :src="brandLogoUrl" alt="Restaurant logo" class="w-12 h-12 rounded-xl object-cover border border-white/15">
+                        <img :src="brandLogoUrl" alt="Restaurant logo" class="h-12 w-28 object-contain shrink-0">
                     </template>
                     <div class="min-w-0">
                         <h1 class="text-xl font-black uppercase tracking-wide truncate" x-text="takeawayTitle()"></h1>

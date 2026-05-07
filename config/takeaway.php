@@ -3,7 +3,7 @@
 return [
     'brand' => [
         'restaurant_name' => env('TAKEAWAY_RESTAURANT_NAME', env('APP_NAME', 'Restaurant')),
-        'logo_url' => env('TAKEAWAY_LOGO_URL', 'https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg'),
+        'logo_url' => env('TAKEAWAY_LOGO_URL', 'https://grandrestaurantv7-0.b-cdn.net/bistro/wp-content/uploads/sites/3/2024/08/logo-white.png'),
     ],
 
     'notification' => [

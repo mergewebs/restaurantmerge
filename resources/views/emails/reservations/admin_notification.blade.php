@@ -7,4 +7,4 @@ Nueva reserva.<br><br>
 📧 Correo: {{ $reservation->customer_email ?? 'N/A' }}<br>
 Mensaje: {{ $reservation->notes ?? 'Sin mensaje' }}<br><br>
 
-<a href="https://koyabcn.es/">Koya Smash Burger & Bol</a>
+<a href="https://samplerestaurant.test/">Sample Restaurant</a>

@@ -2,10 +2,10 @@
 
 return [
     'confirmation' => [
-        'subject' => '🔥 Smash booking ready for :date at :time!',
+        'subject' => 'Reservation ready for :date at :time!',
         'title' => 'Your reservation is confirmed!',
         'greeting' => 'Hello :name,',
-        'intro' => 'Thank you for booking with <strong>Koya Smash Burger & Bol</strong>. Here are your reservation details:',
+        'intro' => 'Thank you for booking with <strong>Sample Restaurant</strong>. Here are your reservation details:',
         'date_time' => 'Date and time',
         'location' => 'Location',
         'location_address' => 'Carrer Empecinado, 10, 08906 L\'Hospitalet de Llobregat, Barcelona',
@@ -14,12 +14,12 @@ return [
         'email_label' => 'Email',
         'phone_label' => 'Phone',
         'whatsapp_label' => 'WhatsApp',
-        'contact_email' => 'koyabcn@gmail.com',
+        'contact_email' => 'hello@samplerestaurant.test',
         'contact_phone' => '931 66 86 11',
         'contact_whatsapp' => '+34 671 620 787',
-        'closing' => 'We look forward to seeing you soon and enjoying the best burgers and bowls in Barcelona!',
-        'footer_name' => 'Koya Smash Burger & Bol',
-        'footer_url' => 'koyabcn.es',
+        'closing' => 'We look forward to seeing you soon at Sample Restaurant!',
+        'footer_name' => 'Sample Restaurant',
+        'footer_url' => 'samplerestaurant.test',
     ],
     'admin' => [
         'subject' => 'New reservation (:datetime)',
@@ -33,5 +33,5 @@ return [
         'notes' => 'Notes',
         'none' => 'None',
         'view_dashboard' => 'View details in dashboard: :url',
-    ]
+    ],
 ];

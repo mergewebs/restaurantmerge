@@ -5,13 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Koya Smash Burger & Bol</title>
-        <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+        <title>Sample Restaurant</title>
+        <link rel="icon" type="image/png" href="https://grandrestaurantv7-0.b-cdn.net/bistro/wp-content/uploads/sites/3/2024/08/logo-white.png">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
         <!-- Scripts & Styles -->
         <script src="https://cdn.tailwindcss.com"></script>
@@ -30,13 +30,14 @@
                     extend: {
                         colors: {
                             koya: {
-                                DEFAULT: '#FF5C00',
-                                dark: '#0A0A0A',
-                                glass: 'rgba(20, 20, 20, 0.75)',
+                                DEFAULT: '#c89b3c',
+                                dark: '#17110c',
+                                glass: 'rgba(35, 27, 21, 0.82)',
                             }
                         },
                         fontFamily: {
                             sans: ['Outfit', 'sans-serif'],
+                            display: ['Cormorant Garamond', 'serif'],
                         }
                     }
                 }
@@ -44,9 +45,9 @@
         </script>
         <style>
             :root {
-                --koya: #FF5C00;
-                --bg: #0A0A0A;
-                --white: #FFFFFF;
+                --koya: #c89b3c;
+                --bg: #17110c;
+                --white: #fff7eb;
                 --white-muted: rgba(255, 255, 255, 0.6);
             }
 
@@ -69,14 +70,14 @@
 
             .btn-koya { 
                 background-color: var(--koya); 
-                color: white; 
-                border-radius: 16px; 
+                color: #17110c; 
+                border-radius: 12px; 
                 font-weight: 800; 
                 text-transform: uppercase;
                 letter-spacing: 0.1em;
                 padding: 1rem 1.5rem;
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 10px 30px -10px rgba(255, 92, 0, 0.3);
+                box-shadow: 0 10px 30px -10px rgba(200, 155, 60, 0.36);
                 border: none;
                 cursor: pointer;
                 display: inline-flex;
@@ -87,7 +88,7 @@
 
             .bottom-nav-active { 
                 color: var(--koya); 
-                filter: drop-shadow(0 0 10px rgba(255, 92, 0, 0.3));
+                filter: drop-shadow(0 0 10px rgba(200, 155, 60, 0.3));
             }
 
             .bottom-menu-panel {
@@ -176,14 +177,15 @@
             }
             [x-cloak] { display: none !important; }
         </style>
+        @include('layouts.restaurant-theme')
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen">
             <!-- Main Content -->
-            <main class="px-5 pt-24 pb-6">
+            <main class="px-5 pt-24 pb-8">
                 @if (isset($header))
                     <div class="mb-8 px-2">
-                        <h2 class="text-3xl font-extrabold text-white tracking-tight uppercase">
+                        <h2 class="font-display text-4xl font-bold text-[#fff7eb] tracking-normal">
                             {{ $header }}
                         </h2>
                     </div>
@@ -231,7 +233,7 @@
 
             <!-- Global Navigation (Top) -->
             <nav x-data="{ open: false }" @keydown.escape.window="open = false" class="fixed top-0 left-0 right-0 z-50">
-                <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-between">
+                <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-between shadow-2xl">
                     <a href="{{ route('dashboard') }}" class="shrink-0 mr-3">
                         <x-application-logo class="h-10 w-auto" />
                     </a>

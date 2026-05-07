@@ -114,7 +114,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="Koya Logo">
+            <img src="https://grandrestaurantv7-0.b-cdn.net/bistro/wp-content/uploads/sites/3/2024/08/logo-white.png" alt="Sample Restaurant Logo">
         </div>
 
         <h1>{{ __('emails.confirmation.title', [], $locale) }}</h1>

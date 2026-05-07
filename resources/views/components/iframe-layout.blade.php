@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Reservation - Koya</title>
+    <title>Reservation - Sample Restaurant</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -26,10 +26,11 @@
             theme: {
                 extend: {
                     colors: {
-                        koya: '#ffc547',
+                        koya: '#c89b3c',
                     },
                     fontFamily: {
-                        sans: ['Biski_4', 'sans-serif'],
+                        sans: ['Outfit', 'sans-serif'],
+                        display: ['Cormorant Garamond', 'serif'],
                         biski: ['Biski_4', 'sans-serif'],
                     },
                     animation: {
@@ -56,32 +57,32 @@
 
         body {
             background-color: transparent;
-            font-family: 'Biski_4', sans-serif;
+            font-family: 'Outfit', sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            color: #1a1a1a;
+            color: #fff7eb;
         }
 
         /* WordPress Style Inputs */
         input, select, textarea {
             width: 100% !important;
             padding: 0.875rem 1rem !important;
-            border: 1.5px solid #e5e7eb !important;
+            border: 1px solid rgba(244, 222, 183, 0.22) !important;
             border-radius: 12px !important;
-            font-size: 1rem !important;
-            color: #111827 !important;
-            background-color: #ffffff !important;
-            font-family: 'Biski_4', sans-serif !important;
+            font-size: 0.96rem !important;
+            color: #fff7eb !important;
+            background-color: rgba(35, 27, 21, 0.72) !important;
+            font-family: 'Outfit', sans-serif !important;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
         }
 
         input:focus, select:focus, textarea:focus {
-            border-color: #ffc547 !important;
-            background-color: #fff !important;
+            border-color: #d9b45f !important;
+            background-color: rgba(35, 27, 21, 0.88) !important;
             outline: none !important;
-            box-shadow: 0 0 0 4px rgba(255, 197, 71, 0.1) !important;
+            box-shadow: 0 0 0 4px rgba(217, 180, 95, 0.14) !important;
             transform: translateY(-1px);
         }
 
@@ -89,19 +90,19 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 700;
-            color: #ffffff;
+            color: rgba(255, 247, 235, 0.72);
             font-size: 0.8125rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            font-family: 'Biski_4', sans-serif !important;
+            font-family: 'Outfit', sans-serif !important;
         }
 
         .btn-reservation {
-            background-color: #ffc547 !important;
-            color: #088972 !important;
-            font-family: 'Biski_4', sans-serif !important;
+            background: linear-gradient(135deg, #d9b45f 0%, #b98627 100%) !important;
+            color: #17110c !important;
+            font-family: 'Outfit', sans-serif !important;
             padding: 1.125rem 2rem;
-            border-radius: 14px;
+            border-radius: 12px;
             font-weight: 800;
             width: 100%;
             border: none;
@@ -123,8 +124,8 @@
         }
 
         .btn-reservation:disabled {
-            background-color: #ffc547 !important;
-            color: #088972 !important;
+            background-color: #c89b3c !important;
+            color: #17110c !important;
             box-shadow: none;
             cursor: not-allowed;
             opacity: 0.5;
@@ -144,16 +145,16 @@
         }
 
         .time-slot:hover {
-            border-color: #ffc547;
-            color: #ffc547;
+            border-color: #d9b45f;
+            color: #d9b45f;
             background: #fff;
             transform: scale(1.02);
         }
 
         .time-slot.selected {
-            background-color: #ffc547;
+            background-color: #c89b3c;
             color: white;
-            border-color: #ffc547;
+            border-color: #c89b3c;
             box-shadow: 0 4px 6px -1px rgba(255, 197, 71, 0.2);
         }
 
@@ -170,17 +171,17 @@
         .flatpickr-day.selected.hover, .flatpickr-day.startRange.hover, .flatpickr-day.endRange.hover, 
         .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, 
         .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover {
-            background: #ffc547 !important;
-            border-color: #ffc547 !important;
-            color: #088972 !important;
+            background: #c89b3c !important;
+            border-color: #c89b3c !important;
+            color: #17110c !important;
         }
         .flatpickr-current-month, .flatpickr-monthDropdown-months, .cur-month, .cur-year, .flatpickr-weekday {
-            color: #088972 !important;
-            fill: #088972 !important;
+            color: #17110c !important;
+            fill: #17110c !important;
             font-weight: 700 !important;
         }
         .flatpickr-months {
-            background: #ffc547 !important;
+            background: #c89b3c !important;
             border-radius: 12px 12px 0 0 !important;
             padding: 10px 0 !important;
         }
@@ -226,7 +227,7 @@
             padding: 0 10px !important;
         }
         .flatpickr-months .flatpickr-prev-month svg, .flatpickr-months .flatpickr-next-month svg {
-            fill: #088972 !important;
+            fill: #17110c !important;
         }
     </style>
 </head>
