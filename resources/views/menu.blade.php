@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>KOYA | Our Menu</title>
+    <title>KOYA | Our Menu</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -250,7 +250,7 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="min-h-screen pb-28 antialiased overflow-x-hidden selection:bg-koya selection:text-koya-dark relative">
+<body class="min-h-screen pb-44 antialiased overflow-x-hidden selection:bg-koya selection:text-koya-dark relative">
 
     <!-- Floating Graphics Background -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -301,10 +301,10 @@
             
             <div class="flex items-center gap-2">
                 <a href="/" class="btn-koya-secondary text-[11px] sm:text-xs uppercase py-2 px-3 sm:py-2.5 sm:px-4 rounded-full" style="font-size: 0.75rem; border-width: 3px;">
-                    🏠 <span class="hidden sm:inline">Home</span>
+                    ðŸ  <span class="hidden sm:inline">Home</span>
                 </a>
                 <a href="{{ route('order.public') }}" class="btn-koya-primary text-[11px] sm:text-xs uppercase py-2 px-3 sm:py-2.5 sm:px-4 rounded-full" style="font-size: 0.75rem; border-width: 3px; background-color: var(--color-green); color: white;">
-                    ⚡ <span class="hidden sm:inline">Order Online</span>
+                    âš¡ <span class="hidden sm:inline">Order Online</span>
                 </a>
             </div>
         </div>
@@ -354,7 +354,7 @@
         </div>
 
         <!-- Products Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             <template x-for="item in filteredItems()" :key="item.id">
                 <div
                     class="koya-card rounded-[24px] p-5 flex flex-col justify-between group relative"
@@ -402,9 +402,10 @@
                         </div>
                         
                         <!-- Description -->
-                        <p 
-                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-4" 
+                        <p
+                            x-show="hasDescription(item)"
                             x-text="getDescription(item)"
+                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-4"
                         ></p>
                     </div>
                 </div>
@@ -412,7 +413,7 @@
         </div>
 
         <!-- Allergy Disclaimer -->
-        <div class="text-center mt-6">
+        <div class="text-center mt-10 mb-6">
             <p class="text-white/70 italic text-xs">
                 En caso de alergias, consulte con nuestro personal.
             </p>
@@ -494,40 +495,12 @@
                     return name ? `/images/${name}` : null;
                 },
 
+                hasDescription(item) {
+                    return typeof item.description === 'string' && item.description.trim() !== '';
+                },
+
                 getDescription(item) {
-                    if (item.description && item.description.trim() !== '') {
-                        return item.description;
-                    }
-                    if (item.package_details && item.package_details.trim() !== '') {
-                        return item.package_details;
-                    }
-                    const descriptions = {
-                        'Classic Smash Burger': 'Two smashed beef patties, cheddar cheese, pickles, and our signature KOYA sauce in a toasted brioche bun.',
-                        'Truffle Double Smash': 'Double smashed beef patty, truffle mayo, caramelized onions, and melted Swiss cheese.',
-                        'Tartufata': 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.',
-                        'Smash Burger': 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.',
-                        'Red Onion': 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.',
-                        'SOBOKU': 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.',
-                        'Loaded Nachos': 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeños.',
-                        'Crispy Chicken Bites': 'Tender buttermilk chicken bites served with honey mustard sauce.',
-                        'Spicy Korean Rice Bowl': 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame.',
-                        'Mediterranean Rice Bowl': 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.',
-                        'KOYA SALAD': 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.',
-                        'KATSUDON': 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.',
-                        'House Fries': 'Golden crispy fries seasoned with our house spice blend.',
-                        'Sweet Potato Fries': 'Sweet potato fries served with chipotle garlic mayo.',
-                        'Cheesecake Jar': 'Creamy NY-style cheesecake with red berry coulis in a jar.',
-                        'Chocolate Brownie': 'Warm chocolate brownie served with a scoop of vanilla ice cream.',
-                        'Homemade Lemonade': 'Freshly squeezed lemons with a touch of mint and honey.',
-                        'Local Lager': 'Cold, refreshing local lager.',
-                        'House IPA': 'Cold, craft India Pale Ale with citrus notes.',
-                        'Mojito': 'Classic refreshing cocktail with rum, lime, and fresh mint.',
-                        'Still Water': 'Refreshing mineral water.',
-                        'Espresso': 'Freshly brewed aromatic espresso.',
-                        'Lunch Combo': 'Burger or rice bowl, side, and drink.',
-                        'Family Takeaway Pack': 'Four burgers, two large fries, and four drinks.'
-                    };
-                    return descriptions[item.name] || 'Delicious KOYA recipe prepared with fresh ingredients.';
+                    return this.hasDescription(item) ? item.description.trim() : '';
                 },
 
                 getBadge(itemName) {
@@ -550,5 +523,3 @@
     </script>
 </body>
 </html>
-
-

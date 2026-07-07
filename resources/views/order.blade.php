@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ __('public.site_title_order', ['restaurant' => $restaurantName]) }}</title>
+    <title>{{ __('public.site_title_order', ['restaurant' => $restaurantName]) }}</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -305,7 +305,7 @@
             <div class="flex items-center gap-2">
                 <x-language-switcher theme="dark" />
                 <a href="/" class="btn-koya-secondary text-xs uppercase py-2 px-4 rounded-full" style="font-size: 0.8rem; border-width: 3px;">
-                    🏠 Home
+                    ðŸ  Home
                 </a>
             </div>
         </div>
@@ -444,9 +444,10 @@
                         </div>
                         
                         <!-- Description -->
-                        <p 
-                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-6" 
+                        <p
+                            x-show="hasDescription(item)"
                             x-text="getDescription(item)"
+                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-6"
                         ></p>
                     </div>
 
@@ -936,40 +937,12 @@
                     return name ? `/images/${name}` : null;
                 },
 
+                hasDescription(item) {
+                    return typeof item.description === 'string' && item.description.trim() !== '';
+                },
+
                 getDescription(item) {
-                    if (item.description && item.description.trim() !== '') {
-                        return item.description;
-                    }
-                    if (item.package_details && item.package_details.trim() !== '') {
-                        return item.package_details;
-                    }
-                    const descriptions = {
-                        'Classic Smash Burger': 'Two smashed beef patties, cheddar cheese, pickles, and our signature KOYA sauce in a toasted brioche bun.',
-                        'Truffle Double Smash': 'Double smashed beef patty, truffle mayo, caramelized onions, and melted Swiss cheese.',
-                        'Tartufata': 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.',
-                        'Smash Burger': 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.',
-                        'Red Onion': 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.',
-                        'SOBOKU': 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.',
-                        'Loaded Nachos': 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeños.',
-                        'Crispy Chicken Bites': 'Tender buttermilk chicken bites served with honey mustard sauce.',
-                        'Spicy Korean Rice Bowl': 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame.',
-                        'Mediterranean Rice Bowl': 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.',
-                        'KOYA SALAD': 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.',
-                        'KATSUDON': 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.',
-                        'House Fries': 'Golden crispy fries seasoned with our house spice blend.',
-                        'Sweet Potato Fries': 'Sweet potato fries served with chipotle garlic mayo.',
-                        'Cheesecake Jar': 'Creamy NY-style cheesecake with red berry coulis in a jar.',
-                        'Chocolate Brownie': 'Warm chocolate brownie served with a scoop of vanilla ice cream.',
-                        'Homemade Lemonade': 'Freshly squeezed lemons with a touch of mint and honey.',
-                        'Local Lager': 'Cold, refreshing local lager.',
-                        'House IPA': 'Cold, craft India Pale Ale with citrus notes.',
-                        'Mojito': 'Classic refreshing cocktail with rum, lime, and fresh mint.',
-                        'Still Water': 'Refreshing mineral water.',
-                        'Espresso': 'Freshly brewed aromatic espresso.',
-                        'Lunch Combo': 'Burger or rice bowl, side, and drink.',
-                        'Family Takeaway Pack': 'Four burgers, two large fries, and four drinks.'
-                    };
-                    return descriptions[item.name] || this.i18n.menuFallback;
+                    return this.hasDescription(item) ? item.description.trim() : '';
                 },
 
                 getBadge(itemName) {
@@ -992,7 +965,3 @@
     </script>
 </body>
 </html>
-
-
-
-

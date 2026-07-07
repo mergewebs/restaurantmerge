@@ -1,1 +1,1 @@
-<img src="https://grandrestaurantv7-0.b-cdn.net/bistro/wp-content/uploads/sites/3/2024/08/logo-white.png" {{ $attributes }} alt="Sample Restaurant Logo">
+<img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" {{ $attributes }} alt="KOYA Logo">

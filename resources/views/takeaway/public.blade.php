@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $restaurantName }} | Takeaway & Order</title>
+    <title>{{ $restaurantName }} | Takeaway & Order</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -168,7 +168,7 @@
                         <div class="flex items-center gap-2.5 flex-wrap">
                             <x-language-switcher theme="dark" />
                             <a href="/" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/80 hover:text-white px-2.5 py-1 rounded-full border border-white/10 transition-colors uppercase font-bold tracking-wider">
-                                🏠 Home
+                                ðŸ  Home
                             </a>
                             <span class="text-[9px] bg-koya/20 text-koya border border-koya/30 px-2 py-0.5 rounded-full uppercase font-black tracking-widest animate-pulse-slow">
                                 Ordering Online
@@ -797,7 +797,7 @@
                         'Smash Burger': 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.',
                         'Red Onion': 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.',
                         'SOBOKU': 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.',
-                        'Loaded Nachos': 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeños.',
+                        'Loaded Nachos': 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeÃ±os.',
                         'Crispy Chicken Bites': 'Tender buttermilk chicken bites served with honey mustard sauce.',
                         'Spicy Korean Rice Bowl': 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame.',
                         'Mediterranean Rice Bowl': 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.',
@@ -839,6 +839,3 @@
     </script>
 </body>
 </html>
-
-
-
