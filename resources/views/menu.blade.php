@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>KOYA | Our Menu</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <title>KOYA | Our Menu</title>
+    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -301,10 +302,10 @@
             
             <div class="flex items-center gap-2">
                 <a href="/" class="btn-koya-secondary text-[11px] sm:text-xs uppercase py-2 px-3 sm:py-2.5 sm:px-4 rounded-full" style="font-size: 0.75rem; border-width: 3px;">
-                    ðŸ  <span class="hidden sm:inline">Home</span>
+                    🏠 <span class="hidden sm:inline">Home</span>
                 </a>
                 <a href="{{ route('order.public') }}" class="btn-koya-primary text-[11px] sm:text-xs uppercase py-2 px-3 sm:py-2.5 sm:px-4 rounded-full" style="font-size: 0.75rem; border-width: 3px; background-color: var(--color-green); color: white;">
-                    âš¡ <span class="hidden sm:inline">Order Online</span>
+                    ⚡ <span class="hidden sm:inline">Order Online</span>
                 </a>
             </div>
         </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ __('public.homepage_meta_description') }}">
     <title>KOYA | Smash Burger & BOL</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1760,7 +1761,7 @@
                         $tabCategory = 'Smash Burgers';
                     } elseif (in_array($category, ['Bol de Arroz', 'Rice Bowls', 'BOL'])) {
                         $tabCategory = 'BOL';
-                    } elseif (in_array($category, ['Entrantes', 'Acompaï¿½amientos', 'Sides', 'Starters'])) {
+                    } elseif (in_array($category, ['Entrantes', 'AcompaÃ¯Â¿Â½amientos', 'Sides', 'Starters'])) {
                         $tabCategory = 'Sides';
                     } elseif (in_array($category, ['Bebidas', 'Cervezas', 'Cocteles', 'Cafes', 'Drinks', 'Beers', 'Cocktails', 'Coffee'])) {
                         $tabCategory = 'Drinks';
@@ -1805,7 +1806,7 @@
                     ['name' => 'Teriyaki Tofu Bowl', 'tab_category' => 'BOL', 'price' => 11.50, 'description' => 'Crispy teriyaki tofu, jasmine rice, broccoli, avocado, ginger, and sesame glaze.', 'badge' => 'Crunchy'],
                     ['name' => 'KOYA SALAD', 'tab_category' => 'BOL', 'price' => 9.80, 'description' => 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.', 'badge' => 'Fresh'],
                     ['name' => 'KATSUDON', 'tab_category' => 'BOL', 'price' => 12.50, 'description' => 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.', 'badge' => 'Crispy'],
-                    ['name' => 'Loaded Nachos', 'tab_category' => 'Sides', 'price' => 8.90, 'description' => 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeÃ±os.', 'badge' => 'Shareable'],
+                    ['name' => 'Loaded Nachos', 'tab_category' => 'Sides', 'price' => 8.90, 'description' => 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeÃƒÂ±os.', 'badge' => 'Shareable'],
                     ['name' => 'Crispy Chicken Bites', 'tab_category' => 'Sides', 'price' => 7.50, 'description' => 'Tender buttermilk chicken bites served with honey mustard sauce.', 'badge' => 'Popular'],
                     ['name' => 'House Fries', 'tab_category' => 'Sides', 'price' => 4.20, 'description' => 'Golden crispy fries seasoned with our house spice blend.', 'badge' => 'Classic'],
                     ['name' => 'Sweet Potato Fries', 'tab_category' => 'Sides', 'price' => 4.90, 'description' => 'Sweet potato fries served with chipotle garlic mayo.', 'badge' => null],
