@@ -24,6 +24,7 @@ class TakeawayOrderingTest extends TestCase
 
     public function test_guest_can_submit_takeaway_order_and_email_notification_is_sent(): void
     {
+        app()->setLocale('en');
         Mail::fake();
 
         config()->set('takeaway.notification.email_enabled', true);

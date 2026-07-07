@@ -52,7 +52,7 @@ class PublicTakeawayController extends Controller
             'package_details' => $item->package_details,
         ])->values()->all();
 
-        return view('takeaway.public', [
+        return view('order', [
             'menuItems' => $menuItems,
             'menuItemsFlat' => $menuItemsFlat,
             'restaurantName' => config('takeaway.brand.restaurant_name', config('app.name')),

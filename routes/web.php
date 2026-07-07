@@ -12,7 +12,16 @@ use App\Http\Controllers\PublicTakeawayController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    try {
+        $menuItems = \App\Models\MenuItem::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+        $schedule = \App\Models\RestaurantSchedule::orderBy('day_of_week')->get();
+    } catch (\Exception $e) {
+        $menuItems = collect();
+        $schedule = collect();
+    }
+    return view('welcome', compact('menuItems', 'schedule'));
 });
 
 // Public Routes (for iframe)
@@ -20,6 +29,15 @@ Route::get('/reservation', [ReservationController::class, 'publicCreate'])->name
 Route::post('/reservation', [ReservationController::class, 'publicStore'])->name('reservations.public.store');
 Route::get('/restaurant/schedule-data', [ReservationController::class, 'getScheduleData'])->name('restaurant.schedule.data');
 Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');
+
+// New Menu Page (Same as Order)
+Route::get('/menu', [PublicTakeawayController::class, 'index'])->name('menu.public');
+
+// New Order Page
+Route::get('/order', [PublicTakeawayController::class, 'index'])->name('order.public');
+Route::post('/order', [PublicTakeawayController::class, 'store'])->name('order.public.store');
+
+// Legacy Takeaway Routes (pointing to same actions for compatibility and tests)
 Route::get('/takeaway', [PublicTakeawayController::class, 'index'])->name('takeaway.public');
 Route::post('/takeaway/orders', [PublicTakeawayController::class, 'store'])->name('takeaway.public.store');
 
