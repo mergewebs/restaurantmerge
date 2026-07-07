@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Reservation - Sample Restaurant</title>
+    <title>{{ __('public.iframe_title') }}</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 
-    <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -49,6 +45,14 @@
 
     <style>
         @font-face {
+            font-family: 'Biski';
+            src: url('{{ asset('fonts/Biski.ttf') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
             font-family: 'Biski_4';
             src: url('{{ asset('fonts/Biski_4.ttf') }}') format('truetype');
             font-weight: normal;
@@ -64,7 +68,6 @@
             color: #fff7eb;
         }
 
-        /* WordPress Style Inputs */
         input, select, textarea {
             width: 100% !important;
             padding: 0.875rem 1rem !important;
@@ -100,7 +103,7 @@
         .btn-reservation {
             background: linear-gradient(135deg, #d9b45f 0%, #b98627 100%) !important;
             color: #17110c !important;
-            font-family: 'Outfit', sans-serif !important;
+            font-family: 'Biski', sans-serif !important;
             padding: 1.125rem 2rem;
             border-radius: 12px;
             font-weight: 800;
@@ -131,133 +134,38 @@
             opacity: 0.5;
         }
 
-        .time-slot {
-            padding: 0.75rem 0.5rem;
-            border: 1.5px solid #f3f4f6;
-            border-radius: 12px;
-            text-align: center;
-            font-weight: 700;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            background: #f9fafb;
-            color: #4b5563;
-        }
-
-        .time-slot:hover {
-            border-color: #d9b45f;
-            color: #d9b45f;
-            background: #fff;
-            transform: scale(1.02);
-        }
-
-        .time-slot.selected {
-            background-color: #c89b3c;
-            color: white;
-            border-color: #c89b3c;
-            box-shadow: 0 4px 6px -1px rgba(255, 197, 71, 0.2);
-        }
-
         [x-cloak] { display: none !important; }
-
-        /* Custom scrollbar for time slots */
-        .custom-scroll::-webkit-scrollbar { width: 5px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f3f4f6; border-radius: 10px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #ffc547; }
-
-        /* Flatpickr Brand Customization */
-        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, 
-        .flatpickr-day.selected.hover, .flatpickr-day.startRange.hover, .flatpickr-day.endRange.hover, 
-        .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, 
-        .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover {
-            background: #c89b3c !important;
-            border-color: #c89b3c !important;
-            color: #17110c !important;
-        }
-        .flatpickr-current-month, .flatpickr-monthDropdown-months, .cur-month, .cur-year, .flatpickr-weekday {
-            color: #17110c !important;
-            fill: #17110c !important;
-            font-weight: 700 !important;
-        }
-        .flatpickr-months {
-            background: #c89b3c !important;
-            border-radius: 12px 12px 0 0 !important;
-            padding: 10px 0 !important;
-        }
-        .flatpickr-calendar {
-            background: #ffffff !important;
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2) !important;
-            border-radius: 14px !important;
-            border: none !important;
-            padding-bottom: 5px !important;
-            width: 315px !important;
-        }
-        .flatpickr-innerContainer {
-            padding: 10px !important;
-        }
-        /* Reset global input/select styles for flatpickr internal elements */
-        .flatpickr-calendar input, .flatpickr-calendar select {
-            width: auto !important;
-            padding: 0 !important;
-            border: none !important;
-            border-radius: 0 !important;
-            box-shadow: none !important;
-            background: transparent !important;
-            font-size: 1rem !important;
-            height: auto !important;
-        }
-        .flatpickr-monthDropdown-months {
-            padding: 0 5px !important;
-            margin: 0 !important;
-            display: inline-block !important;
-            cursor: pointer !important;
-        }
-        .flatpickr-current-month {
-            padding: 0 !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            height: auto !important;
-        }
-        .flatpickr-months .flatpickr-prev-month, .flatpickr-months .flatpickr-next-month {
-            height: 40px !important;
-            display: flex !important;
-            align-items: center !important;
-            padding: 0 10px !important;
-        }
-        .flatpickr-months .flatpickr-prev-month svg, .flatpickr-months .flatpickr-next-month svg {
-            fill: #17110c !important;
-        }
     </style>
 </head>
 <body class="antialiased">
     <div id="iframe-wrapper" class="w-full">
+        <div class="flex justify-end pb-3">
+            <x-language-switcher theme="dark" />
+        </div>
         {{ $slot }}
     </div>
 
     <script>
         let lastHeight = 0;
         function sendHeight() {
-            // Use offsetHeight of the wrapper div for more stability
             const wrapper = document.getElementById('iframe-wrapper');
             if (!wrapper) return;
-            
+
             const height = wrapper.offsetHeight;
-            
+
             if (height > 0 && Math.abs(height - lastHeight) > 5) {
                 lastHeight = height;
-                window.parent.postMessage({ 
+                window.parent.postMessage({
                     height: height,
                     frameHeight: height,
                     type: 'resize'
                 }, '*');
             }
         }
-        
+
         window.addEventListener('load', () => setTimeout(sendHeight, 100));
         window.addEventListener('resize', sendHeight);
-        
+
         const observer = new MutationObserver(() => {
             sendHeight();
         });

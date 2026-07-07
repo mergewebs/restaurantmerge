@@ -11,20 +11,21 @@ class MenuItem extends Model
     use HasFactory;
 
     public const CATEGORY_OPTIONS = [
-        'Starters',
-        'Smash Burgers',
-        'Rice Bowls',
-        'Sides',
-        'Homemade Desserts',
-        'Drinks',
-        'Beers',
-        'Cocktails',
-        'Coffee',
+        'Entrantes',
+        'Acompañamientos',
+        'Smash Burger',
+        'Bol de Arroz',
+        'Postres de la Casa',
+        'Bebidas',
+        'Cafes',
+        'Cocteles',
+        'Cervezas',
     ];
 
     protected $fillable = [
         'name',
         'category',
+        'description',
         'price',
         'is_active',
         'is_package',

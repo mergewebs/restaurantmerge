@@ -57,6 +57,7 @@ class TableManagementController extends Controller
                 'id',
                 'name',
                 'category',
+                'description',
                 'price',
                 'is_package',
                 'package_details',
@@ -67,6 +68,7 @@ class TableManagementController extends Controller
             'id' => $item->id,
             'name' => $item->name,
             'category' => $item->category,
+            'description' => $item->description,
             'price' => (float) $item->price,
             'is_package' => (bool) $item->is_package,
             'package_details' => $item->package_details,
@@ -844,3 +846,7 @@ class TableManagementController extends Controller
         return $this->hasOrderTypeColumn;
     }
 }
+
+
+
+

@@ -9,11 +9,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RestaurantConfigController;
 use App\Http\Controllers\TableManagementController;
 use App\Http\Controllers\PublicTakeawayController;
+use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     try {
         $menuItems = \App\Models\MenuItem::where('is_active', true)
+            ->orderedByCategory()
             ->orderBy('sort_order')
             ->get();
         $schedule = \App\Models\RestaurantSchedule::orderBy('day_of_week')->get();
@@ -23,6 +25,8 @@ Route::get('/', function () {
     }
     return view('welcome', compact('menuItems', 'schedule'));
 });
+
+Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
 
 // Public Routes (for iframe)
 Route::get('/reservation', [ReservationController::class, 'publicCreate'])->name('reservations.public.create');
@@ -41,7 +45,9 @@ Route::post('/order', [PublicTakeawayController::class, 'store'])->name('order.p
 Route::get('/takeaway', [PublicTakeawayController::class, 'index'])->name('takeaway.public');
 Route::post('/takeaway/orders', [PublicTakeawayController::class, 'store'])->name('takeaway.public.store');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::redirect('/admin', '/admin/dashboard');
+
+Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Reservations

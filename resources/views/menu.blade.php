@@ -93,7 +93,7 @@
             justify-content: center;
             background-color: var(--color-yellow);
             color: var(--color-dark);
-            font-family: var(--font-headline);
+            font-family: 'Biski', sans-serif;
             border: var(--border-width) solid var(--color-dark);
             box-shadow: 4px 4px 0px var(--color-dark);
             cursor: pointer;
@@ -120,7 +120,7 @@
             justify-content: center;
             background-color: var(--color-light);
             color: var(--color-dark);
-            font-family: var(--font-headline);
+            font-family: 'Biski', sans-serif;
             border: var(--border-width) solid var(--color-dark);
             box-shadow: 4px 4px 0px var(--color-dark);
             cursor: pointer;
@@ -287,7 +287,7 @@
     </div>
 
     <!-- Sticky Navigation Header -->
-    <header class="sticky top-0 z-50 bg-[#fac021] border-b-[4px] border-[#121212] py-2 backdrop-blur-md relative">
+    <header class="sticky top-0 z-50 bg-[#fac021] py-2 backdrop-blur-md relative">
         <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
             <a href="/" class="flex items-center gap-3">
                 <img 
@@ -329,8 +329,8 @@
 
         <!-- Category Horizontal Tabs Container -->
         <div class="sticky top-[76px] z-40 py-4 -mx-4 px-4 bg-gradient-to-b from-[#088972] via-[#088972]/95 to-transparent">
-            <div class="flex justify-start md:justify-center overflow-x-auto no-scrollbar pb-1">
-                <div class="flex gap-1.5 md:gap-2 bg-[#fac021] p-1.5 md:p-2 rounded-full border-[3px] border-koya-dark">
+            <div class="flex justify-center pb-1">
+                <div class="flex flex-wrap justify-center gap-1.5 md:gap-2 bg-[#fac021] p-1.5 md:p-2 rounded-2xl md:rounded-full border-[3px] border-koya-dark">
                     <button
                         type="button"
                         @click="activeCategory = 'All'"
@@ -392,26 +392,30 @@
                                         Combo Pack
                                     </span>
                                 </template>
-                                <template x-if="getBadge(item.name)">
-                                    <span class="sticker text-[9px] px-2 py-0.5 rounded border border-[#121212]" x-text="getBadge(item.name)"></span>
-                                </template>
                             </div>
                         </div>
 
                         <!-- Product Title and Price -->
                         <div class="flex justify-between items-start gap-2 mb-2">
-                            <h3 class="font-['Bubbleboddy'] text-xl text-koya-dark uppercase tracking-wide leading-tight group-hover:text-koya-green transition-colors" x-text="item.name"></h3>
+                            <h3 class="font-['Bubbleboddy'] text-xl text-koya-dark uppercase tracking-wide leading-tight group-hover:text-koya-green transition-colors" x-html="formatName(item.name)"></h3>
                             <span class="font-bold text-xl text-koya-green whitespace-nowrap" x-text="currency(item.price)"></span>
                         </div>
                         
                         <!-- Description -->
                         <p 
-                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-4 line-clamp-3 min-h-[3.375rem]" 
+                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-4" 
                             x-text="getDescription(item)"
                         ></p>
                     </div>
                 </div>
             </template>
+        </div>
+
+        <!-- Allergy Disclaimer -->
+        <div class="text-center mt-6">
+            <p class="text-white/70 italic text-xs">
+                En caso de alergias, consulte con nuestro personal.
+            </p>
         </div>
 
         <!-- Sticky bottom call to action -->
@@ -463,25 +467,37 @@
                     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
                 },
 
+                formatName(name) {
+                    if (!name) return '';
+                    return name.replace(/(\(\d+\s*uds\.?\))/gi, '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>');
+                },
+
                 getImagePath(itemName) {
+                    if (!itemName) return null;
+                    const cleanName = itemName.toUpperCase().trim();
                     const images = {
-                        'Classic Smash Burger': 'smash-burger.png',
-                        'Truffle Double Smash': 'tartufata.png',
-                        'Tartufata': 'tartufata.png',
-                        'Smash Burger': 'smash-burger.png',
-                        'Red Onion': 'red-onion.png',
+                        'CLASSIC SMASH BURGER': 'smash-burger.png',
+                        'TRUFFLE DOUBLE SMASH': 'tartufata.png',
+                        'TARTUFATA': 'tartufata.png',
+                        'SMASH BURGER': 'smash-burger.png',
+                        'RED ONION': 'red-onion.png',
                         'SOBOKU': 'soboku.png',
-                        'Family Takeaway Pack': 'smash-burger.png',
-                        'Spicy Korean Rice Bowl': 'katsudon.png',
-                        'Mediterranean Rice Bowl': 'koya-salad.png',
+                        'FAMILY TAKEAWAY PACK': 'smash-burger.png',
+                        'SPICY KOREAN RICE BOWL': 'katsudon.png',
+                        'MEDITERRANEAN RICE BOWL': 'koya-salad.png',
                         'KOYA SALAD': 'koya-salad.png',
                         'KATSUDON': 'katsudon.png',
+                        'KOYA SMASH': 'smash-burger.png',
+                        'KOYA SMASH SPECIAL': 'smash-burger.png',
                     };
-                    const name = images[itemName];
+                    const name = images[cleanName];
                     return name ? `/images/${name}` : null;
                 },
 
                 getDescription(item) {
+                    if (item.description && item.description.trim() !== '') {
+                        return item.description;
+                    }
                     if (item.package_details && item.package_details.trim() !== '') {
                         return item.package_details;
                     }
@@ -534,3 +550,5 @@
     </script>
 </body>
 </html>
+
+

@@ -274,7 +274,7 @@
                     </div>
                 @endif
 
-                <form :action="'/finance/' + editingFinance.id" method="POST" class="space-y-4">
+                <form :action="@js(route('finance.update', ['id' => '__FINANCE__'])).replace('__FINANCE__', editingFinance.id)" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="finance_id" :value="editingFinance.id">
@@ -330,7 +330,7 @@
 
                     <div class="flex gap-3 pt-2">
                         <button type="button" 
-                                @click="if(confirm('Delete this entry?')) $refs.deleteEntryForm.action = '/finance/' + editingFinance.id + '?type=' + editingFinance.originalType; $refs.deleteEntryForm.submit()"
+                                @click="if(confirm('Delete this entry?')) $refs.deleteEntryForm.action = @js(route('finance.destroy', ['id' => '__FINANCE__'])).replace('__FINANCE__', editingFinance.id) + '?type=' + editingFinance.originalType; $refs.deleteEntryForm.submit()"
                                 class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
                             Delete
                         </button>
@@ -429,3 +429,4 @@
         }
     </style>
 </x-app-layout>
+

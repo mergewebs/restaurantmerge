@@ -150,7 +150,7 @@
                     </div>
                 @endif
 
-                <form :action="'/users/' + editingUser.id" method="POST" class="space-y-4">
+                <form :action="@js(route('users.update', ['user' => '__USER__'])).replace('__USER__', editingUser.id)" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="user_id" :value="editingUser.id">
@@ -195,7 +195,7 @@
                     </div>
                 </form>
                 
-                <form :action="'/users/' + editingUser.id" method="POST" x-ref="deleteUserForm" class="hidden">
+                <form :action="@js(route('users.destroy', ['user' => '__USER__'])).replace('__USER__', editingUser.id)" method="POST" x-ref="deleteUserForm" class="hidden">
                     @csrf
                     @method('DELETE')
                 </form>
@@ -203,3 +203,4 @@
         </div>
     </div>
 </x-app-layout>
+

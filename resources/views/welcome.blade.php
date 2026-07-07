@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Nos aventuramos más allá de las 🍔, fusionando la cocina asiática y americana en cada bocado. 🥗 Fresh, fast, and modern street food in Barcelona.">
+    <meta name="description" content="{{ __('public.homepage_meta_description') }}">
     <title>KOYA | Smash Burger & BOL</title>
 
     <!-- Preconnect to external resources -->
@@ -87,7 +87,7 @@
             justify-content: center;
             background-color: var(--color-yellow);
             color: var(--color-dark);
-            font-family: var(--font-headline);
+            font-family: 'Biski', sans-serif;
             font-size: 1.25rem;
             padding: 1rem 2rem;
             border: var(--border-width) solid var(--color-dark);
@@ -117,7 +117,7 @@
             justify-content: center;
             background-color: var(--color-light);
             color: var(--color-dark);
-            font-family: var(--font-headline);
+            font-family: 'Biski', sans-serif;
             font-size: 1.25rem;
             padding: 1rem 2rem;
             border: var(--border-width) solid var(--color-dark);
@@ -194,7 +194,6 @@
             right: 0;
             z-index: 1000;
             background-color: rgba(8, 137, 114, 0.95);
-            border-bottom: var(--border-width) solid var(--color-dark);
             padding: 0.5rem 0;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
@@ -288,11 +287,13 @@
 
         /* Hero Section */
         .hero {
-            background-color: var(--color-green);
+            background: linear-gradient(135deg, var(--color-green), #0ba389, #055f4f, var(--color-green));
+            background-size: 400% 400%;
             padding: 8rem 0 5rem 0;
             border-bottom: var(--border-width) solid var(--color-dark);
             position: relative;
             overflow: hidden;
+            animation: gradientShift 15s ease infinite;
         }
 
         .hero::before {
@@ -302,10 +303,22 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(rgba(250, 192, 33, 0.15) 20%, transparent 20%);
+            background-image: radial-gradient(rgba(250, 192, 33, 0.18) 20%, transparent 20%);
             background-size: 40px 40px;
-            opacity: 0.4;
+            opacity: 0.45;
             pointer-events: none;
+            animation: backgroundDrift 12s linear infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes backgroundDrift {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 40px; }
         }
 
         .hero-grid {
@@ -363,6 +376,25 @@
             justify-content: center;
             align-items: center;
             height: 560px;
+        }
+
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            background-color: var(--color-yellow);
+            border-radius: 50%;
+            opacity: 0.18;
+            filter: blur(60px);
+            z-index: 1;
+            animation: pulseGlow 5s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.85); opacity: 0.15; }
+            100% { transform: scale(1.15); opacity: 0.25; }
         }
 
         .hero-main-img-wrap {
@@ -589,18 +621,13 @@
 
         .menu-tabs {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 1rem;
             background-color: var(--color-green-dark);
             padding: 0.6rem;
             border-radius: 9999px;
             border: 3px solid var(--color-dark);
-            overflow-x: auto;
-            max-width: 100%;
-            scrollbar-width: none; /* Firefox */
-        }
-
-        .menu-tabs::-webkit-scrollbar {
-            display: none; /* Safari & Chrome */
         }
 
         .menu-tab {
@@ -629,6 +656,18 @@
             box-shadow: 2px 2px 0px var(--color-dark);
         }
 
+        @media (max-width: 768px) {
+            .menu-tabs {
+                border-radius: 2rem;
+                padding: 0.8rem;
+                gap: 0.6rem;
+            }
+            .menu-tab {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+        }
+
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -640,59 +679,150 @@
         .menu-card-simple {
             background-color: white;
             border: 3px solid var(--color-dark);
-            border-radius: 20px;
-            padding: 1.5rem;
+            border-radius: 24px;
+            padding: 1.25rem 1rem;
             color: var(--color-dark);
             box-shadow: 5px 5px 0px var(--color-dark);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
+            text-decoration: none;
+            isolation: isolate;
         }
 
         .menu-card-simple:hover {
-            transform: translateY(-4px);
-            box-shadow: 8px 8px 0px var(--color-dark);
+            transform: translate(-5px, -5px);
+            box-shadow: 10px 10px 0px var(--color-dark);
+            background-color: #fffef9;
+            border-color: var(--color-green);
         }
 
-        .menu-card-simple:hover .menu-item-img-container {
-            transform: scale(1.08) rotate(3deg);
+        .menu-item-inner {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .menu-item-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .menu-item-top {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.15rem;
         }
 
         .menu-item-name {
             font-family: 'Biski', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             color: var(--color-dark);
             text-transform: uppercase;
+            margin: 0;
+            line-height: 1.2;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .menu-card-simple:hover .menu-item-name {
+            color: var(--color-green);
+            transform: translateX(2px);
+        }
+
+        .menu-item-description {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .menu-item-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 0.25rem;
         }
 
         .menu-item-price {
             font-family: 'Biski_2', sans-serif;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
+            color: var(--color-dark);
+            background-color: var(--color-yellow);
+            border: 2px solid var(--color-dark);
+            padding: 0.15rem 0.6rem;
+            border-radius: 9999px;
+            box-shadow: 2px 2px 0px var(--color-dark);
+            font-weight: 800;
+        }
+
+        .menu-item-order-link {
+            font-family: 'Bubbleboddy', 'Outfit', sans-serif;
+            font-size: 0.8rem;
             color: var(--color-green);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.2s ease;
+        }
+
+        .menu-card-simple:hover .menu-item-order-link {
+            color: var(--color-green-light);
+        }
+
+        .menu-item-order-link .arrow-icon {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-card-simple:hover .arrow-icon {
+            transform: translateX(4px);
+        }
+
+        .menu-item-img-container {
+            width: 120px;
+            height: 120px;
+            overflow: visible;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .menu-item-description {
-            font-size: 0.9rem;
-            color: #666;
-            line-height: 1.4;
+        .menu-card-simple:hover .menu-item-img-container {
+            transform: scale(1.1) rotate(5deg);
         }
 
-        .menu-item-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        .menu-item-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sticker-badge {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.45rem;
+            border-radius: 6px;
+            border-width: 1.5px;
+            box-shadow: 1.5px 1.5px 0px var(--color-dark);
+            transform: rotate(-2deg);
+            vertical-align: middle;
+            display: inline-block;
+            margin-left: 0.5rem;
         }
 
         /* About / Story Section */
@@ -828,14 +958,31 @@
         /* Contact & Location Section */
         .contact {
             padding: 6rem 0;
-            background-color: var(--color-light);
+            background-color: var(--color-yellow);
             border-bottom: var(--border-width) solid var(--color-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(18, 18, 18, 0.08) 15%, transparent 15%);
+            background-size: 24px 24px;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .contact-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3.5rem;
+            position: relative;
+            z-index: 2;
         }
 
         .contact-card {
@@ -844,6 +991,12 @@
             border-radius: 24px;
             padding: 2.5rem;
             box-shadow: 8px 8px 0px var(--color-dark);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px var(--color-dark);
         }
 
         .contact-card-title {
@@ -887,6 +1040,12 @@
             justify-content: center;
             flex-shrink: 0;
             box-shadow: 2px 2px 0px var(--color-dark);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s ease;
+        }
+
+        .contact-info-item:hover .contact-info-icon {
+            transform: scale(1.15) rotate(-8deg);
+            background-color: #ffd147;
         }
 
         .contact-info-icon svg {
@@ -908,6 +1067,20 @@
             line-height: 1.4;
         }
 
+        .contact-info-text p a {
+            color: var(--color-dark);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid var(--color-green);
+            transition: all 0.2s ease;
+            padding-bottom: 1px;
+        }
+
+        .contact-info-text p a:hover {
+            color: var(--color-green);
+            border-bottom-color: var(--color-dark);
+        }
+
         /* Schedule list styling */
         .schedule-list {
             list-style: none;
@@ -919,8 +1092,8 @@
         .schedule-row {
             display: flex;
             justify-content: space-between;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px dashed #ebd6b0;
+            padding-bottom: 0.6rem;
+            border-bottom: 2px dashed rgba(18, 18, 18, 0.12);
             font-size: 1rem;
         }
 
@@ -941,21 +1114,37 @@
         }
 
         .schedule-hours.closed {
-            color: #cc3333;
+            color: #e53e3e;
+            font-weight: 800;
         }
 
         /* Footer */
         footer {
-            background-color: var(--color-dark);
-            color: #aaa;
-            padding: 4rem 0 2rem 0;
+            background-color: var(--color-green);
+            background-image: radial-gradient(rgba(250, 192, 33, 0.12) 15%, transparent 15%);
+            background-size: 24px 24px;
+            color: var(--color-light);
+            padding: 5rem 0 3rem 0;
             font-size: 0.95rem;
             border-top: var(--border-width) solid var(--color-dark);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background-color: var(--color-yellow);
+            border-bottom: 2px solid var(--color-dark);
+            z-index: 10;
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr;
             gap: 3rem;
             margin-bottom: 3rem;
         }
@@ -966,24 +1155,39 @@
             gap: 1rem;
         }
 
-        .footer-logo-title {
-            font-family: var(--font-headline);
-            font-size: 2rem;
-            color: var(--color-yellow);
-            text-transform: uppercase;
+        .footer-logo-wrap {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: fit-content;
+        }
+
+        .footer-logo-wrap:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+
+        .footer-logo-img {
+            height: 90px;
+            width: auto;
+            border-radius: 12px;
+            border: 3px solid var(--color-dark);
+            box-shadow: 3px 3px 0px var(--color-dark);
         }
 
         .footer-p {
             line-height: 1.6;
+            color: rgba(255, 252, 244, 0.9);
+            font-weight: 500;
+            max-width: 380px;
         }
 
         .footer-nav-title {
             font-family: var(--font-headline);
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             color: white;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-shadow: 2px 2px 0px var(--color-dark);
         }
 
         .footer-links {
@@ -994,72 +1198,86 @@
         }
 
         .footer-links a {
-            color: #aaa;
+            color: rgba(255, 252, 244, 0.85);
             text-decoration: none;
-            transition: all 0.2s ease;
+            display: inline-block;
+            font-weight: 600;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .footer-links a:hover {
             color: var(--color-yellow);
-            padding-left: 4px;
+            transform: translateX(6px);
         }
 
         .social-icons {
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 1.2rem;
+            margin-top: 1.2rem;
         }
 
         .social-icon {
-            background-color: #222;
-            border: 2px solid #444;
-            width: 40px;
-            height: 40px;
+            background-color: var(--color-light);
+            border: 3px solid var(--color-dark);
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            box-shadow: 3px 3px 0px var(--color-dark);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .social-icon:hover {
             background-color: var(--color-yellow);
-            border-color: var(--color-dark);
-            transform: translateY(-3px);
-        }
-
-        .social-icon:hover svg {
-            fill: var(--color-dark);
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0px var(--color-dark);
         }
 
         .social-icon svg {
-            width: 18px;
-            height: 18px;
-            fill: white;
-            transition: all 0.2s ease;
+            width: 20px;
+            height: 20px;
+            fill: var(--color-dark);
+            transition: fill 0.25s ease;
         }
 
         .footer-bottom {
-            border-top: 1px solid #222;
+            border-top: 3px solid var(--color-dark);
             padding-top: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
+            font-weight: 600;
+            color: rgba(255, 252, 244, 0.9);
+        }
+
+        .footer-credit-link {
+            color: var(--color-yellow);
+            text-decoration: none;
+            border-bottom: 2px solid var(--color-yellow);
+            font-weight: 800;
+            transition: all 0.2s ease;
+        }
+
+        .footer-credit-link:hover {
+            color: white;
+            border-color: white;
         }
 
         /* Animations Keyframes */
         @keyframes floatSlow {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(3deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(15px, -20px) rotate(4deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
         }
 
         @keyframes floatSlower {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(-4deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            50% { transform: translate(-20px, -30px) rotate(-6deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
         }
 
         @keyframes spinSlow {
@@ -1444,7 +1662,7 @@
                 <h1 class="hero-title">Smash Burger<br><span>& BOL</span></h1>
 
                 <div class="hero-btns">
-                    <a href="#menu-section" class="btn-koya-primary">Ver Menú</a>
+                    <a href="#menu-section" class="btn-koya-primary">{{ __('public.homepage_hero_cta_menu') }}</a>
                     <a href="{{ route('reservations.public.create') }}" class="btn-koya-secondary">Reservar</a>
                 </div>
             </div>
@@ -1456,7 +1674,7 @@
                         <path id="circlePath" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" fill="none"/>
                         <text font-family="'Bubbleboddy', 'Outfit', sans-serif" font-size="13.5" font-weight="900" fill="#fac021" letter-spacing="3.5">
                             <textPath href="#circlePath">
-                                SMASH BURGER & BOL • SMASH BURGER & BOL • SMASH BURGER & BOL •
+                                SMASH BURGER & BOL &#8226; SMASH BURGER & BOL &#8226; SMASH BURGER & BOL &#8226;
                             </textPath>
                         </text>
                     </svg>
@@ -1472,7 +1690,7 @@
     <section class="gallery-promo">
         <div class="container">
             <h2 class="gallery-promo-title reveal">
-                NOS AVENTURAMOS MÁS ALLÁ DE LAS 🍔, FUSIONANDO LA COCINA ASIÁTICA Y AMERICANA EN CADA BOCADO. 🥗
+                {{ __('public.homepage_gallery_title') }}
             </h2>
             <div class="gallery-grid">
                 <div class="gallery-card card-rotate-1 reveal">
@@ -1522,11 +1740,15 @@
                 'Mediterranean Rice Bowl' => 'koya-salad.png',
                 'Teriyaki Tofu Bowl' => 'koya-salad.png',
                 'Tartufata' => 'tartufata.png',
+                'TARTUFATA' => 'tartufata.png',
                 'Smash Burger' => 'smash-burger.png',
                 'Red Onion' => 'red-onion.png',
+                'RED ONION' => 'red-onion.png',
                 'KOYA SALAD' => 'koya-salad.png',
                 'KATSUDON' => 'katsudon.png',
                 'SOBOKU' => 'soboku.png',
+                'KOYA SMASH' => 'smash-burger.png',
+                'KOYA SMASH SPECIAL' => 'smash-burger.png',
             ];
 
             $displayItems = [];
@@ -1534,45 +1756,19 @@
                 foreach ($menuItems as $item) {
                     $category = $item->category;
                     $tabCategory = 'Sides';
-                    if ($category === 'Smash Burgers') {
+                    if ($category === 'Smash Burger' || $category === 'Smash Burgers') {
                         $tabCategory = 'Smash Burgers';
-                    } elseif ($category === 'Rice Bowls' || $category === 'BOL') {
+                    } elseif (in_array($category, ['Bol de Arroz', 'Rice Bowls', 'BOL'])) {
                         $tabCategory = 'BOL';
-                    } elseif (in_array($category, ['Sides', 'Starters'])) {
+                    } elseif (in_array($category, ['Entrantes', 'Acompa�amientos', 'Sides', 'Starters'])) {
                         $tabCategory = 'Sides';
-                    } elseif (in_array($category, ['Drinks', 'Beers', 'Cocktails', 'Coffee'])) {
+                    } elseif (in_array($category, ['Bebidas', 'Cervezas', 'Cocteles', 'Cafes', 'Drinks', 'Beers', 'Cocktails', 'Coffee'])) {
                         $tabCategory = 'Drinks';
-                    } elseif ($category === 'Homemade Desserts' || $category === 'Desserts') {
+                    } elseif (in_array($category, ['Postres de la Casa', 'Homemade Desserts', 'Desserts'])) {
                         $tabCategory = 'Desserts';
                     }
-                    
-                    // Generate description if empty
-                    $description = $item->package_details ?? '';
-                    if (empty($description)) {
-                        if ($item->name === 'Classic Smash Burger') $description = 'Two smashed beef patties, cheddar cheese, pickles, and our signature KOYA sauce in a toasted brioche bun.';
-                        elseif ($item->name === 'Truffle Double Smash') $description = 'Double smashed beef patty, truffle mayo, caramelized onions, and melted Swiss cheese.';
-                        elseif ($item->name === 'Tartufata') $description = 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.';
-                        elseif ($item->name === 'Smash Burger') $description = 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.';
-                        elseif ($item->name === 'Red Onion') $description = 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.';
-                        elseif ($item->name === 'KOYA SALAD') $description = 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.';
-                        elseif ($item->name === 'KATSUDON') $description = 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.';
-                        elseif ($item->name === 'SOBOKU') $description = 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.';
-                        elseif ($item->name === 'Loaded Nachos') $description = 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeños.';
-                        elseif ($item->name === 'Crispy Chicken Bites') $description = 'Tender buttermilk chicken bites served with honey mustard sauce.';
-                        elseif ($item->name === 'Spicy Korean Rice Bowl') $description = 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame.';
-                        elseif ($item->name === 'Mediterranean Rice Bowl') $description = 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.';
-                        elseif ($item->name === 'House Fries') $description = 'Golden crispy fries seasoned with our house spice blend.';
-                        elseif ($item->name === 'Sweet Potato Fries') $description = 'Sweet potato fries served with chipotle garlic mayo.';
-                        elseif ($item->name === 'Cheesecake Jar') $description = 'Creamy NY-style cheesecake with red berry coulis in a jar.';
-                        elseif ($item->name === 'Chocolate Brownie') $description = 'Warm chocolate brownie served with a scoop of vanilla ice cream.';
-                        elseif ($item->name === 'Homemade Lemonade') $description = 'Freshly squeezed lemons with a touch of mint and honey.';
-                        elseif ($item->name === 'Local Lager') $description = 'Cold, refreshing local lager.';
-                        elseif ($item->name === 'House IPA') $description = 'Cold, craft India Pale Ale with citrus notes.';
-                        elseif ($item->name === 'Mojito') $description = 'Classic refreshing cocktail with rum, lime, and fresh mint.';
-                        elseif ($item->name === 'Still Water') $description = 'Refreshing mineral water.';
-                        elseif ($item->name === 'Espresso') $description = 'Freshly brewed aromatic espresso.';
-                        else $description = 'Delicious KOYA recipe prepared with fresh ingredients.';
-                    }
+
+                    $description = $item->description ?? $item->package_details ?? 'Delicious KOYA recipe prepared with fresh ingredients.';
 
                     $badge = null;
                     if ($item->name === 'Classic Smash Burger') $badge = 'KOYA Favorite';
@@ -1628,54 +1824,37 @@
                     @php
                     $imageName = $imageMap[$item['name']] ?? null;
                     @endphp
-                    <div class="menu-card-simple reveal" x-show="activeTab === '{{ $item['tab_category'] }}'" x-transition>
-                        <div style="display: flex; gap: 1rem; align-items: center; justify-content: space-between; width: 100%;">
-                            <div style="flex: 1; min-width: 0;">
-                                <div class="menu-item-top" style="margin-bottom: 0.25rem;">
-                                    <h3 class="menu-item-name" style="margin: 0; line-height: 1.2;">
-                                        {{ $item['name'] }}
-                                        @if(!empty($item['badge']))
-                                            <span class="sticker text-xs ml-2" style="font-size: 0.7rem; padding: 0.15rem 0.4rem; vertical-align: middle; display: inline-block;">{{ $item['badge'] }}</span>
-                                        @endif
-                                    </h3>
+                    <div class="menu-card-simple reveal" x-show="activeTab === '{{ $item['tab_category'] }}'"
+                         x-transition:enter="transition ease-out duration-300 transform"
+                         x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                         x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                        <div class="menu-item-inner">
+                            <div class="menu-item-info">
+                                <div class="menu-item-top">
+                                    <h3 class="menu-item-name">{!! preg_replace('/(\(\d+\s*uds\.?\))/i', '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>', e($item['name'])) !!}</h3>
+                                    <span class="menu-item-price">{{ number_format($item['price'], 2) }}&euro;</span>
                                 </div>
-                                <p class="menu-item-description" style="margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">{{ $item['description'] }}</p>
-                                <span class="menu-item-price" style="font-weight: bold;">{{ number_format($item['price'], 2) }}€</span>
+                                <p class="menu-item-description" style="margin-top: 0.15rem; min-height: auto;">{{ $item['description'] }}</p>
                             </div>
                             @if(!empty($imageName))
-                                <div class="menu-item-img-container" style="width: 80px; height: 80px; border-radius: 12px; border: 2px solid var(--color-dark); overflow: hidden; flex-shrink: 0; background-color: var(--color-light); display: flex; align-items: center; justify-content: center; box-shadow: 2px 2px 0px var(--color-dark); transition: transform 0.2s ease;">
-                                    <img src="{{ asset('images/' . $imageName) }}" alt="{{ $item['name'] }}" style="width: 85%; height: 85%; object-fit: contain;" onerror="this.style.display='none'">
+                                <div class="menu-item-img-container">
+                                    <img src="{{ asset('images/' . $imageName) }}" alt="{{ $item['name'] }}" onerror="this.style.display='none'">
                                 </div>
                             @endif
                         </div>
                     </div>
                 @endforeach
             </div>
-        </div>
-    </section>
 
-
-
-    <!-- Call to Action (CTA) Section -->
-    <section class="cta">
-        <div class="container cta-container reveal">
-            <h2 class="cta-title">Ready for your next KOYA craving?</h2>
-            <div class="cta-btn-wrap">
-                <!-- Playful bouncing arrows -->
-                <svg class="cta-arrow" width="50" height="30" viewBox="0 0 50 30" fill="none">
-                    <path d="M10 5L30 15L10 25" stroke="var(--color-dark)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M25 5L45 15L25 25" stroke="var(--color-dark)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-
-                <a href="{{ route('order.public') }}" class="btn-koya-primary btn-koya-green" style="font-size: 1.5rem; padding: 1.25rem 3rem;">Order Now</a>
-
-                <svg class="cta-arrow-right" width="50" height="30" viewBox="0 0 50 30" fill="none">
-                    <path d="M10 5L30 15L10 25" stroke="var(--color-dark)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M25 5L45 15L25 25" stroke="var(--color-dark)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+            <!-- Allergy Disclaimer -->
+            <div class="text-center mt-8 reveal">
+                <p class="text-white/60 italic text-sm" style="font-family: 'Biski_2', sans-serif;">
+                    En caso de alergias, consulte con nuestro personal.
+                </p>
             </div>
         </div>
     </section>
+
 
     <!-- Contact & Location Section -->
     <section id="contact" class="contact">
@@ -1692,8 +1871,8 @@
                             <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                         </div>
                         <div class="contact-info-text">
-                            <h4>Our Address</h4>
-                            <p>Carrer de Ramon y Cajal, 45, Gràcia, 08012 Barcelona, Spain</p>
+                            <h4>{{ __('public.homepage_address_label') }}</h4>
+                            <p>{{ __('public.contact_address') }}</p>
                         </div>
                     </li>
                     <li class="contact-info-item">
@@ -1701,8 +1880,8 @@
                             <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.2c.28-.27.36-.66.25-1.02C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
                         </div>
                         <div class="contact-info-text">
-                            <h4>Phone & WhatsApp</h4>
-                            <p>+34 931 234 567 / +34 600 999 888</p>
+                            <h4>{{ __('public.homepage_phone_label') }}</h4>
+                            <p><a href="tel:+34931668611">{{ __('public.contact_phone') }}</a> / <a href="https://wa.me/34671620787" target="_blank" rel="noopener noreferrer">{{ __('public.contact_whatsapp') }}</a></p>
                         </div>
                     </li>
                     <li class="contact-info-item">
@@ -1710,8 +1889,8 @@
                             <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                         </div>
                         <div class="contact-info-text">
-                            <h4>Email Support</h4>
-                            <p>hello@koyabcn.es</p>
+                            <h4>{{ __('public.homepage_email_label') }}</h4>
+                            <p><a href="mailto:{{ __('public.contact_email') }}">{{ __('public.contact_email') }}</a></p>
                         </div>
                     </li>
                 </ul>
@@ -1725,7 +1904,15 @@
                 </h3>
                 <div class="schedule-list">
                     @php
-                    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    $daysOfWeek = [
+                        __('public.day_0'),
+                        __('public.day_1'),
+                        __('public.day_2'),
+                        __('public.day_3'),
+                        __('public.day_4'),
+                        __('public.day_5'),
+                        __('public.day_6'),
+                    ];
                     @endphp
 
                     @if($schedule && $schedule->count() > 0)
@@ -1733,12 +1920,15 @@
                             <div class="schedule-row">
                                 <span class="schedule-day">{{ $daysOfWeek[$sched->day_of_week] }}</span>
                                 @if($sched->is_closed)
-                                    <span class="schedule-hours closed">Closed</span>
+                                    <span class="schedule-hours closed">{{ __('public.closed_short') }}</span>
                                 @else
                                     <span class="schedule-hours">
                                         {{ substr($sched->open_time_1, 0, 5) }} - {{ substr($sched->close_time_1, 0, 5) }}
                                         @if($sched->open_time_2)
                                             &amp; {{ substr($sched->open_time_2, 0, 5) }} - {{ substr($sched->close_time_2, 0, 5) }}
+                                        @endif
+                                        @if($sched->open_time_3)
+                                            &amp; {{ substr($sched->open_time_3, 0, 5) }} - {{ substr($sched->close_time_3, 0, 5) }}
                                         @endif
                                     </span>
                                 @endif
@@ -1747,15 +1937,33 @@
                     @else
                         <!-- Fallback schedule -->
                         <div class="schedule-row">
-                            <span class="schedule-day">Monday</span>
-                            <span class="schedule-hours closed">Closed</span>
+                            <span class="schedule-day">{{ __('public.day_2') }}</span>
+                            <span class="schedule-hours">18:00 - 23:00</span>
                         </div>
-                        @foreach(['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] as $day)
-                            <div class="schedule-row">
-                                <span class="schedule-day">{{ $day }}</span>
-                                <span class="schedule-hours">12:00 - 16:00 &amp; 19:00 - 23:30</span>
-                            </div>
-                        @endforeach
+                        <div class="schedule-row">
+                            <span class="schedule-day">{{ __('public.day_3') }}</span>
+                            <span class="schedule-hours">18:00 - 23:00</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-day">{{ __('public.day_4') }}</span>
+                            <span class="schedule-hours">18:00 - 23:00</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-day">{{ __('public.day_5') }}</span>
+                            <span class="schedule-hours">13:00 - 16:30 &amp; 19:30 - 23:30</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-day">{{ __('public.day_6') }}</span>
+                            <span class="schedule-hours">13:00 - 16:30 &amp; 19:30 - 23:30</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-day">{{ __('public.day_0') }}</span>
+                            <span class="schedule-hours closed">{{ __('public.closed_short') }}</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span class="schedule-day">{{ __('public.day_1') }}</span>
+                            <span class="schedule-hours closed">{{ __('public.closed_short') }}</span>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -1767,9 +1975,11 @@
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-logo-desc">
-                    <h3 class="footer-logo-title">KOYA</h3>
+                    <a href="#" class="footer-logo-wrap">
+                        <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA Logo" class="footer-logo-img" onerror="this.src='/favicon.ico'">
+                    </a>
                     <p class="footer-p">
-                        Authentic Smash Burgers with crispy borders and bold Rice Bowls loaded with premium ingredients. Experience street food with attitude.
+                        {{ __('public.homepage_meta_description') }}
                     </p>
                     <div class="social-icons">
                         <a href="#" class="social-icon" aria-label="Instagram">
@@ -1777,9 +1987,6 @@
                         </a>
                         <a href="#" class="social-icon" aria-label="Facebook">
                             <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
-                        </a>
-                        <a href="#" class="social-icon" aria-label="TikTok">
-                            <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.86-.74-3.99-1.72-.08-.07-.17-.14-.24-.22v6.52c-.05 2.12-.87 4.25-2.48 5.61-1.61 1.35-3.85 1.83-5.91 1.44-2.07-.39-3.96-1.73-4.99-3.56-1.03-1.84-1.12-4.16-.32-6.05.8-1.89 2.53-3.38 4.54-3.87 1.05-.26 2.15-.22 3.19.12v4.07c-.89-.35-1.91-.32-2.76.17-.86.49-1.44 1.4-1.57 2.38-.13.98.2 2.01.88 2.73.68.72 1.7 1.07 2.68.96.98-.11 1.83-.78 2.22-1.68.27-.63.34-1.32.33-2V.02z"/></svg>
                         </a>
                     </div>
                 </div>
@@ -1793,19 +2000,11 @@
                     </ul>
                 </div>
 
-                <div>
-                    <h4 class="footer-nav-title">Services</h4>
-                    <ul class="footer-links">
-                        <li><a href="{{ route('order.public') }}">Takeaway & Delivery</a></li>
-                        <li><a href="{{ route('reservations.public.create') }}">Book a Table</a></li>
-                        <li><a href="{{ route('login') }}">Staff Login</a></li>
-                    </ul>
-                </div>
             </div>
 
             <div class="footer-bottom">
                 <p>&copy; 2026 KOYA BCN. All rights reserved.</p>
-                <p>Designed with attitude 🤘</p>
+                <p>Create by <a href="http://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
             </div>
         </div>
     </footer>
@@ -1863,4 +2062,8 @@
     </script>
 </body>
 </html>
+
+
+
+
 

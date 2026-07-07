@@ -323,7 +323,7 @@
                     </div>
                 @endif
 
-                <form :action="'/reservations/' + editingReservation.id" method="POST" class="space-y-4 text-left"
+                <form :action="@js(route('reservations.update', ['reservation' => '__RESERVATION__'])).replace('__RESERVATION__', editingReservation.id)" method="POST" class="space-y-4 text-left"
                     x-data="{ 
                         date: '',
                         selectedTime: '',
@@ -481,7 +481,7 @@
                     </div>
                 </form>
                 
-                <form :action="'/reservations/' + editingReservation.id" method="POST" x-ref="deleteResForm" class="hidden">
+                <form :action="@js(route('reservations.destroy', ['reservation' => '__RESERVATION__'])).replace('__RESERVATION__', editingReservation.id)" method="POST" x-ref="deleteResForm" class="hidden">
                     @csrf
                     @method('DELETE')
                 </form>

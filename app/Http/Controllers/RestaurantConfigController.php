@@ -30,33 +30,29 @@ class RestaurantConfigController extends Controller
 
         $schedules = RestaurantSchedule::orderBy('day_of_week')->get();
         if ($schedules->isEmpty()) {
-            // Seed default schedules if none exist
-            $days = [
-                0 => 'Sunday',
-                1 => 'Monday',
-                2 => 'Tuesday',
-                3 => 'Wednesday',
-                4 => 'Thursday',
-                5 => 'Friday',
-                6 => 'Saturday'
-            ];
-            foreach ($days as $day => $name) {
+            foreach (range(0, 6) as $day) {
                 $params = [
                     'day_of_week' => $day,
-                    'is_closed' => false,
-                    'open_time_1' => '12:00',
-                    'close_time_1' => '16:00',
-                    'open_time_2' => '19:00',
-                    'close_time_2' => '23:00',
+                    'is_closed' => in_array($day, [0, 1], true),
+                    'open_time_1' => null,
+                    'close_time_1' => null,
+                    'open_time_2' => null,
+                    'close_time_2' => null,
+                    'open_time_3' => null,
+                    'close_time_3' => null,
                     'max_party_size' => 25,
                 ];
 
-                // Special double-seating for Friday and Saturday
-                if ($day === 5 || $day === 6) {
+                if (in_array($day, [2, 3, 4], true)) {
+                    $params['open_time_1'] = '18:00';
+                    $params['close_time_1'] = '23:00';
+                }
+
+                if (in_array($day, [5, 6], true)) {
+                    $params['open_time_1'] = '13:00';
+                    $params['close_time_1'] = '16:30';
                     $params['open_time_2'] = '19:30';
-                    $params['close_time_2'] = '21:30';
-                    $params['open_time_3'] = '21:30';
-                    $params['close_time_3'] = '23:30';
+                    $params['close_time_2'] = '23:30';
                 }
 
                 RestaurantSchedule::create($params);
@@ -168,3 +164,4 @@ class RestaurantConfigController extends Controller
         return back()->with('success', $message);
     }
 }
+

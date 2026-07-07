@@ -37,6 +37,7 @@ class PublicTakeawayController extends Controller
                 'id',
                 'name',
                 'category',
+                'description',
                 'price',
                 'is_package',
                 'package_details',
@@ -47,6 +48,7 @@ class PublicTakeawayController extends Controller
             'id' => $item->id,
             'name' => $item->name,
             'category' => $item->category,
+            'description' => $item->description,
             'price' => (float) $item->price,
             'is_package' => (bool) $item->is_package,
             'package_details' => $item->package_details,
@@ -95,7 +97,7 @@ class PublicTakeawayController extends Controller
 
         if (count($menuItemIds) !== $menuItemsById->count()) {
             return response()->json([
-                'message' => 'Some selected menu items are no longer available.',
+                'message' => __('public.takeaway_unavailable'),
             ], 422);
         }
 
@@ -242,3 +244,8 @@ class PublicTakeawayController extends Controller
         return $this->hasCustomerPhoneColumn;
     }
 }
+
+
+
+
+

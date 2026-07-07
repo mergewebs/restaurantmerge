@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Cashout;
 use App\Models\Expense;
 use App\Models\Income;
-use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Reservation;
@@ -24,7 +23,6 @@ class PresentationDemoSeeder extends Seeder
     {
         $users = $this->seedUsers();
         $this->seedSchedule();
-        $this->seedMenu();
         $this->seedTablesAndOrders();
         $this->seedReservations($users['owner']);
         $this->seedFinance($users['owner']);
@@ -78,58 +76,22 @@ class PresentationDemoSeeder extends Seeder
             RestaurantSchedule::updateOrCreate(
                 ['day_of_week' => $day],
                 [
-                    'is_closed' => $day === 1,
-                    'open_time_1' => $day === 1 ? null : '12:00',
-                    'close_time_1' => $day === 1 ? null : '16:00',
-                    'open_time_2' => $day === 1 ? null : '19:00',
-                    'close_time_2' => $day === 1 ? null : '23:30',
+                    'is_closed' => in_array($day, [0, 1], true),
+                    'open_time_1' => match (true) {
+                        in_array($day, [2, 3, 4], true) => '18:00',
+                        in_array($day, [5, 6], true) => '13:00',
+                        default => null,
+                    },
+                    'close_time_1' => match (true) {
+                        in_array($day, [2, 3, 4], true) => '23:00',
+                        in_array($day, [5, 6], true) => '16:30',
+                        default => null,
+                    },
+                    'open_time_2' => in_array($day, [5, 6], true) ? '19:30' : null,
+                    'close_time_2' => in_array($day, [5, 6], true) ? '23:30' : null,
                     'open_time_3' => null,
                     'close_time_3' => null,
                     'max_party_size' => 12,
-                ]
-            );
-        }
-    }
-
-    private function seedMenu(): void
-    {
-        $items = [
-            ['Loaded Nachos', 'Starters', 8.90, false, null],
-            ['Crispy Chicken Bites', 'Starters', 7.50, false, null],
-            ['Classic Smash Burger', 'Smash Burgers', 11.90, false, null],
-            ['Truffle Double Smash', 'Smash Burgers', 14.50, false, null],
-            ['Tartufata', 'Smash Burgers', 13.90, false, 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.'],
-            ['Smash Burger', 'Smash Burgers', 10.90, false, 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.'],
-            ['Red Onion', 'Smash Burgers', 11.50, false, 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.'],
-            ['SOBOKU', 'Smash Burgers', 10.50, false, 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.'],
-            ['Spicy Korean Rice Bowl', 'Rice Bowls', 12.80, false, null],
-            ['Mediterranean Rice Bowl', 'Rice Bowls', 11.70, false, null],
-            ['KOYA SALAD', 'Rice Bowls', 9.80, false, 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.'],
-            ['KATSUDON', 'Rice Bowls', 12.50, false, 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.'],
-            ['House Fries', 'Sides', 4.20, false, null],
-            ['Sweet Potato Fries', 'Sides', 4.90, false, null],
-            ['Cheesecake Jar', 'Homemade Desserts', 5.50, false, null],
-            ['Chocolate Brownie', 'Homemade Desserts', 5.20, false, null],
-            ['Still Water', 'Drinks', 2.00, false, null],
-            ['Homemade Lemonade', 'Drinks', 3.50, false, null],
-            ['Local Lager', 'Beers', 3.80, false, null],
-            ['House IPA', 'Beers', 4.50, false, null],
-            ['Mojito', 'Cocktails', 7.90, false, null],
-            ['Espresso', 'Coffee', 1.70, false, null],
-            ['Lunch Combo', 'Starters', 15.90, true, 'Burger or rice bowl, side, and drink.'],
-            ['Family Takeaway Pack', 'Smash Burgers', 39.90, true, 'Four burgers, two large fries, and four drinks.'],
-        ];
-
-        foreach ($items as $index => [$name, $category, $price, $isPackage, $details]) {
-            MenuItem::updateOrCreate(
-                ['name' => $name],
-                [
-                    'category' => $category,
-                    'price' => $price,
-                    'is_active' => true,
-                    'is_package' => $isPackage,
-                    'package_details' => $details,
-                    'sort_order' => $index + 1,
                 ]
             );
         }
@@ -147,20 +109,20 @@ class PresentationDemoSeeder extends Seeder
         }
 
         $this->createOrder(2, Order::TYPE_TABLE, Order::KITCHEN_STATUS_PENDING, [
-            ['Classic Smash Burger', 2, 11.90, 'No onion on one burger', OrderItem::STATUS_PENDING],
-            ['House Fries', 2, 4.20, null, OrderItem::STATUS_PENDING],
-            ['Homemade Lemonade', 2, 3.50, null, OrderItem::STATUS_PENDING],
+            ['KOYA SMASH SPECIAL', 2, 13.99, 'No onion on one burger', OrderItem::STATUS_PENDING],
+            ['PATATAS FRITAS', 2, 3.50, null, OrderItem::STATUS_PENDING],
+            ['NESTEA', 2, 2.60, null, OrderItem::STATUS_PENDING],
         ]);
 
         $this->createOrder(5, Order::TYPE_TABLE, Order::KITCHEN_STATUS_IN_PREPARATION, [
-            ['Truffle Double Smash', 1, 14.50, 'Medium well', OrderItem::STATUS_IN_PREPARATION],
-            ['Spicy Korean Rice Bowl', 1, 12.80, null, OrderItem::STATUS_PENDING],
-            ['Local Lager', 2, 3.80, null, OrderItem::STATUS_READY],
+            ['TARTUFATA', 1, 12.50, 'Medium well', OrderItem::STATUS_IN_PREPARATION],
+            ['ADOBO', 1, 10.00, null, OrderItem::STATUS_PENDING],
+            ['ESTRELLA DAMM', 2, 2.40, null, OrderItem::STATUS_READY],
         ]);
 
         $this->createOrder(10000, Order::TYPE_TAKEAWAY, Order::KITCHEN_STATUS_READY, [
-            ['Family Takeaway Pack', 1, 39.90, null, OrderItem::STATUS_READY],
-            ['Cheesecake Jar', 2, 5.50, null, OrderItem::STATUS_READY],
+            ['KOYA SMASH SPECIAL', 1, 13.99, null, OrderItem::STATUS_READY],
+            ['MANGO FLOAT', 2, 5.90, null, OrderItem::STATUS_READY],
         ], 'Lucia Martin', '+34 600 123 456');
     }
 
@@ -278,3 +240,4 @@ class PresentationDemoSeeder extends Seeder
         ]);
     }
 }
+

@@ -136,7 +136,7 @@
                     </button>
                 </div>
 
-                <form :action="'/finance/categories/' + editingCategory.id" method="POST" class="space-y-4">
+                <form :action="@js(route('finance.categories.update', ['category' => '__CATEGORY__'])).replace('__CATEGORY__', editingCategory.id)" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
                     <div>
@@ -153,7 +153,7 @@
                     </div>
                     <div class="flex gap-3 pt-2">
                         <button type="button" 
-                                @click="if(confirm('Delete this category?')) $refs.deleteCategoryForm.action = '/finance/categories/' + editingCategory.id; $refs.deleteCategoryForm.submit()"
+                                @click="if(confirm('Delete this category?')) $refs.deleteCategoryForm.action = @js(route('finance.categories.destroy', ['category' => '__CATEGORY__'])).replace('__CATEGORY__', editingCategory.id); $refs.deleteCategoryForm.submit()"
                                 class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
                             Delete
                         </button>
@@ -168,3 +168,4 @@
         </div>
     </div>
 </x-app-layout>
+

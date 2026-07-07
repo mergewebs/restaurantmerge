@@ -224,6 +224,12 @@
                                         </div>
 
                                         <div x-show="openEdit" x-cloak class="px-2.5 pb-2.5 pt-2 border-t border-white/10">
+                                            @if($item->description)
+                                                <div class="mb-2 rounded-lg border border-white/10 bg-white/5 p-2 text-[11px] text-white/70">
+                                                    {{ $item->description }}
+                                                </div>
+                                            @endif
+
                                             @if($item->is_package && $item->package_details)
                                                 <div class="mb-2 rounded-lg border border-amber-500/20 bg-amber-500/5 p-2 text-[11px] text-amber-200">
                                                     {{ $item->package_details }}
@@ -249,6 +255,11 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
+                                                </div>
+
+                                                <div>
+                                                    <label class="menu-label" for="description-{{ $item->id }}">Description</label>
+                                                    <textarea id="description-{{ $item->id }}" class="menu-field" name="description" rows="3" placeholder="Short menu description">{{ $item->description }}</textarea>
                                                 </div>
 
                                                 <div class="grid grid-cols-2 gap-1.5">
@@ -332,11 +343,16 @@
                         <label class="menu-label" for="menu-item-category">Category</label>
                         <select id="menu-item-category" class="menu-field" name="category" required>
                             @foreach($categoryOptions as $categoryOption)
-                                <option value="{{ $categoryOption }}" {{ old('category', 'Starters') === $categoryOption ? 'selected' : '' }}>
+                                <option value="{{ $categoryOption }}" {{ old('category', 'Entrantes') === $categoryOption ? 'selected' : '' }}>
                                     {{ $categoryOption }}
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div>
+                        <label class="menu-label" for="menu-item-description">Description</label>
+                        <textarea id="menu-item-description" class="menu-field" name="description" rows="3" placeholder="Short menu description">{{ old('description') }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -381,3 +397,5 @@
     </div>
 
 </x-app-layout>
+
+

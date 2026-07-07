@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $restaurantName }} | Order Online</title>
+    <title>{{ __('public.site_title_order', ['restaurant' => $restaurantName]) }}</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,7 +94,7 @@
             justify-content: center;
             background-color: var(--color-yellow);
             color: var(--color-dark);
-            font-family: var(--font-headline);
+            font-family: 'Biski', sans-serif;
             border: var(--border-width) solid var(--color-dark);
             box-shadow: 4px 4px 0px var(--color-dark);
             cursor: pointer;
@@ -121,7 +121,7 @@
             justify-content: center;
             background-color: var(--color-light);
             color: var(--color-dark);
-            font-family: var(--font-headline);
+            font-family: 'Biski', sans-serif;
             border: var(--border-width) solid var(--color-dark);
             box-shadow: 4px 4px 0px var(--color-dark);
             cursor: pointer;
@@ -290,7 +290,7 @@
     </div>
 
     <!-- Sticky Navigation Header -->
-    <header class="sticky top-0 z-50 bg-[#088972] border-b-[4px] border-[#121212] py-2 backdrop-blur-md relative">
+    <header class="sticky top-0 z-50 bg-[#088972] py-2 backdrop-blur-md relative">
         <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
             <a href="/" class="flex items-center gap-3">
                 <img 
@@ -303,6 +303,7 @@
             </a>
             
             <div class="flex items-center gap-2">
+                <x-language-switcher theme="dark" />
                 <a href="/" class="btn-koya-secondary text-xs uppercase py-2 px-4 rounded-full" style="font-size: 0.8rem; border-width: 3px;">
                     🏠 Home
                 </a>
@@ -330,11 +331,11 @@
             
             <div class="flex items-center justify-between md:justify-end gap-6 border-t md:border-t-0 border-[#ebd6b0]/50 pt-3 md:pt-0 z-10">
                 <div class="text-left md:text-right">
-                    <p class="text-[10px] text-[#555] uppercase tracking-widest font-extrabold">In Cart</p>
-                    <p class="text-sm font-black text-[#121212]"><span x-text="itemCount()"></span> items</p>
+                    <p class="text-[10px] text-[#555] uppercase tracking-widest font-extrabold">{{ __('public.order_in_cart') }}</p>
+                    <p class="text-sm font-black text-[#121212]"><span x-text="itemCount()"></span> <span x-text="itemLabel(itemCount())"></span></p>
                 </div>
                 <div class="text-right">
-                    <p class="text-[10px] text-[#555] uppercase tracking-widest font-extrabold">Total</p>
+                    <p class="text-[10px] text-[#555] uppercase tracking-widest font-extrabold">{{ __('public.order_total') }}</p>
                     <p class="font-['Biski'] text-2xl text-koya-green" x-text="currency(total())"></p>
                 </div>
             </div>
@@ -361,7 +362,7 @@
                     <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <span>Order Placed Successfully!</span>
+                    <span>{{ __('public.order_success_heading') }}</span>
                 </div>
                 <p class="text-xs font-bold" x-html="successMessage"></p>
             </div>
@@ -369,8 +370,8 @@
 
         <!-- Category Horizontal Tabs Container -->
         <div class="sticky top-[76px] z-40 py-3 -mx-4 px-4 bg-gradient-to-b from-[#fac021] via-[#fac021]/95 to-transparent">
-            <div class="flex justify-start md:justify-center overflow-x-auto no-scrollbar pb-1">
-                <div class="flex gap-1.5 md:gap-2 bg-koya-greenDark p-1.5 md:p-2 rounded-full border-[3px] border-koya-dark">
+            <div class="flex justify-center pb-1">
+                <div class="flex flex-wrap justify-center gap-1.5 md:gap-2 bg-koya-greenDark p-1.5 md:p-2 rounded-2xl md:rounded-full border-[3px] border-koya-dark">
                     <button
                         type="button"
                         @click="activeCategory = 'All'"
@@ -419,7 +420,7 @@
                             <template x-if="!getImagePath(item.name)">
                                 <div class="flex flex-col items-center justify-center text-center p-4">
                                     <div class="w-16 h-16 rounded-full bg-koya/20 border-2 border-[#fac021]/30 flex items-center justify-center mb-2">
-                                        <span class="text-koya-dark font-black text-xl" x-text="item.name.substring(0, 2).toUpperCase()"></span>
+                                        <span class="text-koya-dark font-black text-xl" x-text="translatedName(item.name).substring(0, 2).toUpperCase()"></span>
                                     </div>
                                     <span class="text-[9px] uppercase tracking-widest text-[#121212]/40" x-text="item.category"></span>
                                 </div>
@@ -433,21 +434,18 @@
                                         Combo Pack
                                     </span>
                                 </template>
-                                <template x-if="getBadge(item.name)">
-                                    <span class="sticker text-[9px] px-2 py-0.5 rounded border border-[#121212]" x-text="getBadge(item.name)"></span>
-                                </template>
                             </div>
                         </div>
 
                         <!-- Product Title and Price -->
                         <div class="flex justify-between items-start gap-2 mb-2">
-                            <h3 class="font-['Biski'] text-xl text-koya-dark uppercase tracking-wide leading-tight group-hover:text-koya-green transition-colors" x-text="item.name"></h3>
+                            <h3 class="font-['Biski'] text-xl text-koya-dark uppercase tracking-wide leading-tight group-hover:text-koya-green transition-colors" x-html="formatName(translatedName(item.name))"></h3>
                             <span class="font-bold text-xl text-koya-green whitespace-nowrap" x-text="currency(item.price)"></span>
                         </div>
                         
                         <!-- Description -->
                         <p 
-                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-6 line-clamp-3 min-h-[3.375rem]" 
+                            class="font-['Biski_2'] text-sm text-[#555] leading-relaxed mb-6" 
                             x-text="getDescription(item)"
                         ></p>
                     </div>
@@ -479,7 +477,7 @@
                                     &minus;
                                 </button>
                                 <div class="flex-1 text-center select-none">
-                                    <span class="text-[9px] text-[#555] block leading-none font-bold uppercase tracking-wider">In Cart</span>
+                                    <span class="text-[9px] text-[#555] block leading-none font-bold uppercase tracking-wider">{{ __('public.order_in_cart') }}</span>
                                     <span class="text-sm font-black text-[#088972] block mt-0.5" x-text="getCartQty(item.id)"></span>
                                 </div>
                                 <button
@@ -521,8 +519,8 @@
                 <div>
                     <div class="flex items-center justify-between border-b-[3px] border-[#121212] pb-4">
                         <div>
-                            <h2 class="font-['Biski'] text-2xl uppercase text-[#121212]">Your Order</h2>
-                            <p class="text-xs text-[#555] mt-0.5 font-bold"><span x-text="itemCount()"></span> items selected</p>
+                            <h2 class="font-['Biski'] text-2xl uppercase text-[#121212]">{{ __('public.order_panel_title') }}</h2>
+                            <p class="text-xs text-[#555] mt-0.5 font-bold" x-text="i18n.itemSelected.replace('__COUNT__', itemCount())"></p>
                         </div>
                         <button 
                             type="button" 
@@ -541,7 +539,7 @@
                         <template x-for="item in cart" :key="item.id">
                             <div class="rounded-2xl bg-[#fac021] border-[3px] border-[#121212] p-4 flex gap-3 items-center justify-between shadow-[3px_3px_0px_#121212]">
                                 <div class="min-w-0 flex-1">
-                                    <h4 class="font-bold text-sm text-[#121212] truncate uppercase" x-text="item.name"></h4>
+                                    <h4 class="font-bold text-sm text-[#121212] truncate uppercase" x-html="formatName(translatedName(item.name))"></h4>
                                     <p class="text-xs text-[#121212]/80 mt-0.5">
                                         <span x-text="currency(item.price)"></span> each
                                     </p>
@@ -571,7 +569,7 @@
                                         type="button" 
                                         class="ml-1 w-8 h-8 rounded bg-red-100 hover:bg-red-200 border-2 border-red-600 text-red-600 flex items-center justify-center active:scale-95 transition-colors shadow-[1px_1px_0px_#121212]" 
                                         @click="removeItem(item.id)"
-                                        title="Remove item"
+                                        title="{{ __('Remove item') }}"
                                     >
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -587,8 +585,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                                 </svg>
                             </div>
-                            <p class="text-sm text-[#555] font-bold">Your cart is empty.</p>
-                            <p class="text-xs text-[#777] mt-1">Tap Add to Order on menu items to begin!</p>
+                            <p class="text-sm text-[#555] font-bold">{{ __('public.order_empty') }}</p>
+                            <p class="text-xs text-[#777] mt-1">{{ __('public.order_empty_help') }}</p>
                         </div>
                     </div>
                 </div>
@@ -596,23 +594,23 @@
                 <!-- Customer Fields & Checkout Button -->
                 <div class="border-t-[3px] border-[#121212] pt-4 mt-4 space-y-4 bg-transparent shrink-0">
                     <div class="bg-[#fac021]/15 border-2 border-[#121212] p-4 rounded-2xl flex justify-between items-center shadow-[3px_3px_0px_#121212]">
-                        <span class="text-xs font-black uppercase text-[#121212]/70 tracking-wider font-['Biski_2']">Total to Pay</span>
+                        <span class="text-xs font-black uppercase text-[#121212]/70 tracking-wider font-['Biski_2']">{{ __('public.order_total_to_pay') }}</span>
                         <span class="font-['Biski'] text-2xl text-koya-green" x-text="currency(total())"></span>
                     </div>
 
                     <div class="space-y-3">
                         <div>
-                            <label class="text-[10px] uppercase tracking-widest text-[#121212]/60 font-black block mb-1">Customer Name</label>
+                            <label class="text-[10px] uppercase tracking-widest text-[#121212]/60 font-black block mb-1">{{ __('public.order_customer_name') }}</label>
                             <input 
                                 type="text" 
                                 x-model="customerName" 
                                 @input="persistState()" 
-                                placeholder="Write your full name" 
+                                placeholder="{{ __('public.order_customer_name_placeholder') }}" 
                                 class="w-full text-sm rounded-xl px-4 py-3"
                             >
                         </div>
                         <div>
-                            <label class="text-[10px] uppercase tracking-widest text-[#121212]/60 font-black block mb-1">Phone Number (Optional)</label>
+                            <label class="text-[10px] uppercase tracking-widest text-[#121212]/60 font-black block mb-1">{{ __('public.order_customer_phone') }}</label>
                             <input 
                                 type="tel" 
                                 x-model="customerPhone" 
@@ -650,8 +648,8 @@
                 @click="showOrderPanel = true"
                 class="pointer-events-auto relative w-16 h-16 rounded-full border-[3px] border-[#121212] bg-[#fac021] text-[#121212] shadow-[4px_4px_0px_#121212] flex items-center justify-center active:translate-x-[2px] active:translate-y-[2px] active:shadow-none hover:scale-105 transition-transform"
                 :class="cart.length > 0 ? 'bg-[#fac021] border-[#121212] animate-pulse-slow' : 'bg-white'"
-                title="Current Order"
-                aria-label="Open current order"
+                title="{{ __('public.order_current') }}"
+                aria-label="{{ __('public.order_open_current') }}"
             >
                 <svg class="w-6.5 h-6.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
@@ -828,6 +826,15 @@
                     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
                 },
 
+                translatedName(name) {
+                    return name || '';
+                },
+
+                formatName(name) {
+                    if (!name) return '';
+                    return name.replace(/(\(\d+\s*uds\.?\))/gi, '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>');
+                },
+
                 async submitOrder() {
                     if (this.isSubmitting) return;
 
@@ -856,7 +863,7 @@
                         const payload = await response.json();
 
                         if (!response.ok) {
-                            throw new Error(payload.message || 'Could not submit your order right now.');
+                            throw new Error(payload.message || this.i18n.submitError);
                         }
 
                         this.successMessage = payload.message || `Order #${payload.order_id} received.`;
@@ -866,7 +873,7 @@
                         this.showOrderPanel = false;
                         this.persistState();
                     } catch (error) {
-                        this.errorMessage = error?.message || 'Could not submit your order right now.';
+                        this.errorMessage = error?.message || this.i18n.submitError;
                     } finally {
                         this.isSubmitting = false;
                     }
@@ -908,24 +915,31 @@
                 },
 
                 getImagePath(itemName) {
+                    if (!itemName) return null;
+                    const cleanName = itemName.toUpperCase().trim();
                     const images = {
-                        'Classic Smash Burger': 'smash-burger.png',
-                        'Truffle Double Smash': 'tartufata.png',
-                        'Tartufata': 'tartufata.png',
-                        'Smash Burger': 'smash-burger.png',
-                        'Red Onion': 'red-onion.png',
+                        'CLASSIC SMASH BURGER': 'smash-burger.png',
+                        'TRUFFLE DOUBLE SMASH': 'tartufata.png',
+                        'TARTUFATA': 'tartufata.png',
+                        'SMASH BURGER': 'smash-burger.png',
+                        'RED ONION': 'red-onion.png',
                         'SOBOKU': 'soboku.png',
-                        'Family Takeaway Pack': 'smash-burger.png',
-                        'Spicy Korean Rice Bowl': 'katsudon.png',
-                        'Mediterranean Rice Bowl': 'koya-salad.png',
+                        'FAMILY TAKEAWAY PACK': 'smash-burger.png',
+                        'SPICY KOREAN RICE BOWL': 'katsudon.png',
+                        'MEDITERRANEAN RICE BOWL': 'koya-salad.png',
                         'KOYA SALAD': 'koya-salad.png',
                         'KATSUDON': 'katsudon.png',
+                        'KOYA SMASH': 'smash-burger.png',
+                        'KOYA SMASH SPECIAL': 'smash-burger.png',
                     };
-                    const name = images[itemName];
+                    const name = images[cleanName];
                     return name ? `/images/${name}` : null;
                 },
 
                 getDescription(item) {
+                    if (item.description && item.description.trim() !== '') {
+                        return item.description;
+                    }
                     if (item.package_details && item.package_details.trim() !== '') {
                         return item.package_details;
                     }
@@ -955,7 +969,7 @@
                         'Lunch Combo': 'Burger or rice bowl, side, and drink.',
                         'Family Takeaway Pack': 'Four burgers, two large fries, and four drinks.'
                     };
-                    return descriptions[item.name] || 'Delicious KOYA recipe prepared with fresh ingredients.';
+                    return descriptions[item.name] || this.i18n.menuFallback;
                 },
 
                 getBadge(itemName) {
@@ -971,10 +985,14 @@
                         'KATSUDON': 'Crispy',
                         'SOBOKU': 'Simple',
                     };
-                    return badges[itemName] || null;
+                    return this.i18n.menuBadges?.[badges[itemName]] || badges[itemName] || null;
                 },
             };
         }
     </script>
 </body>
 </html>
+
+
+
+

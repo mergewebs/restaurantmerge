@@ -44,6 +44,14 @@
             }
         </script>
         <style>
+            @font-face {
+                font-family: 'Biski';
+                src: url("{{ asset('fonts/Biski.ttf') }}") format('truetype');
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
             :root {
                 --koya: #c89b3c;
                 --bg: #17110c;
@@ -71,6 +79,7 @@
             .btn-koya { 
                 background-color: var(--koya); 
                 color: #17110c; 
+                font-family: 'Biski', sans-serif;
                 border-radius: 12px; 
                 font-weight: 800; 
                 text-transform: uppercase;

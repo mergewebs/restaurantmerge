@@ -40,6 +40,14 @@
     </script>
     
     <style>
+        @font-face {
+            font-family: 'Biski';
+            src: url("{{ asset('fonts/Biski.ttf') }}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
         :root {
             --koya: #c89b3c;
             --koya-gold: #fac021;
@@ -75,10 +83,11 @@
             border-color: rgba(200, 155, 60, 0.3);
             box-shadow: 0 15px 30px -10px rgba(200, 155, 60, 0.1);
         }
-
+ 
         .btn-koya {
             background: linear-gradient(135deg, #d9b45f 0%, #b98627 100%);
             color: #120d09;
+            font-family: 'Biski', sans-serif;
             box-shadow: 0 4px 15px rgba(200, 155, 60, 0.3);
             transition: all 0.2s ease;
         }
@@ -156,7 +165,8 @@
                         >
                     </a>
                     <div>
-                        <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-2.5 flex-wrap">
+                            <x-language-switcher theme="dark" />
                             <a href="/" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/80 hover:text-white px-2.5 py-1 rounded-full border border-white/10 transition-colors uppercase font-bold tracking-wider">
                                 🏠 Home
                             </a>
@@ -212,11 +222,11 @@
 
         <!-- Category Horizontal Tabs Container -->
         <div class="sticky top-0 z-40 py-3 -mx-4 px-4 bg-gradient-to-b from-[#120d09] via-[#120d09]/95 to-transparent backdrop-blur-md">
-            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+            <div class="flex flex-wrap items-center justify-center gap-2 py-1">
                 <button
                     type="button"
                     @click="activeCategory = 'All'"
-                    class="px-5 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 border flex-shrink-0"
+                    class="px-5 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 border"
                     :class="activeCategory === 'All' ? 'bg-koya text-darkBg border-koya shadow-lg shadow-koya/20 scale-105' : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10 hover:text-white'"
                 >
                     All Menu
@@ -225,7 +235,7 @@
                     <button
                         type="button"
                         @click="activeCategory = category"
-                        class="px-5 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 border flex-shrink-0"
+                        class="px-5 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider transition-all duration-300 border"
                         :class="activeCategory === category ? 'bg-koya text-darkBg border-koya shadow-lg shadow-koya/20 scale-105' : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10 hover:text-white'"
                     >
                         <span x-text="category"></span>
@@ -281,13 +291,13 @@
 
                         <!-- Product Title and Price -->
                         <div class="flex justify-between items-start gap-2 mb-2">
-                            <h3 class="text-lg font-black text-white leading-tight group-hover:text-koya transition-colors duration-200" x-text="item.name"></h3>
+                            <h3 class="text-lg font-black text-white leading-tight group-hover:text-koya transition-colors duration-200" x-html="formatName(item.name)"></h3>
                             <span class="text-lg font-black text-koya-gold whitespace-nowrap" x-text="currency(item.price)"></span>
                         </div>
                         
                         <!-- Description -->
                         <p 
-                            class="text-xs text-white/60 font-light leading-relaxed mb-6 line-clamp-3 min-h-[3.375rem]" 
+                            class="text-xs text-white/60 font-light leading-relaxed mb-6" 
                             x-text="getDescription(item)"
                         ></p>
                     </div>
@@ -381,7 +391,7 @@
                         <template x-for="item in cart" :key="item.id">
                             <div class="rounded-2xl bg-white/5 border border-white/5 p-4 flex gap-3 items-center justify-between">
                                 <div class="min-w-0 flex-1">
-                                    <h4 class="text-sm font-extrabold text-white truncate" x-text="item.name"></h4>
+                                    <h4 class="text-sm font-extrabold text-white truncate" x-html="formatName(item.name)"></h4>
                                     <p class="text-xs text-white/50 mt-0.5">
                                         <span x-text="currency(item.price)"></span> each
                                     </p>
@@ -667,6 +677,11 @@
                     return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(amount);
                 },
 
+                formatName(name) {
+                    if (!name) return '';
+                    return name.replace(/(\(\d+\s*uds\.?\))/gi, '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>');
+                },
+
                 async submitOrder() {
                     if (this.isSubmitting) return;
 
@@ -747,24 +762,31 @@
                 },
 
                 getImagePath(itemName) {
+                    if (!itemName) return null;
+                    const cleanName = itemName.toUpperCase().trim();
                     const images = {
-                        'Classic Smash Burger': 'smash-burger.png',
-                        'Truffle Double Smash': 'tartufata.png',
-                        'Tartufata': 'tartufata.png',
-                        'Smash Burger': 'smash-burger.png',
-                        'Red Onion': 'red-onion.png',
+                        'CLASSIC SMASH BURGER': 'smash-burger.png',
+                        'TRUFFLE DOUBLE SMASH': 'tartufata.png',
+                        'TARTUFATA': 'tartufata.png',
+                        'SMASH BURGER': 'smash-burger.png',
+                        'RED ONION': 'red-onion.png',
                         'SOBOKU': 'soboku.png',
-                        'Family Takeaway Pack': 'smash-burger.png',
-                        'Spicy Korean Rice Bowl': 'katsudon.png',
-                        'Mediterranean Rice Bowl': 'koya-salad.png',
+                        'FAMILY TAKEAWAY PACK': 'smash-burger.png',
+                        'SPICY KOREAN RICE BOWL': 'katsudon.png',
+                        'MEDITERRANEAN RICE BOWL': 'koya-salad.png',
                         'KOYA SALAD': 'koya-salad.png',
                         'KATSUDON': 'katsudon.png',
+                        'KOYA SMASH': 'smash-burger.png',
+                        'KOYA SMASH SPECIAL': 'smash-burger.png',
                     };
-                    const name = images[itemName];
+                    const name = images[cleanName];
                     return name ? `/images/${name}` : null;
                 },
 
                 getDescription(item) {
+                    if (item.description && item.description.trim() !== '') {
+                        return item.description;
+                    }
                     if (item.package_details && item.package_details.trim() !== '') {
                         return item.package_details;
                     }
@@ -817,3 +839,6 @@
     </script>
 </body>
 </html>
+
+
+

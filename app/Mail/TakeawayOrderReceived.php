@@ -39,3 +39,4 @@ class TakeawayOrderReceived extends Mailable
         return [];
     }
 }
+

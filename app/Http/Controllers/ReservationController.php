@@ -50,7 +50,7 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'nullable|string|max:20',
-            'customer_email' => 'nullable|email|max:255',
+            'customer_email' => 'required|email|max:255',
             'party_size' => 'required|integer|min:1',
             'reservation_time' => 'required|date',
             'notes' => 'nullable|string',
@@ -75,7 +75,7 @@ class ReservationController extends Controller
             Mail::to($reservation->customer_email)->send(new ReservationConfirmationClient($reservation, $locale));
         }
 
-        return back()->with('success', 'Reservation created successfully.');
+        return back()->with('success', __('Reservation created successfully.'));
     }
 
     public function publicStore(Request $request)
@@ -83,7 +83,7 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'nullable|string|max:20',
-            'customer_email' => 'nullable|email|max:255',
+            'customer_email' => 'required|email|max:255',
             'party_size' => 'required|integer|min:1',
             'reservation_time' => 'required|date',
             'notes' => 'nullable|string',
@@ -247,13 +247,13 @@ class ReservationController extends Controller
 
         $reservation->update($validated);
 
-        return back()->with('success', 'Reservation updated successfully.');
+        return back()->with('success', __('Reservation updated successfully.'));
     }
 
     public function destroy(Reservation $reservation)
     {
         $reservation->delete();
-        return back()->with('success', 'Reservation deleted.');
+        return back()->with('success', __('Reservation deleted.'));
     }
 
     private function checkAvailability($time, $partySize, $excludeId = null)
@@ -494,3 +494,4 @@ class ReservationController extends Controller
         ]);
     }
 }
+

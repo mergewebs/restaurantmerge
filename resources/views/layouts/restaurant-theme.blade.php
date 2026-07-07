@@ -1,4 +1,12 @@
 <style>
+    @font-face {
+        font-family: 'Biski';
+        src: url("{{ asset('fonts/Biski.ttf') }}") format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
     :root {
         --koya: #c89b3c;
         --koya-dark: #17110c;
@@ -65,6 +73,7 @@
         border-radius: 12px !important;
         box-shadow: 0 16px 32px -22px rgba(217, 180, 95, 0.9) !important;
         font-weight: 800 !important;
+        font-family: 'Biski', sans-serif !important;
         letter-spacing: 0.08em !important;
         min-height: 2.75rem;
     }
