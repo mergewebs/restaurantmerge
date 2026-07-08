@@ -93,13 +93,13 @@ class MenuItemSeeder extends Seeder
         ];
 
         foreach ($items as [$category, $sortOrder, $name, $price, $description]) {
-            MenuItem::firstOrCreate(
+            $menuItem = MenuItem::updateOrCreate(
                 [
                     'category' => $category,
-                    'name' => $name,
+                    'sort_order' => $sortOrder,
                 ],
                 [
-                    'sort_order' => $sortOrder,
+                    'name' => $name,
                     'description' => $description,
                     'price' => $price,
                     'is_active' => true,
@@ -107,6 +107,12 @@ class MenuItemSeeder extends Seeder
                     'package_details' => null,
                 ]
             );
+
+            MenuItem::query()
+                ->where('category', $category)
+                ->where('sort_order', $sortOrder)
+                ->whereKeyNot($menuItem->id)
+                ->delete();
         }
     }
 }

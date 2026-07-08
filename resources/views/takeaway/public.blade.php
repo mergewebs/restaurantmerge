@@ -169,7 +169,7 @@
                         <div class="flex items-center gap-2.5 flex-wrap">
                             <x-language-switcher theme="dark" />
                             <a href="/" class="text-[10px] bg-white/5 hover:bg-white/10 text-white/80 hover:text-white px-2.5 py-1 rounded-full border border-white/10 transition-colors uppercase font-bold tracking-wider">
-                                Ã°Å¸ÂÂ  Home
+                                ÃƒÂ°Ã…Â¸Ã‚ÂÃ‚Â  Home
                             </a>
                             <span class="text-[9px] bg-koya/20 text-koya border border-koya/30 px-2 py-0.5 rounded-full uppercase font-black tracking-widest animate-pulse-slow">
                                 Ordering Online
@@ -788,7 +788,7 @@
                         'Smash Burger': 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.',
                         'Red Onion': 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.',
                         'SOBOKU': 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.',
-                        'Loaded Nachos': 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeÃƒÂ±os.',
+                        'Loaded Nachos': 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeÃƒÆ’Ã‚Â±os.',
                         'Crispy Chicken Bites': 'Tender buttermilk chicken bites served with honey mustard sauce.',
                         'Spicy Korean Rice Bowl': 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame.',
                         'Mediterranean Rice Bowl': 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.',
@@ -807,7 +807,7 @@
                         'Lunch Combo': 'Burger or rice bowl, side, and drink.',
                         'Family Takeaway Pack': 'Four burgers, two large fries, and four drinks.'
                     };
-                    return descriptions[item.name] || 'Delicious KOYA recipe prepared with fresh ingredients.';
+                    return descriptions[item.name] || '';
                 },
 
                 getBadge(itemName) {
