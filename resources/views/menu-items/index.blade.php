@@ -1,163 +1,19 @@
 <x-app-layout>
-    <style>
-        summary.menu-summary {
-            list-style: none;
-        }
-
-        summary.menu-summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .menu-scroll {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 92, 0, 0.5) rgba(255, 255, 255, 0.08);
-        }
-
-        .menu-scroll::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .menu-scroll::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 9999px;
-        }
-
-        .menu-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 92, 0, 0.6);
-            border-radius: 9999px;
-        }
-
-        .menu-checkbox {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0, 0, 0, 0) !important;
-            white-space: nowrap !important;
-            border: 0 !important;
-        }
-
-        .menu-toggle {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-            border-radius: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(255, 255, 255, 0.04);
-            padding: 0.6rem 0.7rem;
-            font-size: 0.74rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.76);
-            transition: border-color .2s ease, background-color .2s ease, color .2s ease;
-            cursor: pointer;
-        }
-
-        .menu-toggle:hover {
-            border-color: rgba(255, 255, 255, 0.26);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .menu-toggle-switch {
-            position: relative;
-            width: 1.85rem;
-            height: 1.1rem;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.16);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            transition: background-color .2s ease, border-color .2s ease;
-            flex: none;
-        }
-
-        .menu-toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 2px;
-            width: 0.75rem;
-            height: 0.75rem;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.92);
-            transform: translate(0, -50%);
-            transition: transform .2s ease, background-color .2s ease;
-        }
-
-        .menu-toggle input:checked + .menu-toggle-switch {
-            background: rgba(255, 92, 0, 0.45);
-            border-color: rgba(255, 92, 0, 0.62);
-        }
-
-        .menu-toggle input:checked + .menu-toggle-switch::after {
-            transform: translate(0.72rem, -50%);
-            background: #fff;
-        }
-
-        .menu-toggle input:checked ~ .menu-toggle-text {
-            color: rgba(255, 255, 255, 0.95);
-        }
-
-        .menu-label {
-            display: block;
-            margin-bottom: 0.35rem;
-            font-size: 0.65rem;
-            font-weight: 800;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.65);
-        }
-
-        .menu-field {
-            width: 100%;
-            border-radius: 0.95rem;
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            background: rgba(255, 255, 255, 0.04);
-            color: #fff;
-            padding: 0.72rem 0.85rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            outline: none;
-            transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
-        }
-
-        .menu-field::placeholder {
-            color: rgba(255, 255, 255, 0.38);
-            font-weight: 500;
-        }
-
-        .menu-field:focus {
-            border-color: rgba(255, 92, 0, 0.58);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 0 3px rgba(255, 92, 0, 0.16);
-        }
-
-        .menu-help {
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.46);
-            margin-top: 0.32rem;
-        }
-    </style>
-
     @php
-        $allItems = $menuItems->flatten();
-        $activeCount = $allItems->where('is_active', true)->count();
-        $packageCount = $allItems->where('is_package', true)->count();
+        $allProducts = $menuItems->flatten();
+        $activeCount = $allProducts->where('is_active', true)->count();
     @endphp
 
-    <div class="space-y-4" x-data="{ showCreateModal: {{ old('create_form') ? 'true' : 'false' }}, createIsPackage: {{ old('is_package') ? 'true' : 'false' }} }" @keydown.escape.window="showCreateModal = false">
+    <div class="space-y-6">
         @if(session('success'))
-            <div class="p-3.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 rounded-2xl text-sm font-bold">
+            <div class="rounded-3xl border border-emerald-500/25 bg-emerald-500/10 px-4 py-3 text-sm font-bold text-emerald-300">
                 {{ session('success') }}
             </div>
         @endif
 
         @if($errors->any())
-            <div class="p-3.5 bg-red-500/10 border border-red-500/20 text-red-300 rounded-2xl text-xs">
-                <ul class="list-disc list-inside space-y-1">
+            <div class="rounded-3xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                <ul class="space-y-1 list-disc list-inside">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -165,237 +21,240 @@
             </div>
         @endif
 
-        <div class="glass rounded-3xl p-5 border border-white/10">
-            <div class="flex flex-wrap items-center justify-between gap-3">
+        <section class="glass rounded-[28px] border border-white/10 p-5 sm:p-6">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <h1 class="text-xl font-black uppercase tracking-wide">Menu Management</h1>
+                    <p class="text-[11px] font-black uppercase tracking-[0.28em] text-koya/70">Owner Panel</p>
+                    <h1 class="mt-2 text-2xl font-black text-white">Products</h1>
+                    <p class="mt-1 max-w-2xl text-sm text-white/55">Create, update, and remove the products shown on the public site. Product photos uploaded here are used on the customer-facing product cards.</p>
+                    <p class="mt-3 max-w-2xl rounded-2xl border border-koya/20 bg-koya/10 px-4 py-3 text-sm font-semibold text-koya/90">Production seeding now adds missing default products from the seeder without deleting the current menu. After that, the owner can manage products here without needing controller or developer changes.</p>
                 </div>
-                <div class="flex items-center gap-2 flex-wrap justify-end">
-                    <span class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/15 bg-white/5 text-white/70">{{ $allItems->count() }} Items</span>
-                    <span class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-500/20 bg-emerald-500/10 text-emerald-300">{{ $activeCount }} Active</span>
-                    <span class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border border-amber-500/20 bg-amber-500/10 text-amber-300">{{ $packageCount }} Packages</span>
-                    <button type="button" @click="showCreateModal = true" class="btn-koya px-4 py-2.5 text-[10px] uppercase tracking-widest font-black">
-                        Add Menu Item
-                    </button>
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-white/45">Total</p>
+                        <p class="mt-1 text-xl font-black text-white">{{ $allProducts->count() }}</p>
+                    </div>
+                    <div class="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3">
+                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-300/70">Active</p>
+                        <p class="mt-1 text-xl font-black text-emerald-300">{{ $activeCount }}</p>
+                    </div>
+                    <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 col-span-2 sm:col-span-1">
+                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-white/45">Categories</p>
+                        <p class="mt-1 text-xl font-black text-white">{{ count($categoryOptions) }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div class="glass rounded-3xl p-3 border border-white/10">
-                <div class="max-h-[80vh] overflow-y-auto pr-1 menu-scroll space-y-3">
-                    @forelse($menuItems as $category => $items)
-                        <details class="rounded-2xl border border-white/10 bg-white/5 mt-1" open>
-                            <summary class="menu-summary cursor-pointer flex items-center justify-between gap-2 px-3 py-2.5 border-b border-white/10">
-                                <div class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-koya shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
-                                    </svg>
-                                    <span class="text-[11px] font-black uppercase tracking-widest text-koya">{{ $category }}</span>
-                                </div>
-                                <span class="text-[10px] font-black uppercase tracking-widest text-white/50">{{ $items->count() }} items</span>
-                            </summary>
-
-                            <div class="p-2.5 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
-                                @foreach($items as $item)
-                                    <div class="rounded-xl border border-white/10 bg-black/20" x-data="{ openEdit: false, editIsPackage: {{ $item->is_package ? 'true' : 'false' }} }">
-                                        <div class="flex items-start justify-between gap-2 px-2.5 py-2">
-                                            <div class="min-w-0">
-                                                <p class="text-sm font-black text-white truncate">{{ $item->name }}</p>
-                                                <div class="mt-1 flex items-center gap-1.5">
-                                                    <span class="px-1.5 py-0.5 rounded-md border border-emerald-500/25 bg-emerald-500/10 text-[9px] font-black uppercase tracking-wider text-emerald-300 {{ $item->is_active ? '' : 'hidden' }}">Active</span>
-                                                    <span class="px-1.5 py-0.5 rounded-md border border-amber-500/25 bg-amber-500/10 text-[9px] font-black uppercase tracking-wider text-amber-300 {{ $item->is_package ? '' : 'hidden' }}">Package</span>
-                                                </div>
-                                            </div>
-                                            <button type="button"
-                                                    @click="openEdit = !openEdit"
-                                                    class="shrink-0 w-7 h-7 rounded-lg border border-white/20 bg-white/5 flex items-center justify-center text-white/80 hover:text-koya hover:border-koya/40 transition-colors"
-                                                    title="Edit item">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M16.5 3.5a2.121 2.121 0 113 3L12 14l-4 1 1-4 7.5-7.5z"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-
-                                        <div class="px-2.5 pb-2.5">
-                                            <div class="flex items-center justify-between gap-2">
-                                                <p class="text-sm font-black text-koya">&euro;{{ number_format((float) $item->price, 2) }}</p>
-                                                <p class="text-[10px] text-white/50">Sort {{ $item->sort_order }}</p>
-                                            </div>
-                                        </div>
-
-                                        <div x-show="openEdit" x-cloak class="px-2.5 pb-2.5 pt-2 border-t border-white/10">
-                                            @if($item->description)
-                                                <div class="mb-2 rounded-lg border border-white/10 bg-white/5 p-2 text-[11px] text-white/70">
-                                                    {{ $item->description }}
-                                                </div>
-                                            @endif
-
-                                            @if($item->is_package && $item->package_details)
-                                                <div class="mb-2 rounded-lg border border-amber-500/20 bg-amber-500/5 p-2 text-[11px] text-amber-200">
-                                                    {{ $item->package_details }}
-                                                </div>
-                                            @endif
-
-                                            <form action="{{ route('menu-items.update', $item) }}" method="POST" class="grid grid-cols-1 gap-1.5">
-                                                @csrf
-                                                @method('PUT')
-
-                                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                                                    <div>
-                                                        <label class="menu-label" for="name-{{ $item->id }}">Name</label>
-                                                        <input id="name-{{ $item->id }}" class="menu-field" type="text" name="name" value="{{ $item->name }}" required>
-                                                    </div>
-                                                    <div>
-                                                        <label class="menu-label" for="category-{{ $item->id }}">Category</label>
-                                                        <select id="category-{{ $item->id }}" class="menu-field" name="category" required>
-                                                            @foreach($categoryOptions as $categoryOption)
-                                                                <option value="{{ $categoryOption }}" {{ $item->category === $categoryOption ? 'selected' : '' }}>
-                                                                    {{ $categoryOption }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div>
-                                                    <label class="menu-label" for="description-{{ $item->id }}">Description</label>
-                                                    <textarea id="description-{{ $item->id }}" class="menu-field" name="description" rows="3" placeholder="Short menu description">{{ $item->description }}</textarea>
-                                                </div>
-
-                                                <div class="grid grid-cols-2 gap-1.5">
-                                                    <div>
-                                                        <label class="menu-label" for="price-{{ $item->id }}">Price</label>
-                                                        <input id="price-{{ $item->id }}" class="menu-field" type="number" step="0.01" min="0" name="price" value="{{ $item->price }}" required>
-                                                    </div>
-                                                    <div>
-                                                        <label class="menu-label" for="sort-{{ $item->id }}">Sort</label>
-                                                        <input id="sort-{{ $item->id }}" class="menu-field" type="number" min="0" max="999" name="sort_order" value="{{ $item->sort_order }}" required>
-                                                    </div>
-                                                </div>
-
-                                                <div class="grid grid-cols-2 gap-1.5">
-                                                    <label class="menu-toggle">
-                                                        <input type="checkbox" name="is_active" value="1" {{ $item->is_active ? 'checked' : '' }} class="menu-checkbox">
-                                                        <span class="menu-toggle-switch"></span>
-                                                        <span class="menu-toggle-text">Active</span>
-                                                    </label>
-                                                    <label class="menu-toggle">
-                                                        <input type="checkbox" name="is_package" value="1" x-model="editIsPackage" class="menu-checkbox">
-                                                        <span class="menu-toggle-switch"></span>
-                                                        <span class="menu-toggle-text">Package</span>
-                                                    </label>
-                                                </div>
-
-                                                <div x-show="editIsPackage" x-cloak>
-                                                    <label class="menu-label" for="package-{{ $item->id }}">Package Details</label>
-                                                    <textarea id="package-{{ $item->id }}" class="menu-field" name="package_details" rows="2" placeholder="Package details">{{ $item->package_details }}</textarea>
-                                                </div>
-
-                                                <div class="grid grid-cols-2 gap-1.5 pt-0.5">
-                                                    <button type="submit" class="btn-koya w-full py-2 text-[10px]">Save</button>
-                                                    <button type="submit" form="delete-menu-item-{{ $item->id }}" class="w-full py-2 rounded-2xl border border-red-500/20 bg-red-500/10 text-red-400 font-black uppercase text-[10px] tracking-widest">Delete</button>
-                                                </div>
-                                            </form>
-
-                                            <form id="delete-menu-item-{{ $item->id }}" action="{{ route('menu-items.destroy', $item) }}" method="POST" class="hidden">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </details>
-                    @empty
-                        <div class="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-                            <p class="text-sm text-white/60">No menu items yet. Create your first one with the Add Menu Item button.</p>
-                        </div>
-                    @endforelse
+        <section class="glass rounded-[28px] border border-white/10 p-5 sm:p-6" x-data="{ createIsPackage: {{ old('is_package') ? 'true' : 'false' }} }">
+            <div class="mb-5 flex items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-lg font-black text-white">Add New Product</h2>
+                    <p class="text-sm text-white/50">Simple form for the owner. Uploading an image is optional but recommended.</p>
                 </div>
-        </div>
+            </div>
 
-        <div x-show="showCreateModal" x-cloak class="fixed inset-0 z-[120] flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-black/75 backdrop-blur-sm" @click="showCreateModal = false"></div>
+            <form action="{{ route('menu-items.store') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                @csrf
 
-            <div x-show="showCreateModal" x-transition class="relative w-full max-w-xl glass rounded-[30px] border border-white/10 p-6 sm:p-7">
-                <div class="flex items-start justify-between gap-4">
+                <div class="lg:col-span-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <h2 class="text-base sm:text-lg font-black uppercase tracking-widest text-koya">Add Menu Item</h2>
-                        <p class="text-[11px] text-white/50 mt-1">Create polished menu entries with pricing and package options.</p>
+                        <label for="product-name">Product name</label>
+                        <input id="product-name" type="text" name="name" value="{{ old('name') }}" placeholder="KOYA Smash" required>
                     </div>
-                    <button type="button" @click="showCreateModal = false" class="w-9 h-9 rounded-xl border border-white/15 bg-white/5 text-white/70 hover:text-white hover:border-white/30 transition-colors flex items-center justify-center">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <form action="{{ route('menu-items.store') }}" method="POST" class="mt-5 grid grid-cols-1 gap-3">
-                    @csrf
-                    <input type="hidden" name="create_form" value="1">
-
                     <div>
-                        <label class="menu-label" for="menu-item-name">Item Name</label>
-                        <input id="menu-item-name" class="menu-field" type="text" name="name" value="{{ old('name') }}" placeholder="Cheeseburger Deluxe" required>
-                    </div>
-
-                    <div>
-                        <label class="menu-label" for="menu-item-category">Category</label>
-                        <select id="menu-item-category" class="menu-field" name="category" required>
+                        <label for="product-category">Category</label>
+                        <select id="product-category" name="category" required>
                             @foreach($categoryOptions as $categoryOption)
-                                <option value="{{ $categoryOption }}" {{ old('category', 'Entrantes') === $categoryOption ? 'selected' : '' }}>
-                                    {{ $categoryOption }}
-                                </option>
+                                <option value="{{ $categoryOption }}" {{ old('category', 'Smash Burger') === $categoryOption ? 'selected' : '' }}>{{ $categoryOption }}</option>
                             @endforeach
                         </select>
                     </div>
+                </div>
 
-                    <div>
-                        <label class="menu-label" for="menu-item-description">Description</label>
-                        <textarea id="menu-item-description" class="menu-field" name="description" rows="3" placeholder="Short menu description">{{ old('description') }}</textarea>
-                    </div>
+                <div>
+                    <label for="product-price">Price</label>
+                    <input id="product-price" type="number" step="0.01" min="0" name="price" value="{{ old('price') }}" placeholder="0.00" required>
+                </div>
+                <div>
+                    <label for="product-sort-order">Display order</label>
+                    <input id="product-sort-order" type="number" min="0" max="999" name="sort_order" value="{{ old('sort_order', 0) }}" placeholder="0">
+                </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="menu-label" for="menu-item-price">Price</label>
-                            <input id="menu-item-price" class="menu-field" type="number" step="0.01" min="0" name="price" value="{{ old('price') }}" placeholder="0.00" required>
-                        </div>
-                        <div>
-                            <label class="menu-label" for="menu-item-sort">Sort</label>
-                            <input id="menu-item-sort" class="menu-field" type="number" min="0" max="999" name="sort_order" value="{{ old('sort_order', 0) }}" placeholder="0">
-                        </div>
-                    </div>
+                <div class="lg:col-span-2">
+                    <label for="product-description">Description</label>
+                    <textarea id="product-description" name="description" rows="3" placeholder="Short description for customers">{{ old('description') }}</textarea>
+                </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <label class="menu-toggle">
-                            <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="menu-checkbox">
-                            <span class="menu-toggle-switch"></span>
-                            <span class="menu-toggle-text">Active</span>
-                        </label>
-                        <label class="menu-toggle">
-                            <input type="checkbox" name="is_package" value="1" x-model="createIsPackage" {{ old('is_package') ? 'checked' : '' }} class="menu-checkbox">
-                            <span class="menu-toggle-switch"></span>
-                            <span class="menu-toggle-text">Package</span>
-                        </label>
-                    </div>
+                <div class="lg:col-span-2 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-4">
+                    <label for="product-image">Product image</label>
+                    <input id="product-image" type="file" name="image" accept="image/*" class="file:mr-4 file:rounded-xl file:border-0 file:bg-koya file:px-4 file:py-2 file:font-black file:text-[#17110c] file:cursor-pointer">
+                    <p class="mt-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/35">JPG, PNG, WEBP. Up to 5 MB.</p>
+                </div>
 
-                    <div x-show="createIsPackage" x-cloak>
-                        <label class="menu-label" for="menu-item-package-details">Package Details</label>
-                        <textarea id="menu-item-package-details" class="menu-field" name="package_details" rows="2" placeholder="Starter + main + drink">{{ old('package_details') }}</textarea>
-                        <p class="menu-help">Shown only when package is enabled.</p>
-                    </div>
+                <div class="lg:col-span-2 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white">
+                        <input type="checkbox" name="is_active" value="1" {{ old('is_active', true) ? 'checked' : '' }} class="h-5 w-5 rounded border-white/20 bg-transparent">
+                        <span>Visible on public page</span>
+                    </label>
+                    <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white sm:col-span-2">
+                        <input type="checkbox" name="is_package" value="1" x-model="createIsPackage" {{ old('is_package') ? 'checked' : '' }} class="h-5 w-5 rounded border-white/20 bg-transparent">
+                        <span>This is a package / combo</span>
+                    </label>
+                </div>
 
-                    <div class="pt-1 flex items-center gap-2">
-                        <button type="button" @click="showCreateModal = false" class="w-1/3 py-3 rounded-2xl border border-white/15 bg-white/5 text-white/80 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" class="btn-koya w-2/3 py-3">Save Item</button>
-                    </div>
-                </form>
+                <div class="lg:col-span-2" x-show="createIsPackage" x-cloak>
+                    <label for="product-package-details">Package details</label>
+                    <textarea id="product-package-details" name="package_details" rows="2" placeholder="For example: burger + fries + drink">{{ old('package_details') }}</textarea>
+                </div>
+
+                <div class="lg:col-span-2 flex justify-end">
+                    <button type="submit" class="btn-koya w-full sm:w-auto min-w-[220px]">Create Product</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="space-y-4">
+            <div class="flex items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-lg font-black text-white">Existing Products</h2>
+                    <p class="text-sm text-white/50">Tap any product card to edit or delete it.</p>
+                </div>
             </div>
-        </div>
+
+            @forelse($menuItems as $category => $items)
+                <div class="glass rounded-[28px] border border-white/10 p-4 sm:p-5">
+                    <div class="mb-4 flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+                        <div>
+                            <p class="text-[10px] font-black uppercase tracking-[0.28em] text-koya/70">Category</p>
+                            <h3 class="mt-1 text-lg font-black text-white">{{ $category }}</h3>
+                        </div>
+                        <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-black uppercase tracking-[0.24em] text-white/60">{{ $items->count() }} products</span>
+                    </div>
+
+                    <div class="space-y-3">
+                        @foreach($items as $item)
+                            <details class="rounded-[24px] border border-white/10 bg-black/20 p-4" x-data="{ editIsPackage: {{ $item->is_package ? 'true' : 'false' }} }">
+                                <summary class="cursor-pointer list-none">
+                                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div class="flex items-center gap-4 min-w-0">
+                                            <div class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
+                                                @if($item->image_url)
+                                                    <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="h-full w-full object-cover">
+                                                @else
+                                                    <div class="flex h-full w-full items-center justify-center text-lg font-black uppercase text-white/35">
+                                                        {{ \Illuminate\Support\Str::of($item->name)->substr(0, 2)->upper() }}
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <div class="min-w-0">
+                                                <div class="flex flex-wrap items-center gap-2">
+                                                    <h4 class="text-base font-black text-white">{{ $item->name }}</h4>
+                                                    @if($item->is_active)
+                                                        <span class="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-300">Visible</span>
+                                                    @else
+                                                        <span class="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white/55">Hidden</span>
+                                                    @endif
+                                                    @if($item->is_package)
+                                                        <span class="rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-amber-300">Package</span>
+                                                    @endif
+                                                </div>
+                                                <p class="mt-1 text-sm text-white/45">{{ $item->description ?: 'No description yet.' }}</p>
+                                                <div class="mt-2 flex flex-wrap items-center gap-3 text-xs font-bold uppercase tracking-[0.18em] text-white/40">
+                                                    <span>€{{ number_format((float) $item->price, 2) }}</span>
+                                                    <span>Order {{ $item->sort_order }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-sm font-bold text-koya">
+                                            <span>Edit</span>
+                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </summary>
+
+                                <form action="{{ route('menu-items.update', $item) }}" method="POST" enctype="multipart/form-data" class="mt-5 grid grid-cols-1 gap-4 border-t border-white/10 pt-5 lg:grid-cols-2">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <div class="lg:col-span-2 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                        <div>
+                                            <label for="name-{{ $item->id }}">Product name</label>
+                                            <input id="name-{{ $item->id }}" type="text" name="name" value="{{ $item->name }}" required>
+                                        </div>
+                                        <div>
+                                            <label for="category-{{ $item->id }}">Category</label>
+                                            <select id="category-{{ $item->id }}" name="category" required>
+                                                @foreach($categoryOptions as $categoryOption)
+                                                    <option value="{{ $categoryOption }}" {{ $item->category === $categoryOption ? 'selected' : '' }}>{{ $categoryOption }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label for="price-{{ $item->id }}">Price</label>
+                                        <input id="price-{{ $item->id }}" type="number" step="0.01" min="0" name="price" value="{{ $item->price }}" required>
+                                    </div>
+                                    <div>
+                                        <label for="sort-order-{{ $item->id }}">Display order</label>
+                                        <input id="sort-order-{{ $item->id }}" type="number" min="0" max="999" name="sort_order" value="{{ $item->sort_order }}">
+                                    </div>
+
+                                    <div class="lg:col-span-2">
+                                        <label for="description-{{ $item->id }}">Description</label>
+                                        <textarea id="description-{{ $item->id }}" name="description" rows="3">{{ $item->description }}</textarea>
+                                    </div>
+
+                                    <div class="lg:col-span-2 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-4">
+                                        <label for="image-{{ $item->id }}">Replace product image</label>
+                                        <input id="image-{{ $item->id }}" type="file" name="image" accept="image/*" class="file:mr-4 file:rounded-xl file:border-0 file:bg-koya file:px-4 file:py-2 file:font-black file:text-[#17110c] file:cursor-pointer">
+                                        @if($item->image_url)
+                                            <label class="mt-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white">
+                                                <input type="checkbox" name="remove_image" value="1" class="h-5 w-5 rounded border-white/20 bg-transparent">
+                                                <span>Remove current image</span>
+                                            </label>
+                                        @endif
+                                    </div>
+
+                                    <div class="lg:col-span-2 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                                        <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white">
+                                            <input type="checkbox" name="is_active" value="1" {{ $item->is_active ? 'checked' : '' }} class="h-5 w-5 rounded border-white/20 bg-transparent">
+                                            <span>Visible on public page</span>
+                                        </label>
+                                        <label class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-bold text-white sm:col-span-2">
+                                            <input type="checkbox" name="is_package" value="1" x-model="editIsPackage" {{ $item->is_package ? 'checked' : '' }} class="h-5 w-5 rounded border-white/20 bg-transparent">
+                                            <span>This is a package / combo</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="lg:col-span-2" x-show="editIsPackage" x-cloak>
+                                        <label for="package-details-{{ $item->id }}">Package details</label>
+                                        <textarea id="package-details-{{ $item->id }}" name="package_details" rows="2">{{ $item->package_details }}</textarea>
+                                    </div>
+
+                                    <div class="lg:col-span-2 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                                        <button type="submit" class="btn-koya w-full sm:w-auto min-w-[180px]">Save Changes</button>
+                                        <button type="submit" form="delete-product-{{ $item->id }}" class="w-full sm:w-auto min-w-[180px] rounded-2xl border border-red-500/25 bg-red-500/10 px-6 py-4 text-sm font-black uppercase tracking-[0.22em] text-red-300 transition hover:bg-red-500/15">Delete Product</button>
+                                    </div>
+                                </form>
+
+                                <form id="delete-product-{{ $item->id }}" action="{{ route('menu-items.destroy', $item) }}" method="POST" class="hidden">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </details>
+                        @endforeach
+                    </div>
+                </div>
+            @empty
+                <div class="glass rounded-[28px] border border-white/10 p-8 text-center text-white/55">
+                    No products yet. Use the form above to add the first one.
+                </div>
+            @endforelse
+        </section>
     </div>
-
 </x-app-layout>
-
 

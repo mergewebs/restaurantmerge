@@ -130,9 +130,6 @@ return [
 
     'menu_item_fallback' => 'Delicious KOYA recipe prepared with fresh ingredients.',
     'menu_items' => [
-        'Classic Smash Burger' => ['name' => 'Classic Smash Burger', 'description' => 'Two smashed beef patties, cheddar cheese, pickles, and our signature KOYA sauce in a toasted brioche bun.'],
-        'Truffle Double Smash' => ['name' => 'Truffle Double Smash', 'description' => 'Double smashed beef patty, truffle mayo, caramelized onions, and melted Swiss cheese.'],
-        'Bacon Cheese Smash' => ['name' => 'Bacon Cheese Smash', 'description' => 'Double smash patty, crispy bacon, double cheddar, onion jam, and barbecue sauce.'],
         'Tartufata' => ['name' => 'Tartufata', 'description' => 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.'],
         'Smash Burger' => ['name' => 'Smash Burger', 'description' => 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.'],
         'Red Onion' => ['name' => 'Red Onion', 'description' => 'Double smash patty with caramelized red onions, melted cheddar, pickles, and smoky barbecue sauce.'],
@@ -173,6 +170,8 @@ return [
         'Refreshing' => 'Refreshing',
     ],
 ];
+
+
 
 
 

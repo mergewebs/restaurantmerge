@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $restaurantName }} | Takeaway & Order</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <title>{{ $restaurantName }} | Takeaway & Order</title><link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     
     <!-- Google Fonts -->
@@ -43,7 +43,7 @@
     <style>
         @font-face {
             font-family: 'Biski';
-            src: url("{{ asset('fonts/Biski.ttf') }}") format('truetype');
+            src: url('/fonts/Biski.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -258,9 +258,9 @@
                     <div>
                         <!-- Product Image Container -->
                         <div class="relative w-full h-48 rounded-2xl overflow-hidden mb-4 bg-gradient-to-br from-white/5 to-white/10 border border-white/5 flex items-center justify-center">
-                            <template x-if="getImagePath(item.name)">
+                            <template x-if="getImagePath(item)">
                                 <img 
-                                    :src="getImagePath(item.name)" 
+                                    :src="getImagePath(item)" 
                                     :alt="item.name" 
                                     class="max-h-[85%] max-w-[85%] object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2"
                                     loading="lazy"
@@ -268,7 +268,7 @@
                             </template>
                             
                             <!-- If no image, show elegant placeholder -->
-                            <template x-if="!getImagePath(item.name)">
+                            <template x-if="!getImagePath(item)">
                                 <div class="flex flex-col items-center justify-center text-center p-4">
                                     <div class="w-16 h-16 rounded-full bg-koya/10 border border-koya/20 flex items-center justify-center mb-2">
                                         <span class="text-koya font-black text-xl" x-text="item.name.substring(0, 2).toUpperCase()"></span>
@@ -344,7 +344,17 @@
                         </template>
                     </div>
                 </div>
-            </template>
+</template>
+            <div
+                x-show="activeCategory === 'Smash Burger'"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-4"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                class="lg:col-span-3 md:col-span-2 rounded-[28px] border border-koya/30 bg-white/5 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+            >
+                <p class="text-lg md:text-2xl font-black uppercase tracking-wide text-koya">Pan vegetariano y Pan Sin Gluten disponible</p>
+                <p class="text-sm text-white/70 mt-2">2&euro; de suplemento</p>
+            </div>
         </div>
 
         <!-- Cart Panel Drawer (Slide-out) -->
@@ -762,26 +772,8 @@
                     }, 1200);
                 },
 
-                getImagePath(itemName) {
-                    if (!itemName) return null;
-                    const cleanName = itemName.toUpperCase().trim();
-                    const images = {
-                        'CLASSIC SMASH BURGER': 'smash-burger.png',
-                        'TRUFFLE DOUBLE SMASH': 'tartufata.png',
-                        'TARTUFATA': 'tartufata.png',
-                        'SMASH BURGER': 'smash-burger.png',
-                        'RED ONION': 'red-onion.png',
-                        'SOBOKU': 'soboku.png',
-                        'FAMILY TAKEAWAY PACK': 'smash-burger.png',
-                        'SPICY KOREAN RICE BOWL': 'katsudon.png',
-                        'MEDITERRANEAN RICE BOWL': 'koya-salad.png',
-                        'KOYA SALAD': 'koya-salad.png',
-                        'KATSUDON': 'katsudon.png',
-                        'KOYA SMASH': 'smash-burger.png',
-                        'KOYA SMASH SPECIAL': 'smash-burger.png',
-                    };
-                    const name = images[cleanName];
-                    return name ? `/images/${name}` : null;
+                getImagePath(item) {
+                    return item?.image_url || null;
                 },
 
                 getDescription(item) {
@@ -792,8 +784,6 @@
                         return item.package_details;
                     }
                     const descriptions = {
-                        'Classic Smash Burger': 'Two smashed beef patties, cheddar cheese, pickles, and our signature KOYA sauce in a toasted brioche bun.',
-                        'Truffle Double Smash': 'Double smashed beef patty, truffle mayo, caramelized onions, and melted Swiss cheese.',
                         'Tartufata': 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.',
                         'Smash Burger': 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.',
                         'Red Onion': 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.',
@@ -822,8 +812,6 @@
 
                 getBadge(itemName) {
                     const badges = {
-                        'Classic Smash Burger': 'Favorite',
-                        'Truffle Double Smash': 'Popular',
                         'Spicy Korean Rice Bowl': 'New',
                         'Cheesecake Jar': 'Favorite',
                         'Tartufata': 'Truffle',
@@ -840,3 +828,6 @@
     </script>
 </body>
 </html>
+
+
+

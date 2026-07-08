@@ -8,7 +8,7 @@ return [
     'site_title_takeaway' => ':restaurant | Pedido para llevar',
     'iframe_title' => 'Reserva - KOYA BCN',
     'guest_title' => 'KOYA BCN',
-    'copyright' => 'Â© 2026 Mergewebs Restaurant',
+    'copyright' => '© 2026 Mergewebs Restaurant',
 
     'nav_home' => 'Inicio',
     'nav_menu' => 'Menú',
@@ -25,7 +25,7 @@ return [
     'homepage_meta_description' => 'Nos aventuramos más allá de las hamburguesas, fusionando la cocina asiática y americana en cada bocado. Street food fresco, rápido y moderno en Barcelona.',
     'homepage_hero_cta_menu' => 'Ver menú',
     'homepage_hero_cta_reserve' => 'Reservar',
-    'homepage_gallery_title' => 'NOS AVENTURAMOS MÃS ALLÃ DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASIÃTICA Y AMERICANA EN CADA BOCADO.',
+    'homepage_gallery_title' => 'NOS AVENTURAMOS MÁS ALLÁ DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASIÁTICA Y AMERICANA EN CADA BOCADO.',
     'homepage_menu_title' => 'Nuestro menú completo',
     'homepage_cta_title' => '¿Listo para tu próximo antojo de KOYA?',
     'homepage_cta_button' => 'Pedir ahora',
@@ -34,8 +34,8 @@ return [
     'homepage_phone_label' => 'Teléfono y WhatsApp',
     'homepage_email_label' => 'Correo',
     'homepage_hours_title' => 'Horario',
-    'homepage_footer_description' => 'Auténticas smash burgers con bordes crujientes y rice bowls intensos cargados de ingredientes premium. Street food con actitud.',
-    'homepage_footer_rights' => 'Â© 2026 KOYA BCN. Todos los derechos reservados.',
+    'homepage_footer_description' => 'NOS AVENTURAMOS M�S ALL� DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASI�TICA Y AMERICANA EN CADA BOCADO.',
+    'homepage_footer_rights' => '© 2026 KOYA BCN. Todos los derechos reservados.',
     'homepage_footer_tagline' => 'Diseñado con actitud',
 
     'menu_tab_burgers' => 'Burgers',
@@ -130,9 +130,6 @@ return [
 
     'menu_item_fallback' => 'Deliciosa receta KOYA preparada con ingredientes frescos.',
     'menu_items' => [
-        'Classic Smash Burger' => ['name' => 'Classic Smash Burger', 'description' => 'Dos patties de ternera smash, cheddar, pepinillos y nuestra salsa KOYA en pan brioche tostado.'],
-        'Truffle Double Smash' => ['name' => 'Truffle Double Smash', 'description' => 'Doble patty smash de ternera, mayonesa de trufa, cebolla caramelizada y queso suizo fundido.'],
-        'Bacon Cheese Smash' => ['name' => 'Bacon Cheese Smash', 'description' => 'Doble smash, bacon crujiente, doble cheddar, mermelada de cebolla y salsa barbacoa.'],
         'Tartufata' => ['name' => 'Tartufata', 'description' => 'Doble smash burger con pasta de trufa negra premium, queso suizo fundido, cebolla caramelizada y mayonesa de trufa en brioche tostado.'],
         'Smash Burger' => ['name' => 'Smash Burger', 'description' => 'Doble smash perfectamente sazonado con cheddar, lechuga crujiente, tomate, pepinillos y nuestra salsa burger.'],
         'Red Onion' => ['name' => 'Red Onion', 'description' => 'Doble smash con cebolla roja caramelizada, cheddar fundido, pepinillos y salsa barbacoa ahumada.'],
@@ -173,3 +170,6 @@ return [
         'Refreshing' => 'Refrescante',
     ],
 ];
+
+
+

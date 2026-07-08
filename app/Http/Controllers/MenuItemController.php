@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\MenuItem;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class MenuItemController extends Controller
@@ -28,10 +31,11 @@ class MenuItemController extends Controller
         $this->ensureAdmin();
 
         $validated = $this->validateMenuItem($request);
+        $validated['image_path'] = $this->storeImage($request->file('image'));
 
         MenuItem::create($validated);
 
-        return redirect()->route('menu-items.index')->with('success', 'Menu item created.');
+        return redirect()->route('menu-items.index')->with('success', 'Product created successfully.');
     }
 
     public function update(Request $request, MenuItem $menuItem)
@@ -40,18 +44,33 @@ class MenuItemController extends Controller
 
         $validated = $this->validateMenuItem($request);
 
+        if ($request->boolean('remove_image')) {
+            $this->deleteImage($menuItem->image_path);
+            $validated['image_path'] = null;
+        }
+
+        if ($request->hasFile('image')) {
+            $newImagePath = $this->storeImage($request->file('image'));
+
+            if ($newImagePath !== null) {
+                $this->deleteImage($menuItem->image_path);
+                $validated['image_path'] = $newImagePath;
+            }
+        }
+
         $menuItem->update($validated);
 
-        return redirect()->route('menu-items.index')->with('success', 'Menu item updated.');
+        return redirect()->route('menu-items.index')->with('success', 'Product updated successfully.');
     }
 
     public function destroy(MenuItem $menuItem)
     {
         $this->ensureAdmin();
 
+        $this->deleteImage($menuItem->image_path);
         $menuItem->delete();
 
-        return redirect()->route('menu-items.index')->with('success', 'Menu item deleted.');
+        return redirect()->route('menu-items.index')->with('success', 'Product deleted successfully.');
     }
 
     private function validateMenuItem(Request $request): array
@@ -65,6 +84,8 @@ class MenuItemController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'is_package' => ['nullable', 'boolean'],
             'package_details' => ['nullable', 'string', 'max:1000'],
+            'image' => ['nullable', 'image', 'max:5120'],
+            'remove_image' => ['nullable', 'boolean'],
         ]);
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -75,7 +96,32 @@ class MenuItemController extends Controller
             ? ($validated['package_details'] ?? null)
             : null;
 
+        unset($validated['image'], $validated['remove_image']);
+
         return $validated;
+    }
+
+    private function storeImage(?UploadedFile $file): ?string
+    {
+        if ($file === null) {
+            return null;
+        }
+
+        $extension = $file->getClientOriginalExtension() ?: $file->extension() ?: 'jpg';
+        $filename = Str::uuid()->toString() . '.' . strtolower($extension);
+
+        Storage::disk('product-images')->putFileAs('', $file, $filename);
+
+        return $filename;
+    }
+
+    private function deleteImage(?string $imagePath): void
+    {
+        if (blank($imagePath)) {
+            return;
+        }
+
+        Storage::disk('product-images')->delete($imagePath);
     }
 
     private function ensureAdmin(): void

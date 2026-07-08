@@ -30,7 +30,7 @@
                     extend: {
                         colors: {
                             koya: {
-                                DEFAULT: '#c89b3c',
+                                DEFAULT: '#4f46e5',
                                 dark: '#17110c',
                                 glass: 'rgba(35, 27, 21, 0.82)',
                             }
@@ -137,7 +137,7 @@
                 align-items: center;
                 justify-content: center;
                 gap: 0.3rem;
-                width: 100%;
+                width: auto;
                 color: rgba(255, 255, 255, 0.45);
                 transition: all 0.2s ease;
                 text-align: center;
@@ -185,16 +185,79 @@
                 padding-left: 0.25rem;
             }
             [x-cloak] { display: none !important; }
+
+            /* Animated Background Blobs */
+            .bg-glow-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+                overflow: hidden;
+                pointer-events: none;
+            }
+            .bg-glow-blob {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(120px);
+                opacity: 0.05;
+                animation: floatBlob 25s infinite alternate ease-in-out;
+            }
+            .bg-glow-1 {
+                top: -10%;
+                left: -10%;
+                width: 50vw;
+                height: 50vw;
+                background-color: var(--koya);
+                animation-duration: 35s;
+            }
+            .bg-glow-2 {
+                bottom: -15%;
+                right: -5%;
+                width: 60vw;
+                height: 60vw;
+                background-color: #ff5c00;
+                animation-duration: 45s;
+                animation-delay: -5s;
+            }
+            .bg-glow-3 {
+                top: 40%;
+                left: 60%;
+                width: 40vw;
+                height: 40vw;
+                background-color: #10b981;
+                opacity: 0.03;
+                animation-duration: 40s;
+                animation-delay: -10s;
+            }
+
+            @keyframes floatBlob {
+                0% {
+                    transform: translate(0, 0) scale(1) rotate(0deg);
+                }
+                50% {
+                    transform: translate(8%, 12%) scale(1.1) rotate(180deg);
+                }
+                100% {
+                    transform: translate(-5%, -8%) scale(0.9) rotate(360deg);
+                }
+            }
         </style>
-        @include('layouts.restaurant-theme')
+        @include('layouts.admin-theme')
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen">
+    <body class="font-sans antialiased relative">
+        <div class="bg-glow-container">
+            <div class="bg-glow-blob bg-glow-1"></div>
+            <div class="bg-glow-blob bg-glow-2"></div>
+            <div class="bg-glow-blob bg-glow-3"></div>
+        </div>
+        <div class="min-h-screen relative z-10">
             <!-- Main Content -->
             <main class="px-5 pt-24 pb-8">
                 @if (isset($header))
                     <div class="mb-8 px-2">
-                        <h2 class="font-display text-4xl font-bold text-[#fff7eb] tracking-normal">
+                        <h2 class="font-display text-4xl font-bold text-slate-900 tracking-normal">
                             {{ $header }}
                         </h2>
                     </div>
@@ -212,7 +275,7 @@
                 if (auth()->user()->isAdmin()) {
                     $bottomMenuItems[] = ['route' => route('finance.stats'), 'active' => request()->routeIs('finance.*'), 'label' => 'Finance', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'];
                     $bottomMenuItems[] = ['route' => route('restaurant.config'), 'active' => request()->routeIs('restaurant.config'), 'label' => 'Config', 'icon' => 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'];
-                    $bottomMenuItems[] = ['route' => route('menu-items.index'), 'active' => request()->routeIs('menu-items.*'), 'label' => 'Menu', 'icon' => 'M6 3v8M9 3v8M6 7h3M7.5 11v10M15 3v20M15 3c3 0 4 2.5 4 5.5S18 14 15 14'];
+                    $bottomMenuItems[] = ['route' => route('menu-items.index'), 'active' => request()->routeIs('menu-items.*'), 'label' => 'Products', 'icon' => 'M6 3v8M9 3v8M6 7h3M7.5 11v10M15 3v20M15 3c3 0 4 2.5 4 5.5S18 14 15 14'];
                 }
 
                 if (auth()->user()->isUserAdmin()) {
@@ -244,9 +307,9 @@
             <nav x-data="{ open: false }" @keydown.escape.window="open = false" class="fixed top-0 left-0 right-0 z-50">
                 <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-between shadow-2xl">
                     <a href="{{ route('dashboard') }}" class="shrink-0 mr-3">
-                        <x-application-logo class="h-10 w-auto" />
+                        <x-application-logo class="h-10 w-10 rounded-full border border-white/10 object-cover shadow-[0_0_15px_rgba(200,155,60,0.15)] bg-koya-dark" />
                     </a>
-                    <div class="bottom-primary-links flex-1 grid gap-1 pr-1" style="grid-template-columns: repeat({{ max(count($primaryMenuItems), 1) }}, minmax(0, 1fr));">
+                    <div class="bottom-primary-links flex-1 flex justify-center items-center gap-10 md:gap-16 pr-1">
                         @foreach($primaryMenuItems as $item)
                             <a href="{{ $item['route'] }}" class="bottom-quick-link {{ $item['active'] ? 'active' : '' }}">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -313,3 +376,4 @@
         </div>
     </body>
 </html>
+

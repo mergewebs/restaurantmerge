@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>KOYA | {{ __('public.reservation_title') }}</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <title>KOYA | {{ __('public.reservation_title') }}</title> <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <!-- Preconnect to external resources -->
@@ -45,28 +45,28 @@
     <style>
         @font-face {
             font-family: 'Biski';
-            src: url("{{ asset('fonts/Biski.ttf') }}") format('truetype');
+            src: url('/fonts/Biski.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Biski_2';
-            src: url("{{ asset('fonts/Biski_2.ttf') }}") format('truetype');
+            src: url('/fonts/Biski_2.ttf') format('truetype');
             font-weight: bold;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Biski_4';
-            src: url("{{ asset('fonts/Biski_4.ttf') }}") format('truetype');
+            src: url('/fonts/Biski_4.ttf') format('truetype');
             font-weight: 800;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Bubbleboddy';
-            src: url("{{ asset('fonts/Bubbleboddy_Neue1.ttf') }}") format('truetype');
+            src: url('/fonts/Bubbleboddy_Neue1.ttf') format('truetype');
             font-weight: bold;
             font-style: normal;
             font-display: swap;
@@ -278,22 +278,71 @@
             gap: 1rem;
         }
 
-        /* Mobile Menu */
+        /* Mobile Menu Toggle */
         .mobile-toggle {
             display: none;
-            background: none;
-            border: none;
+            background-color: var(--color-yellow);
+            border: 3.5px solid var(--color-dark);
+            box-shadow: 3.5px 3.5px 0px var(--color-dark);
             cursor: pointer;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
             align-items: center;
             justify-content: center;
+            position: relative;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1010;
         }
 
-        .mobile-toggle svg {
-            fill: white;
-            width: 28px;
-            height: 28px;
+        .mobile-toggle:hover {
+            transform: translate(-1.5px, -1.5px);
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+
+        .mobile-toggle:active {
+            transform: translate(1.5px, 1.5px);
+            box-shadow: 1.5px 1.5px 0px var(--color-dark);
+        }
+
+        .hamburger-inner {
+            position: relative;
+            width: 20px;
+            height: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-inner span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--color-dark);
+            border-radius: 9999px;
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* Animation from Hamburger to Close 'X' */
+        .mobile-toggle.is-open {
+            background-color: white;
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span {
+            background-color: var(--color-dark);
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span:nth-child(1) {
+            transform: translateY(5.5px) rotate(45deg);
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span:nth-child(2) {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span:nth-child(3) {
+            transform: translateY(-5.5px) rotate(-45deg);
         }
 
         @media (max-width: 768px) {
@@ -303,6 +352,10 @@
 
             .mobile-toggle {
                 display: flex;
+            }
+
+            .header-reserve-btn {
+                display: none !important;
             }
 
             .logo-img {
@@ -315,35 +368,193 @@
             }
         }
 
+        /* Mobile overlay menu standard styles */
         .mobile-menu-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            height: 100dvh;
             background-color: var(--color-green);
+            background-image: radial-gradient(rgba(250, 192, 33, 0.08) 15%, transparent 15%);
+            background-size: 20px 20px;
             z-index: 999;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            border-bottom: var(--border-width) solid var(--color-dark);
+            justify-content: flex-start;
+            padding: 90px 20px 30px 20px;
+            overflow-y: auto;
             transform: translateY(-100%);
-            transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .mobile-menu-overlay.open {
             transform: translateY(0);
         }
 
-        .mobile-menu-overlay a {
+        /* Header styling when menu overlay is open */
+        header.header-overlay-open {
+            background-color: transparent !important;
+            backdrop-filter: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Group container for vertical links */
+        .mobile-links-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Individual link styles */
+        .mobile-menu-overlay .menu-link {
             font-family: var(--font-headline);
             font-size: 2rem;
             color: white;
             text-decoration: none;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-shadow: 3px 3px 0px var(--color-dark);
+            -webkit-text-stroke: 1px var(--color-dark);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(25px);
+            display: inline-block;
+        }
+
+        .mobile-menu-overlay.open .menu-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered transition delay for links */
+        .mobile-menu-overlay .menu-link:nth-child(1) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.08s; }
+        .mobile-menu-overlay .menu-link:nth-child(2) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s; }
+        .mobile-menu-overlay .menu-link:nth-child(3) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.22s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.22s; }
+
+        .mobile-menu-overlay .menu-link:hover {
+            color: var(--color-yellow);
+            transform: scale(1.08) rotate(-1.5deg);
+        }
+
+        /* Action buttons container */
+        .mobile-actions-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+            margin-bottom: auto; /* Pushes the social media section to the bottom */
+        }
+
+        /* Sticker buttons inside overlay */
+        .mobile-menu-overlay .sticker-btn {
+            font-size: 1.25rem;
+            width: 240px;
+            padding: 0.7rem 1.2rem;
+            border-width: 3.5px;
+            box-shadow: 3.5px 3.5px 0px var(--color-dark);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(25px) rotate(-3deg);
+            display: block;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 900;
+            font-family: var(--font-headline);
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
+            border: var(--border-width) solid var(--color-dark);
+            text-align: center;
+        }
+        
+        .mobile-menu-overlay .sticker-btn.sticker-white {
+            transform: translateY(25px) rotate(2deg);
+            background-color: white;
+        }
+
+        .mobile-menu-overlay.open .sticker-btn {
+            opacity: 1;
+            transform: translateY(0) rotate(-3deg);
+        }
+
+        .mobile-menu-overlay.open .sticker-btn.sticker-white {
+            transform: translateY(0) rotate(2deg);
+        }
+
+        /* Staggered transition delay for buttons */
+        .mobile-menu-overlay .sticker-btn:nth-child(1) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.29s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.29s, box-shadow 0.2s ease, background-color 0.2s ease; }
+        .mobile-menu-overlay .sticker-btn:nth-child(2) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.36s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.36s, box-shadow 0.2s ease, background-color 0.2s ease; }
+
+        .mobile-menu-overlay .sticker-btn:hover {
+            transform: scale(1.04) rotate(-1deg) !important;
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+        .mobile-menu-overlay .sticker-btn.sticker-white:hover {
+            transform: scale(1.04) rotate(1deg) !important;
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+
+        /* Social media section inside overlay */
+        .mobile-socials-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            margin-top: 1.5rem;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.43s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.43s;
+        }
+
+        .mobile-menu-overlay.open .mobile-socials-section {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-socials-title {
+            font-family: var(--font-headline);
+            font-size: 0.9rem;
+            color: rgba(255, 252, 244, 0.85);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-shadow: 1px 1px 0px var(--color-dark);
+        }
+
+        .mobile-socials-container {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .mobile-socials-container .social-icon {
+            background-color: var(--color-light);
+            border: 3px solid var(--color-dark);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3.5px 3.5px 0px var(--color-dark);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .mobile-socials-container .social-icon:hover {
+            background-color: var(--color-yellow);
+            transform: translate(-3px, -3px) rotate(-8deg);
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+
+        .mobile-socials-container .social-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--color-dark);
         }
 
         /* Custom Reservation Card Styles */
@@ -713,16 +924,36 @@
     @endif
 
     <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" :class="mobileMenuOpen ? 'open' : ''">
-        <a href="/" @click="mobileMenuOpen = false">Home</a>
-        <a href="/#menu-section" @click="mobileMenuOpen = false">Menu</a>
-        <a href="/#contact" @click="mobileMenuOpen = false">Find Us</a>
-        <a href="{{ route('reservations.public.create') }}" class="sticker text-center" style="display: block; width: 220px;" @click="mobileMenuOpen = false">Reservar</a>
-        <a href="{{ route('order.public') }}" class="sticker sticker-white text-center" style="display: block; width: 220px;" @click="mobileMenuOpen = false">Pedir Online</a>
+    <div class="mobile-menu-overlay" :class="mobileMenuOpen ? 'open' : ''" x-cloak>
+        <div class="mobile-links-container">
+            <a href="/" class="menu-link" @click="mobileMenuOpen = false">Home</a>
+            <a href="/#menu-section" class="menu-link" @click="mobileMenuOpen = false">Menu</a>
+            <a href="/#contact" class="menu-link" @click="mobileMenuOpen = false">Find Us</a>
+        </div>
+        
+        <div class="mobile-actions-container">
+            <a href="{{ route('reservations.public.create') }}" class="sticker-btn text-center" @click="mobileMenuOpen = false">Reservar</a>
+            <a href="{{ route('order.public') }}" class="sticker-btn sticker-white text-center" @click="mobileMenuOpen = false">Pedir Online</a>
+        </div>
+
+        <div class="mobile-socials-section">
+            <p class="mobile-socials-title">Connect</p>
+            <div class="mobile-socials-container">
+                <a href="https://www.instagram.com/koyabcn" target="_blank" class="social-icon" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/koyabcn" target="_blank" class="social-icon" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+                </a>
+                <a href="https://wa.me/34671620787" target="_blank" class="social-icon" aria-label="WhatsApp">
+                    <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.504-5.714-1.466L0 24zm12.35-3.555c1.72-.001 3.4-.462 4.87-1.334l.348-.206 3.626.95-.968-3.535.226-.36c.962-1.532 1.467-3.31 1.464-5.14-.003-5.263-4.286-9.544-9.554-9.544-2.553 0-4.954.994-6.762 2.804-1.808 1.81-2.8 4.212-2.8 6.768-.002 5.263 4.282 9.545 9.548 9.545zm5.244-7.142c-.287-.143-1.697-.838-1.959-.933-.262-.096-.453-.143-.642.143-.19.285-.733.933-.898 1.121-.165.189-.33.213-.617.07-1.122-.56-1.916-.985-2.673-2.285-.195-.336-.195-.543-.053-.685.127-.127.287-.333.43-.5.142-.167.19-.285.287-.476.096-.19.048-.356-.024-.5-.072-.143-.643-1.551-.881-2.122-.23-.556-.464-.48-.642-.489-.166-.008-.357-.01-.548-.01-.19 0-.5.07-.762.356-.262.285-1 .978-1 2.386 0 1.407 1.024 2.766 1.167 2.956.143.19 2.016 3.078 4.883 4.316.682.294 1.214.47 1.63.602.686.218 1.311.187 1.805.114.55-.082 1.697-.693 1.936-1.363.238-.67.238-1.246.166-1.363-.07-.118-.261-.19-.547-.333z"/></svg>
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- Navigation Header -->
-    <header>
+    <header :class="mobileMenuOpen ? 'header-overlay-open' : ''">
         <div class="container header-container">
             <a href="/" class="logo-wrap">
                 <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA Logo" class="logo-img" onerror="this.src='/favicon.ico'">
@@ -735,10 +966,13 @@
             </nav>
 
             <div class="nav-actions">
-                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">Reservar</a>
-                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle Menu">
-                    <svg x-show="!mobileMenuOpen" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-                    <svg x-show="mobileMenuOpen" viewBox="0 0 24 24" x-cloak><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">Reservar</a>
+                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="mobileMenuOpen ? 'is-open' : ''" aria-label="Toggle Menu">
+                    <div class="hamburger-inner">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -784,7 +1018,7 @@
             
             <!-- Card Header -->
             <div class="mb-8 pb-4 border-b-4 border-dashed border-[#121212]">
-                <h2 style="font-family: var(--font-headline); font-size: 2.2rem; line-height: 1.1; color: var(--color-dark); text-transform: uppercase;">
+                <h2 style="font-family: 'Bubbleboddy', 'Outfit', sans-serif; font-size: 2.2rem; line-height: 1.1; color: var(--color-dark); text-transform: uppercase;">
                     {{ __('public.reservation_title') }}
                 </h2>
             </div>

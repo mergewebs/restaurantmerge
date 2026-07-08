@@ -38,6 +38,7 @@ class PublicTakeawayController extends Controller
                 'name',
                 'category',
                 'description',
+                'image_path',
                 'price',
                 'is_package',
                 'package_details',
@@ -49,6 +50,7 @@ class PublicTakeawayController extends Controller
             'name' => $item->name,
             'category' => $item->category,
             'description' => $item->description,
+            'image_url' => $item->image_url,
             'price' => (float) $item->price,
             'is_package' => (bool) $item->is_package,
             'package_details' => $item->package_details,
@@ -244,8 +246,3 @@ class PublicTakeawayController extends Controller
         return $this->hasCustomerPhoneColumn;
     }
 }
-
-
-
-
-

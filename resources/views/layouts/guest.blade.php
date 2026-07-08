@@ -34,7 +34,7 @@
     <body class="font-sans antialiased text-gray-100">
         <div class="min-h-screen flex flex-col items-center justify-center p-6">
             <div class="mb-8 flex w-full max-w-sm items-center justify-center gap-4">
-                <x-application-logo class="w-44 h-auto" />
+                <x-application-logo class="w-28 h-auto rounded-2xl" />
             </div>
 
             <div class="w-full max-w-sm glass p-8 rounded-[24px] border border-white/10 shadow-2xl overflow-hidden">

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ __('public.homepage_meta_description') }}">
-    <title>KOYA | Smash Burger & BOL</title>`r`n    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <title>KOYA | Smash Burger & BOL</title><link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <!-- Preconnect to external resources -->
@@ -19,28 +19,28 @@
     <style>
         @font-face {
             font-family: 'Biski';
-            src: url("{{ asset('fonts/Biski.ttf') }}") format('truetype');
+            src: url('/fonts/Biski.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Biski_2';
-            src: url("{{ asset('fonts/Biski_2.ttf') }}") format('truetype');
+            src: url('/fonts/Biski_2.ttf') format('truetype');
             font-weight: bold;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Biski_4';
-            src: url("{{ asset('fonts/Biski_4.ttf') }}") format('truetype');
+            src: url('/fonts/Biski_4.ttf') format('truetype');
             font-weight: 800;
             font-style: normal;
             font-display: swap;
         }
         @font-face {
             font-family: 'Bubbleboddy';
-            src: url("{{ asset('fonts/Bubbleboddy_Neue1.ttf') }}") format('truetype');
+            src: url('/fonts/Bubbleboddy_Neue1.ttf') format('truetype');
             font-weight: bold;
             font-style: normal;
             font-display: swap;
@@ -268,22 +268,71 @@
             gap: 1rem;
         }
 
-        /* Mobile Menu */
+        /* Mobile Menu Toggle */
         .mobile-toggle {
             display: none;
-            background: none;
-            border: none;
+            background-color: var(--color-yellow);
+            border: 3.5px solid var(--color-dark);
+            box-shadow: 3.5px 3.5px 0px var(--color-dark);
             cursor: pointer;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
             align-items: center;
             justify-content: center;
+            position: relative;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1010;
         }
 
-        .mobile-toggle svg {
-            fill: white;
-            width: 28px;
-            height: 28px;
+        .mobile-toggle:hover {
+            transform: translate(-1.5px, -1.5px);
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+
+        .mobile-toggle:active {
+            transform: translate(1.5px, 1.5px);
+            box-shadow: 1.5px 1.5px 0px var(--color-dark);
+        }
+
+        .hamburger-inner {
+            position: relative;
+            width: 20px;
+            height: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-inner span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--color-dark);
+            border-radius: 9999px;
+            transition: transform 0.3s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* Animation from Hamburger to Close 'X' */
+        .mobile-toggle.is-open {
+            background-color: white;
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span {
+            background-color: var(--color-dark);
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span:nth-child(1) {
+            transform: translateY(5.5px) rotate(45deg);
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span:nth-child(2) {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .mobile-toggle.is-open .hamburger-inner span:nth-child(3) {
+            transform: translateY(-5.5px) rotate(-45deg);
         }
 
         /* Hero Section */
@@ -671,7 +720,7 @@
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
             gap: 2rem;
             position: relative;
             z-index: 5;
@@ -719,19 +768,23 @@
 
         .menu-item-top {
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            align-items: flex-start;
             gap: 0.5rem;
             margin-bottom: 0.15rem;
+            width: 100%;
         }
 
         .menu-item-name {
             font-family: 'Biski', sans-serif;
-            font-size: 1.35rem;
+            font-size: 1.25rem;
             color: var(--color-dark);
             text-transform: uppercase;
             margin: 0;
             line-height: 1.2;
             transition: color 0.2s ease, transform 0.2s ease;
+            flex: 1;
+            min-width: 0;
         }
 
         .menu-card-simple:hover .menu-item-name {
@@ -755,14 +808,18 @@
 
         .menu-item-price {
             font-family: 'Biski_2', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             color: var(--color-dark);
             background-color: var(--color-yellow);
-            border: 2px solid var(--color-dark);
-            padding: 0.15rem 0.6rem;
+            border: 1.5px solid var(--color-dark);
+            padding: 0.1rem 0.5rem;
             border-radius: 9999px;
-            box-shadow: 2px 2px 0px var(--color-dark);
+            box-shadow: 1.5px 1.5px 0px var(--color-dark);
             font-weight: 800;
+            display: inline-block;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
         }
 
         .menu-item-order-link {
@@ -794,8 +851,8 @@
         }
 
         .menu-item-img-container {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             overflow: visible;
             flex-shrink: 0;
             display: flex;
@@ -814,16 +871,152 @@
             object-fit: contain;
         }
 
+        .drinks-highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 5;
+            align-items: start;
+        }
+
+        .drinks-showcase,
+        .sides-showcase {
+            background-color: var(--color-yellow);
+            border: 3px solid var(--color-dark);
+            border-radius: 28px;
+            box-shadow: 7px 7px 0px var(--color-dark);
+            padding: 1.6rem 1.4rem;
+        }
+
+        .drinks-showcase-title,
+        .sides-showcase-title {
+            font-family: 'Biski', sans-serif;
+            font-size: 1.55rem;
+            color: var(--color-green);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .drinks-showcase-title-image,
+        .sides-showcase-title-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .drinks-showcase-title-image img,
+        .sides-showcase-title-image img {
+            width: 72px;
+            height: auto;
+            display: block;
+        }
+
+        .drink-cocktail-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .drink-cocktail-marker img {
+            width: 88px;
+            height: auto;
+            display: block;
+        }
+
+        .drinks-showcase-grid,
+        .sides-showcase-grid {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .drinks-showcase-item,
+        .sides-showcase-item {
+            padding-bottom: 0.8rem;
+            border-bottom: 1px dashed rgba(18, 18, 18, 0.22);
+        }
+
+        .drinks-showcase-item:last-child,
+        .sides-showcase-item:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .drinks-showcase-top,
+        .sides-showcase-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .drinks-showcase-name,
+        .sides-showcase-name {
+            font-family: 'Biski', sans-serif;
+            font-size: 1.15rem;
+            color: var(--color-green);
+            margin: 0;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        .drinks-showcase-price,
+        .sides-showcase-price {
+            font-family: 'Biski_2', sans-serif;
+            font-size: 1rem;
+            color: #d92c2c;
+            flex-shrink: 0;
+            line-height: 1;
+            margin-top: 0.1rem;
+        }
+
+        .drinks-showcase-description,
+        .sides-showcase-description {
+            font-size: 0.85rem;
+            color: var(--color-dark);
+            line-height: 1.45;
+            margin: 0.35rem 0 0;
+        }
+
+        .sides-showcase {
+            margin-top: 2rem;
+            max-width: 460px;
+            margin-left: auto;
+        }
+
+        @media (max-width: 992px) {
+            .drinks-highlight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sides-showcase {
+                max-width: none;
+            }
+        }
+
         .sticker-badge {
+            font-family: var(--font-headline);
             font-size: 0.65rem;
+            background-color: var(--color-yellow);
+            color: var(--color-dark);
             padding: 0.15rem 0.45rem;
+            border: 1.5px solid var(--color-dark);
             border-radius: 6px;
-            border-width: 1.5px;
             box-shadow: 1.5px 1.5px 0px var(--color-dark);
             transform: rotate(-2deg);
-            vertical-align: middle;
+            text-transform: uppercase;
+            font-weight: 800;
             display: inline-block;
-            margin-left: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .sticker-badge.on-image {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            z-index: 2;
+            transform: rotate(-5deg);
         }
 
         /* About / Story Section */
@@ -1324,16 +1517,21 @@
         @media (max-width: 992px) {
             .hero-grid {
                 grid-template-columns: 1fr;
-                gap: 4rem;
+                gap: 2rem;
                 text-align: center;
             }
 
             .hero-content {
                 align-items: center;
+                order: 2;
+            }
+
+            .hero-visual {
+                order: 1;
             }
 
             .hero-title {
-                font-size: 3.5rem;
+                display: none;
             }
 
             .hero-btns {
@@ -1373,8 +1571,42 @@
                 display: flex;
             }
 
+            .header-reserve-btn {
+                display: none !important;
+            }
+
             .hero-title {
-                font-size: 3rem;
+                display: none;
+            }
+
+            .hero-btns {
+                gap: 0.8rem;
+                flex-wrap: nowrap;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-btns .btn-koya-primary, 
+            .hero-btns .btn-koya-secondary {
+                font-size: 1rem;
+                padding: 0.75rem 1.25rem;
+                border-width: 3px;
+                box-shadow: 3px 3px 0px var(--color-dark);
+                flex: 1;
+                max-width: 160px;
+                white-space: nowrap;
+            }
+
+            .hero-btns .btn-koya-primary:hover,
+            .hero-btns .btn-koya-secondary:hover {
+                transform: translate(-1px, -1px);
+                box-shadow: 4px 4px 0px var(--color-dark);
+            }
+
+            .hero-btns .btn-koya-primary:active,
+            .hero-btns .btn-koya-secondary:active {
+                transform: translate(1px, 1px);
+                box-shadow: 2px 2px 0px var(--color-dark);
             }
 
             .section-title {
@@ -1414,6 +1646,32 @@
             }
         }
 
+        @media (max-width: 480px) {
+            .rotating-badge-wrap {
+                width: 290px;
+                height: 290px;
+            }
+
+            .hero-main-img-wrap {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .hero-visual {
+                height: 300px;
+            }
+
+            .hero-btns {
+                gap: 0.5rem;
+            }
+
+            .hero-btns .btn-koya-primary, 
+            .hero-btns .btn-koya-secondary {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+
         /* Mobile overlay menu standard styles */
         .mobile-menu-overlay {
             position: fixed;
@@ -1421,29 +1679,179 @@
             left: 0;
             width: 100%;
             height: 100%;
+            height: 100dvh;
             background-color: var(--color-green);
+            background-image: radial-gradient(rgba(250, 192, 33, 0.08) 15%, transparent 15%);
+            background-size: 20px 20px;
             z-index: 999;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            border-bottom: var(--border-width) solid var(--color-dark);
+            justify-content: flex-start;
+            padding: 90px 20px 30px 20px;
+            overflow-y: auto;
             transform: translateY(-100%);
-            transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .mobile-menu-overlay.open {
             transform: translateY(0);
         }
 
-        .mobile-menu-overlay a {
+        /* Header styling when menu overlay is open */
+        header.header-overlay-open {
+            background-color: transparent !important;
+            backdrop-filter: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Group container for vertical links */
+        .mobile-links-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Individual link styles */
+        .mobile-menu-overlay .menu-link {
             font-family: var(--font-headline);
             font-size: 2rem;
             color: white;
             text-decoration: none;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-shadow: 3px 3px 0px var(--color-dark);
+            -webkit-text-stroke: 1px var(--color-dark);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(25px);
+            display: inline-block;
+        }
+
+        .mobile-menu-overlay.open .menu-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered transition delay for links */
+        .mobile-menu-overlay .menu-link:nth-child(1) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.08s; }
+        .mobile-menu-overlay .menu-link:nth-child(2) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s; }
+        .mobile-menu-overlay .menu-link:nth-child(3) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.22s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.22s; }
+
+        .mobile-menu-overlay .menu-link:hover {
+            color: var(--color-yellow);
+            transform: scale(1.08) rotate(-1.5deg);
+        }
+
+        /* Action buttons container */
+        .mobile-actions-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+            margin-bottom: auto; /* Pushes the social media section to the bottom */
+        }
+
+        /* Sticker buttons inside overlay */
+        .mobile-menu-overlay .sticker-btn {
+            font-size: 1.25rem;
+            width: 240px;
+            padding: 0.7rem 1.2rem;
+            border-width: 3.5px;
+            box-shadow: 3.5px 3.5px 0px var(--color-dark);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(25px) rotate(-3deg);
+            display: block;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .mobile-menu-overlay .sticker-btn.sticker-white {
+            transform: translateY(25px) rotate(2deg);
+        }
+
+        .mobile-menu-overlay.open .sticker-btn {
+            opacity: 1;
+            transform: translateY(0) rotate(-3deg);
+        }
+
+        .mobile-menu-overlay.open .sticker-btn.sticker-white {
+            transform: translateY(0) rotate(2deg);
+        }
+
+        /* Staggered transition delay for buttons */
+        .mobile-menu-overlay .sticker-btn:nth-child(1) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.29s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.29s, box-shadow 0.2s ease, background-color 0.2s ease; }
+        .mobile-menu-overlay .sticker-btn:nth-child(2) { transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.36s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.36s, box-shadow 0.2s ease, background-color 0.2s ease; }
+
+        .mobile-menu-overlay .sticker-btn:hover {
+            transform: scale(1.04) rotate(-1deg) !important;
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+        .mobile-menu-overlay .sticker-btn.sticker-white:hover {
+            transform: scale(1.04) rotate(1deg) !important;
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+
+        /* Social media section inside overlay */
+        .mobile-socials-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            margin-top: 1.5rem;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.43s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.43s;
+        }
+
+        .mobile-menu-overlay.open .mobile-socials-section {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-socials-title {
+            font-family: var(--font-headline);
+            font-size: 0.9rem;
+            color: rgba(255, 252, 244, 0.85);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-shadow: 1px 1px 0px var(--color-dark);
+        }
+
+        .mobile-socials-container {
+            display: flex;
+            gap: 1.2rem;
+        }
+
+        .mobile-socials-container .social-icon {
+            background-color: var(--color-light);
+            border: 3px solid var(--color-dark);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 3.5px 3.5px 0px var(--color-dark);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .mobile-socials-container .social-icon:hover {
+            background-color: var(--color-yellow);
+            transform: translate(-3px, -3px) rotate(-8deg);
+            box-shadow: 5px 5px 0px var(--color-dark);
+        }
+
+        .mobile-socials-container .social-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--color-dark);
         }
 
         /* Gallery Promo Section */
@@ -1592,16 +2000,40 @@
 <body x-data="{ mobileMenuOpen: false }">
 
     <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" :class="mobileMenuOpen ? 'open' : ''">
-        <a href="#hero" @click="mobileMenuOpen = false">Home</a>
-        <a href="#menu-section" @click="mobileMenuOpen = false">Menu</a>
-        <a href="#contact" @click="mobileMenuOpen = false">Find Us</a>
-        <a href="{{ route('reservations.public.create') }}" class="sticker text-center" style="display: block; width: 220px;" @click="mobileMenuOpen = false">Reservar</a>
-        <a href="{{ route('order.public') }}" class="sticker sticker-white text-center" style="display: block; width: 220px;" @click="mobileMenuOpen = false">Pedir Online</a>
+    <div class="mobile-menu-overlay" :class="mobileMenuOpen ? 'open' : ''" x-cloak>
+        <div class="mobile-links-container">
+            <a href="#hero" class="menu-link" @click="mobileMenuOpen = false">Home</a>
+            <a href="#menu-section" class="menu-link" @click="mobileMenuOpen = false">Menu</a>
+            <a href="#contact" class="menu-link" @click="mobileMenuOpen = false">Find Us</a>
+        </div>
+        
+        <div class="mobile-actions-container">
+            <a href="{{ route('reservations.public.create') }}" class="sticker sticker-large text-center sticker-btn" @click="mobileMenuOpen = false">Reservar</a>
+            <a href="{{ route('order.public') }}" class="sticker sticker-large sticker-white text-center sticker-btn" @click="mobileMenuOpen = false">Pedir Online</a>
+        </div>
+
+        <div class="mobile-lang-container-wrap" style="margin-top: 0.75rem; margin-bottom: 0.75rem; display: flex; justify-content: center; width: 100%;">
+            <x-language-switcher theme="dark" />
+        </div>
+
+        <div class="mobile-socials-section">
+            <p class="mobile-socials-title">Connect</p>
+            <div class="mobile-socials-container">
+                <a href="https://www.instagram.com/koyabcn" target="_blank" class="social-icon" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://www.facebook.com/koyabcn" target="_blank" class="social-icon" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+                </a>
+                <a href="https://wa.me/34671620787" target="_blank" class="social-icon" aria-label="WhatsApp">
+                    <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.504-5.714-1.466L0 24zm12.35-3.555c1.72-.001 3.4-.462 4.87-1.334l.348-.206 3.626.95-.968-3.535.226-.36c.962-1.532 1.467-3.31 1.464-5.14-.003-5.263-4.286-9.544-9.554-9.544-2.553 0-4.954.994-6.762 2.804-1.808 1.81-2.8 4.212-2.8 6.768-.002 5.263 4.282 9.545 9.548 9.545zm5.244-7.142c-.287-.143-1.697-.838-1.959-.933-.262-.096-.453-.143-.642.143-.19.285-.733.933-.898 1.121-.165.189-.33.213-.617.07-1.122-.56-1.916-.985-2.673-2.285-.195-.336-.195-.543-.053-.685.127-.127.287-.333.43-.5.142-.167.19-.285.287-.476.096-.19.048-.356-.024-.5-.072-.143-.643-1.551-.881-2.122-.23-.556-.464-.48-.642-.489-.166-.008-.357-.01-.548-.01-.19 0-.5.07-.762.356-.262.285-1 .978-1 2.386 0 1.407 1.024 2.766 1.167 2.956.143.19 2.016 3.078 4.883 4.316.682.294 1.214.47 1.63.602.686.218 1.311.187 1.805.114.55-.082 1.697-.693 1.936-1.363.238-.67.238-1.246.166-1.363-.07-.118-.261-.19-.547-.333z"/></svg>
+                </a>
+            </div>
+        </div>
     </div>
 
     <!-- Navigation Header -->
-    <header>
+    <header :class="mobileMenuOpen ? 'header-overlay-open' : ''">
         <div class="container header-container">
             <a href="#" class="logo-wrap">
                 <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA Logo" class="logo-img" onerror="this.src='/favicon.ico'">
@@ -1614,10 +2046,14 @@
             </nav>
 
             <div class="nav-actions">
-                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">Reservar</a>
-                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle Menu">
-                    <svg x-show="!mobileMenuOpen" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
-                    <svg x-show="mobileMenuOpen" viewBox="0 0 24 24" x-cloak><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                <x-language-switcher theme="dark" class="koya-lang-header-hide" style="margin-right: 0.5rem;" />
+                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">Reservar</a>
+                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="mobileMenuOpen ? 'is-open' : ''" aria-label="Toggle Menu">
+                    <div class="hamburger-inner">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -1722,9 +2158,10 @@
             <!-- Category Tabs -->
             <div class="menu-tabs-container reveal">
                 <div class="menu-tabs">
-                    <button class="menu-tab" :class="activeTab === 'Smash Burgers' ? 'active' : ''" @click="activeTab = 'Smash Burgers'">Burgers</button>
+                    <button class="menu-tab" :class="activeTab === 'Smash Burgers' ? 'active' : ''" @click="activeTab = 'Smash Burgers'">SMASH BURGER</button>
                     <button class="menu-tab" :class="activeTab === 'BOL' ? 'active' : ''" @click="activeTab = 'BOL'">BOL (Bowls)</button>
-                    <button class="menu-tab" :class="activeTab === 'Sides' ? 'active' : ''" @click="activeTab = 'Sides'">Sides & Starters</button>
+                    <button class="menu-tab" :class="activeTab === 'Starters' ? 'active' : ''" @click="activeTab = 'Starters'">Entrantes</button>
+
                     <button class="menu-tab" :class="activeTab === 'Drinks' ? 'active' : ''" @click="activeTab = 'Drinks'">Drinks</button>
                     <button class="menu-tab" :class="activeTab === 'Desserts' ? 'active' : ''" @click="activeTab = 'Desserts'">Desserts</button>
                 </div>
@@ -1734,34 +2171,32 @@
             @php
             // Prepare items matching database content or using our high quality fallbacks
             $imageMap = [
-                'Classic Smash Burger' => 'smash-burger.png',
-                'Truffle Double Smash' => 'tartufata.png',
-                'Bacon Cheese Smash' => 'soboku.png',
                 'Spicy Korean Rice Bowl' => 'katsudon.png',
                 'Mediterranean Rice Bowl' => 'koya-salad.png',
                 'Teriyaki Tofu Bowl' => 'koya-salad.png',
-                'Tartufata' => 'tartufata.png',
+                'KOYA SMASH SPECIAL' => 'smash-burger.png',
+                'KIMCHI BURGER' => 'kimchI_burguer.png',
                 'TARTUFATA' => 'tartufata.png',
-                'Smash Burger' => 'smash-burger.png',
-                'Red Onion' => 'red-onion.png',
+                'ZORSADA' => 'ZORSADA.PNG',
                 'RED ONION' => 'red-onion.png',
+                'CANGRE BURGER' => 'cangre_burguer.png',
                 'KOYA SALAD' => 'koya-salad.png',
                 'KATSUDON' => 'katsudon.png',
                 'SOBOKU' => 'soboku.png',
-                'KOYA SMASH' => 'smash-burger.png',
-                'KOYA SMASH SPECIAL' => 'smash-burger.png',
             ];
 
             $displayItems = [];
             if ($menuItems && $menuItems->count() > 0) {
                 foreach ($menuItems as $item) {
                     $category = $item->category;
-                    $tabCategory = 'Sides';
+                    $tabCategory = 'Starters';
                     if ($category === 'Smash Burger' || $category === 'Smash Burgers') {
                         $tabCategory = 'Smash Burgers';
                     } elseif (in_array($category, ['Bol de Arroz', 'Rice Bowls', 'BOL'])) {
                         $tabCategory = 'BOL';
-                    } elseif (in_array($category, ['Entrantes', 'AcompaÃ¯Â¿Â½amientos', 'Sides', 'Starters'])) {
+                    } elseif (in_array($category, ['Entrantes', 'Starters'])) {
+                        $tabCategory = 'Starters';
+                    } elseif (in_array($category, ['AcompaÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±amientos', 'Acompa\u{00F1}amientos', 'AcompaÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¿ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â½amientos', 'Sides'])) {
                         $tabCategory = 'Sides';
                     } elseif (in_array($category, ['Bebidas', 'Cervezas', 'Cocteles', 'Cafes', 'Drinks', 'Beers', 'Cocktails', 'Coffee'])) {
                         $tabCategory = 'Drinks';
@@ -1772,79 +2207,221 @@
                     $description = $item->description ?? $item->package_details ?? 'Delicious KOYA recipe prepared with fresh ingredients.';
 
                     $badge = null;
-                    if ($item->name === 'Classic Smash Burger') $badge = 'KOYA Favorite';
-                    elseif ($item->name === 'Truffle Double Smash') $badge = 'Popular';
-                    elseif ($item->name === 'Spicy Korean Rice Bowl') $badge = 'New';
+                    if ($item->name === 'Spicy Korean Rice Bowl') $badge = 'New';
                     elseif ($item->name === 'Cheesecake Jar') $badge = 'KOYA Favorite';
-                    elseif ($item->name === 'Tartufata') $badge = 'Truffle';
-                    elseif ($item->name === 'Smash Burger') $badge = 'Classic';
-                    elseif ($item->name === 'Red Onion') $badge = 'Smoky';
+                    elseif ($item->name === 'TARTUFATA') $badge = 'Truffle';
+                    elseif ($item->name === 'RED ONION') $badge = 'Smoky';
                     elseif ($item->name === 'KOYA SALAD') $badge = 'Fresh';
                     elseif ($item->name === 'KATSUDON') $badge = 'Crispy';
                     elseif ($item->name === 'SOBOKU') $badge = 'Simple';
                     
                     $displayItems[] = [
                         'name' => $item->name,
+                        'category' => $item->category,
                         'tab_category' => $tabCategory,
                         'price' => $item->price,
                         'description' => $description,
-                        'badge' => $badge
+                        'badge' => $badge,
+                        'image_url' => $item->image_url,
                     ];
                 }
             } else {
                 // Fallbacks if DB is completely empty
                 $displayItems = [
-                    ['name' => 'Classic Smash Burger', 'tab_category' => 'Smash Burgers', 'price' => 11.90, 'description' => 'Two smashed beef patties, cheddar cheese, pickles, and our signature KOYA sauce in a toasted brioche bun.', 'badge' => 'KOYA Favorite'],
-                    ['name' => 'Truffle Double Smash', 'tab_category' => 'Smash Burgers', 'price' => 14.50, 'description' => 'Double smashed beef patty, truffle mayo, caramelized onions, and melted Swiss cheese.', 'badge' => 'Popular'],
-                    ['name' => 'Bacon Cheese Smash', 'tab_category' => 'Smash Burgers', 'price' => 12.90, 'description' => 'Double smash patty, crispy bacon, double cheddar, onion jam, and barbecue sauce.', 'badge' => 'Classic'],
-                    ['name' => 'Tartufata', 'tab_category' => 'Smash Burgers', 'price' => 13.90, 'description' => 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.', 'badge' => 'Truffle'],
-                    ['name' => 'Smash Burger', 'tab_category' => 'Smash Burgers', 'price' => 10.90, 'description' => 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.', 'badge' => 'Classic'],
-                    ['name' => 'Red Onion', 'tab_category' => 'Smash Burgers', 'price' => 11.50, 'description' => 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.', 'badge' => 'Smoky'],
-                    ['name' => 'SOBOKU', 'tab_category' => 'Smash Burgers', 'price' => 10.50, 'description' => 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.', 'badge' => 'Simple'],
-                    ['name' => 'Spicy Korean Rice Bowl', 'tab_category' => 'BOL', 'price' => 12.80, 'description' => 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame seeds.', 'badge' => 'New'],
-                    ['name' => 'Mediterranean Rice Bowl', 'tab_category' => 'BOL', 'price' => 11.70, 'description' => 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.', 'badge' => 'Fresh'],
-                    ['name' => 'Teriyaki Tofu Bowl', 'tab_category' => 'BOL', 'price' => 11.50, 'description' => 'Crispy teriyaki tofu, jasmine rice, broccoli, avocado, ginger, and sesame glaze.', 'badge' => 'Crunchy'],
-                    ['name' => 'KOYA SALAD', 'tab_category' => 'BOL', 'price' => 9.80, 'description' => 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.', 'badge' => 'Fresh'],
-                    ['name' => 'KATSUDON', 'tab_category' => 'BOL', 'price' => 12.50, 'description' => 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.', 'badge' => 'Crispy'],
-                    ['name' => 'Loaded Nachos', 'tab_category' => 'Sides', 'price' => 8.90, 'description' => 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeÃƒÂ±os.', 'badge' => 'Shareable'],
-                    ['name' => 'Crispy Chicken Bites', 'tab_category' => 'Sides', 'price' => 7.50, 'description' => 'Tender buttermilk chicken bites served with honey mustard sauce.', 'badge' => 'Popular'],
-                    ['name' => 'House Fries', 'tab_category' => 'Sides', 'price' => 4.20, 'description' => 'Golden crispy fries seasoned with our house spice blend.', 'badge' => 'Classic'],
-                    ['name' => 'Sweet Potato Fries', 'tab_category' => 'Sides', 'price' => 4.90, 'description' => 'Sweet potato fries served with chipotle garlic mayo.', 'badge' => null],
-                    ['name' => 'Homemade Lemonade', 'tab_category' => 'Drinks', 'price' => 3.50, 'description' => 'Freshly squeezed lemons with a touch of mint and honey.', 'badge' => 'Refreshing'],
-                    ['name' => 'House IPA', 'tab_category' => 'Drinks', 'price' => 4.50, 'description' => 'Cold, craft India Pale Ale with citrus notes.', 'badge' => null],
-                    ['name' => 'Mojito', 'tab_category' => 'Drinks', 'price' => 7.90, 'description' => 'Classic refreshing cocktail with rum, lime, and fresh mint.', 'badge' => null],
-                    ['name' => 'Still Water', 'tab_category' => 'Drinks', 'price' => 2.00, 'description' => 'Refreshing mineral water.', 'badge' => null],
-                    ['name' => 'Cheesecake Jar', 'tab_category' => 'Desserts', 'price' => 5.50, 'description' => 'Creamy NY-style cheesecake with red berry coulis in a jar.', 'badge' => 'KOYA Favorite'],
-                    ['name' => 'Chocolate Brownie', 'tab_category' => 'Desserts', 'price' => 5.20, 'description' => 'Warm chocolate brownie served with a scoop of vanilla ice cream.', 'badge' => null],
+                    ['name' => 'KOYA SMASH SPECIAL', 'tab_category' => 'Smash Burgers', 'price' => 13.99, 'description' => 'Pan cronut, rabo de toro, ternera, queso havarti, lechuga, cebolla crujiente y salsa casera', 'badge' => null],
+                    ['name' => 'WAGYU', 'tab_category' => 'Smash Burgers', 'price' => 12.95, 'description' => 'Pan brioche, Wagyu, pepino, queso cheddar y salsa de la casa', 'badge' => null],
+                    ['name' => 'KIMCHI BURGER', 'tab_category' => 'Smash Burgers', 'price' => 10.00, 'description' => 'Pollo frito, kimchi casero, salsa hoisin, lechuga y cebolla japonesa', 'badge' => null],
+                    ['name' => 'HAWAIIANA', 'tab_category' => 'Smash Burgers', 'price' => 10.99, 'description' => "Ternera, lechuga, pi\u{00F1}a, queso cheddar, bacon, salsa barbacoa y cebolla crujiente", 'badge' => null],
+                    ['name' => 'TARTUFATA', 'tab_category' => 'Smash Burgers', 'price' => 12.50, 'description' => 'Ternera, champiÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â±ones salteados, queso havarti con salsa trufa y perejil', 'badge' => 'Truffle'],
+                    ['name' => 'VEGAN', 'tab_category' => 'Smash Burgers', 'price' => 12.00, 'description' => 'Pan vegano o sin gluten, carne vegana, lechuga, cebolla encurtida, pepino encurtido y salsa miso', 'badge' => null],
+                    ['name' => 'ZORSADA', 'tab_category' => 'Smash Burgers', 'price' => 11.95, 'description' => 'Pan brioche, ternera, zorza y sobrasada de Lugo con sofrito de cebolla, queso cheddar y huevo frito', 'badge' => null],
+                    ['name' => 'RED ONION', 'tab_category' => 'Smash Burgers', 'price' => 10.25, 'description' => 'Ternera, cebolla caramelizada, queso cheddar, col morada y cebolla encurtida', 'badge' => 'Smoky'],
+                    ['name' => 'KRISPY GARLIC CHICKEN', 'tab_category' => 'Smash Burgers', 'price' => 9.99, 'description' => 'Pollo rebozado, lechuga, queso cheddar, cebolla crujiente y salsa agridulce', 'badge' => null],
+                    ['name' => 'CANGRE BURGER', 'tab_category' => 'Smash Burgers', 'price' => 11.99, 'description' => "Pan brioche, cangrejo c\u{00E1}scara blanda rebozado de panko japon\u{00E9}s con encurtida de pepino y cebolla roja con salsa ahumada de la casa", 'badge' => null],
+                    ['name' => 'CHIQUI BURGER', 'tab_category' => 'Smash Burgers', 'price' => 7.00, 'description' => 'Pan brioche, una patty, queso cheddar con salsa de la casa con patatas incluidas', 'badge' => null],
+                    ['name' => 'SOBOKU', 'tab_category' => 'Smash Burgers', 'price' => 13.50, 'description' => 'Osobuco de ternera a baja temperatura, rÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âºcula, berenjena, setas de shimeji y queso havarti con salsa de la casa', 'badge' => 'Simple'],
+                    ['name' => 'SALMON SUPREME', 'tab_category' => 'BOL', 'price' => 13.00, 'description' => "Salm\u{00F3}n al horno, arroz, salsa teriyaki de pescado, pepino y tomate concasse", 'badge' => null],
+                    ['name' => 'ADOBO', 'tab_category' => 'BOL', 'price' => 10.00, 'description' => "Trocitos de panceta de cerdo marinado de soja con cebolla pochada y cocinado al wok", 'badge' => null],
+                    ['name' => 'KATSUDON', 'tab_category' => 'BOL', 'price' => 11.25, 'description' => "Lomo empanado, s\u{00E9}samo, salsa tonkatsu, cebolla crujiente y rodajas de rabanitos con huevo frito", 'badge' => 'Crispy'],
+                    ['name' => 'KOYA SALAD', 'tab_category' => 'Starters', 'price' => 6.50, 'description' => 'lechuga, wakame, sonomono, col valencia, cebolla crujiente y vinagreta de la casa', 'badge' => 'Fresh'],
+                    ['name' => 'GYOZAS FRITAS IBÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â°RICAS (5 uds.)', 'tab_category' => 'Starters', 'price' => 9.75, 'description' => "Ib\u{00E9}rico, shiitake, cebolla Japonesa, aceite de s\u{00E9}samo y salsa de mayonesa hoisin", 'badge' => null],
+                    ['name' => 'EDAMAME AL VAPOR', 'tab_category' => 'Starters', 'price' => 4.50, 'description' => "Sal maldon, aceite de s\u{00E9}samo y shichimi", 'badge' => null],
+                    ['name' => 'SWEET & SPICY WINGS', 'tab_category' => 'Starters', 'price' => 7.75, 'description' => 'Alitas de pollo, gomashio, cebolla japonesa y salsa teriyaki', 'badge' => null],
+                    ['name' => 'EBI FRY (5 uds.)', 'tab_category' => 'Starters', 'price' => 7.75, 'description' => 'Tempura de gambas y salsa de miel wasabi', 'badge' => null],
+                    ['name' => 'ROLLITOS (5 uds.)', 'tab_category' => 'Starters', 'price' => 8.99, 'description' => 'Rollito de ternera y verdura con tartufata', 'badge' => null],
+                    ['name' => 'KROQUETAS (5 uds.)', 'tab_category' => 'Starters', 'price' => 10.00, 'description' => 'Croquetas de ternera con rabo de toro', 'badge' => null],
+                    ['name' => 'TACOS DE CARILLADA DE TERNERA', 'tab_category' => 'Starters', 'price' => 11.99, 'description' => 'Galtas de ternera, vino tinto y bresa al fuego lento con arroz blanco', 'badge' => null],
+                    ['name' => 'BIL-BAO', 'tab_category' => 'Starters', 'price' => 9.99, 'description' => '2 mini pan bao relleno de cochinita pibil', 'badge' => null],
+                    ['name' => 'KROQUETAS de berenjena con trufa (POR UNIDAD)', 'tab_category' => 'Starters', 'price' => 2.50, 'description' => 'Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pure', 'badge' => null],
+                    ['name' => 'POP-billas', 'tab_category' => 'Starters', 'price' => 16.50, 'description' => "Pulpo hervido salteado de salsa kimchi, patatas con aji amarillo y chimichurri japon\u{00E9}s", 'badge' => null],
+                    ['name' => 'BONIATO FRITO', 'tab_category' => 'Sides', 'price' => 4.20, 'description' => 'Sal, perejil, oregano y katsubishi', 'badge' => null],
+                    ['name' => 'PATATAS FRITAS', 'tab_category' => 'Sides', 'price' => 3.50, 'description' => '', 'badge' => null],
+                    ['name' => 'MEZCLUM FRIES', 'tab_category' => 'Sides', 'price' => 4.50, 'description' => 'Patatas y boniato', 'badge' => null],
+                    ['name' => 'BRAVAS', 'tab_category' => 'Sides', 'price' => 4.00, 'description' => 'Con triple salsa de la casa', 'badge' => null],
+                    ['name' => 'VERMUT DE LA CASA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 3.50, 'description' => '', 'badge' => null],
+                    ['name' => 'VINO BLANCO', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 3.85, 'description' => '', 'badge' => null],
+                    ['name' => 'VINO TINTO', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 3.60, 'description' => '', 'badge' => null],
+                    ['name' => 'COPA DE SANGRIA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 4.50, 'description' => '', 'badge' => null],
+                    ['name' => '1 L SANGRIA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 12.75, 'description' => '', 'badge' => null],
+                    ['name' => 'COPA DE CERVEZA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.30, 'description' => '', 'badge' => null],
+                    ['name' => 'CLARA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.40, 'description' => '', 'badge' => null],
+                    ['name' => 'PINTA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 5.50, 'description' => '', 'badge' => null],
+                    ['name' => 'NESTEA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'AQUARIUS', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'FANTA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.40, 'description' => 'LIMÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã¢â‚¬Å“N / NARANJA', 'badge' => null],
+                    ['name' => 'COCA COLA', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.40, 'description' => 'NORMAL / ZERO', 'badge' => null],
+                    ['name' => 'AGUA GRANDE 50CL', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.20, 'description' => '', 'badge' => null],
+                    ['name' => 'AGUA CON GAS 33CL', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.00, 'description' => '', 'badge' => null],
+                    ['name' => 'ZUMO DE FRUTAS', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 2.50, 'description' => '', 'badge' => null],
+                    ['name' => 'TINTO VERANO', 'category' => 'Bebidas', 'tab_category' => 'Drinks', 'price' => 3.95, 'description' => '', 'badge' => null],
+                    ['name' => 'CAFE SOLO', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 1.40, 'description' => '', 'badge' => null],
+                    ['name' => 'CAFE CORTADO', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 1.50, 'description' => '', 'badge' => null],
+                    ['name' => 'CAFE CON LECHE', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 1.60, 'description' => '', 'badge' => null],
+                    ['name' => 'CAFE AMERICANO', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 1.50, 'description' => '', 'badge' => null],
+                    ['name' => 'CAFE TRIFASICO', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'INFUSIONES', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 2.30, 'description' => '', 'badge' => null],
+                    ['name' => 'TE VERDE o NEGRO', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 2.65, 'description' => '', 'badge' => null],
+                    ['name' => "CARAJILLO DE BAILEY'S", 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'CARAJILLO DE WHISKY/BRANDY', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'CHUPITO DE WHISKY/BRANDY', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 2.00, 'description' => '', 'badge' => null],
+                    ['name' => 'CHUPITO DE ALMENDRA', 'category' => 'Cafes', 'tab_category' => 'Drinks', 'price' => 2.00, 'description' => '', 'badge' => null],
+                    ['name' => 'MOJITO', 'category' => 'Cocteles', 'tab_category' => 'Drinks', 'price' => 8.50, 'description' => 'Bacardi, sifÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³n y menta', 'badge' => null],
+                    ['name' => 'TEQUILA SUNRISE', 'category' => 'Cocteles', 'tab_category' => 'Drinks', 'price' => 8.50, 'description' => 'Zumo de naranja, tequila & granadina', 'badge' => null],
+                    ['name' => 'NEGRONI', 'category' => 'Cocteles', 'tab_category' => 'Drinks', 'price' => 8.50, 'description' => 'Martini rosso, Campari, gin', 'badge' => null],
+                    ['name' => 'VODKA 7', 'category' => 'Cocteles', 'tab_category' => 'Drinks', 'price' => 8.50, 'description' => 'Vodka & refresco de 7 Up', 'badge' => null],
+                    ['name' => 'GIN TONIC', 'category' => 'Cocteles', 'tab_category' => 'Drinks', 'price' => 8.00, 'description' => 'Gin & tÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â³nica', 'badge' => null],
+                    ['name' => 'ESTRELLA DAMM', 'category' => 'Cervezas', 'tab_category' => 'Drinks', 'price' => 2.40, 'description' => '', 'badge' => null],
+                    ['name' => 'ESTRELLA FREE DAMM', 'category' => 'Cervezas', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'ESTRELLA FREE DAMM TOSTADA', 'category' => 'Cervezas', 'tab_category' => 'Drinks', 'price' => 2.50, 'description' => '', 'badge' => null],
+                    ['name' => 'TURIA', 'category' => 'Cervezas', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'VOLLDAMN', 'category' => 'Cervezas', 'tab_category' => 'Drinks', 'price' => 2.60, 'description' => '', 'badge' => null],
+                    ['name' => 'MANGO FLOAT', 'tab_category' => 'Desserts', 'price' => 5.90, 'description' => 'Mango fresco, galletas y crema de leche', 'badge' => null],
+                    ['name' => 'BROWNIE DE PISTACHIO', 'tab_category' => 'Desserts', 'price' => 5.75, 'description' => 'Harina de almendra y pistachio', 'badge' => null],
+                    ['name' => 'MATCHA CHEESECAKE', 'tab_category' => 'Desserts', 'price' => 6.00, 'description' => 'Tarta de queso con matcha', 'badge' => null],
+                    ['name' => 'TARTA DE CHOCOLATE', 'tab_category' => 'Desserts', 'price' => 5.50, 'description' => 'Chocolate negro, azucar moreno, huevo, leche, almendras y mermelada de melocoton', 'badge' => null],
+                    ['name' => 'KOULANT', 'tab_category' => 'Desserts', 'price' => 5.25, 'description' => 'Coulant de chocolate con vainilla', 'badge' => null],
                 ];
             }
+                $firstCocktailName = collect($displayItems)->firstWhere('category', 'Cocteles')['name'] ?? null;
             @endphp
 
             <div class="menu-grid">
                 @foreach($displayItems as $item)
                     @php
                     $imageName = $imageMap[$item['name']] ?? null;
+                    $imageUrl = $item['image_url'] ?? ($imageName ? asset('images/' . $imageName) : null);
                     @endphp
-                    <div class="menu-card-simple reveal" x-show="activeTab === '{{ $item['tab_category'] }}'"
-                         x-transition:enter="transition ease-out duration-300 transform"
-                         x-transition:enter-start="opacity-0 translate-y-4 scale-95"
-                         x-transition:enter-end="opacity-100 translate-y-0 scale-100">
-                        <div class="menu-item-inner">
-                            <div class="menu-item-info">
-                                <div class="menu-item-top">
-                                    <h3 class="menu-item-name">{!! preg_replace('/(\(\d+\s*uds\.?\))/i', '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>', e($item['name'])) !!}</h3>
-                                    <span class="menu-item-price">{{ number_format($item['price'], 2) }}&euro;</span>
-                                </div>
-                                <p class="menu-item-description" style="margin-top: 0.15rem; min-height: auto;">{{ $item['description'] }}</p>
+                    @php
+                    $skipStandardDrinkCard = $item['tab_category'] === 'Drinks' && in_array($item['category'] ?? null, ['Cafes', 'Cervezas'], true);
+                    @endphp
+                    @if(! $skipStandardDrinkCard)
+                        @if($item['tab_category'] === 'Drinks' && ($item['category'] ?? null) === 'Cocteles' && $item['name'] === $firstCocktailName)
+                            <div class="drink-cocktail-marker reveal" x-show="activeTab === 'Drinks'"
+                                 x-transition:enter="transition ease-out duration-300 transform"
+                                 x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                                 x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                                <img src="https://koyabcn.es/wp-content/uploads/2025/08/Picture7.png" alt="Cocktails">
                             </div>
-                            @if(!empty($imageName))
-                                <div class="menu-item-img-container">
-                                    <img src="{{ asset('images/' . $imageName) }}" alt="{{ $item['name'] }}" onerror="this.style.display='none'">
+                        @endif
+                        <div class="menu-card-simple reveal" x-show="activeTab === '{{ $item['tab_category'] }}'"
+                             x-transition:enter="transition ease-out duration-300 transform"
+                             x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                             x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                            <div class="menu-item-inner">
+                                <div class="menu-item-info">
+                                    <div class="menu-item-top">
+                                        <h3 class="menu-item-name">{!! preg_replace('/(\(\d+\s*uds\.?\))/i', '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>', e($item['name'])) !!}</h3>
+                                        <span class="menu-item-price">{{ number_format($item['price'], 2) }}&euro;</span>
+                                    </div>
+                                    @if(!empty($item['description']))
+                                        <p class="menu-item-description" style="margin-top: 0.25rem; min-height: auto;">{{ $item['description'] }}</p>
+                                    @endif
                                 </div>
+                                @if(!empty($imageUrl))
+                                    <div class="menu-item-img-container">
+                                        <img src="{{ $imageUrl }}" alt="{{ $item['name'] }}" onerror="this.style.display='none'">
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+                @endforeach
+            </div>
+
+            @php
+                $sideItems = collect($displayItems)->where('tab_category', 'Sides')->values();
+                $drinkCoffeeItems = collect($displayItems)->where('tab_category', 'Drinks')->where('category', 'Cafes')->values();
+                $drinkBeerItems = collect($displayItems)->where('tab_category', 'Drinks')->where('category', 'Cervezas')->values();
+            @endphp
+
+            <div class="drinks-highlight-grid reveal" x-show="activeTab === 'Drinks'"
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                <div class="drinks-showcase">
+                    <div class="drinks-showcase-title drinks-showcase-title-image">
+                        <img src="https://koyabcn.es/wp-content/uploads/2025/08/cafe.png" alt="Cafe">
+                    </div>
+                    <div class="drinks-showcase-grid">
+                        @foreach($drinkCoffeeItems as $item)
+                            <div class="drinks-showcase-item">
+                                <div class="drinks-showcase-top">
+                                    <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
+                                    <span class="drinks-showcase-price">{{ number_format($item['price'], 2) }}&euro;</span>
+                                </div>
+                                @if(!empty($item['description']))
+                                    <p class="drinks-showcase-description">{{ $item['description'] }}</p>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="drinks-showcase">
+                    <div class="drinks-showcase-title">Cervezas</div>
+                    <div class="drinks-showcase-grid">
+                        @foreach($drinkBeerItems as $item)
+                            <div class="drinks-showcase-item">
+                                <div class="drinks-showcase-top">
+                                    <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
+                                    <span class="drinks-showcase-price">{{ number_format($item['price'], 2) }}&euro;</span>
+                                </div>
+                                @if(!empty($item['description']))
+                                    <p class="drinks-showcase-description">{{ $item['description'] }}</p>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div class="sides-showcase reveal" x-show="activeTab === 'Starters'"
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                                <div class="sides-showcase-title sides-showcase-title-image">
+                    <img src="https://koyabcn.es/wp-content/uploads/2025/08/fritas.png" alt="Fritas">
+                </div>
+                <div class="sides-showcase-grid">
+                    @foreach($sideItems as $item)
+                        <div class="sides-showcase-item">
+                            <div class="sides-showcase-top">
+                                <h3 class="sides-showcase-name">{!! preg_replace('/(\(\d+\s*uds\.?\))/i', '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>', e($item['name'])) !!}</h3>
+                                <span class="sides-showcase-price">{{ number_format($item['price'], 2) }}&euro;</span>
+                            </div>
+                            @if(!empty($item['description']))
+                                <p class="sides-showcase-description">{{ $item['description'] }}</p>
                             @endif
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="text-left mt-6 reveal" x-show="activeTab === 'Smash Burgers'"
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 translate-y-4"
+                 x-transition:enter-end="opacity-100 translate-y-0">
+                <p class="menu-item-name" style="font-size: 1.35rem; margin-bottom: 0.2rem;">Pan vegetariano y Pan Sin Gluten disponible</p>
+                <p class="menu-item-description" style="margin-top: 0; min-height: auto;">2&euro; de suplemento</p>
             </div>
 
             <!-- Allergy Disclaimer -->

@@ -14,10 +14,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
+        $seeders = [
             CategorySeeder::class,
             MenuItemSeeder::class,
-            PresentationDemoSeeder::class,
-        ]);
+        ];
+
+        if (! app()->environment('production')) {
+            $seeders[] = PresentationDemoSeeder::class;
+        }
+
+        $this->call($seeders);
     }
 }
+

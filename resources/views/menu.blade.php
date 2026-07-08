@@ -367,9 +367,9 @@
                     <div>
                         <!-- Product Image Container -->
                         <div class="relative w-full h-48 rounded-[16px] overflow-hidden mb-4 bg-koya-light border-[3px] border-dashed border-[#ebd6b0] flex items-center justify-center">
-                            <template x-if="getImagePath(item.name)">
+                            <template x-if="getImagePath(item)">
                                 <img 
-                                    :src="getImagePath(item.name)" 
+                                    :src="getImagePath(item)" 
                                     :alt="item.name" 
                                     class="max-h-[85%] max-w-[85%] object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2"
                                     loading="lazy"
@@ -377,7 +377,7 @@
                             </template>
                             
                             <!-- If no image, show placeholder -->
-                            <template x-if="!getImagePath(item.name)">
+                            <template x-if="!getImagePath(item)">
                                 <div class="flex flex-col items-center justify-center text-center p-4">
                                     <div class="w-16 h-16 rounded-full bg-koya/20 border-2 border-[#fac021]/30 flex items-center justify-center mb-2">
                                         <span class="text-koya-dark font-black text-xl" x-text="item.name.substring(0, 2).toUpperCase()"></span>
@@ -410,7 +410,17 @@
                         ></p>
                     </div>
                 </div>
-            </template>
+</template>
+            <div
+                x-show="activeCategory === 'Smash Burger'"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 translate-y-4"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                class="koya-card rounded-[24px] p-5 md:col-span-2 lg:col-span-3 bg-[#fac021]"
+            >
+                <p class="font-['Bubbleboddy'] text-2xl text-koya-dark uppercase tracking-wide">Pan vegetariano y Pan Sin Gluten disponible</p>
+                <p class="font-['Biski_2'] text-sm text-[#555] mt-2">2&euro; de suplemento</p>
+            </div>
         </div>
 
         <!-- Allergy Disclaimer -->
@@ -474,26 +484,8 @@
                     return name.replace(/(\(\d+\s*uds\.?\))/gi, '<span style="font-size: 0.75em; opacity: 0.85; font-weight: normal; text-transform: none; display: inline-block; margin-left: 4px;">$1</span>');
                 },
 
-                getImagePath(itemName) {
-                    if (!itemName) return null;
-                    const cleanName = itemName.toUpperCase().trim();
-                    const images = {
-                        'CLASSIC SMASH BURGER': 'smash-burger.png',
-                        'TRUFFLE DOUBLE SMASH': 'tartufata.png',
-                        'TARTUFATA': 'tartufata.png',
-                        'SMASH BURGER': 'smash-burger.png',
-                        'RED ONION': 'red-onion.png',
-                        'SOBOKU': 'soboku.png',
-                        'FAMILY TAKEAWAY PACK': 'smash-burger.png',
-                        'SPICY KOREAN RICE BOWL': 'katsudon.png',
-                        'MEDITERRANEAN RICE BOWL': 'koya-salad.png',
-                        'KOYA SALAD': 'koya-salad.png',
-                        'KATSUDON': 'katsudon.png',
-                        'KOYA SMASH': 'smash-burger.png',
-                        'KOYA SMASH SPECIAL': 'smash-burger.png',
-                    };
-                    const name = images[cleanName];
-                    return name ? `/images/${name}` : null;
+                getImagePath(item) {
+                    return item?.image_url || null;
                 },
 
                 hasDescription(item) {
@@ -506,8 +498,6 @@
 
                 getBadge(itemName) {
                     const badges = {
-                        'Classic Smash Burger': 'Favorite',
-                        'Truffle Double Smash': 'Popular',
                         'Spicy Korean Rice Bowl': 'New',
                         'Cheesecake Jar': 'Favorite',
                         'Tartufata': 'Truffle',
@@ -524,3 +514,6 @@
     </script>
 </body>
 </html>
+
+
+
