@@ -414,8 +414,8 @@
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
         };
-        const gridColor   = 'rgba(255,255,255,0.05)';
-        const tickColor   = 'rgba(255,255,255,0.25)';
+        const gridColor   = 'rgba(0,0,0,0.06)';
+        const tickColor   = 'rgba(0,0,0,0.5)';
         const axisStyle   = { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'Outfit', size: 10 } } };
 
         const labels   = @json($chartLabels);

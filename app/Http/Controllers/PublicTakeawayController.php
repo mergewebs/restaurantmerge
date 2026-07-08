@@ -28,39 +28,26 @@ class PublicTakeawayController extends Controller
         $locale = request()->getPreferredLanguage(['es', 'en']);
         app()->setLocale($locale);
 
-        $menuItemsCollection = MenuItem::query()
-            ->where('is_active', true)
-            ->orderedByCategory()
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get([
-                'id',
-                'name',
-                'category',
-                'description',
-                'image_path',
-                'price',
-                'is_package',
-                'package_details',
-            ]);
-
-        $menuItems = $menuItemsCollection->groupBy('category');
-        $menuItemsFlat = $menuItemsCollection->map(fn (MenuItem $item) => [
-            'id' => $item->id,
-            'name' => $item->name,
-            'category' => $item->category,
-            'description' => $item->description,
-            'image_url' => $item->image_url,
-            'price' => (float) $item->price,
-            'is_package' => (bool) $item->is_package,
-            'package_details' => $item->package_details,
-        ])->values()->all();
+        ['menuItems' => $menuItems, 'menuItemsFlat' => $menuItemsFlat] = $this->menuPayload();
 
         return view('order', [
             'menuItems' => $menuItems,
             'menuItemsFlat' => $menuItemsFlat,
             'restaurantName' => config('takeaway.brand.restaurant_name', config('app.name')),
             'brandLogoUrl' => config('takeaway.brand.logo_url'),
+        ]);
+    }
+
+    public function menu()
+    {
+        $locale = request()->getPreferredLanguage(['es', 'en']);
+        app()->setLocale($locale);
+
+        ['menuItems' => $menuItems, 'menuItemsFlat' => $menuItemsFlat] = $this->menuPayload();
+
+        return view('menu', [
+            'menuItems' => $menuItems,
+            'menuItemsFlat' => $menuItemsFlat,
         ]);
     }
 
@@ -154,6 +141,45 @@ class PublicTakeawayController extends Controller
             'message' => __('public.takeaway_success', ['order' => $order->id]),
             'order_id' => $order->id,
         ], 201);
+    }
+
+    private function menuPayload(): array
+    {
+        $menuItemsCollection = MenuItem::query()
+            ->where('is_active', true)
+            ->orderedByCategory()
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get([
+                'id',
+                'name',
+                'category',
+                'description',
+                'image_path',
+                'image_display_path',
+                'image_thumbnail_path',
+                'price',
+                'is_package',
+                'package_details',
+            ]);
+
+        $menuItems = $menuItemsCollection->groupBy('category');
+        $menuItemsFlat = $menuItemsCollection->map(fn (MenuItem $item) => [
+            'id' => $item->id,
+            'name' => $item->name,
+            'category' => $item->category,
+            'description' => $item->description,
+            'image_url' => $item->image_url,
+            'image_thumbnail_url' => $item->image_thumbnail_url,
+            'price' => (float) $item->price,
+            'is_package' => (bool) $item->is_package,
+            'package_details' => $item->package_details,
+        ])->values()->all();
+
+        return [
+            'menuItems' => $menuItems,
+            'menuItemsFlat' => $menuItemsFlat,
+        ];
     }
 
     private function takeawayTable(): RestaurantTable

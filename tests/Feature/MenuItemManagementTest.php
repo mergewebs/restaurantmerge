@@ -39,7 +39,11 @@ class MenuItemManagementTest extends TestCase
         $this->assertTrue((bool) $menuItem->is_package);
         $this->assertEquals('Soup + Steak + Drink', $menuItem->package_details);
         $this->assertNotNull($menuItem->image_path);
+        $this->assertNotNull($menuItem->image_display_path);
+        $this->assertNotNull($menuItem->image_thumbnail_path);
         Storage::disk('product-images')->assertExists($menuItem->image_path);
+        Storage::disk('product-images')->assertExists($menuItem->image_display_path);
+        Storage::disk('product-images')->assertExists($menuItem->image_thumbnail_path);
 
         $originalImagePath = $menuItem->image_path;
         $updatedImage = UploadedFile::fake()->image('lunch-package-plus.jpg');
@@ -62,14 +66,20 @@ class MenuItemManagementTest extends TestCase
         $this->assertNotSame($originalImagePath, $menuItem->image_path);
         Storage::disk('product-images')->assertMissing($originalImagePath);
         Storage::disk('product-images')->assertExists($menuItem->image_path);
+        Storage::disk('product-images')->assertExists($menuItem->image_display_path);
+        Storage::disk('product-images')->assertExists($menuItem->image_thumbnail_path);
 
         $currentImagePath = $menuItem->image_path;
+        $currentDisplayPath = $menuItem->image_display_path;
+        $currentThumbnailPath = $menuItem->image_thumbnail_path;
 
         $this->actingAs($admin)->delete(route('menu-items.destroy', $menuItem))
             ->assertRedirect(route('menu-items.index'));
 
         $this->assertDatabaseMissing('menu_items', ['id' => $menuItem->id]);
         Storage::disk('product-images')->assertMissing($currentImagePath);
+        Storage::disk('product-images')->assertMissing($currentDisplayPath);
+        Storage::disk('product-images')->assertMissing($currentThumbnailPath);
     }
 
     public function test_public_pages_and_ordering_share_the_same_active_products(): void
@@ -89,6 +99,10 @@ class MenuItemManagementTest extends TestCase
             ->assertSee('Shared Product');
 
         $this->get(route('order.public'))
+            ->assertOk()
+            ->assertSee('Shared Product');
+
+        $this->get(route('menu.public'))
             ->assertOk()
             ->assertSee('Shared Product');
 

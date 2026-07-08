@@ -414,6 +414,10 @@
                                     :alt="item.name" 
                                     class="max-h-[85%] max-w-[85%] object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2"
                                     loading="lazy"
+                                    decoding="async"
+                                    fetchpriority="low"
+                                    width="600"
+                                    height="600"
                                 />
                             </template>
                             
@@ -927,7 +931,7 @@
                 },
 
                 getImagePath(item) {
-                    return item?.image_url || null;
+                    return item?.image_thumbnail_url || item?.image_url || null;
                 },
 
                 hasDescription(item) {
@@ -956,6 +960,9 @@
     </script>
 </body>
 </html>
+
+
+
 
 
 

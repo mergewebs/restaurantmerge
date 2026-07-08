@@ -2082,14 +2082,14 @@
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay" :class="mobileMenuOpen ? 'open' : ''" x-cloak>
         <div class="mobile-links-container">
-            <a href="#hero" class="menu-link" @click="mobileMenuOpen = false">Home</a>
-            <a href="#menu-section" class="menu-link" @click="mobileMenuOpen = false">Menu</a>
-            <a href="#contact" class="menu-link" @click="mobileMenuOpen = false">Find Us</a>
+            <a href="#hero" class="menu-link" @click="mobileMenuOpen = false">{{ __('public.nav_home') }}</a>
+            <a href="#menu-section" class="menu-link" @click="mobileMenuOpen = false">{{ __('public.nav_menu') }}</a>
+            <a href="#contact" class="menu-link" @click="mobileMenuOpen = false">{{ __('public.nav_find_us') }}</a>
         </div>
         
         <div class="mobile-actions-container">
-            <a href="{{ route('reservations.public.create') }}" class="sticker sticker-large text-center sticker-btn" @click="mobileMenuOpen = false">Reservar</a>
-            <a href="{{ route('order.public') }}" class="sticker sticker-large sticker-white text-center sticker-btn" @click="mobileMenuOpen = false">Pedir Online</a>
+            <a href="{{ route('reservations.public.create') }}" class="sticker sticker-large text-center sticker-btn" @click="mobileMenuOpen = false">{{ __('public.nav_reserve') }}</a>
+            <a href="{{ route('order.public') }}" class="sticker sticker-large sticker-white text-center sticker-btn" @click="mobileMenuOpen = false">{{ __('public.nav_order_online') }}</a>
         </div>
 
         <div class="mobile-lang-container-wrap" style="margin-top: 0.75rem; margin-bottom: 0.75rem; display: flex; justify-content: center; width: 100%;">
@@ -2120,15 +2120,15 @@
             </a>
 
             <nav class="nav-links">
-                <a href="#hero">Home</a>
-                <a href="#menu-section">Menu</a>
-                <a href="#contact">Find Us</a>
+                <a href="#hero">{{ __('public.nav_home') }}</a>
+                <a href="#menu-section">{{ __('public.nav_menu') }}</a>
+                <a href="#contact">{{ __('public.nav_find_us') }}</a>
             </nav>
 
             <div class="nav-actions">
                 <x-language-switcher theme="dark" class="koya-lang-header-hide" style="margin-right: 0.5rem;" />
-                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">Reservar</a>
-                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="mobileMenuOpen ? 'is-open' : ''" aria-label="Toggle Menu">
+                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">{{ __('public.nav_reserve') }}</a>
+                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="mobileMenuOpen ? 'is-open' : ''" aria-label="{{ __('public.nav_menu') }}">
                     <div class="hamburger-inner">
                         <span></span>
                         <span></span>
@@ -2180,7 +2180,7 @@
 
                 <div class="hero-btns">
                     <a href="#menu-section" class="btn-koya-primary">{{ __('public.homepage_hero_cta_menu') }}</a>
-                    <a href="{{ route('reservations.public.create') }}" class="btn-koya-secondary">Reservar</a>
+                    <a href="{{ route('reservations.public.create') }}" class="btn-koya-secondary">{{ __('public.nav_reserve') }}</a>
                 </div>
             </div>
 
@@ -2232,7 +2232,7 @@
     <section id="menu-section" class="menu-section" x-data="{ activeTab: 'Smash Burgers' }">
         <div class="container">
             <div class="section-header reveal">
-                <h2 class="section-title">Our Full Menu</h2>
+                <h2 class="section-title">{{ __('public.homepage_menu_title') }}</h2>
             </div>
 
             <!-- Category Tabs -->
@@ -2241,8 +2241,8 @@
                     <button class="menu-tab" :class="activeTab === 'Smash Burgers' ? 'active' : ''" @click="activeTab = 'Smash Burgers'">SMASH BURGER</button>
                     <button class="menu-tab" :class="activeTab === 'BOL' ? 'active' : ''" @click="activeTab = 'BOL'">BOL (Bowls)</button>
                     <button class="menu-tab" :class="activeTab === 'Starters' ? 'active' : ''" @click="activeTab = 'Starters'">Entrantes</button>
-                    <button class="menu-tab" :class="activeTab === 'Drinks' ? 'active' : ''" @click="activeTab = 'Drinks'">Drinks</button>
-                    <button class="menu-tab" :class="activeTab === 'Desserts' ? 'active' : ''" @click="activeTab = 'Desserts'">Desserts</button>
+                    <button class="menu-tab" :class="activeTab === 'Drinks' ? 'active' : ''" @click="activeTab = 'Drinks'">{{ __('public.menu_tab_drinks') }}</button>
+                    <button class="menu-tab" :class="activeTab === 'Desserts' ? 'active' : ''" @click="activeTab = 'Desserts'">{{ __('public.menu_tab_desserts') }}</button>
                 </div>
             </div>
 
@@ -2260,6 +2260,8 @@
                 'RED ONION' => 'red-onion.png',
                 'CANGRE BURGER' => 'cangre_burguer.png',
                 'KOYA SALAD' => 'koya-salad.png',
+                'SALMON SUPREME' => 'Salmon_supreme.png',
+                'ADOBO' => 'adobo.png',
                 'KATSUDON' => 'katsudon.png',
                 'SOBOKU' => 'soboku.png',
             ];
@@ -2279,7 +2281,7 @@
                         $tabCategory = 'Fries';
                     } elseif (in_array($category, ['Bebidas', 'Cervezas', 'Cocteles', 'Cafes', 'Drinks', 'Beers', 'Cocktails', 'Coffee'])) {
                         $tabCategory = 'Drinks';
-                    } elseif (in_array($category, ['Postres de la Casa', 'Homemade Desserts', 'Desserts'])) {
+                    } elseif (in_array($category, ['Postres', 'Postres de la Casa', 'Homemade Desserts', 'Desserts'])) {
                         $tabCategory = 'Desserts';
                     }
 
@@ -2302,6 +2304,7 @@
                         'description' => $description,
                         'badge' => $badge,
                         'image_url' => $item->image_url,
+                        'image_thumbnail_url' => $item->image_thumbnail_url,
                     ];
                 }
             } else {
@@ -2388,7 +2391,7 @@
                 @foreach($displayItems as $item)
                     @php
                     $imageName = $imageMap[$item['name']] ?? null;
-                    $imageUrl = $item['image_url'] ?? ($imageName ? asset('images/' . $imageName) : null);
+                    $imageUrl = $item['image_thumbnail_url'] ?? $item['image_url'] ?? ($imageName ? asset('images/' . $imageName) : null);
                     @endphp
                     @php
                     $skipStandardDrinkCard = $item['tab_category'] === 'Drinks';
@@ -2410,7 +2413,7 @@
                                 </div>
                                 @if(!empty($imageUrl))
                                     <div class="menu-item-img-container">
-                                        <img src="{{ $imageUrl }}" alt="{{ $item['name'] }}" onerror="this.style.display='none'">
+                                        <img src="{{ $imageUrl }}" alt="{{ $item['name'] }}" loading="lazy" decoding="async" width="100" height="100" @if($item['name'] === 'ADOBO') style="transform: scale(1.1);" @endif onerror="this.style.display='none'">
                                     </div>
                                 @endif
                             </div>
@@ -2599,7 +2602,7 @@
             <div class="contact-card reveal">
                 <h3 class="contact-card-title">
                     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                    Visit KOYA
+                    {{ __('public.homepage_contact_title') }}
                 </h3>
                 <ul class="contact-info-list">
                     <li class="contact-info-item">
@@ -2636,7 +2639,7 @@
             <div class="contact-card reveal">
                 <h3 class="contact-card-title">
                     <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-                    Opening Hours
+                    {{ __('public.homepage_hours_title') }}
                 </h3>
                 <div class="schedule-list">
                     @php
@@ -2728,19 +2731,19 @@
                 </div>
 
                 <div>
-                    <h4 class="footer-nav-title">Quick Links</h4>
+                    <h4 class="footer-nav-title">{{ __('public.nav_quick_links') }}</h4>
                     <ul class="footer-links">
-                        <li><a href="#hero">Home</a></li>
-                        <li><a href="#menu-section">Menu</a></li>
-                        <li><a href="#contact">Location & Hours</a></li>
+                        <li><a href="#hero">{{ __('public.nav_home') }}</a></li>
+                        <li><a href="#menu-section">{{ __('public.nav_menu') }}</a></li>
+                        <li><a href="#contact">{{ __('public.nav_location_hours') }}</a></li>
                     </ul>
                 </div>
 
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2026 KOYA BCN. All rights reserved.</p>
-                <p>Create by <a href="http://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
+                <p>{{ __('public.homepage_footer_rights') }}</p>
+                <p>{{ __('public.homepage_footer_tagline') }} <a href="http://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
             </div>
         </div>
     </footer>
@@ -2820,3 +2823,4 @@
     </script>
 </body>
 </html>
+

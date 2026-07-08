@@ -219,9 +219,9 @@
             </div>
         @endif
 
-        <div class="@if(auth()->user()->isAdmin()) grid grid-cols-1 lg:grid-cols-3 gap-8 @else space-y-8 max-w-4xl mx-auto @endif">
-            <!-- Left/Main Column: Operations -->
-            <div class="@if(auth()->user()->isAdmin()) lg:col-span-2 @endif space-y-8 animate-fade-in-up">
+        <div class="space-y-12 @if(!auth()->user()->isAdmin()) max-w-4xl @endif mx-auto">
+            <!-- First Row: Operations & Reservations -->
+            <div class="space-y-8 animate-fade-in-up">
                 <!-- Reservations Section -->
                 <div class="space-y-6">
             @if($isClosedToday && $date == now()->toDateString())
@@ -739,7 +739,7 @@
                                     <svg class="w-3 h-3 text-amber-400/80 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
                                     </svg>
-                                    <span>{{ $res->notes }}</span>
+                                    <span>{!! $res->notes !!}</span>
                                 </div>
                                 @endif
                             </div>
@@ -754,11 +754,11 @@
                 </div>
             @endif
         </div>
-    </div> <!-- Close operations left column -->
+    </div> <!-- Close operations row -->
 
     @if(auth()->user()->isAdmin())
-    <!-- Right Column: Finances & Quick Actions -->
-    <div class="space-y-8 animate-fade-in-up delay-75">
+    <!-- Second Row: Finances & Quick Actions -->
+    <div class="space-y-8 animate-fade-in-up delay-75 border-t border-gray-200/50 pt-8">
         <!-- Finance Stats Section -->
         <div class="space-y-6">
             <div class="flex items-center justify-between border-b border-white/5 pb-4">
@@ -990,7 +990,7 @@
     </div>
 
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="glass kpi-card kpi-income p-5 rounded-3xl border border-white/5">
                     <p class="text-[10px] text-green-400/70 uppercase tracking-widest font-black mb-1">Income</p>
                     <h3 class="text-2xl font-black text-green-400 leading-tight">€{{ number_format($dailyIncome, 2) }}</h3>
@@ -1031,9 +1031,11 @@
                 </div>
             </div>
 
-            <!-- Daily Summary Chart -->
-            <div class="glass p-5 rounded-3xl border border-white/5 mt-8 hover-lift transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
+            <!-- Chart and Transactions in two columns on desktop -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Daily Summary Chart -->
+                <div class="glass p-5 rounded-3xl border border-white/5 hover-lift transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-xl bg-blue-500/15 flex items-center justify-center border border-blue-500/20">
                             <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -1063,10 +1065,10 @@
                         <p class="text-[10px] text-white/60 uppercase tracking-widest font-extrabold">No financial data for today</p>
                     </div>
                 @endif
-            </div>
+                </div>
 
-            <!-- Recent Transactions -->
-            <div class="space-y-3 mt-8">
+                <!-- Recent Transactions -->
+                <div class="space-y-3">
                 <div class="flex items-center gap-2 mb-2">
                     <div class="w-1.5 h-4 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
                     <h4 class="text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Recent Transactions</h4>
@@ -1129,6 +1131,7 @@
                 @endif
             </div>
         </div>
+    </div>
 
         <script>
             (function() {
@@ -1159,8 +1162,8 @@
                             maintainAspectRatio: false,
                             plugins: { legend: { display: false } },
                             scales: {
-                                x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.2)', font: { size: 9, family: 'Outfit' } } },
-                                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { display: false } }
+                                x: { grid: { display: false }, ticks: { color: 'rgba(0,0,0,0.5)', font: { size: 9, family: 'Outfit' } } },
+                                y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { display: false } }
                             }
                         }
                     });

@@ -139,8 +139,8 @@
                                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                         <div class="flex items-center gap-4 min-w-0">
                                             <div class="h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-                                                @if($item->image_url)
-                                                    <img src="{{ $item->image_url }}" alt="{{ $item->name }}" class="h-full w-full object-cover">
+                                                @if($item->image_thumbnail_url)
+                                                    <img src="{{ $item->image_thumbnail_url }}" alt="{{ $item->name }}" class="h-full w-full object-cover" loading="lazy" decoding="async" width="80" height="80">
                                                 @else
                                                     <div class="flex h-full w-full items-center justify-center text-lg font-black uppercase text-white/35">
                                                         {{ \Illuminate\Support\Str::of($item->name)->substr(0, 2)->upper() }}
@@ -257,4 +257,5 @@
         </section>
     </div>
 </x-app-layout>
+
 

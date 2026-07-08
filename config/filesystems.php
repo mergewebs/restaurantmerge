@@ -50,7 +50,7 @@ return [
         'product-images' => [
             'driver' => 'local',
             'root' => public_path('products'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/products',
+            'url' => env('PRODUCT_IMAGES_URL', '/products'),
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -87,3 +87,4 @@ return [
     ],
 
 ];
+

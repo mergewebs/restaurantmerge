@@ -35,7 +35,7 @@ Route::get('/restaurant/schedule-data', [ReservationController::class, 'getSched
 Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');
 
 // New Menu Page (Same as Order)
-Route::get('/menu', [PublicTakeawayController::class, 'index'])->name('menu.public');
+Route::get('/menu', [PublicTakeawayController::class, 'menu'])->name('menu.public');
 
 // New Order Page
 Route::get('/order', [PublicTakeawayController::class, 'index'])->name('order.public');
@@ -109,3 +109,4 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+

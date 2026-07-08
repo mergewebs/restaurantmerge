@@ -46,6 +46,8 @@ class MenuItem extends Model
         'SPICY KOREAN RICE BOWL' => 'images/katsudon.png',
         'MEDITERRANEAN RICE BOWL' => 'images/koya-salad.png',
         'KOYA SALAD' => 'images/koya-salad.png',
+        'SALMON SUPREME' => 'images/Salmon_supreme.png',
+        'ADOBO' => 'images/adobo.png',
         'KATSUDON' => 'images/katsudon.png',
         'KOYA SMASH' => 'images/smash-burger.png',
         'KOYA SMASH SPECIAL' => 'images/smash-burger.png',
@@ -56,6 +58,8 @@ class MenuItem extends Model
         'category',
         'description',
         'image_path',
+        'image_display_path',
+        'image_thumbnail_path',
         'price',
         'is_active',
         'is_package',
@@ -89,15 +93,31 @@ class MenuItem extends Model
 
     public function getImageUrlAttribute(): ?string
     {
+        if (filled($this->image_display_path)) {
+            return Storage::disk('product-images')->url($this->image_display_path);
+        }
+
         if (filled($this->image_path)) {
             return Storage::disk('product-images')->url($this->image_path);
         }
 
-        $legacyPath = self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
+        $legacyPath = $this->legacyImageAssetPath();
 
         return $legacyPath ? asset($legacyPath) : null;
     }
+
+    public function getImageThumbnailUrlAttribute(): ?string
+    {
+        if (filled($this->image_thumbnail_path)) {
+            return Storage::disk('product-images')->url($this->image_thumbnail_path);
+        }
+
+        return $this->image_url;
+    }
+
+    public function legacyImageAssetPath(): ?string
+    {
+        return self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
+    }
 }
-
-
 

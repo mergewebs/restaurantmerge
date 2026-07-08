@@ -29,7 +29,7 @@
                 }
             }
         </script>
-        @include('layouts.restaurant-theme')
+        @include('layouts.admin-theme')
     </head>
     <body class="font-sans antialiased text-gray-100">
         <div class="min-h-screen flex flex-col items-center justify-center p-6">
