@@ -9,13 +9,13 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #008468;
+            background-color: #088972;
             color: #ffffff;
         }
         .container {
             max-width: 600px;
             margin: 20px auto;
-            background-color: #008468;
+            background-color: #088972;
             padding: 40px 20px;
         }
         .logo {
@@ -23,8 +23,9 @@
             margin-bottom: 30px;
         }
         .logo img {
-            max-width: 150px;
-            border-radius: 5px;
+            max-width: 120px;
+            border-radius: 50%;
+            border: 3px solid #fac021;
         }
         h1 {
             color: #fac021;
@@ -49,7 +50,7 @@
             margin-bottom: 30px;
         }
         .details-box {
-            background-color: #00735a;
+            background-color: #055f4f;
             border-radius: 12px;
             padding: 25px;
             margin-bottom: 30px;
@@ -114,7 +115,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://grandrestaurantv7-0.b-cdn.net/bistro/wp-content/uploads/sites/3/2024/08/logo-white.png" alt="Sample Restaurant Logo">
+            <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA BCN Logo">
         </div>
 
         <h1>{{ __('emails.confirmation.title', [], $locale) }}</h1>
@@ -147,6 +148,10 @@
             </div>
             <div class="detail-item">
                 <span class="detail-label">🔢 {{ __('emails.confirmation.reservation_number', [], $locale) }}:</span>
+                <span class="detail-value">#{{ $reservation->id }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">👥 {{ __('emails.confirmation.guests', [], $locale) }}:</span>
                 <span class="detail-value">{{ $reservation->party_size }}</span>
             </div>
         </div>

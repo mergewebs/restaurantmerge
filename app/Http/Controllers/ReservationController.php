@@ -67,7 +67,7 @@ class ReservationController extends Controller
         $locale = request()->getPreferredLanguage(['es', 'en']);
 
         // Send Email to Admin (for notification of new manual reservation)
-        $adminEmail = env('ADMIN_EMAIL', 'hello@samplerestaurant.test');
+        $adminEmail = env('ADMIN_EMAIL', 'koyabcn@gmail.com');
         Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation, $locale));
 
         // Send Email to Client if email exists
@@ -150,7 +150,7 @@ class ReservationController extends Controller
 
         if ($wasCreated) {
             // Send Email to Admin
-            $adminEmail = env('ADMIN_EMAIL', 'hello@samplerestaurant.test');
+            $adminEmail = env('ADMIN_EMAIL', 'koyabcn@gmail.com');
             Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation, $locale));
 
             // Send Email to Client if email exists

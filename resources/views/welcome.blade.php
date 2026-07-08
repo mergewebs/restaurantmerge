@@ -452,15 +452,18 @@
             width: 420px;
             height: 420px;
             z-index: 10;
+            animation: tiltShake 6s ease-in-out infinite alternate;
         }
 
         .hero-main-img {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: contain;
             filter: drop-shadow(10px 10px 0px rgba(0,0,0,0.15));
-            transition: opacity 0.4s ease-in-out, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            animation: tiltShake 6s ease-in-out infinite alternate;
+            transition: opacity 0.6s ease-in-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .rotating-badge-wrap {
@@ -2763,8 +2766,8 @@
             revealOnScroll(); // initial trigger
 
             // Hero Image Cycler - Changes product images dynamically every X seconds (3.5 seconds)
-            const heroImg = document.querySelector('.hero-main-img');
-            if (heroImg) {
+            const heroImgWrap = document.querySelector('.hero-main-img-wrap');
+            if (heroImgWrap) {
                 const heroImages = [
                     "{{ asset('images/tartufata.png') }}",
                     "{{ asset('images/smash-burger.png') }}",
@@ -2776,19 +2779,41 @@
                 let currentImgIndex = 0;
                 
                 setInterval(() => {
-                    heroImg.style.opacity = '0';
-                    heroImg.style.transform = 'scale(0.9) rotate(-2deg)';
-                    setTimeout(() => {
-                        currentImgIndex = (currentImgIndex + 1) % heroImages.length;
-                        // Preload the next image to avoid flickering
-                        const tempImg = new Image();
-                        tempImg.src = heroImages[currentImgIndex];
-                        tempImg.onload = () => {
-                            heroImg.src = heroImages[currentImgIndex];
-                            heroImg.style.opacity = '1';
-                            heroImg.style.transform = 'scale(1) rotate(0deg)';
-                        };
-                    }, 400); // Wait for opacity/scale transition
+                    currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+                    
+                    const nextSrc = heroImages[currentImgIndex];
+                    const tempImg = new Image();
+                    tempImg.src = nextSrc;
+                    tempImg.onload = () => {
+                        // Create new image element
+                        const newImg = document.createElement('img');
+                        newImg.src = nextSrc;
+                        newImg.alt = "KOYA Product Showcase";
+                        newImg.className = "hero-main-img";
+                        newImg.style.opacity = '0';
+                        newImg.style.transform = 'scale(0.95)';
+                        
+                        heroImgWrap.appendChild(newImg);
+                        
+                        // Trigger reflow to ensure transition is animated
+                        newImg.offsetHeight;
+                        
+                        // Fade/Scale in the new image
+                        newImg.style.opacity = '1';
+                        newImg.style.transform = 'scale(1)';
+                        
+                        // Get all current images to fade them out
+                        const oldImgs = Array.from(heroImgWrap.querySelectorAll('.hero-main-img')).filter(img => img !== newImg);
+                        oldImgs.forEach(oldImg => {
+                            oldImg.style.opacity = '0';
+                            oldImg.style.transform = 'scale(1.05)';
+                        });
+                        
+                        // Remove old images after the transition completes
+                        setTimeout(() => {
+                            oldImgs.forEach(oldImg => oldImg.remove());
+                        }, 600);
+                    };
                 }, 3500); // Cycle every 3.5 seconds
             }
         });
