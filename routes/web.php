@@ -38,12 +38,14 @@ Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosed
 Route::get('/menu', [PublicTakeawayController::class, 'menu'])->name('menu.public');
 
 // New Order Page
-Route::get('/order', [PublicTakeawayController::class, 'index'])->name('order.public');
-Route::post('/order', [PublicTakeawayController::class, 'store'])->name('order.public.store');
+Route::middleware('feature:takeaway')->group(function () {
+    Route::get('/order', [PublicTakeawayController::class, 'index'])->name('order.public');
+    Route::post('/order', [PublicTakeawayController::class, 'store'])->name('order.public.store');
 
-// Legacy Takeaway Routes (pointing to same actions for compatibility and tests)
-Route::get('/takeaway', [PublicTakeawayController::class, 'index'])->name('takeaway.public');
-Route::post('/takeaway/orders', [PublicTakeawayController::class, 'store'])->name('takeaway.public.store');
+    // Legacy Takeaway Routes (pointing to same actions for compatibility and tests)
+    Route::get('/takeaway', [PublicTakeawayController::class, 'index'])->name('takeaway.public');
+    Route::post('/takeaway/orders', [PublicTakeawayController::class, 'store'])->name('takeaway.public.store');
+});
 
 Route::redirect('/admin', '/admin/dashboard');
 
@@ -54,6 +56,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::resource('reservations', ReservationController::class);
 
     // Finance (simplified)
+    Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
     Route::post('/finance', [FinanceController::class, 'store'])->name('finance.store');
     Route::put('/finance/{id}', [FinanceController::class, 'update'])->name('finance.update');
     Route::get('/finance/stats', [FinanceController::class, 'stats'])->name('finance.stats');
@@ -77,24 +80,29 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::post('/restaurant/toggle-today', [RestaurantConfigController::class, 'toggleToday'])->name('restaurant.toggle-today');
 
     // Table Management (TPV)
-    Route::get('/tables', [TableManagementController::class, 'index'])->name('tables.index');
-    Route::get('/tables/completed', [TableManagementController::class, 'completedOrders'])->name('tables.completed');
-    Route::get('/kitchen', [TableManagementController::class, 'kitchen'])->name('tables.kitchen');
-    Route::get('/kitchen/snapshot', [TableManagementController::class, 'kitchenSnapshot'])->name('tables.kitchen.snapshot');
-    Route::get('/kitchen/stream', [TableManagementController::class, 'kitchenStream'])->name('tables.kitchen.stream');
-    Route::get('/tables/{table}/order', [TableManagementController::class, 'orderPage'])->name('tables.order');
-    Route::post('/tables', [TableManagementController::class, 'storeTable'])->name('tables.store');
-    Route::post('/tables/{table}/items', [TableManagementController::class, 'storeItem'])->name('tables.items.store');
-    Route::post('/tables/{table}/menu-items', [TableManagementController::class, 'quickAddMenuItem'])->name('tables.menu-items.quick-add');
-    Route::post('/tables/{table}/sync', [TableManagementController::class, 'syncOrder'])->name('tables.order.sync');
-    Route::post('/tables/{table}/send-to-kitchen', [TableManagementController::class, 'sendToKitchen'])->name('tables.send-to-kitchen');
-    Route::put('/tables/{table}/items/{item}', [TableManagementController::class, 'updateItem'])->name('tables.items.update');
-    Route::patch('/tables/orders/{order}/kitchen-status', [TableManagementController::class, 'updateKitchenOrderStatus'])->name('tables.orders.kitchen-status.update');
-    Route::patch('/tables/items/{item}/kitchen-status', [TableManagementController::class, 'updateKitchenItemStatus'])->name('tables.items.kitchen-status.update');
-    Route::delete('/tables/{table}/items/{item}', [TableManagementController::class, 'destroyItem'])->name('tables.items.destroy');
-    Route::post('/tables/{table}/close-order', [TableManagementController::class, 'closeOrder'])->name('tables.close-order');
-    Route::delete('/tables/{table}/delete-order', [TableManagementController::class, 'deleteOrder'])->name('tables.delete-order');
-    Route::delete('/tables/{table}', [TableManagementController::class, 'destroyTable'])->name('tables.destroy');
+    Route::middleware('feature:tables')->group(function () {
+        Route::get('/tables', [TableManagementController::class, 'index'])->name('tables.index');
+        Route::get('/tables/completed', [TableManagementController::class, 'completedOrders'])->name('tables.completed');
+        Route::get('/tables/{table}/order', [TableManagementController::class, 'orderPage'])->name('tables.order');
+        Route::post('/tables', [TableManagementController::class, 'storeTable'])->name('tables.store');
+        Route::post('/tables/{table}/items', [TableManagementController::class, 'storeItem'])->name('tables.items.store');
+        Route::post('/tables/{table}/menu-items', [TableManagementController::class, 'quickAddMenuItem'])->name('tables.menu-items.quick-add');
+        Route::post('/tables/{table}/sync', [TableManagementController::class, 'syncOrder'])->name('tables.order.sync');
+        Route::post('/tables/{table}/send-to-kitchen', [TableManagementController::class, 'sendToKitchen'])->name('tables.send-to-kitchen');
+        Route::put('/tables/{table}/items/{item}', [TableManagementController::class, 'updateItem'])->name('tables.items.update');
+        Route::delete('/tables/{table}/items/{item}', [TableManagementController::class, 'destroyItem'])->name('tables.items.destroy');
+        Route::post('/tables/{table}/close-order', [TableManagementController::class, 'closeOrder'])->name('tables.close-order');
+        Route::delete('/tables/{table}/delete-order', [TableManagementController::class, 'deleteOrder'])->name('tables.delete-order');
+        Route::delete('/tables/{table}', [TableManagementController::class, 'destroyTable'])->name('tables.destroy');
+    });
+
+    Route::middleware('feature:kitchen')->group(function () {
+        Route::get('/kitchen', [TableManagementController::class, 'kitchen'])->name('tables.kitchen');
+        Route::get('/kitchen/snapshot', [TableManagementController::class, 'kitchenSnapshot'])->name('tables.kitchen.snapshot');
+        Route::get('/kitchen/stream', [TableManagementController::class, 'kitchenStream'])->name('tables.kitchen.stream');
+        Route::patch('/tables/orders/{order}/kitchen-status', [TableManagementController::class, 'updateKitchenOrderStatus'])->name('tables.orders.kitchen-status.update');
+        Route::patch('/tables/items/{item}/kitchen-status', [TableManagementController::class, 'updateKitchenItemStatus'])->name('tables.items.kitchen-status.update');
+    });
 
     // Menu Management
     Route::get('/menu-items', [MenuItemController::class, 'index'])->name('menu-items.index');
@@ -109,4 +117,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+
 

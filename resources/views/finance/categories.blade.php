@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{{ route('finance.history') }}" class="w-10 h-10 bg-white/5 border border-white/10 text-white rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all shadow-lg">
+                <a href="{{ route('finance.index') }}" class="w-10 h-10 bg-white/5 border border-white/10 text-white rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all shadow-lg">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -168,4 +168,5 @@
         </div>
     </div>
 </x-app-layout>
+
 

@@ -11,94 +11,201 @@ use Carbon\CarbonPeriod;
 
 class FinanceController extends Controller
 {
-    public function stats(Request $request)
+    public function index(Request $request)
     {
         if (!auth()->user()->isAdmin()) {
             return redirect()->route('dashboard');
         }
 
-        // Determine filter mode & date range
-        $mode      = $request->get('mode', 'daily');   // daily | weekly | monthly | custom
-        $dateFrom  = $request->get('date_from');
-        $dateTo    = $request->get('date_to');
+        [
+            'mode' => $mode,
+            'dateFrom' => $dateFrom,
+            'dateTo' => $dateTo,
+            'start' => $start,
+            'end' => $end,
+        ] = $this->resolveStatsRange($request);
 
-        switch ($mode) {
-            case 'weekly':
-                $start = Carbon::now()->subDays(6)->startOfDay();
-                $end   = Carbon::now()->endOfDay();
-                break;
-            case 'monthly':
-                $start = Carbon::now()->startOfMonth()->startOfDay();
-                $end   = Carbon::now()->endOfDay();
-                break;
-            case 'custom':
-                $start = $dateFrom ? Carbon::parse($dateFrom)->startOfDay() : Carbon::now()->startOfDay();
-                $end   = $dateTo   ? Carbon::parse($dateTo)->endOfDay()     : Carbon::now()->endOfDay();
-                break;
-            default: // daily
-                $start = Carbon::now()->startOfDay();
-                $end   = Carbon::now()->endOfDay();
-                break;
-        }
+        extract($this->getStatsData($start, $end));
 
-        // Totals
-        $totalIncome   = Income::whereDate('date', '>=', $start->toDateString())
-                               ->whereDate('date', '<=', $end->toDateString())
-                               ->sum('amount');
-        $totalExpenses = Expense::whereDate('date', '>=', $start->toDateString())
-                                ->whereDate('date', '<=', $end->toDateString())
-                                ->sum('amount');
-        $netProfit     = $totalIncome - $totalExpenses;
+        $query = $request->get('history_query');
+        $historyDateFrom = $request->get('history_date_from', Carbon::now()->startOfMonth()->toDateString());
+        $historyDateTo = $request->get('history_date_to', Carbon::now()->endOfMonth()->toDateString());
 
-        // Chart series — group by day across the range
-        $period = CarbonPeriod::create($start->toDateString(), $end->toDateString());
-        $chartLabels  = [];
-        $chartIncome  = [];
-        $chartExpense = [];
-        $chartProfit  = [];
+        $historyQuery = $this->buildHistoryQuery($query, $historyDateFrom, $historyDateTo);
+        $history = (clone $historyQuery)
+            ->paginate(20)
+            ->withQueryString();
+        $latestTransactions = $this->buildHistoryQuery(null, null, null)
+            ->limit(5)
+            ->get();
 
-        foreach ($period as $day) {
-            $d = $day->toDateString();
-            $inc = Income::whereDate('date', $d)->sum('amount');
-            $exp = Expense::whereDate('date', $d)->sum('amount');
-            $chartLabels[]  = $day->format('d M');
-            $chartIncome[]  = round((float) $inc, 2);
-            $chartExpense[] = round((float) $exp, 2);
-            $chartProfit[]  = round((float) ($inc - $exp), 2);
-        }
-
-        // Breakdown by income type & expense category
-        $incomeByType    = Income::whereDate('date', '>=', $start->toDateString())
-                                 ->whereDate('date', '<=', $end->toDateString())
-                                 ->selectRaw('type, SUM(amount) as total')
-                                 ->groupBy('type')->get();
-        
-        $incomeByMethod = Income::whereDate('date', '>=', $start->toDateString())
-                                ->whereDate('date', '<=', $end->toDateString())
-                                ->selectRaw('method, SUM(amount) as total')
-                                ->groupBy('method')->get();
-
-        $expenseByMethod = Expense::whereDate('date', '>=', $start->toDateString())
-                                   ->whereDate('date', '<=', $end->toDateString())
-                                   ->selectRaw('method, SUM(amount) as total')
-                                   ->groupBy('method')->get();
-
-        $expenseByCategory = Expense::whereDate('date', '>=', $start->toDateString())
-                                     ->whereDate('date', '<=', $end->toDateString())
-                                     ->selectRaw('category, SUM(amount) as total')
-                                     ->groupBy('category')->get();
-
-        $categories = Category::orderBy('name')->get();
-
-        return view('finance.stats', compact(
+        return view('finance.index', compact(
             'mode', 'start', 'end', 'dateFrom', 'dateTo',
             'totalIncome', 'totalExpenses', 'netProfit',
             'chartLabels', 'chartIncome', 'chartExpense', 'chartProfit',
             'incomeByType', 'expenseByCategory', 'incomeByMethod', 'expenseByMethod',
-            'categories'
+            'categories', 'history', 'query', 'historyDateFrom', 'historyDateTo', 'latestTransactions'
         ));
     }
 
+    public function stats(Request $request)
+    {
+        return redirect()->route('finance.index', $request->query());
+    }
+
+    public function history(Request $request)
+    {
+        $params = [];
+
+        if ($request->filled('query')) {
+            $params['history_query'] = $request->query('query');
+        }
+        if ($request->filled('date_from')) {
+            $params['history_date_from'] = $request->query('date_from');
+        }
+        if ($request->filled('date_to')) {
+            $params['history_date_to'] = $request->query('date_to');
+        }
+
+        return redirect()->to(route('finance.index', $params) . '#transactions');
+    }
+
+    private function resolveStatsRange(Request $request): array
+    {
+        $mode = $request->get('mode', 'monthly');
+        $dateFrom = $request->get('date_from');
+        $dateTo = $request->get('date_to');
+
+        switch ($mode) {
+            case 'daily':
+                $start = Carbon::now()->startOfDay();
+                $end = Carbon::now()->endOfDay();
+                break;
+            case 'weekly':
+                $start = Carbon::now()->subDays(6)->startOfDay();
+                $end = Carbon::now()->endOfDay();
+                break;
+            case 'last_month':
+                $start = Carbon::now()->subMonth()->startOfMonth()->startOfDay();
+                $end = Carbon::now()->subMonth()->endOfMonth()->endOfDay();
+                break;
+            case 'last_3_months':
+                $start = Carbon::now()->subMonths(3)->startOfDay();
+                $end = Carbon::now()->endOfDay();
+                break;
+            case 'this_year':
+                $start = Carbon::now()->startOfYear()->startOfDay();
+                $end = Carbon::now()->endOfYear()->endOfDay();
+                break;
+            case 'last_year':
+                $start = Carbon::now()->subYear()->startOfYear()->startOfDay();
+                $end = Carbon::now()->subYear()->endOfYear()->endOfDay();
+                break;
+            case 'custom':
+                $start = $dateFrom ? Carbon::parse($dateFrom)->startOfDay() : Carbon::now()->startOfMonth()->startOfDay();
+                $end = $dateTo ? Carbon::parse($dateTo)->endOfDay() : Carbon::now()->endOfMonth()->endOfDay();
+                break;
+            case 'monthly':
+            default:
+                $start = Carbon::now()->startOfMonth()->startOfDay();
+                $end = Carbon::now()->endOfMonth()->endOfDay();
+                break;
+        }
+
+        return compact('mode', 'dateFrom', 'dateTo', 'start', 'end');
+    }
+
+    private function getStatsData(Carbon $start, Carbon $end): array
+    {
+        $totalIncome = Income::whereDate('date', '>=', $start->toDateString())
+            ->whereDate('date', '<=', $end->toDateString())
+            ->sum('amount');
+        $totalExpenses = Expense::whereDate('date', '>=', $start->toDateString())
+            ->whereDate('date', '<=', $end->toDateString())
+            ->sum('amount');
+        $netProfit = $totalIncome - $totalExpenses;
+
+        $period = CarbonPeriod::create($start->toDateString(), $end->toDateString());
+        $chartLabels = [];
+        $chartIncome = [];
+        $chartExpense = [];
+        $chartProfit = [];
+
+        foreach ($period as $day) {
+            $date = $day->toDateString();
+            $income = Income::whereDate('date', $date)->sum('amount');
+            $expense = Expense::whereDate('date', $date)->sum('amount');
+
+            $chartLabels[] = $day->format('d M');
+            $chartIncome[] = round((float) $income, 2);
+            $chartExpense[] = round((float) $expense, 2);
+            $chartProfit[] = round((float) ($income - $expense), 2);
+        }
+
+        $incomeByType = Income::whereDate('date', '>=', $start->toDateString())
+            ->whereDate('date', '<=', $end->toDateString())
+            ->selectRaw('type, SUM(amount) as total')
+            ->groupBy('type')
+            ->get();
+
+        $incomeByMethod = Income::whereDate('date', '>=', $start->toDateString())
+            ->whereDate('date', '<=', $end->toDateString())
+            ->selectRaw('method, SUM(amount) as total')
+            ->groupBy('method')
+            ->get();
+
+        $expenseByMethod = Expense::whereDate('date', '>=', $start->toDateString())
+            ->whereDate('date', '<=', $end->toDateString())
+            ->selectRaw('method, SUM(amount) as total')
+            ->groupBy('method')
+            ->get();
+
+        $expenseByCategory = Expense::whereDate('date', '>=', $start->toDateString())
+            ->whereDate('date', '<=', $end->toDateString())
+            ->selectRaw('category, SUM(amount) as total')
+            ->groupBy('category')
+            ->get();
+
+        $categories = Category::orderBy('name')->get();
+
+        return compact(
+            'totalIncome', 'totalExpenses', 'netProfit',
+            'chartLabels', 'chartIncome', 'chartExpense', 'chartProfit',
+            'incomeByType', 'expenseByCategory', 'incomeByMethod', 'expenseByMethod',
+            'categories'
+        );
+    }
+
+    private function buildHistoryQuery(?string $query, ?string $dateFrom, ?string $dateTo)
+    {
+        $incomes = Income::select('id', 'amount', 'date', 'description', 'method', 'type as category', \DB::raw("'income' as transaction_type"), 'user_id', 'created_at');
+        $expenses = Expense::select('id', 'amount', 'date', 'description', 'method', 'category', \DB::raw("'expense' as transaction_type"), 'user_id', 'created_at');
+
+        if ($dateFrom) {
+            $incomes->whereDate('date', '>=', $dateFrom);
+            $expenses->whereDate('date', '>=', $dateFrom);
+        }
+
+        if ($dateTo) {
+            $incomes->whereDate('date', '<=', $dateTo);
+            $expenses->whereDate('date', '<=', $dateTo);
+        }
+
+        if ($query) {
+            $incomes->where(function ($builder) use ($query) {
+                $builder->where('description', 'like', "%{$query}%")
+                    ->orWhere('amount', 'like', "%{$query}%");
+            });
+            $expenses->where(function ($builder) use ($query) {
+                $builder->where('description', 'like', "%{$query}%")
+                    ->orWhere('amount', 'like', "%{$query}%");
+            });
+        }
+
+        return $incomes->union($expenses)
+            ->orderBy('date', 'desc')
+            ->orderBy('created_at', 'desc');
+    }
 
     private function denyWaiter()
     {
@@ -107,8 +214,6 @@ class FinanceController extends Controller
         }
         return null;
     }
-
-
 
     public function store(Request $request)
     {
@@ -168,7 +273,7 @@ class FinanceController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $type = $request->get('type'); // original type to find the record
+        $type = $request->get('type');
 
         if ($type === 'income') {
             $record = Income::findOrFail($id);
@@ -176,10 +281,9 @@ class FinanceController extends Controller
             $record = Expense::findOrFail($id);
         }
 
-        // If type changed from income to expense or vice versa, we need to delete and create
         if ($type !== $validated['finance_type']) {
             $record->delete();
-            
+
             if ($validated['finance_type'] === 'income') {
                 Income::create([
                     'amount' => $validated['amount'],
@@ -210,52 +314,6 @@ class FinanceController extends Controller
         }
 
         return back()->with('success', 'Finance entry updated successfully.');
-    }
-
-
-
-
-    public function history(Request $request)
-    {
-        if (!auth()->user()->isAdmin()) {
-            return redirect()->route('dashboard');
-        }
-
-        $query = $request->get('query');
-        $dateFrom = $request->get('date_from');
-        $dateTo = $request->get('date_to');
-
-        $incomes = Income::select('id', 'amount', 'date', 'description', 'method', 'type as category', \DB::raw("'income' as transaction_type"), 'user_id', 'created_at');
-        $expenses = Expense::select('id', 'amount', 'date', 'description', 'method', 'category', \DB::raw("'expense' as transaction_type"), 'user_id', 'created_at');
-
-        if ($dateFrom) {
-            $incomes->whereDate('date', '>=', $dateFrom);
-            $expenses->whereDate('date', '>=', $dateFrom);
-        }
-        if ($dateTo) {
-            $incomes->whereDate('date', '<=', $dateTo);
-            $expenses->whereDate('date', '<=', $dateTo);
-        }
-        if ($query) {
-            $incomes->where(function($q) use ($query) {
-                $q->where('description', 'like', "%{$query}%")
-                  ->orWhere('amount', 'like', "%{$query}%");
-            });
-            $expenses->where(function($q) use ($query) {
-                $q->where('description', 'like', "%{$query}%")
-                  ->orWhere('amount', 'like', "%{$query}%");
-            });
-        }
-
-        $history = $incomes->union($expenses)
-            ->orderBy('date', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate(20)
-            ->withQueryString();
-
-        $categories = Category::orderBy('name')->get();
-
-        return view('finance.history', compact('history', 'query', 'dateFrom', 'dateTo', 'categories'));
     }
 
     public function destroy(Request $request, $id)

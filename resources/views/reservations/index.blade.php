@@ -1,11 +1,8 @@
 <x-app-layout>
-    <x-slot name="header">
-        Reservations List
-    </x-slot>
-
     <div x-data="{ 
         showReservationModal: {{ ($errors->any() || session('error')) && old('customer_name') && !old('reservation_id') ? 'true' : 'false' }},
         showEditModal: {{ ($errors->any() || session('error')) && old('reservation_id') ? 'true' : 'false' }},
+        activeTab: 'today',
         editingReservation: {
             id: '{{ old('reservation_id') }}',
             customer_name: '{{ old('customer_name') }}',
@@ -29,95 +26,148 @@
             };
             this.showEditModal = true;
         }
-    }" class="space-y-10">
+    }" class="space-y-6">
 
         <!-- Success/Error Messages -->
         @if(session('success'))
-            <div class="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl text-sm font-bold uppercase tracking-wider">
+            <div class="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 rounded-2xl text-sm font-bold uppercase tracking-wider">
                 {{ session('success') }}
             </div>
         @endif
         @if(session('error'))
-            <div class="mb-4 p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-sm font-bold uppercase tracking-wider">
+            <div class="mb-4 p-4 bg-red-500/10 border border-red-500/20 text-red-600 rounded-2xl text-sm font-bold uppercase tracking-wider">
                 {{ session('error') }}
             </div>
         @endif
 
         <!-- Header Actions -->
-        <div class="flex justify-between items-center">
-            <h2 class="text-xl font-bold text-white">All Reservations</h2>
-            <button @click="showReservationModal = true" class="px-4 py-2 bg-koya text-white flex items-center gap-2 rounded-xl shadow-lg shadow-koya/20 text-sm font-semibold transition-all hover:scale-105 active:scale-95">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                New Reservation
+        <div class="flex justify-between items-center gap-4 mb-2">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Reservations</h1>
+                <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">Manage and track guest reservations and capacity.</p>
+            </div>
+            <button @click="showReservationModal = true" class="btn-koya px-3.5 py-2 md:px-4 md:py-2.5 shadow-lg shadow-koya/20 text-xs md:text-sm font-semibold transition-all hover:scale-105 active:scale-95 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                <span class="hidden md:inline">New Reservation</span>
+                <span class="md:hidden inline">New</span>
             </button>
         </div>
 
-        <!-- Today's Reservations -->
-        <div class="space-y-4">
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-koya rounded-full"></div>
-                <h3 class="text-lg font-bold text-white uppercase tracking-wider text-xs">Today</h3>
+        <!-- KPI Stats Grid -->
+        <div class="grid grid-cols-3 gap-2 md:gap-4">
+            <!-- Today's Reservations -->
+            <div class="p-3 md:p-5 bg-white border border-slate-150/80 rounded-2xl flex items-center gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow">
+                <div class="p-2 md:p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
+                    <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M6 11h12M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-[9px] md:text-xs text-slate-400 font-bold uppercase tracking-wider block">Today</span>
+                    <span class="text-base md:text-2xl font-black text-slate-800 leading-tight block">{{ $todayReservations->total() }}</span>
+                </div>
             </div>
-            @if($todayReservations->isEmpty())
-                <div class="glass p-8 rounded-2xl border border-white/5 text-center">
-                    <p class="text-gray-400 text-sm">No reservations for today</p>
+
+            <!-- Upcoming Reservations -->
+            <div class="p-3 md:p-5 bg-white border border-slate-150/80 rounded-2xl flex items-center gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow">
+                <div class="p-2 md:p-3 bg-blue-50 text-blue-600 rounded-xl shrink-0">
+                    <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
-            @else
-                <div class="space-y-3">
-                    @foreach($todayReservations as $res)
-                        <x-reservation-card :reservation="$res" />
-                    @endforeach
+                <div>
+                    <span class="text-[9px] md:text-xs text-slate-400 font-bold uppercase tracking-wider block">Upcoming</span>
+                    <span class="text-base md:text-2xl font-black text-slate-800 leading-tight block">{{ $upcomingReservations->total() }}</span>
                 </div>
-                <div class="mt-4">
-                    {{ $todayReservations->links() }}
+            </div>
+
+            <!-- Past Reservations -->
+            <div class="p-3 md:p-5 bg-white border border-slate-150/80 rounded-2xl flex items-center gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow">
+                <div class="p-2 md:p-3 bg-slate-50 text-slate-600 rounded-xl shrink-0">
+                    <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                    </svg>
                 </div>
-            @endif
+                <div>
+                    <span class="text-[9px] md:text-xs text-slate-400 font-bold uppercase tracking-wider block">Past</span>
+                    <span class="text-base md:text-2xl font-black text-slate-800 leading-tight block">{{ $pastReservations->total() }}</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Upcoming Reservations -->
-        <div class="space-y-4">
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <h3 class="text-lg font-bold text-white uppercase tracking-wider text-xs">Upcoming</h3>
+        <!-- Reservations Content Tab Panel -->
+        <div class="bg-white border border-slate-150/80 rounded-2xl p-4 md:p-6 shadow-sm">
+            <!-- Tabs Header -->
+            <div class="flex border-b border-slate-100 pb-3 mb-6 overflow-x-auto scrollbar-none gap-2">
+                <button @click="activeTab = 'today'" :class="activeTab === 'today' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="px-4 py-2 border-b-2 font-bold text-sm rounded-xl transition duration-150 flex items-center gap-2 outline-none">
+                    Today
+                    <span class="px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'today' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $todayReservations->total() }}</span>
+                </button>
+                <button @click="activeTab = 'upcoming'" :class="activeTab === 'upcoming' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="px-4 py-2 border-b-2 font-bold text-sm rounded-xl transition duration-150 flex items-center gap-2 outline-none">
+                    Upcoming
+                    <span class="px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'upcoming' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $upcomingReservations->total() }}</span>
+                </button>
+                <button @click="activeTab = 'past'" :class="activeTab === 'past' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="px-4 py-2 border-b-2 font-bold text-sm rounded-xl transition duration-150 flex items-center gap-2 outline-none">
+                    Past
+                    <span class="px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'past' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $pastReservations->total() }}</span>
+                </button>
             </div>
-            @if($upcomingReservations->isEmpty())
-                <div class="glass p-8 rounded-2xl border border-white/5 text-center">
-                    <p class="text-gray-400 text-sm">No upcoming reservations</p>
-                </div>
-            @else
-                <div class="space-y-3">
-                    @foreach($upcomingReservations as $res)
-                        <x-reservation-card :reservation="$res" />
-                    @endforeach
-                </div>
-                <div class="mt-4">
-                    {{ $upcomingReservations->links() }}
-                </div>
-            @endif
-        </div>
 
-        <!-- Past Reservations -->
-        <div class="space-y-4">
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-gray-500 rounded-full"></div>
-                <h3 class="text-lg font-bold text-white uppercase tracking-wider text-xs text-gray-400">Past</h3>
-            </div>
-            @if($pastReservations->isEmpty())
-                <div class="glass p-8 rounded-2xl border border-white/5 text-center">
-                    <p class="text-gray-400 text-sm">No past reservations</p>
-                </div>
-            @else
-                <div class="space-y-3">
-                    @foreach($pastReservations as $res)
-                        <div class="opacity-60 grayscale-[0.5]">
+            <!-- Today's List -->
+            <div x-show="activeTab === 'today'" class="space-y-4">
+                @if($todayReservations->isEmpty())
+                    <div class="text-center py-12">
+                        <p class="text-slate-400 text-sm">No reservations for today</p>
+                    </div>
+                @else
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($todayReservations as $res)
                             <x-reservation-card :reservation="$res" />
-                        </div>
-                    @endforeach
-                </div>
-                <div class="mt-4">
-                    {{ $pastReservations->links() }}
-                </div>
-            @endif
+                        @endforeach
+                    </div>
+                    <div class="mt-6">
+                        {{ $todayReservations->links() }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Upcoming List -->
+            <div x-show="activeTab === 'upcoming'" class="space-y-4" x-cloak>
+                @if($upcomingReservations->isEmpty())
+                    <div class="text-center py-12">
+                        <p class="text-slate-400 text-sm">No upcoming reservations</p>
+                    </div>
+                @else
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($upcomingReservations as $res)
+                            <x-reservation-card :reservation="$res" />
+                        @endforeach
+                    </div>
+                    <div class="mt-6">
+                        {{ $upcomingReservations->links() }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Past List -->
+            <div x-show="activeTab === 'past'" class="space-y-4" x-cloak>
+                @if($pastReservations->isEmpty())
+                    <div class="text-center py-12">
+                        <p class="text-slate-400 text-sm">No past reservations</p>
+                    </div>
+                @else
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach($pastReservations as $res)
+                            <div class="opacity-75 grayscale-[0.2]">
+                                <x-reservation-card :reservation="$res" />
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-6">
+                        {{ $pastReservations->links() }}
+                    </div>
+                @endif
+            </div>
         </div>
 
         <!-- Add Reservation Modal -->

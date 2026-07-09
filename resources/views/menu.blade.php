@@ -304,9 +304,11 @@
                 <a href="/" class="btn-koya-secondary text-[11px] sm:text-xs uppercase py-2 px-3 sm:py-2.5 sm:px-4 rounded-full" style="font-size: 0.75rem; border-width: 3px;">
                     🏠 <span class="hidden sm:inline">Home</span>
                 </a>
-                <a href="{{ route('order.public') }}" class="btn-koya-primary text-[11px] sm:text-xs uppercase py-2 px-3 sm:py-2.5 sm:px-4 rounded-full" style="font-size: 0.75rem; border-width: 3px; background-color: var(--color-green); color: white;">
-                    ⚡ <span class="hidden sm:inline">Order Online</span>
-                </a>
+                @if(config('features.takeaway', false))
+                    <a href="{{ route('order.public') }}" class="btn-koya-primary text-[11px] sm:text-xs uppercase py-2 px-3 sm:py-2.5 sm:px-4 rounded-full" style="font-size: 0.75rem; border-width: 3px; background-color: var(--color-green); color: white;">
+                        ⚡ <span class="hidden sm:inline">Order Online</span>
+                    </a>
+                @endif
             </div>
         </div>
     </header>
@@ -441,13 +443,15 @@
                     <h4 class="font-['Bubbleboddy'] text-sm font-black text-[#121212] uppercase tracking-wider">Ready to taste?</h4>
                     <p class="font-['Biski_2'] text-xs text-[#121212]/80 mt-0.5">Order now for takeaway or delivery!</p>
                 </div>
-                <a 
-                    href="{{ route('order.public') }}" 
-                    class="btn-koya-primary px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap"
-                    style="font-size: 0.75rem; border-width: 3px; background-color: var(--color-green); color: white;"
-                >
-                    Order Online
-                </a>
+                @if(config('features.takeaway', false))
+                    <a 
+                        href="{{ route('order.public') }}" 
+                        class="btn-koya-primary px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap"
+                        style="font-size: 0.75rem; border-width: 3px; background-color: var(--color-green); color: white;"
+                    >
+                        Order Online
+                    </a>
+                @endif
             </div>
         </div>
     </div>
@@ -518,6 +522,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 

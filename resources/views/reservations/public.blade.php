@@ -933,7 +933,9 @@
         
         <div class="mobile-actions-container">
             <a href="{{ route('reservations.public.create') }}" class="sticker-btn text-center" @click="mobileMenuOpen = false">Reservar</a>
-            <a href="{{ route('order.public') }}" class="sticker-btn sticker-white text-center" @click="mobileMenuOpen = false">Pedir Online</a>
+            @if(config('features.takeaway', false))
+                <a href="{{ route('order.public') }}" class="sticker-btn sticker-white text-center" @click="mobileMenuOpen = false">Pedir Online</a>
+            @endif
         </div>
 
         <div class="mobile-socials-section">
@@ -1306,3 +1308,4 @@
     </footer>
 </body>
 </html>
+

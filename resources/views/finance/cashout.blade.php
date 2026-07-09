@@ -5,7 +5,7 @@
 
     <div class="space-y-8">
         <div class="flex items-center gap-4">
-            <a href="{{ route('finance.stats') }}" class="p-4 bg-white/5 rounded-2xl text-gray-400">
+            <a href="{{ route('finance.index') }}" class="p-4 bg-white/5 rounded-2xl text-gray-400">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
             </a>
             <h2 class="text-xl font-bold">Close Register for {{ \Carbon\Carbon::parse($date)->format('M d, Y') }}</h2>
@@ -65,3 +65,4 @@
         </div>
     </div>
 </x-app-layout>
+
