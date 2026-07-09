@@ -1,4 +1,12 @@
 <x-app-layout>
+    <div data-async-region="tables-completed" data-async-mutations="true">
+        @if(session('success'))
+            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
     <style>
         summary.completed-summary {
             list-style: none;
@@ -8,13 +16,7 @@
             display: none;
         }
     </style>
-
     <div class="space-y-6">
-        @if(session('success'))
-            <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-sm font-bold">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <div class="glass rounded-3xl p-5 border border-white/10">
             <div class="flex items-center justify-between gap-3">
@@ -22,7 +24,7 @@
                     <h1 class="text-xl font-black uppercase tracking-wide">Completed Orders</h1>
                     <p class="text-xs text-white/50 mt-1">Closed orders are saved here for review.</p>
                 </div>
-                <a href="{{ route('tables.index') }}" class="px-3 py-2 rounded-xl border border-white/15 bg-white/5 text-white/80 font-black uppercase text-[10px] tracking-widest">
+                <a href="{{ route('tables.index') }}" data-async="off" class="px-3 py-2 rounded-xl border border-white/15 bg-white/5 text-white/80 font-black uppercase text-[10px] tracking-widest">
                     Back To Tables
                 </a>
             </div>
@@ -42,7 +44,7 @@
                             </div>
                         </div>
                         <span class="text-[11px] font-black tracking-widest px-3 py-1 rounded-full bg-koya/15 text-koya border border-koya/20">
-                            TOTAL: €{{ number_format((float) $order->total, 2) }}
+                            TOTAL: â‚¬{{ number_format((float) $order->total, 2) }}
                         </span>
                     </summary>
 
@@ -50,8 +52,8 @@
                         @forelse($order->items as $item)
                             <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
                                 <p class="text-xs font-black text-white truncate">{{ $item->name }}</p>
-                                <p class="text-[11px] text-white/60 mt-0.5">{{ $item->quantity }} x €{{ number_format((float) $item->unit_price, 2) }}</p>
-                                <p class="text-[11px] font-black text-koya mt-1">€{{ number_format((float) $item->line_total, 2) }}</p>
+                                <p class="text-[11px] text-white/60 mt-0.5">{{ $item->quantity }} x â‚¬{{ number_format((float) $item->unit_price, 2) }}</p>
+                                <p class="text-[11px] font-black text-koya mt-1">â‚¬{{ number_format((float) $item->line_total, 2) }}</p>
                             </div>
                         @empty
                             <p class="text-xs text-white/50">No items found in this order.</p>
@@ -70,5 +72,6 @@
                 {{ $orders->links() }}
             </div>
         @endif
+    </div>
     </div>
 </x-app-layout>

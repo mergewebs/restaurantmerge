@@ -279,11 +279,6 @@
                             
                             <!-- Badges Overlay -->
                             <div class="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[90%] pointer-events-none">
-                                <template x-if="item.is_package">
-                                    <span class="bg-amber-500 text-darkBg text-[9px] font-black uppercase px-2.5 py-1 rounded-lg tracking-wider shadow">
-                                        Combo Pack
-                                    </span>
-                                </template>
                                 <template x-if="getBadge(item.name)">
                                     <span class="bg-koya text-darkBg text-[9px] font-black uppercase px-2.5 py-1 rounded-lg tracking-wider shadow" x-text="getBadge(item.name)"></span>
                                 </template>
@@ -469,7 +464,7 @@
                                 x-model="customerName" 
                                 @input="persistState()" 
                                 placeholder="Write your full name" 
-                                class="w-full text-sm rounded-xl px-4 py-3"
+                                class="w-full text-base rounded-xl px-4 py-3"
                             >
                         </div>
                         <div>
@@ -479,7 +474,7 @@
                                 x-model="customerPhone" 
                                 @input="persistState()" 
                                 placeholder="+34 600 000 000" 
-                                class="w-full text-sm rounded-xl px-4 py-3"
+                                class="w-full text-base rounded-xl px-4 py-3"
                             >
                         </div>
                     </div>
@@ -642,7 +637,6 @@
                             name: menuItem.name,
                             price: Number(menuItem.price || 0),
                             quantity: 1,
-                            is_package: Boolean(menuItem.is_package),
                         });
                     }
 
@@ -780,9 +774,6 @@
                     if (item.description && item.description.trim() !== '') {
                         return item.description;
                     }
-                    if (item.package_details && item.package_details.trim() !== '') {
-                        return item.package_details;
-                    }
                     const descriptions = {
                         'Tartufata': 'Double smash burger with premium black truffle paste, melted Swiss cheese, caramelized onions, and truffle mayo on a toasted brioche bun.',
                         'Smash Burger': 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.',
@@ -828,6 +819,5 @@
     </script>
 </body>
 </html>
-
 
 

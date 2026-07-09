@@ -151,7 +151,6 @@
                 color: var(--koya);
                 filter: drop-shadow(0 0 8px rgba(255, 92, 0, 0.3));
             }
-
             /* Inputs */
             input, select, textarea {
                 width: 100%;
@@ -160,6 +159,7 @@
                 border: 1px solid rgba(255, 255, 255, 0.1) !important;
                 border-radius: 16px !important;
                 padding: 1rem 1.25rem !important;
+                font-size: 1rem !important;
                 font-family: 'Outfit', sans-serif !important;
                 outline: none !important;
                 transition: all 0.3s ease;
@@ -243,8 +243,80 @@
                     transform: translate(-5%, -8%) scale(0.9) rotate(360deg);
                 }
             }
+
+            [data-async-region] {
+                position: relative;
+                transition: opacity 0.2s ease;
+            }
+
+            [data-async-region].is-async-loading {
+                pointer-events: none;
+            }
+
+            [data-async-region].is-async-loading > * {
+                opacity: 0.5;
+                transition: opacity 0.2s ease;
+            }
+
+            [data-async-region]::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                background: rgba(255, 255, 255, 0);
+                opacity: 0;
+                transition: opacity 0.2s ease;
+                pointer-events: none;
+            }
+
+            [data-async-region].is-async-loading::after {
+                background: rgba(255, 255, 255, 0.3);
+                opacity: 1;
+            }
+
+            .async-loading-badge {
+                position: absolute;
+                top: 0.75rem;
+                right: 0.75rem;
+                z-index: 5;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                padding: 0.55rem 0.8rem;
+                border-radius: 999px;
+                background: rgba(23, 17, 12, 0.92);
+                color: #fff7eb;
+                font-size: 0.68rem;
+                font-weight: 800;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                box-shadow: 0 10px 28px rgba(15, 23, 42, 0.18);
+                opacity: 0;
+                transform: translateY(-6px);
+                transition: opacity 0.2s ease, transform 0.2s ease;
+                pointer-events: none;
+            }
+
+            [data-async-region].is-async-loading .async-loading-badge {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .async-loading-spinner {
+                width: 0.9rem;
+                height: 0.9rem;
+                border-radius: 999px;
+                border: 2px solid rgba(255, 247, 235, 0.25);
+                border-top-color: var(--koya);
+                animation: asyncSpin 0.75s linear infinite;
+                flex-shrink: 0;
+            }
+            @keyframes asyncSpin {
+                to { transform: rotate(360deg); }
+            }
         </style>
         @include('layouts.admin-theme')
+        @include('partials.toast-notifications')
     </head>
     <body class="font-sans antialiased relative">
         <div class="bg-glow-container">
@@ -374,8 +446,338 @@
                 </div>
             </nav>
         </div>
-    </body>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const autoSubmitTimers = new WeakMap();
+
+                const getAutoSubmitTimerMap = (form) => {
+                    if (!autoSubmitTimers.has(form)) {
+                        autoSubmitTimers.set(form, new Map());
+                    }
+
+                    return autoSubmitTimers.get(form);
+                };
+
+                const submitAutoSubmitForm = (form) => {
+                    if (!(form instanceof HTMLFormElement)) {
+                        return;
+                    }
+
+                    if (typeof form.requestSubmit === 'function') {
+                        form.requestSubmit();
+                        return;
+                    }
+
+                    form.submit();
+                };
+
+                const toggleAutoSubmitPanels = (field) => {
+                    const targetName = field.dataset.rangeToggleTarget;
+                    if (!targetName) {
+                        return;
+                    }
+
+                    const targetValue = field.dataset.rangeToggleValue || 'custom';
+                    document.querySelectorAll(`[data-range-toggle-panel="${targetName}"]`).forEach((panel) => {
+                        panel.classList.toggle('hidden', field.value !== targetValue);
+                    });
+                };
+
+                const shouldDelayAutoSubmit = (field) => {
+                    const rangePanel = field.closest('[data-range-toggle-panel]');
+                    if (!rangePanel) {
+                        return false;
+                    }
+
+                    const rangeFields = Array.from(rangePanel.querySelectorAll('input[type="date"]'));
+                    return rangeFields.length > 1 && rangeFields.some((rangeField) => !rangeField.value);
+                };
+
+                const initializeAutoSubmitForms = (root = document) => {
+                    root.querySelectorAll('form[data-auto-submit-form]').forEach((form) => {
+                        form.querySelectorAll('[data-range-toggle-target]').forEach((field) => {
+                            if (field instanceof HTMLElement) {
+                                toggleAutoSubmitPanels(field);
+                            }
+                        });
+                    });
+                };
+
+                initializeAutoSubmitForms();
+
+                document.addEventListener('input', (event) => {
+                    const field = event.target;
+                    if (!(field instanceof HTMLElement) || !field.hasAttribute('data-auto-submit-search')) {
+                        return;
+                    }
+
+                    const form = field.closest('form[data-auto-submit-form]');
+                    if (!(form instanceof HTMLFormElement)) {
+                        return;
+                    }
+
+                    const defaultDelay = Number(form.dataset.autoSubmitDelay || 650);
+                    const fieldDelay = Number(field.dataset.autoSubmitDelay || defaultDelay);
+                    const timers = getAutoSubmitTimerMap(form);
+                    const key = field.getAttribute('name') || field.id || 'search';
+
+                    window.clearTimeout(timers.get(key));
+                    timers.set(key, window.setTimeout(() => submitAutoSubmitForm(form), fieldDelay));
+                });
+
+                document.addEventListener('change', (event) => {
+                    const field = event.target;
+                    if (!(field instanceof HTMLElement)) {
+                        return;
+                    }
+
+                    const form = field.closest('form[data-auto-submit-form]');
+                    if (!(form instanceof HTMLFormElement) || field.matches('input[type="hidden"]') || field.disabled) {
+                        return;
+                    }
+
+                    const skipValue = field.dataset.autoSubmitSkipOn;
+
+                    if (field.hasAttribute('data-range-toggle-target')) {
+                        toggleAutoSubmitPanels(field);
+                    }
+
+                    if (skipValue && 'value' in field && field.value === skipValue) {
+                        return;
+                    }
+
+                    if (field.hasAttribute('data-auto-submit-search')) {
+                        return;
+                    }
+
+                    if (shouldDelayAutoSubmit(field)) {
+                        return;
+                    }
+
+                    submitAutoSubmitForm(form);
+                });
+                const showToast = (message, level = 'info') => {
+                    window.KoyaNotifications?.show(message, level);
+                };
+
+                const isSameOriginUrl = (href) => {
+                    try {
+                        const url = new URL(href, window.location.href);
+
+                        return url.origin === window.location.origin;
+                    } catch (error) {
+                        return false;
+                    }
+                };
+
+                const shouldInterceptLink = (link) => {
+                    if (!(link instanceof HTMLAnchorElement)) {
+                        return false;
+                    }
+
+                    const href = link.getAttribute('href');
+
+                    if (!href || href.startsWith('#') || link.target === '_blank' || link.hasAttribute('download')) {
+                        return false;
+                    }
+
+                    return isSameOriginUrl(href);
+                };
+
+                const shouldInterceptForm = (form, region) => {
+                    if (!(form instanceof HTMLFormElement)) {
+                        return false;
+                    }
+
+                    if (form.dataset.async === 'off') {
+                        return false;
+                    }
+
+                    const method = (form.getAttribute('method') || 'GET').toUpperCase();
+
+                    if (method !== 'GET' && region.dataset.asyncMutations !== 'true') {
+                        return false;
+                    }
+
+                    return true;
+                };
+
+                const ensureLoadingBadge = (region) => {
+                    let badge = region.querySelector(':scope > .async-loading-badge');
+
+                    if (!badge) {
+                        badge = document.createElement('div');
+                        badge.className = 'async-loading-badge';
+                        badge.innerHTML = '<span class="async-loading-spinner"></span><span>Updating</span>';
+                        region.prepend(badge);
+                    }
+
+                    return badge;
+                };
+
+                const extractFeedback = (region) => {
+                    const feedback = region.querySelector('[data-async-feedback]');
+
+                    if (!feedback) {
+                        return null;
+                    }
+
+                    return {
+                        message: feedback.textContent.trim(),
+                        level: feedback.dataset.feedbackLevel || 'info',
+                    };
+                };
+
+                const parseHtml = (html) => {
+                    const parser = new DOMParser();
+
+                    return parser.parseFromString(html, 'text/html');
+                };
+
+                const reinitializeRegion = (region) => {
+                    if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+                        window.Alpine.initTree(region);
+                    }
+                };
+
+                const replaceRegion = (currentRegion, nextRegion) => {
+                    currentRegion.replaceWith(nextRegion);
+                    reinitializeRegion(nextRegion);
+                    initializeAsyncRegions(nextRegion.parentElement || document);
+
+                    return nextRegion;
+                };
+
+                const buildGetUrl = (form) => {
+                    const action = form.getAttribute('action') || window.location.href;
+                    const url = new URL(action, window.location.href);
+                    const formData = new FormData(form);
+
+                    url.search = '';
+
+                    for (const [key, value] of formData.entries()) {
+                        if (typeof value !== 'string') {
+                            continue;
+                        }
+
+                        url.searchParams.append(key, value);
+                    }
+
+                    return url;
+                };
+
+                const submitRegionRequest = async (region, request) => {
+                    const regionName = region.dataset.asyncRegion;
+
+                    if (!regionName) {
+                        return;
+                    }
+
+                    if (region._asyncAbortController) {
+                        region._asyncAbortController.abort();
+                    }
+
+                    const controller = new AbortController();
+                    region._asyncAbortController = controller;
+
+                    ensureLoadingBadge(region);
+                    region.classList.add('is-async-loading');
+
+                    try {
+                        const response = await fetch(request.url, {
+                            method: request.method,
+                            body: request.body,
+                            headers: {
+                                'X-Async-Request': '1',
+                            },
+                            credentials: 'same-origin',
+                            signal: controller.signal,
+                        });
+
+                        const html = await response.text();
+                        const documentFragment = parseHtml(html);
+                        const nextRegion = documentFragment.querySelector(`[data-async-region="${regionName}"]`);
+
+                        if (!nextRegion) {
+                            window.location.assign(response.url || request.url);
+                            return;
+                        }
+
+                        if (documentFragment.title) {
+                            document.title = documentFragment.title;
+                        }
+
+                        const replacedRegion = replaceRegion(region, nextRegion);
+                        window.history.replaceState({}, document.title, response.url || request.url);
+
+                        window.KoyaNotifications?.consumeFeedback(replacedRegion);
+
+                        const autofocusTarget = replacedRegion.querySelector('[data-async-autofocus], .text-red-500, .text-red-600, .text-red-700, [aria-invalid="true"]');
+                        if (autofocusTarget instanceof HTMLElement && request.method !== 'GET') {
+                            autofocusTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    } catch (error) {
+                        if (error.name !== 'AbortError') {
+                            showToast('We could not update this section. Please try again.', 'error');
+                        }
+                    } finally {
+                        region.classList.remove('is-async-loading');
+                    }
+                };
+
+                const initializeAsyncRegions = (root = document) => {
+                    root.querySelectorAll('[data-async-region]').forEach((region) => {
+                        if (region.dataset.asyncReady === 'true') {
+                            return;
+                        }
+
+                        region.dataset.asyncReady = 'true';
+                        ensureLoadingBadge(region);
+
+                        region.addEventListener('submit', (event) => {
+                            const form = event.target;
+
+                            if (!shouldInterceptForm(form, region)) {
+                                return;
+                            }
+
+                            event.preventDefault();
+
+                            const method = (form.getAttribute('method') || 'GET').toUpperCase();
+                            if (method === 'GET') {
+                                submitRegionRequest(region, {
+                                    method: 'GET',
+                                    url: buildGetUrl(form),
+                                });
+                                return;
+                            }
+
+                            submitRegionRequest(region, {
+                                method,
+                                url: new URL(form.getAttribute('action') || window.location.href, window.location.href),
+                                body: new FormData(form),
+                            });
+                        });
+
+                        region.addEventListener('click', (event) => {
+                            const link = event.target.closest('a');
+
+                            if (!shouldInterceptLink(link) || link.dataset.async === 'off') {
+                                return;
+                            }
+
+                            event.preventDefault();
+                            submitRegionRequest(region, {
+                                method: 'GET',
+                                url: new URL(link.href, window.location.href),
+                            });
+                        });
+                    });
+                };
+
+                initializeAsyncRegions();
+            });
+        </script>
+        @include('partials.form-submit-lock')
+</body>
 </html>
-
-
-

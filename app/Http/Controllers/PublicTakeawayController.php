@@ -159,8 +159,6 @@ class PublicTakeawayController extends Controller
                 'image_display_path',
                 'image_thumbnail_path',
                 'price',
-                'is_package',
-                'package_details',
             ]);
 
         $menuItems = $menuItemsCollection->groupBy('category');
@@ -172,8 +170,6 @@ class PublicTakeawayController extends Controller
             'image_url' => $item->image_url,
             'image_thumbnail_url' => $item->image_thumbnail_url,
             'price' => (float) $item->price,
-            'is_package' => (bool) $item->is_package,
-            'package_details' => $item->package_details,
         ])->values()->all();
 
         return [
@@ -272,3 +268,5 @@ class PublicTakeawayController extends Controller
         return $this->hasCustomerPhoneColumn;
     }
 }
+
+

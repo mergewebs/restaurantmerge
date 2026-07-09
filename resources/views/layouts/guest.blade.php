@@ -30,6 +30,7 @@
             }
         </script>
         @include('layouts.admin-theme')
+        @include('partials.toast-notifications')
         <style>
             body {
                 background-color: #f8fafc !important;
@@ -126,7 +127,7 @@
                 border-radius: 12px !important;
                 color: #0f172a !important;
                 padding: 0 1rem !important;
-                font-size: 0.95rem !important;
+                font-size: 1rem !important;
                 font-weight: 500 !important;
                 transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
                 box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
@@ -165,7 +166,7 @@
                 border: none !important;
                 border-radius: 12px !important;
                 font-family: 'Outfit', sans-serif !important;
-                font-size: 0.95rem !important;
+                font-size: 1rem !important;
                 font-weight: 600 !important;
                 text-transform: none !important;
                 letter-spacing: normal !important;
@@ -239,5 +240,6 @@
                 <p class="text-gray-600 text-[10px] uppercase font-bold tracking-widest">{{ __('public.copyright') }}</p>
             </div>
         </div>
-    </body>
+        @include('partials.form-submit-lock')
+</body>
 </html>

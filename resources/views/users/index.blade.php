@@ -3,6 +3,14 @@
         Users Management
     </x-slot>
 
+    <div data-async-region="users-index" data-async-mutations="true">
+        @if(session('success'))
+            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
     <div x-data="{ 
         showCreateModal: {{ $errors->any() && !old('user_id') ? 'true' : 'false' }},
         showEditModal: {{ $errors->any() && old('user_id') ? 'true' : 'false' }},
@@ -38,18 +46,6 @@
                 </svg>
             </button>
         </div>
-
-        <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="glass p-4 rounded-2xl border border-green-500/30 bg-green-500/10 text-green-400 text-sm font-bold">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="glass p-4 rounded-2xl border border-red-500/30 bg-red-500/10 text-red-400 text-sm font-bold">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <!-- Users List -->
         <div class="space-y-3">
@@ -202,5 +198,5 @@
             </div>
         </div>
     </div>
+    </div>
 </x-app-layout>
-

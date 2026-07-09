@@ -21,6 +21,7 @@ class MenuItemSeeder extends Seeder
             ['Entrantes', 9, 'BIL-BAO', 9.99, '2 mini pan bao relleno de cochinita pibil'],
             ['Entrantes', 10, 'KROQUETAS de berenjena con trufa (POR UNIDAD)', 2.50, 'Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pure'],
             ['Entrantes', 11, 'POP-billas', 16.50, "Pulpo hervido salteado de salsa kimchi, patatas con aji amarillo y chimichurri japon\u{00E9}s"],
+            ['Entrantes', 12, 'PIPARRA ROLL', 0.00, null],
 
             ["Acompa\u{00F1}amientos", 1, 'BONIATO FRITO', 4.20, 'Sal, perejil, oregano y katsubishi'],
             ["Acompa\u{00F1}amientos", 2, 'PATATAS FRITAS', 3.50, null],
@@ -98,14 +99,16 @@ class MenuItemSeeder extends Seeder
                     'category' => $category,
                     'sort_order' => $sortOrder,
                 ],
-                [
+                array_merge([
                     'name' => $name,
                     'description' => $description,
                     'price' => $price,
                     'is_active' => true,
-                    'is_package' => false,
-                    'package_details' => null,
-                ]
+                ], $name === 'PIPARRA ROLL' ? [
+                    'image_path' => 'originals/103/piparral-roll.png',
+                    'image_display_path' => 'optimized/103/piparral-roll.webp',
+                    'image_thumbnail_path' => 'thumbnails/103/piparral-roll.webp',
+                ] : [])
             );
 
             MenuItem::query()
@@ -116,3 +119,4 @@ class MenuItemSeeder extends Seeder
         }
     }
 }
+

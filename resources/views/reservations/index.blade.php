@@ -1,4 +1,12 @@
 <x-app-layout>
+    <div data-async-region="reservations-index" data-async-mutations="true">
+        @if(session('success'))
+            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
     <div x-data="{ 
         showReservationModal: {{ ($errors->any() || session('error')) && old('customer_name') && !old('reservation_id') ? 'true' : 'false' }},
         showEditModal: {{ ($errors->any() || session('error')) && old('reservation_id') ? 'true' : 'false' }},
@@ -26,19 +34,7 @@
             };
             this.showEditModal = true;
         }
-    }" class="space-y-6">
-
-        <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 rounded-2xl text-sm font-bold uppercase tracking-wider">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="mb-4 p-4 bg-red-500/10 border border-red-500/20 text-red-600 rounded-2xl text-sm font-bold uppercase tracking-wider">
-                {{ session('error') }}
-            </div>
-        @endif
+    }" class="space-y-6">
 
         <!-- Header Actions -->
         <div class="flex justify-between items-center gap-4 mb-2">
@@ -436,14 +432,24 @@
                         }
                     }" 
                     x-init="
-                        $watch('editingReservation.reservation_time', value => {
-                            if (value) {
-                                date = value.substring(0, 10);
-                                selectedTime = value.substring(11, 16);
-                                partySize = editingReservation.party_size;
-                                fetchSlots();
+                        const syncReservationFields = (value) => {
+                            if (!value) {
+                                date = '';
+                                selectedTime = '';
+                                return;
                             }
-                        })
+
+                            date = value.substring(0, 10);
+                            selectedTime = value.substring(11, 16);
+                            partySize = editingReservation.party_size || 1;
+                            fetchSlots();
+                        };
+
+                        syncReservationFields(editingReservation.reservation_time);
+
+                        $watch('editingReservation.reservation_time', value => {
+                            syncReservationFields(value);
+                        });
                     ">
                     @csrf
                     @method('PUT')
@@ -539,5 +545,5 @@
         </div>
 
     </div>
+    </div>
 </x-app-layout>
-

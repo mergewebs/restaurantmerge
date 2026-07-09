@@ -31,6 +31,15 @@
     </style>
 
     <!-- Daily Overview Stats -->
+    <div data-page-feedback-wrapper>
+        @if(session('success'))
+            <div class="hidden" data-page-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-page-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-page-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
+    </div>
     <div x-data="{ 
         showFinanceModal: {{ (auth()->user()->isAdmin() && ((($errors->any() || session('error')) && old('amount') && !old('finance_id')) || session('keep_finance_modal') || request()->boolean('finance_modal'))) ? 'true' : 'false' }},
         showReservationModal: {{ ($errors->any() || session('error')) && old('customer_name') && !old('reservation_id') ? 'true' : 'false' }},
@@ -87,20 +96,6 @@
         }
     }" class="space-y-6">
 
-
-
-
-        <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl text-sm font-bold uppercase tracking-wider animate-pulse">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="mb-4 p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-sm font-bold uppercase tracking-wider">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <div class="space-y-8 @if(!auth()->user()->isAdmin()) max-w-4xl @endif mx-auto">
             <!-- First Row: Operations & Reservations -->
@@ -294,7 +289,7 @@
                                         </span>
                                         @if($item->category)
                                         <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-none">
-                                            • #{{ $item->category }}
+                                            &bull; #{{ $item->category }}
                                         </span>
                                         @endif
                                     </div>
@@ -303,7 +298,7 @@
                             
                             <div class="text-right flex items-center gap-3 shrink-0">
                                 <p class="text-sm font-bold {{ $item->transaction_type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
-                                    {{ $item->transaction_type === 'income' ? '+' : '-' }}€{{ number_format($item->amount, 2) }}
+                                    {{ $item->transaction_type === 'income' ? '+' : '-' }}&euro;{{ number_format($item->amount, 2) }}
                                 </p>
                                 
                                 <button @click="editFinance({{ $item->toJson() }})" 
@@ -803,10 +798,10 @@
                         @csrf
                         
                         <div class="mt-2 mb-6">
-                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (€)</label>
+                            <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (&euro;)</label>
                             <div class="relative flex items-center w-full transition-all duration-300">
                                 <span class="absolute left-5 text-2xl font-black transition-colors"
-                                      :class="finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">€</span>
+                                      :class="finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">&euro;</span>
                                 <input type="number" step="0.01" name="amount" placeholder="0.00" value="{{ (session('keep_finance_modal') || request()->boolean('finance_modal')) ? '' : old('amount') }}" required autofocus
                                     class="w-full pl-12 pr-4 py-4 rounded-2xl border-2 text-3xl font-black outline-none transition-all duration-300"
                                     :class="finance_type === 'income' ? 'bg-emerald-50 border-emerald-200 text-emerald-700 focus:border-emerald-500 focus:ring-emerald-500 shadow-lg shadow-emerald-500/15' : 'bg-rose-50 border-rose-200 text-rose-700 focus:border-rose-500 focus:ring-rose-500 shadow-lg shadow-rose-500/15'"
@@ -870,7 +865,7 @@
             </div>
         </div>
 
-        {{-- ─── Edit Finance Modal ─────────────────────── --}}
+        {{-- Edit Finance Modal --}}
         <div x-show="showEditFinanceModal" 
              class="fixed inset-0 z-[100] flex items-center justify-center px-4" 
              style="display: none;"
@@ -914,10 +909,10 @@
                     <input type="hidden" name="type" :value="editingFinance.originalType">
 
                     <div class="mt-2 mb-6">
-                        <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (€)</label>
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (&euro;)</label>
                         <div class="relative flex items-center w-full transition-all duration-300">
                             <span class="absolute left-5 text-2xl font-black transition-colors"
-                                  :class="editingFinance.finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">€</span>
+                                  :class="editingFinance.finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">&euro;</span>
                             <input type="number" step="0.01" name="amount" placeholder="0.00" x-model="editingFinance.amount" required
                                 class="w-full pl-12 pr-4 py-4 rounded-2xl border-2 text-3xl font-black outline-none transition-all duration-300"
                                 :class="editingFinance.finance_type === 'income' ? 'bg-emerald-50 border-emerald-200 text-emerald-700 focus:border-emerald-500 focus:ring-emerald-500 shadow-lg shadow-emerald-500/15' : 'bg-rose-50 border-rose-200 text-rose-700 focus:border-rose-500 focus:ring-rose-500 shadow-lg shadow-rose-500/15'"
@@ -993,5 +988,3 @@
     </div>
 </div>
 </x-app-layout>
-
-

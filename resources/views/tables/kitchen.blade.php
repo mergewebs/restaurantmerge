@@ -20,29 +20,17 @@
             border-radius: 999px;
         }
     </style>
+    <div data-page-feedback-wrapper>
+        @if(session('success'))
+            <div class="hidden" data-page-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-page-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-page-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
+    </div>
 
     <div class="space-y-4 pb-4">
-        @if(session('success'))
-            <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-sm font-bold">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl text-sm font-bold">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="p-4 bg-red-500/10 border border-red-500/20 text-red-300 rounded-2xl text-xs">
-                <ul class="list-disc list-inside space-y-1">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
         <div class="sticky top-2 z-20 glass rounded-3xl p-4 border border-white/10 bg-gradient-to-r from-white/[0.06] via-white/[0.03] to-transparent backdrop-blur-xl">
             <div class="flex flex-wrap items-center justify-between gap-3">

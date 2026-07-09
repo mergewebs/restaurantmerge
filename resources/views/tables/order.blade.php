@@ -123,9 +123,6 @@
                                         <p class="text-[12px] font-black text-white truncate">{{ $menuItem->name }}</p>
                                         <p class="text-[12px] text-koya font-black whitespace-nowrap">&euro;{{ number_format((float) $menuItem->price, 2) }}</p>
                                     </div>
-                                    @if($menuItem->is_package)
-                                        <p class="mt-1 text-[9px] text-amber-300 font-bold uppercase tracking-wider">Package</p>
-                                    @endif
                                 </button>
                             @endforeach
                         </div>
@@ -150,9 +147,9 @@
                 </div>
 
                 <div class="mt-3 grid grid-cols-1 sm:grid-cols-4 gap-2">
-                    <input type="text" x-model="custom.name" placeholder="Title" maxlength="100" class="!py-2.5 !px-3 !rounded-xl !text-sm sm:col-span-2">
-                    <input type="number" x-model.number="custom.unit_price" min="0" step="0.01" placeholder="Price" class="!py-2.5 !px-3 !rounded-xl !text-sm">
-                    <input type="number" x-model.number="custom.quantity" min="1" max="99" placeholder="Qty" class="!py-2.5 !px-3 !rounded-xl !text-sm">
+                    <input type="text" x-model="custom.name" placeholder="Title" maxlength="100" class="!py-2.5 !px-3 !rounded-xl !text-base sm:col-span-2">
+                    <input type="number" x-model.number="custom.unit_price" min="0" step="0.01" placeholder="Price" class="!py-2.5 !px-3 !rounded-xl !text-base">
+                    <input type="number" x-model.number="custom.quantity" min="1" max="99" placeholder="Qty" class="!py-2.5 !px-3 !rounded-xl !text-base">
                     <button type="button" class="btn-koya !py-2.5 !rounded-xl !text-[10px] !tracking-widest sm:col-span-4" @click="addCustomItem()">Add Item</button>
                 </div>
             </div>
@@ -597,3 +594,5 @@
         }
     </script>
 </x-app-layout>
+
+

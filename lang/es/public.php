@@ -25,7 +25,7 @@ return [
     'homepage_meta_description' => 'Nos aventuramos más allá de las hamburguesas, fusionando la cocina asiática y americana en cada bocado. Street food fresco, rápido y moderno en Barcelona.',
     'homepage_hero_cta_menu' => 'Ver menú',
     'homepage_hero_cta_reserve' => 'Reservar',
-    'homepage_gallery_title' => 'NOS AVENTURAMOS MÁS ALLÁ DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASIÁTICA Y AMERICANA EN CADA BOCADO.',
+    'homepage_gallery_title' => 'Nos aventuramos más allá de las :burgerImage, fusionando la cocina asiática y mediterránea en cada bocado :saladImage',
     'homepage_menu_title' => 'Nuestro menú completo',
     'homepage_cta_title' => '¿Listo para tu próximo antojo de KOYA?',
     'homepage_cta_button' => 'Pedir ahora',
@@ -34,7 +34,7 @@ return [
     'homepage_phone_label' => 'Teléfono y WhatsApp',
     'homepage_email_label' => 'Correo',
     'homepage_hours_title' => 'Horario',
-    'homepage_footer_description' => 'NOS AVENTURAMOS M�S ALL� DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASI�TICA Y AMERICANA EN CADA BOCADO.',
+    'homepage_footer_description' => 'NOS AVENTURAMOS M�S ALL� DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASI�TICA Y AMERICANA EN CADA BOCADO.',
     'homepage_footer_rights' => '© 2026 KOYA BCN. Todos los derechos reservados.',
     'homepage_footer_tagline' => 'Diseñado con actitud',
 

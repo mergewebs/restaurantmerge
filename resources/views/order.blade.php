@@ -306,7 +306,7 @@
             <div class="flex items-center gap-2">
                 <x-language-switcher theme="dark" />
                 <a href="/" class="btn-koya-secondary text-xs uppercase py-2 px-4 rounded-full" style="font-size: 0.8rem; border-width: 3px;">
-                    ðŸ  Home
+                    🏠 Home
                 </a>
             </div>
         </div>
@@ -412,7 +412,7 @@
                                 <img 
                                     :src="getImagePath(item)" 
                                     :alt="item.name" 
-                                    class="max-h-[85%] max-w-[85%] object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2"
+                                    :class="getImageScaleClass(item)"
                                     loading="lazy"
                                     decoding="async"
                                     fetchpriority="low"
@@ -434,11 +434,6 @@
                             
                             <!-- Badges Overlay -->
                             <div class="absolute top-3 left-3 flex flex-wrap gap-1.5 max-w-[90%] pointer-events-none">
-                                <template x-if="item.is_package">
-                                    <span class="sticker sticker-green text-[9px] px-2 py-0.5 rounded border border-[#121212]">
-                                        Combo Pack
-                                    </span>
-                                </template>
                             </div>
                         </div>
 
@@ -622,7 +617,7 @@
                                 x-model="customerName" 
                                 @input="persistState()" 
                                 placeholder="{{ __('public.order_customer_name_placeholder') }}" 
-                                class="w-full text-sm rounded-xl px-4 py-3"
+                                class="w-full text-base rounded-xl px-4 py-3"
                             >
                         </div>
                         <div>
@@ -632,7 +627,7 @@
                                 x-model="customerPhone" 
                                 @input="persistState()" 
                                 placeholder="+34 600 000 000" 
-                                class="w-full text-sm rounded-xl px-4 py-3"
+                                class="w-full text-base rounded-xl px-4 py-3"
                             >
                         </div>
                     </div>
@@ -796,7 +791,6 @@
                             name: menuItem.name,
                             price: Number(menuItem.price || 0),
                             quantity: 1,
-                            is_package: Boolean(menuItem.is_package),
                         });
                     }
 
@@ -934,6 +928,25 @@
                     return item?.image_thumbnail_url || item?.image_url || null;
                 },
 
+                getImageScaleClass(item) {
+                    const scaledItems = [
+                        'ADOBO',
+                        'KIMCHI BURGER',
+                        'TARTUFATA',
+                        'CANGRE BURGER',
+                        'GYOZAS FRITAS IBÉRICAS (5 uds.)',
+                        'EDAMAME AL VAPOR',
+                        'SWEET & SPICY WINGS',
+                        'EBI FRY (5 uds.)',
+                        'ROLLITOS (5 uds.)',
+                        'TACOS DE CARILLADA DE TERNERA',
+                    ];
+
+                    return scaledItems.includes(item?.name)
+                        ? 'max-h-[85%] max-w-[85%] object-contain scale-110 transition-transform duration-500 group-hover:scale-[1.18] group-hover:rotate-2'
+                        : 'max-h-[85%] max-w-[85%] object-contain transition-transform duration-500 group-hover:scale-110 group-hover:rotate-2';
+                },
+
                 hasDescription(item) {
                     return typeof item.description === 'string' && item.description.trim() !== '';
                 },
@@ -960,9 +973,6 @@
     </script>
 </body>
 </html>
-
-
-
 
 
 

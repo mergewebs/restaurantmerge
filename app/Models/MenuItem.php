@@ -13,7 +13,7 @@ class MenuItem extends Model
 
     public const CATEGORY_OPTIONS = [
         'Entrantes',
-        'Acompañamientos',
+        'AcompaÃ±amientos',
         'Smash Burger',
         'Bol de Arroz',
         'Postres de la Casa',
@@ -25,16 +25,19 @@ class MenuItem extends Model
     ];
 
     public const LEGACY_IMAGE_MAP = [
+        'PIPARRA ROLL' => 'products/thumbnails/103/piparral-roll.webp',
         'KROQUETAS DE BERENJENA CON TRUFA (POR UNIDAD)' => 'images/kroquetas-de-berejena.PNG',
         'POP-BILLAS' => 'images/pop-billas.PNG',
         'TACOS DE CARILLADA DE TERNERA' => 'images/tacos_carrillera.png',
         'ROLLITOS (5 UDS.)' => 'images/rollitos.png',
         'GYOZAS FRITAS IBERICAS (5 UDS.)' => 'images/gyozas.png',
-        'GYOZAS FRITAS IBÉRICAS (5 UDS.)' => 'images/gyozas.png',
+        'GYOZAS FRITAS IBÃ‰RICAS (5 UDS.)' => 'images/gyozas.png',
         'EBI FRY (5 UDS.)' => 'images/EBI_FRY.png',
         'EDAMAME AL VAPOR' => 'images/EDAMAME.png',
         'KROQUETAS (5 UDS.)' => 'images/croquetas_rabo_toro.png',
         'SWEET & SPICY WINGS' => 'images/alitas.png',
+        'BIL-BAO' => 'images/BIL-BAO.png',
+        'BRAVAS' => 'images/bravas.png',
         'TARTUFATA' => 'images/tartufata.png',
         'SMASH BURGER' => 'images/smash-burger.png',
         'CANGRE BURGER' => 'images/cangre_burguer.png',
@@ -62,8 +65,6 @@ class MenuItem extends Model
         'image_thumbnail_path',
         'price',
         'is_active',
-        'is_package',
-        'package_details',
         'sort_order',
     ];
 
@@ -72,7 +73,6 @@ class MenuItem extends Model
         return [
             'price' => 'decimal:2',
             'is_active' => 'boolean',
-            'is_package' => 'boolean',
             'sort_order' => 'integer',
         ];
     }
@@ -120,4 +120,7 @@ class MenuItem extends Model
         return self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
     }
 }
+
+
+
 

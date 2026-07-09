@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Europe/Madrid'),
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
     'faker_locale' => env('APP_FAKER_LOCALE', 'es_ES'),
 
     'available_locales' => [
-        'es' => 'Español',
+        'es' => 'EspaÃ±ol',
         'en' => 'English',
     ],
 

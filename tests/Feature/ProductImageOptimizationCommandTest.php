@@ -23,7 +23,6 @@ class ProductImageOptimizationCommandTest extends TestCase
             'price' => 12.90,
             'sort_order' => 1,
             'is_active' => true,
-            'is_package' => false,
             'image_path' => 'originals/backfill-burger.jpg',
         ]);
 
@@ -50,3 +49,5 @@ class ProductImageOptimizationCommandTest extends TestCase
         Storage::disk('product-images')->assertExists($menuItem->image_thumbnail_path);
     }
 }
+
+

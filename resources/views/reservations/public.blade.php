@@ -860,67 +860,15 @@
 
         [x-cloak] { display: none !important; }
     </style>
+    @include('partials.toast-notifications')
 </head>
 <body x-data="{ mobileMenuOpen: false }">
-
-    <!-- Toast Notifications Container -->
-    @if(session('success') || session('error') || $errors->any())
-    <div 
-        x-data="{ 
-            visible: true,
-            init() {
-                setTimeout(() => {
-                    this.visible = false;
-                }, 5000); // Disappear after 5 seconds
-            }
-        }"
-        x-show="visible"
-        x-transition:enter="transition ease-out duration-300 transform"
-        x-transition:enter-start="translate-x-12 opacity-0"
-        x-transition:enter-end="translate-x-0 opacity-100"
-        x-transition:leave="transition ease-in duration-200 transform"
-        x-transition:leave-start="translate-x-0 opacity-100"
-        x-transition:leave-end="translate-x-12 opacity-0"
-        class="fixed top-24 right-6 z-[2000] w-full max-w-[350px] sm:max-w-[400px] px-4 sm:px-0"
-        x-cloak
-    >
-        @if(session('success'))
-            <div style="background-color: #088972; border: 4px solid var(--color-dark); box-shadow: 4px 4px 0px var(--color-dark);" class="relative text-white rounded-2xl p-5 flex items-start gap-3">
-                <div class="flex-shrink-0 mt-0.5">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                </div>
-                <div class="flex-1 text-sm font-bold uppercase tracking-wider leading-snug pr-4">
-                    {!! session('success') !!}
-                </div>
-                <button @click="visible = false" class="text-white hover:scale-110 active:scale-95 transition-all font-black text-xl leading-none absolute top-3 right-4" aria-label="Close">&times;</button>
-            </div>
-        @endif
-
-        @if(session('error') || $errors->any())
-            <div style="background-color: #fff5f5; border: 4px solid #f24423; box-shadow: 4px 4px 0px #f24423;" class="relative text-[#f24423] rounded-2xl p-5 flex items-start gap-3">
-                <div class="flex-shrink-0 mt-0.5">
-                    <svg class="w-6 h-6 text-[#f24423]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <div class="flex-1 text-xs font-bold uppercase tracking-wider leading-relaxed pr-4">
-                    @if(session('error'))
-                        <p>{{ session('error') }}</p>
-                    @endif
-                    @if($errors->any())
-                        <ul class="list-none mt-1 space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-                <button @click="visible = false" class="text-[#f24423] hover:scale-110 active:scale-95 transition-all font-black text-xl leading-none absolute top-3 right-4" aria-label="Close">&times;</button>
-            </div>
-        @endif
-    </div>
+    @if(session('success'))
+        <div class="hidden" data-page-feedback data-feedback-level="success">{{ strip_tags(session('success')) }}</div>
+    @elseif(session('error'))
+        <div class="hidden" data-page-feedback data-feedback-level="error">{{ session('error') }}</div>
+    @elseif($errors->any())
+        <div class="hidden" data-page-feedback data-feedback-level="error">{{ $errors->first() }}</div>
     @endif
 
     <!-- Mobile Menu Overlay -->
@@ -1302,10 +1250,10 @@
 
             <div class="footer-bottom">
                 <p>&copy; 2026 KOYA BCN. All rights reserved.</p>
-                <p>Create by <a href="http://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
+                <p>Developed by <a href="http://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
             </div>
         </div>
     </footer>
+    @include('partials.form-submit-lock')
 </body>
 </html>
-

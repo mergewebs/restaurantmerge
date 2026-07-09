@@ -73,7 +73,7 @@
             padding: 0.875rem 1rem !important;
             border: 1px solid rgba(244, 222, 183, 0.22) !important;
             border-radius: 12px !important;
-            font-size: 0.96rem !important;
+            font-size: 1rem !important;
             color: #fff7eb !important;
             background-color: rgba(35, 27, 21, 0.72) !important;
             font-family: 'Outfit', sans-serif !important;
@@ -136,6 +136,7 @@
 
         [x-cloak] { display: none !important; }
     </style>
+    @include('partials.toast-notifications')
 </head>
 <body class="antialiased">
     <div id="iframe-wrapper" class="w-full">
@@ -171,5 +172,6 @@
         });
         observer.observe(document.body, { attributes: true, childList: true, subtree: true });
     </script>
+    @include('partials.form-submit-lock')
 </body>
 </html>

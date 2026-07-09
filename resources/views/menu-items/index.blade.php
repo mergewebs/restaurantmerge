@@ -1,4 +1,12 @@
-﻿<x-app-layout>
+<x-app-layout>
+    <div data-async-region="menu-items-index" data-async-mutations="true">
+        @if(session('success'))
+            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
     @php
         $allProducts = $menuItems->flatten();
         $activeCount = $allProducts->where("is_active", true)->count();
@@ -98,7 +106,7 @@
         /* ---- Badges ---- */
         .bdg-live   { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); color: #059669; border-radius: 999px; font-size: 0.56rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.13em; padding: 0.13rem 0.52rem; }
         .bdg-hidden { background: #f1f5f9; border: 1px solid #e2e8f0; color: #94a3b8; border-radius: 999px; font-size: 0.56rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.13em; padding: 0.13rem 0.52rem; }
-        .bdg-bundle { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); color: #d97706; border-radius: 999px; font-size: 0.56rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.13em; padding: 0.13rem 0.52rem; }
+
 
         /* ---- Product accordion rows ---- */
         .prod-row { border-bottom: 1px solid #f1f5f9; }
@@ -140,22 +148,8 @@
     {{-- ========================================================= --}}
     <div class="products-page space-y-5"
          x-data="{
-             addModal: {{ $errors->any() ? 'true' : 'false' }},
-             createIsPackage: {{ old('is_package') ? 'true' : 'false' }}
+             addModal: {{ $errors->any() ? 'true' : 'false' }}
          }">
-
-        {{-- ---- Alerts ---- --}}
-        @if(session('success'))
-            <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700 flex items-center gap-2">
-                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                {{ session('success') }}
-            </div>
-        @endif
-        @if($errors->any())
-            <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                <ul class="list-disc list-inside space-y-0.5">@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul>
-            </div>
-        @endif
 
         {{-- ---- Page header ---- --}}
         <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
@@ -184,7 +178,7 @@
         <section class="space-y-4">
             <div>
                 <p class="eyebrow">Menu Catalog</p>
-                <h2 class="text-base font-black text-slate-800">Existing Products <span class="text-slate-400 font-semibold text-sm">— tap a row to edit</span></h2>
+                <h2 class="text-base font-black text-slate-800">Existing Products <span class="text-slate-400 font-semibold text-sm">- tap a row to edit</span></h2>
             </div>
 
             @forelse($menuItems as $category => $items)
@@ -203,7 +197,7 @@
                     {{-- Rows --}}
                     <div>
                         @foreach($items as $item)
-                            <details class="prod-row" x-data="{ editIsPackage: {{ $item->is_package ? 'true' : 'false' }} }">
+                            <details class="prod-row">
                                 <summary>
                                     <div class="flex items-center gap-3 px-4 sm:px-5 py-3.5 transition-colors">
                                         <div class="prod-thumb">
@@ -217,11 +211,11 @@
                                             <div class="flex flex-wrap items-center gap-1.5 mb-0.5">
                                                 <span class="text-sm font-black text-slate-800 truncate max-w-[140px] sm:max-w-none">{{ $item->name }}</span>
                                                 @if($item->is_active)<span class="bdg-live">Live</span>@else<span class="bdg-hidden">Hidden</span>@endif
-                                                @if($item->is_package)<span class="bdg-bundle">Bundle</span>@endif
+                                                
                                             </div>
                                             <div class="flex items-center gap-2 text-xs">
                                                 <span class="font-black text-indigo-600">{{ number_format((float)$item->price, 2) }} EUR</span>
-                                                @if($item->description)<span class="text-slate-400 truncate max-w-[110px] sm:max-w-[200px]">{{ $item->description }}</span>@endif
+                                                @if($item->description)<span class="text-slate-400">{{ $item->description }}</span>@endif
                                             </div>
                                         </div>
                                         <div class="row-chev">
@@ -270,11 +264,6 @@
                                         </div>
                                         <div class="sm:col-span-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
                                             <label class="toggle-lbl"><input type="checkbox" name="is_active" value="1" {{ $item->is_active?'checked':'' }}><span>Visible on public page</span></label>
-                                            <label class="toggle-lbl"><input type="checkbox" name="is_package" value="1" x-model="editIsPackage" {{ $item->is_package?'checked':'' }}><span>Package / combo deal</span></label>
-                                        </div>
-                                        <div class="sm:col-span-2" x-show="editIsPackage" x-cloak>
-                                            <label class="field-label" for="pkg-{{ $item->id }}">Package details</label>
-                                            <textarea id="pkg-{{ $item->id }}" name="package_details" rows="2">{{ $item->package_details }}</textarea>
                                         </div>
                                         <div class="sm:col-span-2 flex flex-col sm:flex-row gap-3 sm:justify-end pt-1">
                                             <button type="submit" form="del-{{ $item->id }}" class="btn-del"
@@ -304,113 +293,109 @@
         {{-- ============================================================ --}}
         {{-- ADD PRODUCT MODAL                                            --}}
         {{-- ============================================================ --}}
-        <template x-teleport="body">
             <div x-show="addModal"
-                 x-transition:enter="transition ease-out duration-200"
-                 x-transition:enter-start="opacity-0"
-                 x-transition:enter-end="opacity-100"
-                 x-transition:leave="transition ease-in duration-150"
-                 x-transition:leave-start="opacity-100"
-                 x-transition:leave-end="opacity-0"
-                 @keydown.escape.window="addModal = false"
-                 @click.self="addModal = false"
-                 class="modal-overlay"
-                 style="display:none">
-
-                <div class="modal-box products-page"
-                     x-transition:enter="transition ease-out duration-220"
-                     x-transition:enter-start="opacity-0 scale-95 translate-y-3"
-                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                     x-transition:leave="transition ease-in duration-150"
+                 class="fixed inset-0 z-[100] flex items-center justify-center px-4"
+                 style="display: none;"
+                 x-cloak>
+                <div @click="addModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+                <div class="glass w-full max-w-2xl rounded-[32px] p-8 relative border border-white/10"
+                     x-show="addModal"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-90"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
                      x-transition:leave-start="opacity-100 scale-100"
-                     x-transition:leave-end="opacity-0 scale-95"
+                     x-transition:leave-end="opacity-0 scale-90"
+                     @keydown.escape.window="addModal = false"
                      @click.stop>
 
-                    {{-- Modal header --}}
-                    <div class="modal-header">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-[10px] bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-500">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                            </div>
-                            <div>
-                                <p class="text-sm font-black text-slate-800">Add New Product</p>
-                                <p class="text-xs text-slate-400 leading-none mt-0.5">Fill in the details below</p>
-                            </div>
-                        </div>
-                        <button @click="addModal = false" class="modal-close-btn" aria-label="Close">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-slate-800">Add New Product</h3>
+                        <button @click="addModal = false" class="text-gray-400 hover:text-slate-600 transition-colors" aria-label="Close">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
 
-                    {{-- Modal body --}}
-                    <div class="modal-body">
-                        <form action="{{ route('menu-items.store') }}" method="POST" enctype="multipart/form-data"
-                            class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                            @csrf
+                    <form action="{{ route('menu-items.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4 text-left">
+                        @csrf
 
+                        <div>
+                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-name">Product Name</label>
+                            <input id="product-name" type="text" name="name" value="{{ old('name') }}" placeholder="KOYA Smash" required
+                                class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label class="field-label" for="product-name">Product name</label>
-                                <input id="product-name" type="text" name="name" value="{{ old('name') }}" placeholder="KOYA Smash" required>
-                            </div>
-                            <div>
-                                <label class="field-label" for="product-category">Category</label>
-                                <select id="product-category" name="category" required>
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-category">Category</label>
+                                <select id="product-category" name="category" required
+                                    class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 transition-all">
                                     @foreach($categoryOptions as $cat)
                                         <option value="{{ $cat }}" {{ old('category','Smash Burger')===$cat?'selected':'' }}>{{ $cat }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div>
-                                <label class="field-label" for="product-price">Price (EUR)</label>
-                                <input id="product-price" type="number" step="0.01" min="0" name="price" value="{{ old('price') }}" placeholder="0.00" required>
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-sort">Display Order</label>
+                                <input id="product-sort" type="number" min="0" max="999" name="sort_order" value="{{ old('sort_order',0) }}" placeholder="0"
+                                    class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
                             </div>
-                            <div>
-                                <label class="field-label" for="product-sort">Display order</label>
-                                <input id="product-sort" type="number" min="0" max="999" name="sort_order" value="{{ old('sort_order',0) }}" placeholder="0">
-                            </div>
-                            <div class="sm:col-span-2">
-                                <label class="field-label" for="product-description">Description</label>
-                                <textarea id="product-description" name="description" rows="2" placeholder="Short description for customers">{{ old('description') }}</textarea>
-                            </div>
-                            <div class="sm:col-span-2">
-                                <label class="field-label">Product image</label>
-                                <div class="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-4">
-                                    <input id="product-image" type="file" name="image" accept="image/*"
-                                        class="w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:px-4 file:py-2 file:text-xs file:font-black file:text-indigo-600 file:cursor-pointer file:hover:bg-indigo-100">
-                                    <p class="mt-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">JPG / PNG / WEBP — max 5 MB</p>
-                                </div>
-                            </div>
-                            <div class="sm:col-span-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                <label class="toggle-lbl">
-                                    <input type="checkbox" name="is_active" value="1" {{ old('is_active',true)?'checked':'' }}>
-                                    <span>Visible on public page</span>
-                                </label>
-                                <label class="toggle-lbl">
-                                    <input type="checkbox" name="is_package" value="1" x-model="createIsPackage" {{ old('is_package')?'checked':'' }}>
-                                    <span>Package / combo deal</span>
-                                </label>
-                            </div>
-                            <div class="sm:col-span-2" x-show="createIsPackage" x-cloak>
-                                <label class="field-label" for="product-pkg">Package details</label>
-                                <textarea id="product-pkg" name="package_details" rows="2" placeholder="e.g. burger + fries + drink">{{ old('package_details') }}</textarea>
-                            </div>
+                        </div>
 
-                            {{-- Footer actions --}}
-                            <div class="sm:col-span-2 flex flex-col sm:flex-row gap-3 sm:justify-end pt-2 border-t border-slate-100 mt-1">
-                                <button type="button" @click="addModal = false"
-                                    class="w-full sm:w-auto px-6 py-3 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-500 hover:bg-slate-50 transition-colors">
-                                    Cancel
-                                </button>
-                                <button type="submit" class="btn-koya w-full sm:w-auto px-8">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                                    Create Product
-                                </button>
+                        <div>
+                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 block" for="product-price">Price (EUR)</label>
+                            <input id="product-price" type="number" step="0.01" min="0" name="price" value="{{ old('price') }}" placeholder="0.00" required
+                                class="w-full bg-white border-2 border-indigo-100 text-slate-800 text-2xl font-black px-4 py-4 rounded-2xl outline-none focus:border-indigo-500 transition-all shadow-sm">
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-description">Description</label>
+                            <textarea id="product-description" name="description" rows="3" placeholder="Short description for customers"
+                                class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all resize-y">{{ old('description') }}</textarea>
+                        </div>
+
+                        <div>
+                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-image">Product Image</label>
+                            <div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-4">
+                                <input id="product-image" type="file" name="image" accept="image/*"
+                                    class="w-full text-sm text-slate-500 file:mr-3 file:rounded-xl file:border-0 file:bg-indigo-50 file:px-4 file:py-2.5 file:text-xs file:font-black file:text-indigo-600 file:cursor-pointer hover:file:bg-indigo-100">
+                                <p class="mt-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">JPG / PNG / WEBP - max 5 MB</p>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+
+                        <div>
+                            <label class="toggle-lbl rounded-2xl">
+                                <input type="checkbox" name="is_active" value="1" {{ old('is_active',true)?'checked':'' }}>
+                                <span>Visible on public page</span>
+                            </label>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                            <button type="button" @click="addModal = false"
+                                class="flex-1 bg-gray-50 border border-gray-200 text-slate-600 rounded-2xl py-4 text-xs font-black uppercase tracking-widest hover:bg-gray-100 transition-all active:scale-95">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                class="flex-[2] btn-koya py-4 shadow-xl shadow-koya/20 text-white font-bold uppercase tracking-widest">
+                                Create Product
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </template>
 
     </div>{{-- /products-page --}}
+    </div>
 </x-app-layout>
+
+
+
+
+
+
+
+
+
+
+
+

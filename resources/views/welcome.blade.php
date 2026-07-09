@@ -480,33 +480,80 @@
             height: 100%;
         }
 
-        /* Floating Ingredients */
-        .floating-element {
+        .hero-accent {
             position: absolute;
-            z-index: 12;
             pointer-events: none;
-            filter: drop-shadow(3px 3px 0px var(--color-dark));
+            z-index: 3;
         }
 
-        .float-1 {
-            top: 15%;
-            left: 5%;
-            animation: floatSlow 5s ease-in-out infinite alternate;
+        .hero-accent-blob {
+            width: 110px;
+            height: 110px;
+            border: 4px solid var(--color-dark);
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
         }
-        .float-2 {
-            bottom: 15%;
-            left: 10%;
-            animation: floatSlower 7s ease-in-out infinite alternate;
+
+        .hero-accent-blob.accent-yellow {
+            top: 2.5rem;
+            left: 1.25rem;
+            background-color: var(--color-yellow);
+            border-radius: 38% 62% 46% 54% / 42% 36% 64% 58%;
+            transform: rotate(-12deg);
         }
-        .float-3 {
-            top: 20%;
-            right: 5%;
-            animation: floatSlow 6s ease-in-out infinite alternate;
+
+        .hero-accent-blob.accent-light {
+            right: 2rem;
+            bottom: 4rem;
+            width: 86px;
+            height: 86px;
+            background-color: rgba(255, 252, 244, 0.92);
+            border-radius: 58% 42% 52% 48% / 34% 58% 42% 66%;
+            transform: rotate(14deg);
         }
-        .float-4 {
-            bottom: 20%;
-            right: 8%;
-            animation: floatSlower 8s ease-in-out infinite alternate;
+
+        .hero-accent-dots {
+            right: 3rem;
+            top: 4.5rem;
+            width: 140px;
+            height: 140px;
+            border: 4px solid rgba(18, 18, 18, 0.8);
+            border-radius: 32px;
+            background-image: radial-gradient(rgba(250, 192, 33, 0.95) 18%, transparent 19%);
+            background-size: 18px 18px;
+            background-position: center;
+            background-color: rgba(8, 137, 114, 0.35);
+            transform: rotate(10deg);
+            opacity: 0.95;
+        }
+
+        .hero-accent-spark {
+            left: 2rem;
+            bottom: 5rem;
+            width: 76px;
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(-10deg);
+        }
+
+        .hero-accent-spark::before,
+        .hero-accent-spark::after {
+            content: '';
+            position: absolute;
+            background-color: var(--color-yellow);
+            border: 3px solid var(--color-dark);
+            border-radius: 999px;
+        }
+
+        .hero-accent-spark::before {
+            width: 68px;
+            height: 18px;
+        }
+
+        .hero-accent-spark::after {
+            width: 18px;
+            height: 68px;
         }
 
         /* Section Headings */
@@ -1536,6 +1583,34 @@
                 order: 1;
             }
 
+            .hero-accent-blob.accent-yellow {
+                top: 1.5rem;
+                left: 2rem;
+                width: 88px;
+                height: 88px;
+            }
+
+            .hero-accent-dots {
+                top: 3.25rem;
+                right: 2.25rem;
+                width: 110px;
+                height: 110px;
+            }
+
+            .hero-accent-spark {
+                left: 2.5rem;
+                bottom: 3rem;
+                width: 58px;
+                height: 58px;
+            }
+
+            .hero-accent-blob.accent-light {
+                right: 1.5rem;
+                bottom: 3rem;
+                width: 72px;
+                height: 72px;
+            }
+
             .hero-title {
                 display: none;
             }
@@ -1637,6 +1712,44 @@
                 height: 400px;
             }
 
+            .hero-accent-dots {
+                width: 92px;
+                height: 92px;
+                right: 1.2rem;
+                top: 2rem;
+            }
+
+            .hero-accent-blob.accent-yellow {
+                width: 70px;
+                height: 70px;
+                left: 1rem;
+                top: 1.2rem;
+            }
+
+            .hero-accent-blob.accent-light {
+                width: 56px;
+                height: 56px;
+                right: 1rem;
+                bottom: 2.25rem;
+            }
+
+            .hero-accent-spark {
+                width: 46px;
+                height: 46px;
+                left: 1rem;
+                bottom: 2.5rem;
+            }
+
+            .hero-accent-spark::before {
+                width: 44px;
+                height: 14px;
+            }
+
+            .hero-accent-spark::after {
+                width: 14px;
+                height: 44px;
+            }
+
             .about-img-wrap {
                 width: 290px;
                 height: 290px;
@@ -1665,6 +1778,42 @@
             
             .hero-visual {
                 height: 300px;
+            }
+
+            .hero-accent-dots {
+                width: 74px;
+                height: 74px;
+                border-width: 3px;
+                border-radius: 22px;
+                background-size: 14px 14px;
+            }
+
+            .hero-accent-blob.accent-yellow {
+                width: 54px;
+                height: 54px;
+            }
+
+            .hero-accent-blob.accent-light {
+                width: 44px;
+                height: 44px;
+            }
+
+            .hero-accent-spark {
+                width: 34px;
+                height: 34px;
+                bottom: 2rem;
+            }
+
+            .hero-accent-spark::before {
+                width: 34px;
+                height: 12px;
+                border-width: 2px;
+            }
+
+            .hero-accent-spark::after {
+                width: 12px;
+                height: 34px;
+                border-width: 2px;
             }
 
             .hero-btns {
@@ -1879,8 +2028,17 @@
             max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
-            text-transform: uppercase;
             letter-spacing: 0.03em;
+        }
+
+        .gallery-promo-title .inline-food-image {
+            display: inline-block;
+            width: 3.2rem;
+            height: 3.2rem;
+            margin: 0 0.35rem;
+            vertical-align: middle;
+            object-fit: contain;
+            background: transparent;
         }
 
         .gallery-grid {
@@ -1980,6 +2138,15 @@
                 font-size: 1.5rem;
                 margin-bottom: 2rem;
             }
+            .gallery-promo-title .inline-food-image {
+            display: inline-block;
+            width: 3.2rem;
+            height: 3.2rem;
+            margin: 0 0.35rem;
+            vertical-align: middle;
+            object-fit: contain;
+            background: transparent;
+        }
         }
 
         @media (max-width: 576px) {
@@ -1995,10 +2162,15 @@
                 border-radius: 16px;
                 box-shadow: 4px 4px 0px var(--color-dark);
             }
-            .gallery-promo-title {
-                font-size: 1.25rem;
-                margin-bottom: 1.5rem;
-            }
+            .gallery-promo-title .inline-food-image {
+            display: inline-block;
+            width: 3.2rem;
+            height: 3.2rem;
+            margin: 0 0.35rem;
+            vertical-align: middle;
+            object-fit: contain;
+            background: transparent;
+        }
         }
         [x-cloak] { display: none !important; }
 
@@ -2143,38 +2315,6 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero">
-        <!-- Floating graphics (SVGs drawn in style matching KOYA colors) -->
-        <svg class="floating-element float-1" width="60" height="60" viewBox="0 0 100 100">
-            <!-- Tomato Slice -->
-            <circle cx="50" cy="50" r="45" fill="#f24423" stroke="#121212" stroke-width="6"/>
-            <circle cx="50" cy="50" r="35" fill="#d12e0f" />
-            <circle cx="35" cy="40" r="6" fill="#f24423" />
-            <circle cx="65" cy="40" r="6" fill="#f24423" />
-            <circle cx="50" cy="65" r="6" fill="#f24423" />
-        </svg>
-
-        <svg class="floating-element float-2" width="70" height="70" viewBox="0 0 100 100">
-            <!-- Cheese Slice -->
-            <polygon points="10,15 90,25 65,85 10,15" fill="#fac021" stroke="#121212" stroke-width="6"/>
-            <circle cx="35" cy="40" r="8" fill="#e0ab16" />
-            <circle cx="60" cy="50" r="5" fill="#e0ab16" />
-        </svg>
-
-        <svg class="floating-element float-3" width="85" height="85" viewBox="0 0 100 100">
-            <!-- Lettuce leaf -->
-            <path d="M 20 60 C 10 40, 20 15, 50 20 C 80 15, 90 40, 80 60 C 70 80, 30 80, 20 60 Z" fill="#4fa838" stroke="#121212" stroke-width="6"/>
-            <path d="M 50 20 Q 50 50 50 75" fill="none" stroke="#121212" stroke-width="4"/>
-            <path d="M 50 40 Q 30 35 25 40" fill="none" stroke="#121212" stroke-width="4"/>
-            <path d="M 50 55 Q 70 50 75 55" fill="none" stroke="#121212" stroke-width="4"/>
-        </svg>
-
-        <svg class="floating-element float-4" width="50" height="50" viewBox="0 0 100 100">
-            <!-- Sesame seeds -->
-            <path d="M 30 30 Q 35 15 40 30 Q 35 45 30 30 Z" fill="#ebd6b0" stroke="#121212" stroke-width="3" transform="rotate(15 30 30)"/>
-            <path d="M 70 40 Q 75 25 80 40 Q 75 55 70 40 Z" fill="#ebd6b0" stroke="#121212" stroke-width="3" transform="rotate(-20 70 40)"/>
-            <path d="M 45 70 Q 50 55 55 70 Q 50 85 45 70 Z" fill="#ebd6b0" stroke="#121212" stroke-width="3" transform="rotate(45 45 70)"/>
-        </svg>
-
         <div class="container hero-grid">
             <div class="hero-content">
 
@@ -2187,6 +2327,10 @@
             </div>
 
             <div class="hero-visual">
+                <div class="hero-accent hero-accent-blob accent-yellow"></div>
+                <div class="hero-accent hero-accent-dots"></div>
+                <div class="hero-accent hero-accent-spark"></div>
+                <div class="hero-accent hero-accent-blob accent-light"></div>
                 <!-- Rotating circular badge -->
                 <div class="rotating-badge-wrap">
                     <svg class="rotating-badge-svg" viewBox="0 0 200 200">
@@ -2209,7 +2353,10 @@
     <section class="gallery-promo">
         <div class="container">
             <h2 class="gallery-promo-title reveal">
-                {{ __('public.homepage_gallery_title') }}
+                {!! __('public.homepage_gallery_title', [
+                    'burgerImage' => '<img src="' . asset('images/smash-burger.png') . '" alt="Smash Burger" class="inline-food-image" loading="lazy">',
+                    'saladImage' => '<img src="' . asset('images/koya-salad.png') . '" alt="Koya Salad" class="inline-food-image" loading="lazy">',
+                ]) !!}
             </h2>
             <div class="gallery-grid">
                 <div class="gallery-card card-rotate-1 reveal">
@@ -2287,7 +2434,7 @@
                         $tabCategory = 'Desserts';
                     }
 
-                    $description = $item->description ?? $item->package_details ?? '';
+                    $description = $item->description ?? '';
 
                     $badge = null;
                     if ($item->name === 'Spicy Korean Rice Bowl') $badge = 'New';
@@ -2397,6 +2544,18 @@
                     @endphp
                     @php
                     $skipStandardDrinkCard = $item['tab_category'] === 'Drinks';
+                    $scaledMenuImages = [
+                        'ADOBO',
+                        'KIMCHI BURGER',
+                        'TARTUFATA',
+                        'CANGRE BURGER',
+                        'GYOZAS FRITAS IB�RICAS (5 uds.)',
+                        'EDAMAME AL VAPOR',
+                        'SWEET & SPICY WINGS',
+                        'EBI FRY (5 uds.)',
+                        'ROLLITOS (5 uds.)',
+                        'TACOS DE CARILLADA DE TERNERA',
+                    ];
                     @endphp
                     @if(! $skipStandardDrinkCard)
                         <div class="menu-card-simple reveal" x-show="activeTab === '{{ $item['tab_category'] }}'"
@@ -2415,7 +2574,7 @@
                                 </div>
                                 @if(!empty($imageUrl))
                                     <div class="menu-item-img-container">
-                                        <img src="{{ $imageUrl }}" alt="{{ $item['name'] }}" loading="lazy" decoding="async" width="100" height="100" @if($item['name'] === 'ADOBO') style="transform: scale(1.1);" @endif onerror="this.style.display='none'">
+                                        <img src="{{ $imageUrl }}" alt="{{ $item['name'] }}" loading="lazy" decoding="async" width="100" height="100" @if(in_array($item['name'], $scaledMenuImages, true)) style="transform: scale(1.1);" @endif onerror="this.style.display='none'">
                                     </div>
                                 @endif
                             </div>
@@ -2825,5 +2984,13 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 

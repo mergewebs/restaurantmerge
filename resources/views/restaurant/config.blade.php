@@ -3,6 +3,14 @@
         Restaurant Config
     </x-slot>
 
+    <div data-async-region="restaurant-config" data-async-mutations="true">
+        @if(session('success'))
+            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
     <style>
         .compact-input {
             padding-top: 0.5rem !important;
@@ -10,7 +18,7 @@
             padding-left: 0.75rem !important;
             padding-right: 0.75rem !important;
             border-radius: 12px !important;
-            font-size: 0.875rem !important;
+            font-size: 1rem !important;
         }
         .slot-group {
             background: rgba(255, 255, 255, 0.02);
@@ -19,20 +27,7 @@
             border-radius: 20px;
         }
     </style>
-
     <div class="space-y-6 pb-12">
-        <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl text-sm font-bold uppercase tracking-wider">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-sm font-bold uppercase tracking-wider">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <!-- Weekly Schedule -->
         @if(auth()->user()->isUserAdmin())
         <div class="glass rounded-[32px] p-4 lg:p-8">
@@ -221,7 +216,7 @@
                                             <span class="px-2 py-0.5 bg-red-500/20 text-red-500 text-[10px] font-black uppercase rounded-lg">Closed</span>
                                         @endif
                                         @if($exception->description)
-                                            <span class="text-white/40 text-xs font-medium">— {{ $exception->description }}</span>
+                                            <span class="text-white/40 text-xs font-medium">â€” {{ $exception->description }}</span>
                                         @endif
                                     </div>
                                     <div class="text-[11px] text-white/30 mt-1 font-bold tracking-tight">
@@ -247,4 +242,5 @@
     </div>
     </div>
 </div>
+    </div>
 </x-app-layout>

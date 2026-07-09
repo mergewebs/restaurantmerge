@@ -1,4 +1,27 @@
 <x-app-layout>
+    <div data-async-region="finance-index" data-async-mutations="true">
+        @if(session('success'))
+            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
+        @elseif(session('error'))
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
+        @elseif($errors->any())
+            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
+        @endif
+@php
+    $statsRangeOptions = [
+        'today' => 'Today',
+        'yesterday' => 'Yesterday',
+        'this_week' => 'This week',
+        'last_week' => 'Last week',
+        'this_month' => 'This month',
+        'last_month' => 'Last month',
+        'this_year' => 'This year',
+        'last_year' => 'Last year',
+        'last_3_months' => 'Last 3 months',
+        'custom' => 'Custom date range',
+    ];
+
+@endphp
 <div x-data="{ 
     showFinanceModal: {{ (($errors->any() && old('amount') && !old('finance_id')) || session('keep_finance_modal') || request()->boolean('finance_modal')) ? 'true' : 'false' }}, 
     showEditModal: {{ $errors->any() && old('finance_id') ? 'true' : 'false' }}, 
@@ -38,7 +61,7 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <a href="{{ route('finance.categories.index') }}" 
+            <a href="{{ route('finance.categories.index') }}" data-async="off" 
                class="w-10 h-10 bg-gray-50 border border-gray-200 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-100 rounded-xl flex items-center justify-center transition-all shadow-sm active:scale-95" 
                title="Manage Categories">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,9 +77,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl text-xs font-bold uppercase tracking-wider">{{ session('success') }}</div>
-    @endif
 
     <section class="glass p-6 rounded-[28px] space-y-4">
         <div class="flex items-center justify-between gap-4 flex-wrap">
@@ -64,23 +84,31 @@
                 <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
                 <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Summary Overview</h2>
             </div>
-            <form method="GET" action="{{ route('finance.index') }}" class="flex items-center gap-2 flex-wrap">
-                <select name="mode" onchange="this.form.submit()" class="!w-auto bg-gray-50 border border-gray-200 px-4 py-2.5 rounded-xl text-slate-700 text-xs font-bold transition focus:border-indigo-500 outline-none">
-                    <option value="daily" @selected($mode === 'daily') class="bg-white text-slate-800">Today</option>
-                    <option value="weekly" @selected($mode === 'weekly') class="bg-white text-slate-800">7 Days</option>
-                    <option value="monthly" @selected($mode === 'monthly') class="bg-white text-slate-800">This Month</option>
-                    <option value="last_month" @selected($mode === 'last_month') class="bg-white text-slate-800">Last Month</option>
-                    <option value="last_3_months" @selected($mode === 'last_3_months') class="bg-white text-slate-800">Last 3 Months</option>
-                    <option value="this_year" @selected($mode === 'this_year') class="bg-white text-slate-800">This Year</option>
-                    <option value="last_year" @selected($mode === 'last_year') class="bg-white text-slate-800">Last Year</option>
-                    <option value="custom" @selected($mode === 'custom') class="bg-white text-slate-800">Custom Range</option>
-                </select>
-                
-                @if($mode === 'custom')
-                    <input type="date" name="date_from" value="{{ $dateFrom }}" class="bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl text-slate-700 text-xs font-bold outline-none focus:border-indigo-500">
-                    <input type="date" name="date_to" value="{{ $dateTo }}" class="bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl text-slate-700 text-xs font-bold outline-none focus:border-indigo-500">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold transition shadow-sm active:scale-95">Go</button>
-                @endif
+            <form method="GET" action="{{ route('finance.index') }}" class="w-full lg:w-auto lg:ml-auto" data-auto-submit-form>
+                <input type="hidden" name="history_query" value="{{ $query }}">
+
+                <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                    <select
+                        name="mode"
+                        data-range-toggle-target="finance-summary-custom-range"
+                        data-range-toggle-value="custom"
+                        data-auto-submit-skip-on="custom"
+                        class="w-full sm:w-auto !w-full sm:!w-auto bg-gray-50 border border-gray-200 px-4 py-2.5 rounded-xl text-slate-700 text-xs font-bold transition focus:border-indigo-500 outline-none"
+                    >
+                        @foreach($statsRangeOptions as $value => $label)
+                            <option value="{{ $value }}" @selected($mode === $value) class="bg-white text-slate-800">{{ $label }}</option>
+                        @endforeach
+                    </select>
+
+                    <div
+                        data-range-toggle-panel="finance-summary-custom-range"
+                        @class(['flex flex-col gap-3 sm:flex-row sm:items-center', 'hidden' => $mode !== 'custom'])
+                    >
+                        <input type="date" name="date_from" value="{{ $dateFrom }}" class="bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl text-slate-700 text-xs font-bold outline-none focus:border-indigo-500">
+                        <input type="date" name="date_to" value="{{ $dateTo }}" class="bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl text-slate-700 text-xs font-bold outline-none focus:border-indigo-500">
+                    </div>
+                    <a href="{{ route('finance.index') }}" class="w-full sm:w-auto px-5 py-3 bg-gray-50 border border-gray-200 hover:bg-gray-100 text-slate-700 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center transition-all shadow-sm active:scale-95">Reset</a>
+                </div>
             </form>
         </div>
         <p class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest leading-none">{{ $start->format('d M Y') }} - {{ $end->format('d M Y') }}</p>
@@ -147,21 +175,28 @@
     </section>
 
     <section id="transactions" class="glass p-6 rounded-[28px] space-y-4">
-        <div class="flex items-center gap-2.5">
-            <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-            <div>
-                <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Filtered Transactions</h2>
-                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Default filter: this month</p>
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
+                <div>
+                    <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Filtered Transactions</h2>
+                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Uses the summary date range above</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                <span class="px-3 py-2 rounded-2xl border border-gray-200 bg-gray-50">From: {{ \Carbon\Carbon::parse($dateFrom)->format('d M Y') }}</span>
+                <span class="px-3 py-2 rounded-2xl border border-gray-200 bg-gray-50">To: {{ \Carbon\Carbon::parse($dateTo)->format('d M Y') }}</span>
             </div>
         </div>
 
-        <form action="{{ route('finance.index') }}#transactions" method="GET" class="grid grid-cols-1 md:grid-cols-[1fr_auto_auto_auto] gap-3">
-            <input type="text" name="history_query" value="{{ $query }}" placeholder="Search description or amount..." class="bg-gray-50 border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
-            <input type="date" name="history_date_from" value="{{ $historyDateFrom }}" class="bg-gray-50 border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
-            <input type="date" name="history_date_to" value="{{ $historyDateTo }}" class="bg-gray-50 border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
-            <div class="flex gap-2">
-                <button type="submit" class="btn-koya px-6 py-3 rounded-2xl text-xs font-bold uppercase tracking-widest shadow-md hover:scale-105 active:scale-95 transition-all">Filter</button>
-                <a href="{{ route('finance.index') }}#transactions" class="px-5 py-3 bg-gray-50 border border-gray-200 hover:bg-gray-100 text-slate-700 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center transition-all shadow-sm active:scale-95">Reset</a>
+        <form action="{{ route('finance.index') }}#transactions" method="GET" class="space-y-3" data-auto-submit-form data-auto-submit-delay="700">
+            <input type="hidden" name="mode" value="{{ $mode }}">
+            <input type="hidden" name="date_from" value="{{ $dateFrom }}">
+
+            <input type="hidden" name="date_to" value="{{ $dateTo }}">
+
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <input type="text" name="history_query" value="{{ $query }}" placeholder="Search description or amount..." data-auto-submit-search class="w-full lg:max-w-xl bg-gray-50 border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
             </div>
         </form>
 
@@ -234,7 +269,7 @@
     <section class="glass p-6 rounded-[28px] space-y-4">
         <div class="flex items-center gap-2.5">
             <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-            <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Most Recent Entries</h2>
+            <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Latest Transactions</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             @foreach($latestTransactions as $item)
@@ -489,4 +524,7 @@
         </div>
     </div>
 </div>
+    </div>
 </x-app-layout>
+
+

@@ -8,9 +8,12 @@ use App\Models\Expense;
 use App\Models\Category;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Illuminate\Support\Facades\DB;
 
 class FinanceController extends Controller
 {
+    private const DEFAULT_STATS_RANGE = 'this_month';
+
     public function index(Request $request)
     {
         if (!auth()->user()->isAdmin()) {
@@ -27,11 +30,9 @@ class FinanceController extends Controller
 
         extract($this->getStatsData($start, $end));
 
-        $query = $request->get('history_query');
-        $historyDateFrom = $request->get('history_date_from', Carbon::now()->startOfMonth()->toDateString());
-        $historyDateTo = $request->get('history_date_to', Carbon::now()->endOfMonth()->toDateString());
+        $query = trim((string) $request->get('history_query', ''));
 
-        $historyQuery = $this->buildHistoryQuery($query, $historyDateFrom, $historyDateTo);
+        $historyQuery = $this->buildHistoryQuery($query, $dateFrom, $dateTo);
         $history = (clone $historyQuery)
             ->paginate(20)
             ->withQueryString();
@@ -44,7 +45,7 @@ class FinanceController extends Controller
             'totalIncome', 'totalExpenses', 'netProfit',
             'chartLabels', 'chartIncome', 'chartExpense', 'chartProfit',
             'incomeByType', 'expenseByCategory', 'incomeByMethod', 'expenseByMethod',
-            'categories', 'history', 'query', 'historyDateFrom', 'historyDateTo', 'latestTransactions'
+            'categories', 'history', 'query', 'latestTransactions'
         ));
     }
 
@@ -60,11 +61,14 @@ class FinanceController extends Controller
         if ($request->filled('query')) {
             $params['history_query'] = $request->query('query');
         }
+        if ($request->filled('range')) {
+            $params['mode'] = $request->query('range');
+        }
         if ($request->filled('date_from')) {
-            $params['history_date_from'] = $request->query('date_from');
+            $params['date_from'] = $request->query('date_from');
         }
         if ($request->filled('date_to')) {
-            $params['history_date_to'] = $request->query('date_to');
+            $params['date_to'] = $request->query('date_to');
         }
 
         return redirect()->to(route('finance.index', $params) . '#transactions');
@@ -72,60 +76,122 @@ class FinanceController extends Controller
 
     private function resolveStatsRange(Request $request): array
     {
-        $mode = $request->get('mode', 'monthly');
+        $mode = $request->get('mode', self::DEFAULT_STATS_RANGE);
         $dateFrom = $request->get('date_from');
         $dateTo = $request->get('date_to');
 
-        switch ($mode) {
-            case 'daily':
-                $start = Carbon::now()->startOfDay();
-                $end = Carbon::now()->endOfDay();
-                break;
-            case 'weekly':
-                $start = Carbon::now()->subDays(6)->startOfDay();
-                $end = Carbon::now()->endOfDay();
-                break;
-            case 'last_month':
-                $start = Carbon::now()->subMonth()->startOfMonth()->startOfDay();
-                $end = Carbon::now()->subMonth()->endOfMonth()->endOfDay();
-                break;
-            case 'last_3_months':
-                $start = Carbon::now()->subMonths(3)->startOfDay();
-                $end = Carbon::now()->endOfDay();
-                break;
-            case 'this_year':
-                $start = Carbon::now()->startOfYear()->startOfDay();
-                $end = Carbon::now()->endOfYear()->endOfDay();
-                break;
-            case 'last_year':
-                $start = Carbon::now()->subYear()->startOfYear()->startOfDay();
-                $end = Carbon::now()->subYear()->endOfYear()->endOfDay();
-                break;
-            case 'custom':
-                $start = $dateFrom ? Carbon::parse($dateFrom)->startOfDay() : Carbon::now()->startOfMonth()->startOfDay();
-                $end = $dateTo ? Carbon::parse($dateTo)->endOfDay() : Carbon::now()->endOfMonth()->endOfDay();
-                break;
-            case 'monthly':
-            default:
-                $start = Carbon::now()->startOfMonth()->startOfDay();
-                $end = Carbon::now()->endOfMonth()->endOfDay();
-                break;
-        }
+        [
+            'preset' => $mode,
+            'dateFrom' => $dateFrom,
+            'dateTo' => $dateTo,
+            'start' => $start,
+            'end' => $end,
+        ] = $this->resolveDateRangePreset($mode, $dateFrom, $dateTo, self::DEFAULT_STATS_RANGE);
 
         return compact('mode', 'dateFrom', 'dateTo', 'start', 'end');
     }
 
+    private function resolveDateRangePreset(?string $preset, ?string $dateFrom, ?string $dateTo, string $defaultPreset): array
+    {
+        $preset = $this->normalizeDateRangePreset($preset, $defaultPreset);
+        $now = Carbon::now();
+
+        switch ($preset) {
+            case 'today':
+                $start = $now->copy()->startOfDay();
+                $end = $now->copy()->endOfDay();
+                break;
+            case 'yesterday':
+                $start = $now->copy()->subDay()->startOfDay();
+                $end = $now->copy()->subDay()->endOfDay();
+                break;
+            case 'this_week':
+                $start = $now->copy()->startOfWeek()->startOfDay();
+                $end = $now->copy()->endOfWeek()->endOfDay();
+                break;
+            case 'last_week':
+                $start = $now->copy()->subWeek()->startOfWeek()->startOfDay();
+                $end = $now->copy()->subWeek()->endOfWeek()->endOfDay();
+                break;
+            case 'last_month':
+                $start = $now->copy()->subMonth()->startOfMonth()->startOfDay();
+                $end = $now->copy()->subMonth()->endOfMonth()->endOfDay();
+                break;
+            case 'last_3_months':
+                $start = $now->copy()->subMonths(3)->startOfDay();
+                $end = $now->copy()->endOfDay();
+                break;
+            case 'this_year':
+                $start = $now->copy()->startOfYear()->startOfDay();
+                $end = $now->copy()->endOfYear()->endOfDay();
+                break;
+            case 'last_year':
+                $start = $now->copy()->subYear()->startOfYear()->startOfDay();
+                $end = $now->copy()->subYear()->endOfYear()->endOfDay();
+                break;
+            case 'custom':
+                $start = $dateFrom
+                    ? Carbon::parse($dateFrom)->startOfDay()
+                    : $now->copy()->startOfMonth()->startOfDay();
+                $end = $dateTo
+                    ? Carbon::parse($dateTo)->endOfDay()
+                    : $now->copy()->endOfMonth()->endOfDay();
+                break;
+            case 'this_month':
+            default:
+                $start = $now->copy()->startOfMonth()->startOfDay();
+                $end = $now->copy()->endOfMonth()->endOfDay();
+                break;
+        }
+
+        return [
+            'preset' => $preset,
+            'dateFrom' => $start->toDateString(),
+            'dateTo' => $end->toDateString(),
+            'start' => $start,
+            'end' => $end,
+        ];
+    }
+
+    private function normalizeDateRangePreset(?string $preset, string $defaultPreset): string
+    {
+        return match ($preset) {
+            'daily', 'today' => 'today',
+            'yesterday' => 'yesterday',
+            'weekly', 'this_week' => 'this_week',
+            'last_week' => 'last_week',
+            'monthly', 'this_month', null, '' => 'this_month',
+            'last_month' => 'last_month',
+            'this_year' => 'this_year',
+            'last_year' => 'last_year',
+            'last_3_months' => 'last_3_months',
+            'custom' => 'custom',
+            default => $defaultPreset,
+        };
+    }
+
     private function getStatsData(Carbon $start, Carbon $end): array
     {
-        $totalIncome = Income::whereDate('date', '>=', $start->toDateString())
-            ->whereDate('date', '<=', $end->toDateString())
-            ->sum('amount');
-        $totalExpenses = Expense::whereDate('date', '>=', $start->toDateString())
-            ->whereDate('date', '<=', $end->toDateString())
-            ->sum('amount');
+        $startDate = $start->toDateString();
+        $endDate = $end->toDateString();
+
+        $incomeRecords = Income::query()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->selectRaw('date, SUM(amount) as total')
+            ->groupBy('date')
+            ->pluck('total', 'date');
+
+        $expenseRecords = Expense::query()
+            ->whereBetween('date', [$startDate, $endDate])
+            ->selectRaw('date, SUM(amount) as total')
+            ->groupBy('date')
+            ->pluck('total', 'date');
+
+        $totalIncome = (float) $incomeRecords->sum();
+        $totalExpenses = (float) $expenseRecords->sum();
         $netProfit = $totalIncome - $totalExpenses;
 
-        $period = CarbonPeriod::create($start->toDateString(), $end->toDateString());
+        $period = CarbonPeriod::create($startDate, $endDate);
         $chartLabels = [];
         $chartIncome = [];
         $chartExpense = [];
@@ -133,35 +199,35 @@ class FinanceController extends Controller
 
         foreach ($period as $day) {
             $date = $day->toDateString();
-            $income = Income::whereDate('date', $date)->sum('amount');
-            $expense = Expense::whereDate('date', $date)->sum('amount');
+            $income = (float) ($incomeRecords[$date] ?? 0);
+            $expense = (float) ($expenseRecords[$date] ?? 0);
 
             $chartLabels[] = $day->format('d M');
-            $chartIncome[] = round((float) $income, 2);
-            $chartExpense[] = round((float) $expense, 2);
-            $chartProfit[] = round((float) ($income - $expense), 2);
+            $chartIncome[] = round($income, 2);
+            $chartExpense[] = round($expense, 2);
+            $chartProfit[] = round($income - $expense, 2);
         }
 
-        $incomeByType = Income::whereDate('date', '>=', $start->toDateString())
-            ->whereDate('date', '<=', $end->toDateString())
+        $incomeByType = Income::query()
+            ->whereBetween('date', [$startDate, $endDate])
             ->selectRaw('type, SUM(amount) as total')
             ->groupBy('type')
             ->get();
 
-        $incomeByMethod = Income::whereDate('date', '>=', $start->toDateString())
-            ->whereDate('date', '<=', $end->toDateString())
+        $incomeByMethod = Income::query()
+            ->whereBetween('date', [$startDate, $endDate])
             ->selectRaw('method, SUM(amount) as total')
             ->groupBy('method')
             ->get();
 
-        $expenseByMethod = Expense::whereDate('date', '>=', $start->toDateString())
-            ->whereDate('date', '<=', $end->toDateString())
+        $expenseByMethod = Expense::query()
+            ->whereBetween('date', [$startDate, $endDate])
             ->selectRaw('method, SUM(amount) as total')
             ->groupBy('method')
             ->get();
 
-        $expenseByCategory = Expense::whereDate('date', '>=', $start->toDateString())
-            ->whereDate('date', '<=', $end->toDateString())
+        $expenseByCategory = Expense::query()
+            ->whereBetween('date', [$startDate, $endDate])
             ->selectRaw('category, SUM(amount) as total')
             ->groupBy('category')
             ->get();
@@ -178,8 +244,8 @@ class FinanceController extends Controller
 
     private function buildHistoryQuery(?string $query, ?string $dateFrom, ?string $dateTo)
     {
-        $incomes = Income::select('id', 'amount', 'date', 'description', 'method', 'type as category', \DB::raw("'income' as transaction_type"), 'user_id', 'created_at');
-        $expenses = Expense::select('id', 'amount', 'date', 'description', 'method', 'category', \DB::raw("'expense' as transaction_type"), 'user_id', 'created_at');
+        $incomes = Income::select('id', 'amount', 'date', 'description', 'method', 'type as category', DB::raw("'income' as transaction_type"), 'user_id', 'created_at');
+        $expenses = Expense::select('id', 'amount', 'date', 'description', 'method', 'category', DB::raw("'expense' as transaction_type"), 'user_id', 'created_at');
 
         if ($dateFrom) {
             $incomes->whereDate('date', '>=', $dateFrom);

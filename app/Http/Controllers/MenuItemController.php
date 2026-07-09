@@ -79,19 +79,13 @@ class MenuItemController extends Controller
             'price' => ['required', 'numeric', 'min:0'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:999'],
             'is_active' => ['nullable', 'boolean'],
-            'is_package' => ['nullable', 'boolean'],
-            'package_details' => ['nullable', 'string', 'max:1000'],
             'image' => ['nullable', 'image', 'max:5120'],
             'remove_image' => ['nullable', 'boolean'],
         ]);
 
         $validated['is_active'] = $request->boolean('is_active');
-        $validated['is_package'] = $request->boolean('is_package');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
         $validated['description'] = $validated['description'] ?? null;
-        $validated['package_details'] = $validated['is_package']
-            ? ($validated['package_details'] ?? null)
-            : null;
 
         unset($validated['image'], $validated['remove_image']);
 

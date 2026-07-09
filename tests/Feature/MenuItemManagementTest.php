@@ -21,23 +21,19 @@ class MenuItemManagementTest extends TestCase
             'role' => 'owner',
         ]);
 
-        $createImage = UploadedFile::fake()->image('lunch-package.jpg');
+        $createImage = UploadedFile::fake()->image('lunch-special.jpg');
 
         $this->actingAs($admin)->post(route('menu-items.store'), [
-            'name' => 'Lunch Package',
-            'category' => 'Packages',
+            'name' => 'Lunch Special',
+            'category' => 'Smash Burger',
             'description' => 'Owner-managed combo',
             'price' => 18.50,
             'sort_order' => 1,
             'is_active' => 1,
-            'is_package' => 1,
-            'package_details' => 'Soup + Steak + Drink',
             'image' => $createImage,
         ])->assertRedirect(route('menu-items.index'));
 
-        $menuItem = MenuItem::where('name', 'Lunch Package')->firstOrFail();
-        $this->assertTrue((bool) $menuItem->is_package);
-        $this->assertEquals('Soup + Steak + Drink', $menuItem->package_details);
+        $menuItem = MenuItem::where('name', 'Lunch Special')->firstOrFail();
         $this->assertNotNull($menuItem->image_path);
         $this->assertNotNull($menuItem->image_display_path);
         $this->assertNotNull($menuItem->image_thumbnail_path);
@@ -46,22 +42,20 @@ class MenuItemManagementTest extends TestCase
         Storage::disk('product-images')->assertExists($menuItem->image_thumbnail_path);
 
         $originalImagePath = $menuItem->image_path;
-        $updatedImage = UploadedFile::fake()->image('lunch-package-plus.jpg');
+        $updatedImage = UploadedFile::fake()->image('lunch-special-plus.jpg');
 
         $this->actingAs($admin)->put(route('menu-items.update', $menuItem), [
-            'name' => 'Lunch Package Plus',
-            'category' => 'Packages',
+            'name' => 'Lunch Special Plus',
+            'category' => 'Smash Burger',
             'description' => 'Updated combo',
             'price' => 19.90,
             'sort_order' => 2,
             'is_active' => 1,
-            'is_package' => 1,
-            'package_details' => 'Soup + Steak + Dessert + Drink',
             'image' => $updatedImage,
         ])->assertRedirect(route('menu-items.index'));
 
         $menuItem->refresh();
-        $this->assertEquals('Lunch Package Plus', $menuItem->name);
+        $this->assertEquals('Lunch Special Plus', $menuItem->name);
         $this->assertEquals(19.90, (float) $menuItem->price);
         $this->assertNotSame($originalImagePath, $menuItem->image_path);
         Storage::disk('product-images')->assertMissing($originalImagePath);
@@ -84,6 +78,7 @@ class MenuItemManagementTest extends TestCase
 
     public function test_public_pages_and_ordering_share_the_same_active_products(): void
     {
+        config()->set('features.takeaway', true);
         $menuItem = MenuItem::create([
             'name' => 'Shared Product',
             'category' => 'Smash Burger',
@@ -91,7 +86,6 @@ class MenuItemManagementTest extends TestCase
             'price' => 11.50,
             'sort_order' => 3,
             'is_active' => true,
-            'is_package' => false,
         ]);
 
         $this->get('/')
@@ -129,3 +123,5 @@ class MenuItemManagementTest extends TestCase
         ])->assertForbidden();
     }
 }
+
+
