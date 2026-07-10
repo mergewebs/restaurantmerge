@@ -12,6 +12,7 @@ class MenuItem extends Model
     use HasFactory;
 
     public const CATEGORY_OPTIONS = [
+        'Starters',
         'Entrantes',
         'Acompañamientos',
         'Smash Burger',
@@ -120,6 +121,7 @@ class MenuItem extends Model
         return self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
     }
 }
+
 
 
 

@@ -161,6 +161,7 @@
             margin-bottom: 2rem;
             position: relative;
             z-index: 1;
+            margin-bottom: 1rem;
         }
 
         .menu-tabs {
@@ -501,8 +502,36 @@
         }
     </style>
 </head>
-<body>
-    @php
+<body>    @php
+        $normalizeMenuItemKey = function (?string $value): string {
+            return Illuminate\Support\Str::upper(Illuminate\Support\Str::ascii((string) $value));
+        };
+
+        $menuTranslations = collect(trans('public.menu_items', [], app()->getLocale()))
+            ->mapWithKeys(fn ($translation, $key) => [$normalizeMenuItemKey((string) $key) => $translation])
+            ->all();
+
+        $translateMenuItem = function (array $item) use ($menuTranslations, $normalizeMenuItemKey): array {
+            $normalizedName = $normalizeMenuItemKey((string) ($item['name'] ?? ''));
+            $translation = $menuTranslations[$normalizedName] ?? null;
+
+            if (! is_array($translation) && $normalizedName !== '') {
+                $closestKey = collect(array_keys($menuTranslations))
+                    ->first(fn (string $key) => levenshtein($key, $normalizedName) <= 1);
+
+                if (is_string($closestKey)) {
+                    $translation = $menuTranslations[$closestKey] ?? null;
+                }
+            }
+
+            if (is_array($translation)) {
+                $item['name'] = $translation['name'] ?? ($item['name'] ?? '');
+                $item['description'] = $translation['description'] ?? ($item['description'] ?? '');
+            }
+
+            return $item;
+        };
+
         $displayItems = collect($menuItemsFlat ?? [])->map(function (array $item) {
             $category = (string) ($item['category'] ?? '');
             $tabCategory = 'Starters';
@@ -530,15 +559,15 @@
                 'image_url' => $item['image_url'] ?? null,
                 'image_thumbnail_url' => $item['image_thumbnail_url'] ?? null,
             ];
-        })->values();
+        })->map($translateMenuItem)->values();
 
         $scaledMenuImages = [
             'ADOBO',
             'KIMCHI BURGER',
             'TARTUFATA',
             'CANGRE BURGER',
-            'GYOZAS FRITAS IBERICAS (5 uds.)',
-            'GYOZAS FRITAS IB�RICAS (5 uds.)',
+            "GYOZAS FRITAS IBÉRICAS (5 uds.)",
+            "GYOZAS FRITAS IBÉRICAS (5 uds.)",
             'EDAMAME AL VAPOR',
             'SWEET & SPICY WINGS',
             'EBI FRY (5 uds.)',
@@ -553,11 +582,11 @@
 
         $drinkBeerItems = $drinks->filter(function ($item) {
             return ($item['category'] ?? '') === 'Cervezas' || preg_match('/(cerveza|clara|pinta)/i', $item['name']);
-        })->values();
+        })->map($translateMenuItem)->values();
 
         $drinkWineItems = $drinks->filter(function ($item) {
             return preg_match('/(vino|sangria|vermut|tinto)/i', $item['name']);
-        })->values();
+        })->map($translateMenuItem)->values();
 
         $usedDrinkNames = $drinkCoffeeItems->pluck('name')
             ->merge($drinkCocktailItems->pluck('name'))
@@ -568,18 +597,18 @@
 
         $drinkSoftItems = $drinks->filter(function ($item) use ($usedDrinkNames) {
             return ! in_array($item['name'], $usedDrinkNames, true);
-        })->values();
+        })->map($translateMenuItem)->values();
     @endphp    <div class="menu-page-shell">
-    <section id="menu-section" class="menu-section" x-data="{ activeTab: 'Smash Burgers' }">
+    <section id="menu-section" class="menu-section" x-data="{ activeTab: 'Starters' }">
         <div class="container">
             <div class="section-header">
                 <h1 class="section-title">{{ __('public.homepage_menu_title') }}</h1>
             </div>
             <div class="menu-tabs-container">
                 <div class="menu-tabs">
+                    <button class="menu-tab" :class="activeTab === 'Starters' ? 'active' : ''" @click="activeTab = 'Starters'">{{ __('public.menu_tab_starters') }}</button>
                     <button class="menu-tab" :class="activeTab === 'Smash Burgers' ? 'active' : ''" @click="activeTab = 'Smash Burgers'">SMASH BURGER</button>
                     <button class="menu-tab" :class="activeTab === 'BOL' ? 'active' : ''" @click="activeTab = 'BOL'">BOL (Bowls)</button>
-                    <button class="menu-tab" :class="activeTab === 'Starters' ? 'active' : ''" @click="activeTab = 'Starters'">Entrantes</button>
                     <button class="menu-tab" :class="activeTab === 'Drinks' ? 'active' : ''" @click="activeTab = 'Drinks'">{{ __('public.menu_tab_drinks') }}</button>
                     <button class="menu-tab" :class="activeTab === 'Desserts' ? 'active' : ''" @click="activeTab = 'Desserts'">{{ __('public.menu_tab_desserts') }}</button>
                 </div>
@@ -591,6 +620,11 @@
                     <p style="line-height: 1.5;">No active menu items are available right now.</p>
                 </div>
             @else
+
+                <div class="allergy-disclaimer" x-show="activeTab === 'Smash Burgers'" x-cloak>
+                    <p class="allergy-disclaimer-text">Nuestras hamburguesas cuentan con doble patty</p>
+                </div>
+
                 <div class="menu-grid">
                     @foreach($displayItems as $item)
                         @php
@@ -711,7 +745,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="sides-showcase" x-show="activeTab === 'Starters' && {{ $sideItems->isNotEmpty() ? 'true' : 'false' }}" x-cloak>
                     <div class="sides-showcase-title sides-showcase-title-image">
                         <img src="{{ asset('images/fritas.png') }}" alt="Acompanamientos">
@@ -731,13 +764,6 @@
                     </div>
                 </div>
 
-                <div class="extra-notice-card" x-show="activeTab === 'Smash Burgers'" x-cloak>
-                    <h4 style="font-family: var(--font-headline); font-size: 1.35rem; color: var(--color-dark); text-transform: uppercase; margin-bottom: 0.25rem; line-height: 1.2;">
-                        Pan vegetariano y Pan Sin Gluten disponible
-                    </h4>
-                    <p style="font-size: 0.95rem; color: rgba(18, 18, 18, 0.78); font-weight: bold;">+2&euro; de suplemento</p>
-                </div>
-
                 <div class="allergy-disclaimer">
                     <p class="allergy-disclaimer-text">En caso de alergias, consulte con nuestro personal.</p>
                 </div>
@@ -747,5 +773,15 @@
     </div>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
 
 

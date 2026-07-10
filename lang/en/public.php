@@ -8,7 +8,7 @@ return [
     'site_title_takeaway' => ':restaurant | Takeaway order',
     'iframe_title' => 'Reservation - KOYA BCN',
     'guest_title' => 'KOYA BCN',
-    'copyright' => '� 2026 Mergewebs Restaurant',
+    'copyright' => 'ï¿½ 2026 Mergewebs Restaurant',
 
     'nav_home' => 'Home',
     'nav_menu' => 'Menu',
@@ -35,11 +35,12 @@ return [
     'homepage_email_label' => 'Email',
     'homepage_hours_title' => 'Opening hours',
     'homepage_footer_description' => 'Authentic smash burgers with crispy edges and bold rice bowls loaded with premium ingredients. Street food with attitude.',
-    'homepage_footer_rights' => '� 2026 KOYA BCN. All rights reserved.',
+    'homepage_footer_rights' => 'ï¿½ 2026 KOYA BCN. All rights reserved.',
     'homepage_footer_tagline' => 'Designed with attitude',
 
     'menu_tab_burgers' => 'Burgers',
     'menu_tab_bol' => 'BOL (Bowls)',
+    'menu_tab_starters' => 'Starters',
     'menu_tab_sides' => 'Sides & Starters',
     'menu_tab_drinks' => 'Drinks',
     'menu_tab_desserts' => 'Desserts',
@@ -137,9 +138,24 @@ return [
         'Spicy Korean Rice Bowl' => ['name' => 'Spicy Korean Rice Bowl', 'description' => 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame.'],
         'Mediterranean Rice Bowl' => ['name' => 'Mediterranean Rice Bowl', 'description' => 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.'],
         'Teriyaki Tofu Bowl' => ['name' => 'Teriyaki Tofu Bowl', 'description' => 'Crispy teriyaki tofu, jasmine rice, broccoli, avocado, ginger, and sesame glaze.'],
-        'KOYA SALAD' => ['name' => 'KOYA SALAD', 'description' => 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.'],
+        'KOYA SALAD' => ['name' => 'KOYA SALAD', 'description' => 'Lettuce, wakame, sonomono, purple cabbage, cherry tomato, radishes, crispy onions, and house vinaigrette'],
+        "GYOZAS FRITAS IBÉRICAS (5 UDS.)" => ['name' => "GYOZAS FRITAS IBÉRICAS (5 uds.)", 'description' => 'Marinated pork shoulder and pork jowl with soy sauce, shitake mushrooms, Japanese onion, sesame oil and hoisin mayonnaise sauce'],
+        'EDAMAME AL VAPOR' => ['name' => 'EDAMAME AL VAPOR', 'description' => 'Maldon salt, sesame and shichimi oil'],
+        'SWEET & SPICY WINGS' => ['name' => 'SWEET & SPICY WINGS', 'description' => 'Kimchi-marinated fried chicken wings with teriyaki, sweet and sour sauce and Japanese onion'],
+        'EBI FRY (5 UDS.)' => ['name' => 'EBI FRY (5 uds.)', 'description' => 'Shrimp tempura and wasabi honey sauce'],
+        'ROLLITOS (5 UDS.)' => ['name' => 'ROLLITOS (5 uds.)', 'description' => 'Beef and vegetables roll with tartufata'],
+        'KROQUETAS (5 UDS.)' => ['name' => 'KROQUETAS (5 uds.)', 'description' => 'Veal croquettes with oxtail'],
+        'TACOS DE CARILLADA DE TERNERA' => ['name' => 'BEEF CHEEK TACOS', 'description' => 'Slow-cooked beef, red wine and mirepoix with white rice'],
+        'BIL-BAO' => ['name' => 'BIL-BAO', 'description' => '2 mini bao bread fills with cochinita pibil'],
+        'KROQUETAS DE BERENJENA CON TRUFA (POR UNIDAD)' => ['name' => 'KROQUETAS eggplant with truffle (PER PIECE)', 'description' => 'Japanese panko-breaded roasted eggplant with truffle, red miso, katsuobushi, and puree'],
+        'POP-BILLAS' => ['name' => 'POP-billas', 'description' => 'Boiled octopus salted with kimchi sauce, potatoes with yellow chili and japanese chimichurri'],
+        'PIPARRA ROLL (POR UNIDAD)' => ['name' => 'Piparra roll (PER PIECE)', 'description' => 'Green chili pepper stuffed with beef and sautéed with grated cheese and mushrooms in a wok. Finished with honey-infused grated cheese, house-made smoky sauce, and crispy sweet potato threads.'],
+        'BONIATO FRITO' => ['name' => 'BONIATO FRITO', 'description' => 'Salt de katsuobushi, oregano and katsubishi'],
+        'PATATAS FRITAS' => ['name' => 'PATATAS FRITAS', 'description' => ''],
+        'MEZCLUM FRIES' => ['name' => 'MEZCLUM FRIES', 'description' => 'Fries and sweet potato'],
+        'BRAVAS' => ['name' => 'BRAVAS', 'description' => 'With triple homemade sauce'],
         'KATSUDON' => ['name' => 'KATSUDON', 'description' => 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.'],
-        'Loaded Nachos' => ['name' => 'Loaded Nachos', 'description' => 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalape�os.'],
+        'Loaded Nachos' => ['name' => 'Loaded Nachos', 'description' => 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeï¿½os.'],
         'Crispy Chicken Bites' => ['name' => 'Crispy Chicken Bites', 'description' => 'Tender buttermilk chicken bites served with honey mustard sauce.'],
         'House Fries' => ['name' => 'House Fries', 'description' => 'Golden crispy fries seasoned with our house spice blend.'],
         'Sweet Potato Fries' => ['name' => 'Sweet Potato Fries', 'description' => 'Sweet potato fries served with chipotle garlic mayo.'],
@@ -170,6 +186,13 @@ return [
         'Refreshing' => 'Refreshing',
     ],
 ];
+
+
+
+
+
+
+
 
 
 

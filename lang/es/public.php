@@ -40,6 +40,7 @@ return [
 
     'menu_tab_burgers' => 'Burgers',
     'menu_tab_bol' => 'BOL (Bowls)',
+    'menu_tab_starters' => 'Entrantes',
     'menu_tab_sides' => 'Sides & Starters',
     'menu_tab_drinks' => 'Bebidas',
     'menu_tab_desserts' => 'Postres',
@@ -170,6 +171,10 @@ return [
         'Refreshing' => 'Refrescante',
     ],
 ];
+
+
+
+
 
 
 

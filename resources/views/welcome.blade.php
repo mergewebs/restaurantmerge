@@ -717,6 +717,7 @@
             margin-bottom: 4rem;
             position: relative;
             z-index: 10;
+            margin-bottom: 3rem;
         }
 
         .menu-tabs {
@@ -2266,7 +2267,7 @@
             @endif
         </div>
 
-        <div class="mobile-lang-container-wrap" style="margin-top: 0.75rem; margin-bottom: 0.75rem; display: flex; justify-content: center; width: 100%;">
+        <div class="mobile-lang-container-wrap" style="margin-top: 0.75rem; margin-bottom: 3rem; display: flex; justify-content: center; width: 100%;">
             <x-language-switcher theme="dark" />
         </div>
 
@@ -2378,7 +2379,7 @@
 
 
     <!-- Menu Section -->
-    <section id="menu-section" class="menu-section" x-data="{ activeTab: 'Smash Burgers' }">
+    <section id="menu-section" class="menu-section" x-data="{ activeTab: 'Starters' }">
         <div class="container">
             <div class="section-header reveal">
                 <h2 class="section-title">{{ __('public.homepage_menu_title') }}</h2>
@@ -2387,9 +2388,9 @@
             <!-- Category Tabs -->
             <div class="menu-tabs-container reveal">
                 <div class="menu-tabs">
+                    <button class="menu-tab" :class="activeTab === 'Starters' ? 'active' : ''" @click="activeTab = 'Starters'">{{ __('public.menu_tab_starters') }}</button>
                     <button class="menu-tab" :class="activeTab === 'Smash Burgers' ? 'active' : ''" @click="activeTab = 'Smash Burgers'">SMASH BURGER</button>
                     <button class="menu-tab" :class="activeTab === 'BOL' ? 'active' : ''" @click="activeTab = 'BOL'">BOL (Bowls)</button>
-                    <button class="menu-tab" :class="activeTab === 'Starters' ? 'active' : ''" @click="activeTab = 'Starters'">Entrantes</button>
                     <button class="menu-tab" :class="activeTab === 'Drinks' ? 'active' : ''" @click="activeTab = 'Drinks'">{{ __('public.menu_tab_drinks') }}</button>
                     <button class="menu-tab" :class="activeTab === 'Desserts' ? 'active' : ''" @click="activeTab = 'Desserts'">{{ __('public.menu_tab_desserts') }}</button>
                 </div>
@@ -2414,6 +2415,35 @@
                 'KATSUDON' => 'katsudon.png',
                 'SOBOKU' => 'soboku.png',
             ];
+
+            $normalizeMenuItemKey = function (?string $value): string {
+                return Illuminate\Support\Str::upper(Illuminate\Support\Str::ascii((string) $value));
+            };
+
+            $menuTranslations = collect(trans('public.menu_items', [], app()->getLocale()))
+                ->mapWithKeys(fn ($translation, $key) => [$normalizeMenuItemKey((string) $key) => $translation])
+                ->all();
+
+            $translateMenuItem = function (array $item) use ($menuTranslations, $normalizeMenuItemKey): array {
+                $normalizedName = $normalizeMenuItemKey((string) ($item['name'] ?? ''));
+                $translation = $menuTranslations[$normalizedName] ?? null;
+
+                if (! is_array($translation) && $normalizedName !== '') {
+                    $closestKey = collect(array_keys($menuTranslations))
+                        ->first(fn (string $key) => levenshtein($key, $normalizedName) <= 1);
+
+                    if (is_string($closestKey)) {
+                        $translation = $menuTranslations[$closestKey] ?? null;
+                    }
+                }
+
+                if (is_array($translation)) {
+                    $item['name'] = $translation['name'] ?? ($item['name'] ?? '');
+                    $item['description'] = $translation['description'] ?? ($item['description'] ?? '');
+                }
+
+                return $item;
+            };
 
             $displayItems = [];
             if ($menuItems && $menuItems->count() > 0) {
@@ -2459,33 +2489,33 @@
             } else {
                 // Fallbacks if DB is completely empty
                 $displayItems = [
-                    ['name' => 'KOYA SMASH SPECIAL', 'tab_category' => 'Smash Burgers', 'price' => 13.99, 'description' => 'Pan cronut, rabo de toro, ternera, queso havarti, lechuga, cebolla crujiente y salsa casera', 'badge' => null],
-                    ['name' => 'WAGYU', 'tab_category' => 'Smash Burgers', 'price' => 12.95, 'description' => 'Pan brioche, Wagyu, pepino, queso cheddar y salsa de la casa', 'badge' => null],
-                    ['name' => 'KIMCHI BURGER', 'tab_category' => 'Smash Burgers', 'price' => 10.00, 'description' => 'Pollo frito, kimchi casero, salsa hoisin, lechuga y cebolla japonesa', 'badge' => null],
-                    ['name' => 'HAWAIIANA', 'tab_category' => 'Smash Burgers', 'price' => 10.99, 'description' => "Ternera, lechuga, pi\u{00F1}a, queso cheddar, bacon, salsa barbacoa y cebolla crujiente", 'badge' => null],
-                    ['name' => 'TARTUFATA', 'tab_category' => 'Smash Burgers', 'price' => 12.50, 'description' => "Ternera, champi\u{00F1}ones salteados, queso havarti con salsa trufa y perejil", 'badge' => 'Truffle'],
-                    ['name' => 'VEGAN', 'tab_category' => 'Smash Burgers', 'price' => 12.00, 'description' => 'Pan vegano o sin gluten, carne vegana, lechuga, cebolla encurtida, pepino encurtido y salsa miso', 'badge' => null],
+                    ['name' => 'KOYA SMASH SPECIAL', 'tab_category' => 'Smash Burgers', 'price' => 14.50, 'description' => 'Pan cronut, rabo de toro, ternera, queso havarti, lechuga, cebolla crujiente y salsa casera', 'badge' => null],
+                    ['name' => 'WAGYU', 'tab_category' => 'Smash Burgers', 'price' => 12.95, 'description' => 'Pan brioche, Wagyu, pepino, queso havarti y salsa de la casa', 'badge' => null],
+                    ['name' => 'KIMCHI BURGER', 'tab_category' => 'Smash Burgers', 'price' => 10.40, 'description' => 'Pollo frito, kimchi casero, salsa hoisin y cebolla japonesa', 'badge' => null],
+                    ['name' => 'HAWAIIANA', 'tab_category' => 'Smash Burgers', 'price' => 11.20, 'description' => "Ternera, lechuga, pi\u{00F1}a, queso cheddar, bacon, salsa barbacoa y cebolla crujiente", 'badge' => null],
+                    ['name' => 'TARTUFATA', 'tab_category' => 'Smash Burgers', 'price' => 12.50, 'description' => "Ternera, champi\u{00F1}ones salteados, cebolla pochada, queso havarti con salsa trufa y perejil", 'badge' => 'Truffle'],
+                    ['name' => 'VEGAN', 'tab_category' => 'Smash Burgers', 'price' => 13.00, 'description' => 'carne vegana, lechuga, cebolla encurtida y pepino encurtido y salsa miso', 'badge' => null],
                     ['name' => 'ZORSADA', 'tab_category' => 'Smash Burgers', 'price' => 11.95, 'description' => 'Pan brioche, ternera, zorza y sobrasada de Lugo con sofrito de cebolla, queso cheddar y huevo frito', 'badge' => null],
-                    ['name' => 'RED ONION', 'tab_category' => 'Smash Burgers', 'price' => 10.25, 'description' => 'Ternera, cebolla caramelizada, queso cheddar, col morada y cebolla encurtida', 'badge' => 'Smoky'],
-                    ['name' => 'KRISPY GARLIC CHICKEN', 'tab_category' => 'Smash Burgers', 'price' => 9.99, 'description' => 'Pollo rebozado, lechuga, queso cheddar, cebolla crujiente y salsa agridulce', 'badge' => null],
-                    ['name' => 'CANGRE BURGER', 'tab_category' => 'Smash Burgers', 'price' => 11.99, 'description' => "Pan brioche, cangrejo c\u{00E1}scara blanda rebozado de panko japon\u{00E9}s con encurtida de pepino y cebolla roja con salsa ahumada de la casa", 'badge' => null],
-                    ['name' => 'CHIQUI BURGER', 'tab_category' => 'Smash Burgers', 'price' => 7.00, 'description' => 'Pan brioche, una patty, queso cheddar con salsa de la casa con patatas incluidas', 'badge' => null],
-                    ['name' => 'SOBOKU', 'tab_category' => 'Smash Burgers', 'price' => 13.50, 'description' => "Osobuco de ternera a baja temperatura, r\u{00FA}cula, berenjena, setas de shimeji y queso havarti con salsa de la casa", 'badge' => 'Simple'],
+                    ['name' => 'RED ONION', 'tab_category' => 'Smash Burgers', 'price' => 10.75, 'description' => 'Ternera, cebolla caramelizada, queso cheddar, col morada y cebolla encurtida', 'badge' => 'Smoky'],
+                    ['name' => 'KRISPY GARLIC CHICKEN', 'tab_category' => 'Smash Burgers', 'price' => 10.20, 'description' => 'Pollo rebozado, lechuga, queso cheddar, cebolla crujiente y salsa agridulce', 'badge' => null],
+                    ['name' => 'CANGRE BURGER', 'tab_category' => 'Smash Burgers', 'price' => 11.99, 'description' => "Pan brioche, cangrejo c\u{00E1}scara blanda rebosado de panko japon\u{00E9}s con encurtida de pepino y cebolla roja con salsa ahumada de la casa", 'badge' => null],
+                    ['name' => 'CHIQUI BURGER', 'tab_category' => 'Smash Burgers', 'price' => 7.00, 'description' => 'Pan brioche, una patty, queso havarti con salsa de la casa con patatas incluidas', 'badge' => null],
+                    ['name' => 'SOBOKU', 'tab_category' => 'Smash Burgers', 'price' => 13.99, 'description' => "Osobuco de ternera a baja temperatura, r\u{00FA}cula, berenjena, setas de shimeji y queso havarti con salsa de la casa", 'badge' => 'Simple'],
                     ['name' => 'SALMON SUPREME', 'tab_category' => 'BOL', 'price' => 13.00, 'description' => "Salm\u{00F3}n al horno, arroz, salsa teriyaki de pescado, pepino y tomate concasse", 'badge' => null],
                     ['name' => 'ADOBO', 'tab_category' => 'BOL', 'price' => 10.00, 'description' => "Trocitos de panceta de cerdo marinado de soja con cebolla pochada y cocinado al wok", 'badge' => null],
                     ['name' => 'KATSUDON', 'tab_category' => 'BOL', 'price' => 11.25, 'description' => "Lomo empanado, s\u{00E9}samo, salsa tonkatsu, cebolla crujiente y rodajas de rabanitos con huevo frito", 'badge' => 'Crispy'],
-                    ['name' => 'KOYA SALAD', 'tab_category' => 'Starters', 'price' => 6.50, 'description' => 'lechuga, wakame, sonomono, col valencia, cebolla crujiente y vinagreta de la casa', 'badge' => 'Fresh'],
-                    ['name' => 'GYOZAS FRITAS IBÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¾ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¾ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Â¦Ãƒâ€šÃ‚Â¡ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â°RICAS (5 uds.)', 'tab_category' => 'Starters', 'price' => 9.75, 'description' => "Ib\u{00E9}rico, shiitake, cebolla Japonesa, aceite de s\u{00E9}samo y salsa de mayonesa hoisin", 'badge' => null],
-                    ['name' => 'EDAMAME AL VAPOR', 'tab_category' => 'Starters', 'price' => 4.50, 'description' => "Sal maldon, aceite de s\u{00E9}samo y shichimi", 'badge' => null],
-                    ['name' => 'SWEET & SPICY WINGS', 'tab_category' => 'Starters', 'price' => 7.75, 'description' => 'Alitas de pollo, gomashio, cebolla japonesa y salsa teriyaki', 'badge' => null],
-                    ['name' => 'EBI FRY (5 uds.)', 'tab_category' => 'Starters', 'price' => 7.75, 'description' => 'Tempura de gambas y salsa de miel wasabi', 'badge' => null],
-                    ['name' => 'ROLLITOS (5 uds.)', 'tab_category' => 'Starters', 'price' => 8.99, 'description' => 'Rollito de ternera y verdura con tartufata', 'badge' => null],
-                    ['name' => 'KROQUETAS (5 uds.)', 'tab_category' => 'Starters', 'price' => 10.00, 'description' => 'Croquetas de ternera con rabo de toro', 'badge' => null],
+                                                            ['name' => 'KOYA SALAD', 'tab_category' => 'Starters', 'price' => 7.50, 'description' => 'Lechuga, wakame, sonomono, col morada, tomate cherry, rabanitos, cebolla crujiente y vinagreta de la casa', 'badge' => 'Fresh'],
+                    ['name' => "GYOZAS FRITAS IB\u{00C9}RICAS (5 UDS.)", 'tab_category' => 'Starters', 'price' => 10.25, 'description' => 'Picada de secreto y papada marinada de soja con shiitake, cebolla japonesa, aceite de s�samo y salsa de mayonesa hoisin', 'badge' => null],
+                    ['name' => 'EDAMAME AL VAPOR', 'tab_category' => 'Starters', 'price' => 4.75, 'description' => 'Sal maldon, aceite de s�samo y shichimi', 'badge' => null],
+                    ['name' => 'SWEET & SPICY WINGS', 'tab_category' => 'Starters', 'price' => 7.95, 'description' => 'Alitas de pollo frito marinado de kimchi con salsa teriyaki, agridulce y cebolla japonesa', 'badge' => null],
+                    ['name' => 'EBI FRY (5 UDS.)', 'tab_category' => 'Starters', 'price' => 7.75, 'description' => 'Tempura de gambas y salsa de miel wasabi', 'badge' => null],
+                    ['name' => 'ROLLITOS (5 UDS.)', 'tab_category' => 'Starters', 'price' => 8.99, 'description' => 'Rollito de ternera y verdura con tartufata', 'badge' => null],
+                    ['name' => 'KROQUETAS (5 UDS.)', 'tab_category' => 'Starters', 'price' => 10.00, 'description' => 'Croquetas de ternera con rabo de toro', 'badge' => null],
                     ['name' => 'TACOS DE CARILLADA DE TERNERA', 'tab_category' => 'Starters', 'price' => 11.99, 'description' => 'Galtas de ternera, vino tinto y bresa al fuego lento con arroz blanco', 'badge' => null],
                     ['name' => 'BIL-BAO', 'tab_category' => 'Starters', 'price' => 9.99, 'description' => '2 mini pan bao relleno de cochinita pibil', 'badge' => null],
-                    ['name' => 'KROQUETAS de berenjena con trufa (POR UNIDAD)', 'tab_category' => 'Starters', 'price' => 2.50, 'description' => 'Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pure', 'badge' => null],
-                    ['name' => 'POP-billas', 'tab_category' => 'Starters', 'price' => 16.50, 'description' => "Pulpo hervido salteado de salsa kimchi, patatas con aji amarillo y chimichurri japon\u{00E9}s", 'badge' => null],
-                    ['name' => 'BONIATO FRITO', 'tab_category' => 'Fries', 'price' => 4.20, 'description' => 'Sal, perejil, oregano y katsubishi', 'badge' => null],
+                    ['name' => 'KROQUETAS DE BERENJENA CON TRUFA (POR UNIDAD)', 'tab_category' => 'Starters', 'price' => 2.50, 'description' => "Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pur\u{00E9}", 'badge' => null],
+                    ['name' => 'POP-BILLAS', 'tab_category' => 'Starters', 'price' => 16.50, 'description' => "Pulpo hervido marinado de salsa kimchi con pur\u{00E9} de patatas, aceite oliva y piment\u{00F3}n mix", 'badge' => null],
+                    ['name' => 'BONIATO FRITO', 'tab_category' => 'Fries', 'price' => 4.30, 'description' => 'Sal, perejil, oregano y katsubishi', 'badge' => null],
                     ['name' => 'PATATAS FRITAS', 'tab_category' => 'Fries', 'price' => 3.50, 'description' => '', 'badge' => null],
                     ['name' => 'MEZCLUM FRIES', 'tab_category' => 'Fries', 'price' => 4.50, 'description' => 'Patatas y boniato', 'badge' => null],
                     ['name' => 'BRAVAS', 'tab_category' => 'Fries', 'price' => 4.00, 'description' => 'Con triple salsa de la casa', 'badge' => null],
@@ -2533,8 +2563,21 @@
                     ['name' => 'KOULANT', 'tab_category' => 'Desserts', 'price' => 5.25, 'description' => 'Coulant de chocolate con vainilla', 'badge' => null],
                 ];
             }
+
+            $displayItems = collect($displayItems)
+                ->map($translateMenuItem)
+                ->values()
+                ->all();
+
             $firstCocktailName = collect($displayItems)->firstWhere('category', 'Cocteles')['name'] ?? null;
             @endphp
+
+            <div class="allergy-disclaimer reveal" x-show="activeTab === 'Smash Burgers'"
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 translate-y-4"
+                 x-transition:enter-end="opacity-100 translate-y-0">
+                <p class="allergy-disclaimer-text">Nuestras hamburguesas cuentan con doble patty</p>
+            </div>
 
             <div class="menu-grid">
                 @foreach($displayItems as $item)
@@ -2549,7 +2592,7 @@
                         'KIMCHI BURGER',
                         'TARTUFATA',
                         'CANGRE BURGER',
-                        'GYOZAS FRITAS IB�RICAS (5 uds.)',
+                        "GYOZAS FRITAS IBÉRICAS (5 uds.)",
                         'EDAMAME AL VAPOR',
                         'SWEET & SPICY WINGS',
                         'EBI FRY (5 uds.)',
@@ -2585,7 +2628,6 @@
 
             @php
                 $sideItems = collect($displayItems)->where('tab_category', 'Fries')->unique('name')->values();
-                
                 $drinks = collect($displayItems)->where('tab_category', 'Drinks');
                 $drinkCoffeeItems = $drinks->where('category', 'Cafes')->values();
                 $drinkCocktailItems = $drinks->where('category', 'Cocteles')->values();
@@ -2711,7 +2753,6 @@
                 </div>
 
             </div>
-
             <div class="sides-showcase reveal" x-show="activeTab === 'Starters'"
                  x-transition:enter="transition ease-out duration-300 transform"
                  x-transition:enter-start="opacity-0 translate-y-4 scale-95"
@@ -2732,18 +2773,6 @@
                         </div>
                     @endforeach
                 </div>
-            </div>
-
-            <div class="reveal extra-notice-card" x-show="activeTab === 'Smash Burgers'"
-                 x-transition:enter="transition ease-out duration-300 transform"
-                 x-transition:enter-start="opacity-0 translate-y-4"
-                 x-transition:enter-end="opacity-100 translate-y-0">
-                <h4 style="font-family: var(--font-headline); font-size: 1.35rem; color: var(--color-dark); text-transform: uppercase; margin-bottom: 0.25rem; line-height: 1.2;">
-                    Pan vegetariano y Pan Sin Gluten disponible
-                </h4>
-                <p style="font-family: var(--font-body); font-size: 0.95rem; color: rgba(18, 18, 18, 0.75); margin: 0; font-weight: bold;">
-                    +2&euro; de suplemento
-                </p>
             </div>
 
             <!-- Allergy Disclaimer -->
@@ -2984,6 +3013,17 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

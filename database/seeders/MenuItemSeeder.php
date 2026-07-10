@@ -4,42 +4,43 @@ namespace Database\Seeders;
 
 use App\Models\MenuItem;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class MenuItemSeeder extends Seeder
 {
     public function run(): void
     {
         $items = [
-            ['Entrantes', 1, 'KOYA SALAD', 6.50, 'lechuga, wakame, sonomono, col valencia, cebolla crujiente y vinagreta de la casa'],
-            ['Entrantes', 2, "GYOZAS FRITAS IB\u{00C9}RICAS (5 uds.)", 9.75, "Ib\u{00E9}rico, shiitake, cebolla Japonesa, aceite de s\u{00E9}samo y salsa de mayonesa hoisin"],
-            ['Entrantes', 3, 'EDAMAME AL VAPOR', 4.50, "Sal maldon, aceite de s\u{00E9}samo y shichimi"],
-            ['Entrantes', 4, 'SWEET & SPICY WINGS', 7.75, 'Alitas de pollo, gomashio, cebolla japonesa y salsa teriyaki'],
-            ['Entrantes', 5, 'EBI FRY (5 uds.)', 7.75, 'Tempura de gambas y salsa de miel wasabi'],
-            ['Entrantes', 6, 'ROLLITOS (5 uds.)', 8.99, 'Rollito de ternera y verdura con tartufata'],
-            ['Entrantes', 7, 'KROQUETAS (5 uds.)', 10.00, 'Croquetas de ternera con rabo de toro'],
+            ['Entrantes', 1, 'KOYA SALAD', 7.50, 'Lechuga, wakame, sonomono, col morada, tomate cherry, rabanitos, cebolla crujiente y vinagreta de la casa'],
+            ['Entrantes', 2, "GYOZAS FRITAS IB\u{00C9}RICAS (5 UDS.)", 10.25, "Picada de secreto y papada marinada de soja con shiitake, cebolla japonesa, aceite de s\u{00E9}samo y salsa de mayonesa hoisin"],
+            ['Entrantes', 3, 'EDAMAME AL VAPOR', 4.75, "Sal maldon, aceite de s\u{00E9}samo y shichimi"],
+            ['Entrantes', 4, 'SWEET & SPICY WINGS', 7.95, 'Alitas de pollo frito marinado de kimchi con salsa teriyaki, agridulce y cebolla japonesa'],
+            ['Entrantes', 5, 'EBI FRY (5 UDS.)', 7.75, 'Tempura de gambas y salsa de miel wasabi'],
+            ['Entrantes', 6, 'ROLLITOS (5 UDS.)', 8.99, 'Rollito de ternera y verdura con tartufata'],
+            ['Entrantes', 7, 'KROQUETAS (5 UDS.)', 10.00, 'Croquetas de ternera con rabo de toro'],
             ['Entrantes', 8, 'TACOS DE CARILLADA DE TERNERA', 11.99, 'Galtas de ternera, vino tinto y bresa al fuego lento con arroz blanco'],
             ['Entrantes', 9, 'BIL-BAO', 9.99, '2 mini pan bao relleno de cochinita pibil'],
-            ['Entrantes', 10, 'KROQUETAS de berenjena con trufa (POR UNIDAD)', 2.50, 'Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pure'],
-            ['Entrantes', 11, 'POP-billas', 16.50, "Pulpo hervido salteado de salsa kimchi, patatas con aji amarillo y chimichurri japon\u{00E9}s"],
-            ['Entrantes', 12, 'PIPARRA ROLL', 0.00, null],
+            ['Entrantes', 10, 'KROQUETAS DE BERENJENA CON TRUFA (POR UNIDAD)', 2.50, "Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pur\u{00E9}"],
+            ['Entrantes', 11, 'POP-BILLAS', 16.50, "Pulpo hervido marinado de salsa kimchi con pur\u{00E9} de patatas, aceite oliva y piment\u{00F3}n mix"],
+            ['Entrantes', 12, 'PIPARRA ROLL (POR UNIDAD)', 2.99, "Chilli verde relleno de ternera y sofrito con queso rallado y champi\u{00F1}ones al wok. Acabado con queso rallado con miel, salsa ahumada de la casa e hilos crujientes de boniato"],
 
-            ["Acompa\u{00F1}amientos", 1, 'BONIATO FRITO', 4.20, 'Sal, perejil, oregano y katsubishi'],
+            ["Acompa\u{00F1}amientos", 1, 'BONIATO FRITO', 4.30, "Sal de katsuobushi con perejil y or\u{00E9}gano"],
             ["Acompa\u{00F1}amientos", 2, 'PATATAS FRITAS', 3.50, null],
             ["Acompa\u{00F1}amientos", 3, 'MEZCLUM FRIES', 4.50, 'Patatas y boniato'],
             ["Acompa\u{00F1}amientos", 4, 'BRAVAS', 4.00, 'Con triple salsa de la casa'],
 
-            ['Smash Burger', 1, 'KOYA SMASH SPECIAL', 13.99, 'Pan cronut, rabo de toro, ternera, queso havarti, lechuga, cebolla crujiente y salsa casera'],
-            ['Smash Burger', 2, 'WAGYU', 12.95, 'Pan brioche, Wagyu, pepino, queso cheddar y salsa de la casa'],
-            ['Smash Burger', 3, 'KIMCHI BURGER', 10.00, 'Pollo frito, kimchi casero, salsa hoisin, lechuga y cebolla Japonesa'],
-            ['Smash Burger', 4, 'HAWAIIANA', 10.99, "Ternera, lechuga, pi\u{00F1}a, queso cheddar, bacon, salsa barbacoa y cebolla crujiente"],
-            ['Smash Burger', 5, 'TARTUFATA', 12.50, "Ternera, champi\u{00F1}ones salteados, queso havarti con salsa trufa y perejil"],
-            ['Smash Burger', 6, 'VEGAN', 12.00, 'Pan vegano o sin gluten, carne vegana, lechuga, cebolla encurtida, pepino encurtido y salsa miso'],
+            ['Smash Burger', 1, 'KOYA SMASH SPECIAL', 14.50, 'Pan cronut, rabo de toro, ternera, queso havarti, lechuga, cebolla crujiente y salsa casera'],
+            ['Smash Burger', 2, 'WAGYU', 12.95, 'Pan brioche, Wagyu, pepino, queso havarti y salsa de la casa'],
+            ['Smash Burger', 3, 'KIMCHI BURGER', 10.40, 'Pollo frito, kimchi casero, salsa hoisin y cebolla Japonesa'],
+            ['Smash Burger', 4, 'HAWAIIANA', 11.20, "Ternera, lechuga, pi\u{00F1}a, queso cheddar, bacon, salsa barbacoa y cebolla crujiente"],
+            ['Smash Burger', 5, 'TARTUFATA', 12.50, "Ternera, champi\u{00F1}ones salteados, cebolla pochada, queso havarti con salsa trufa y perejil"],
+            ['Smash Burger', 6, 'VEGAN', 13.00, 'carne vegana, lechuga, cebolla encurtida y pepino encurtido y salsa miso'],
             ['Smash Burger', 7, 'ZORSADA', 11.95, 'Pan brioche, ternera, zorza y sobrasada de Lugo con sofrito de cebolla, queso cheddar y huevo frito'],
-            ['Smash Burger', 8, 'RED ONION', 10.25, 'Ternera, cebolla caramelizada, queso cheddar, col morada y cebolla encurtida'],
-            ['Smash Burger', 9, 'KRISPY GARLIC CHICKEN', 9.99, 'Pollo rebozado, lechuga, queso cheddar, cebolla crujiente y salsa agridulce'],
-            ['Smash Burger', 10, 'CANGRE BURGER', 11.99, "Pan brioche, cangrejo c\u{00E1}scara blanda rebozado de panko japon\u{00E9}s con encurtida de pepino y cebolla roja con salsa ahumada de la casa"],
-            ['Smash Burger', 11, 'CHIQUI BURGER', 7.00, 'Pan brioche, una patty, queso cheddar con salsa de la casa con patatas incluidas'],
-            ['Smash Burger', 12, 'SOBOKU', 13.50, "Osobuco de ternera a baja temperatura, r\u{00FA}cula, berenjena, setas de shimeji y queso havarti con salsa de la casa"],
+            ['Smash Burger', 8, 'RED ONION', 10.75, 'Ternera, cebolla caramelizada, queso cheddar, col morada y cebolla encurtida'],
+            ['Smash Burger', 9, 'KRISPY GARLIC CHICKEN', 10.20, 'Pollo rebozado, lechuga, queso cheddar, cebolla crujiente y salsa agridulce'],
+            ['Smash Burger', 10, 'CANGRE BURGER', 11.99, "Pan brioche, cangrejo c\u{00E1}scara blanda rebosado de panko japon\u{00E9}s con encurtida de pepino y cebolla roja con salsa ahumada de la casa"],
+            ['Smash Burger', 11, 'CHIQUI BURGER', 7.00, 'Pan brioche, una patty, queso havarti con salsa de la casa con patatas incluidas'],
+            ['Smash Burger', 12, 'SOBOKU', 13.99, "Osobuco de ternera a baja temperatura, r\u{00FA}cula, berenjena, setas de shimeji y queso havarti con salsa de la casa"],
 
             ['Bol de Arroz', 1, 'SALMON SUPREME', 13.00, "Salm\u{00F3}n al horno, arroz, salsa teriyaki de pescado, pepino y tomate concasse"],
             ['Bol de Arroz', 2, 'ADOBO', 10.00, 'Trocitos de panceta de cerdo marinado de soja con cebolla pochada y cocinado al wok'],
@@ -94,29 +95,67 @@ class MenuItemSeeder extends Seeder
         ];
 
         foreach ($items as [$category, $sortOrder, $name, $price, $description]) {
-            $menuItem = MenuItem::updateOrCreate(
-                [
-                    'category' => $category,
-                    'sort_order' => $sortOrder,
-                ],
-                array_merge([
-                    'name' => $name,
-                    'description' => $description,
-                    'price' => $price,
-                    'is_active' => true,
-                ], $name === 'PIPARRA ROLL' ? [
-                    'image_path' => 'originals/103/piparral-roll.png',
-                    'image_display_path' => 'optimized/103/piparral-roll.webp',
-                    'image_thumbnail_path' => 'thumbnails/103/piparral-roll.webp',
-                ] : [])
-            );
+            $menuItem = $this->findExistingItem($category, $sortOrder, $name) ?? new MenuItem();
 
-            MenuItem::query()
-                ->where('category', $category)
-                ->where('sort_order', $sortOrder)
+            $menuItem->fill(array_merge([
+                'category' => $category,
+                'sort_order' => $sortOrder,
+                'name' => $name,
+                'description' => $description,
+                'price' => $price,
+                'is_active' => true,
+            ], $this->isPiparraRoll($name) ? [
+                'image_path' => 'originals/103/piparral-roll.png',
+                'image_display_path' => 'optimized/103/piparral-roll.webp',
+                'image_thumbnail_path' => 'thumbnails/103/piparral-roll.webp',
+            ] : []));
+            $menuItem->save();
+
+            $duplicateIds = MenuItem::query()
                 ->whereKeyNot($menuItem->id)
-                ->delete();
+                ->whereIn('category', $this->matchingCategories($category))
+                ->get()
+                ->filter(fn (MenuItem $item) => $item->sort_order === $sortOrder || $this->normalizeName($item->name) === $this->normalizeName($name))
+                ->pluck('id');
+
+            if ($duplicateIds->isNotEmpty()) {
+                MenuItem::query()->whereKey($duplicateIds)->delete();
+            }
         }
     }
+
+    private function findExistingItem(string $category, int $sortOrder, string $name): ?MenuItem
+    {
+        $itemsInCategory = MenuItem::query()
+            ->whereIn('category', $this->matchingCategories($category))
+            ->get();
+
+        $normalizedName = $this->normalizeName($name);
+
+        return $itemsInCategory->first(
+            fn (MenuItem $item) => $this->normalizeName($item->name) === $normalizedName
+        ) ?? $itemsInCategory->firstWhere('sort_order', $sortOrder);
+    }
+
+    private function normalizeName(string $name): string
+    {
+        return Str::upper(Str::ascii(trim($name)));
+    }
+
+    private function matchingCategories(string $category): array
+    {
+        return match ($category) {
+            'Starters' => ['Starters', 'Entrantes'],
+            'Entrantes' => ['Entrantes', 'Starters'],
+            "Acompa\u{00F1}amientos" => ["Acompa\u{00F1}amientos", 'Acompa�amientos'],
+            default => [$category],
+        };
+    }
+
+    private function isPiparraRoll(string $name): bool
+    {
+        return Str::startsWith($this->normalizeName($name), 'PIPARRA ROLL');
+    }
 }
+
 
