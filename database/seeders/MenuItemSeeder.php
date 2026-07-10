@@ -24,7 +24,7 @@ class MenuItemSeeder extends Seeder
             ['Entrantes', 11, 'POP-BILLAS', 16.50, "Pulpo hervido marinado de salsa kimchi con pur\u{00E9} de patatas, aceite oliva y piment\u{00F3}n mix"],
             ['Entrantes', 12, 'PIPARRA ROLL (POR UNIDAD)', 2.99, "Chilli verde relleno de ternera y sofrito con queso rallado y champi\u{00F1}ones al wok. Acabado con queso rallado con miel, salsa ahumada de la casa e hilos crujientes de boniato"],
 
-            ["Acompa\u{00F1}amientos", 1, 'BONIATO FRITO', 4.30, "Sal de katsuobushi con perejil y or\u{00E9}gano"],
+            "Acompañamientos" => ["Acompañamientos", "Acompa\u{00F1}amientos", "Acompa?amientos"],
             ["Acompa\u{00F1}amientos", 2, 'PATATAS FRITAS', 3.50, null],
             ["Acompa\u{00F1}amientos", 3, 'MEZCLUM FRIES', 4.50, 'Patatas y boniato'],
             ["Acompa\u{00F1}amientos", 4, 'BRAVAS', 4.00, 'Con triple salsa de la casa'],
@@ -147,7 +147,7 @@ class MenuItemSeeder extends Seeder
         return match ($category) {
             'Starters' => ['Starters', 'Entrantes'],
             'Entrantes' => ['Entrantes', 'Starters'],
-            "Acompa\u{00F1}amientos" => ["Acompa\u{00F1}amientos", 'Acompa�amientos'],
+            "Acompa\u{00F1}amientos" => ["Acompa\u{00F1}amientos", 'Acompa?amientos'],
             default => [$category],
         };
     }

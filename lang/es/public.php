@@ -25,7 +25,7 @@ return [
     'homepage_meta_description' => 'Nos aventuramos más allá de las hamburguesas, fusionando la cocina asiática y americana en cada bocado. Street food fresco, rápido y moderno en Barcelona.',
     'homepage_hero_cta_menu' => 'Ver menú',
     'homepage_hero_cta_reserve' => 'Reservar',
-    'homepage_gallery_title' => 'Nos aventuramos más allá de las :burgerImage, fusionando la cocina asiática y mediterránea en cada bocado :saladImage',
+    'homepage_gallery_title' => "Nos aventuramos más allá de las :burgerImage, fusionando la cocina asiática y mediterránea en cada bocado :saladImage",
     'homepage_menu_title' => 'Nuestro menú completo',
     'homepage_cta_title' => '¿Listo para tu próximo antojo de KOYA?',
     'homepage_cta_button' => 'Pedir ahora',
@@ -34,7 +34,7 @@ return [
     'homepage_phone_label' => 'Teléfono y WhatsApp',
     'homepage_email_label' => 'Correo',
     'homepage_hours_title' => 'Horario',
-    'homepage_footer_description' => 'NOS AVENTURAMOS M�S ALL� DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASI�TICA Y AMERICANA EN CADA BOCADO.',
+    'homepage_footer_description' => "NOS AVENTURAMOS MÁS ALLÁ DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASIÁTICA Y AMERICANA EN CADA BOCADO.",
     'homepage_footer_rights' => '© 2026 KOYA BCN. Todos los derechos reservados.',
     'homepage_footer_tagline' => 'Diseñado con actitud',
 
@@ -131,10 +131,10 @@ return [
 
     'menu_item_fallback' => 'Deliciosa receta KOYA preparada con ingredientes frescos.',
     'menu_items' => [
-        'Tartufata' => ['name' => 'Tartufata', 'description' => 'Doble smash burger con pasta de trufa negra premium, queso suizo fundido, cebolla caramelizada y mayonesa de trufa en brioche tostado.'],
+        'Tartufata' => ['name' => 'TARTUFATA', 'description' => "Ternera, champiñones salteados, cebolla pochada, queso havarti con salsa trufa y perejil"],
         'Smash Burger' => ['name' => 'Smash Burger', 'description' => 'Doble smash perfectamente sazonado con cheddar, lechuga crujiente, tomate, pepinillos y nuestra salsa burger.'],
-        'Red Onion' => ['name' => 'Red Onion', 'description' => 'Doble smash con cebolla roja caramelizada, cheddar fundido, pepinillos y salsa barbacoa ahumada.'],
-        'SOBOKU' => ['name' => 'SOBOKU', 'description' => 'Una burger simple y limpia con smash único, cheddar, mostaza amarilla y pepinillos en pan suave.'],
+        'Red Onion' => ['name' => 'RED ONION', 'description' => 'Ternera, cebolla caramelizada, queso cheddar, col morada y cebolla encurtida'],
+        'SOBOKU' => ['name' => 'SOBOKU', 'description' => "Osobuco de ternera a baja temperatura, rúcula, berenjena, setas de shimeji y queso havarti con salsa de la casa"],
         'Spicy Korean Rice Bowl' => ['name' => 'Spicy Korean Rice Bowl', 'description' => 'Bocados de pollo jugosos glaseados con gochujang, arroz al vapor, rábano encurtido, edamame y sésamo.'],
         'Mediterranean Rice Bowl' => ['name' => 'Mediterranean Rice Bowl', 'description' => 'Salmón a la plancha o falafel, quinoa, tomates cherry, pepino, tzatziki y hierbas frescas.'],
         'Teriyaki Tofu Bowl' => ['name' => 'Teriyaki Tofu Bowl', 'description' => 'Tofu teriyaki crujiente, arroz jazmín, brócoli, aguacate, jengibre y glaseado de sésamo.'],
@@ -171,10 +171,6 @@ return [
         'Refreshing' => 'Refrescante',
     ],
 ];
-
-
-
-
 
 
 
