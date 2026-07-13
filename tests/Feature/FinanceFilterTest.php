@@ -174,5 +174,57 @@ class FinanceFilterTest extends TestCase
         $response->assertSee('To: 03 Jul 2026', false);
         $response->assertDontSee('name="history_date_to"', false);
     }
+
+    public function test_summary_shows_payment_method_totals_for_selected_range(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        Income::create([
+            'amount' => 121.25,
+            'type' => 'sale',
+            'method' => 'cash',
+            'description' => 'Cash income in range',
+            'date' => '2026-07-02',
+            'user_id' => $user->id,
+        ]);
+
+        Expense::create([
+            'amount' => 32.75,
+            'category' => 'supplies',
+            'method' => 'card',
+            'description' => 'Card expense in range',
+            'date' => '2026-07-03',
+            'user_id' => $user->id,
+        ]);
+
+        Income::create([
+            'amount' => 999.99,
+            'type' => 'sale',
+            'method' => 'card',
+            'description' => 'Income outside range',
+            'date' => '2026-07-09',
+            'user_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('finance.index', [
+            'mode' => 'custom',
+            'date_from' => '2026-07-01',
+            'date_to' => '2026-07-03',
+        ]));
+
+        $response->assertOk();
+        $response->assertViewHas('incomeByMethod', fn ($methods) => $methods->contains(
+            fn ($method) => $method->method === 'cash' && (float) $method->total === 121.25
+        ));
+        $response->assertViewHas('expenseByMethod', fn ($methods) => $methods->contains(
+            fn ($method) => $method->method === 'card' && (float) $method->total === 32.75
+        ));
+        $response->assertSee('data-payment-method-summary="income"', false);
+        $response->assertSee('data-payment-method-summary="expense"', false);
+        $response->assertSee('&euro;121.25', false);
+        $response->assertSee('&euro;32.75', false);
+    }
 }
 

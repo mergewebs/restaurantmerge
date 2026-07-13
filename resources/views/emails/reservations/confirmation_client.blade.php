@@ -63,6 +63,13 @@
         .detail-item:last-child {
             margin-bottom: 0;
         }
+        .detail-item-stacked {
+            display: block;
+        }
+        .detail-item-stacked .detail-label {
+            display: block;
+            margin: 0 0 4px;
+        }
         .detail-label {
             color: #fac021;
             font-weight: bold;
@@ -138,17 +145,13 @@
                     {{ \Carbon\Carbon::parse($reservation->reservation_time)->format('H:i') }}
                 </span>
             </div>
-            <div class="detail-item">
+            <div class="detail-item detail-item-stacked">
                 <span class="detail-label">📍 {{ __('emails.confirmation.location', [], $locale) }}:</span>
                 <span class="detail-value">
                     <a href="https://www.google.com/maps/search/?api=1&query={{ urlencode(__('emails.confirmation.location_address', [], $locale)) }}" class="contact-link">
                         {{ __('emails.confirmation.location_address', [], $locale) }}
                     </a>
                 </span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">🔢 {{ __('emails.confirmation.reservation_number', [], $locale) }}:</span>
-                <span class="detail-value">#{{ $reservation->id }}</span>
             </div>
             <div class="detail-item">
                 <span class="detail-label">👥 {{ __('emails.confirmation.guests', [], $locale) }}:</span>

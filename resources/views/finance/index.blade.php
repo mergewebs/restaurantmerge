@@ -122,7 +122,20 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 11l5-5m0 0l5 5m-5-5v12"></path></svg>
                         </span>
                     </div>
-                    <p class="text-2xl font-black text-emerald-600 mt-3">€{{ number_format($totalIncome, 2) }}</p>
+                    <div class="mt-3 flex items-end justify-between gap-3">
+                        <p class="text-2xl font-black text-emerald-600">€{{ number_format($totalIncome, 2) }}</p>
+                        @if($incomeByMethod->isNotEmpty())
+                            <div data-payment-method-summary="income" class="min-w-[6.5rem] shrink-0 border-l border-emerald-100 pl-3 text-right">
+                                <p class="mb-1 text-[8px] font-black uppercase tracking-widest text-slate-400">Payment</p>
+                                @foreach($incomeByMethod as $item)
+                                    <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
+                                        <span class="capitalize text-slate-500">{{ $item->method }}</span>
+                                        <span class="font-black text-emerald-700">&euro;{{ number_format($item->total, 2) }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                 </div>
                 
                 @if($incomeByType->isNotEmpty())
@@ -145,7 +158,20 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
                         </span>
                     </div>
-                    <p class="text-2xl font-black text-rose-600 mt-3">€{{ number_format($totalExpenses, 2) }}</p>
+                    <div class="mt-3 flex items-end justify-between gap-3">
+                        <p class="text-2xl font-black text-rose-600">€{{ number_format($totalExpenses, 2) }}</p>
+                        @if($expenseByMethod->isNotEmpty())
+                            <div data-payment-method-summary="expense" class="min-w-[6.5rem] shrink-0 border-l border-rose-100 pl-3 text-right">
+                                <p class="mb-1 text-[8px] font-black uppercase tracking-widest text-slate-400">Payment</p>
+                                @foreach($expenseByMethod as $item)
+                                    <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
+                                        <span class="capitalize text-slate-500">{{ $item->method }}</span>
+                                        <span class="font-black text-rose-700">&euro;{{ number_format($item->total, 2) }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
                 </div>
                 
                 @if($expenseByCategory->isNotEmpty())
@@ -172,6 +198,7 @@
                 </div>
             </div>
         </div>
+
     </section>
 
     <section id="transactions" class="glass p-6 rounded-[28px] space-y-4">

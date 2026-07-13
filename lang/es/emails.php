@@ -2,10 +2,10 @@
 
 return [
     'confirmation' => [
-        'subject' => 'Reserva lista para el :date a las :time!',
-        'title' => 'Tu reserva esta confirmada!',
-        'greeting' => 'Hola :name,',
-        'intro' => 'Gracias por reservar con <strong>KOYA</strong>. Aqui tienes los detalles de tu reserva:',
+        'subject' => 'Tu mesa en KOYA está confirmada',
+        'title' => '🎉 ¡Tu mesa en KOYA está confirmada!',
+        'greeting' => '¡Hola :name! 👋',
+        'intro' => '¡Prepárate para sabores increíbles y un gran momento! 🔥 Gracias por reservar en <strong>KOYA</strong>. Aquí tienes los detalles de tu reserva:',
         'date_time' => 'Fecha y hora',
         'location' => 'Ubicacion',
         'location_address' => 'Carrer de l\'Empecinado, 10, 08906 L\'Hospitalet de Llobregat, Barcelona',
@@ -18,7 +18,7 @@ return [
         'contact_email' => 'koyabcn@gmail.com',
         'contact_phone' => '931 66 86 11',
         'contact_whatsapp' => '+34 671 62 07 87',
-        'closing' => 'Te esperamos pronto en KOYA!',
+        'closing' => '🔥 ¡Tenemos muchas ganas de recibirte en KOYA! ¡Nos vemos pronto!',
         'footer_name' => 'KOYA',
         'footer_url' => 'koyabcn.es',
     ],

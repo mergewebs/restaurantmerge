@@ -526,6 +526,10 @@
             if (is_array($translation)) {
                 $item['name'] = $translation['name'] ?? ($item['name'] ?? '');
                 $item['description'] = $translation['description'] ?? ($item['description'] ?? '');
+                $item['price'] = array_key_exists('price', $translation)
+                    ? (float) $translation['price']
+                    : ($item['price'] ?? 0);
+                $item['_translation_sort_order'] = $translation['sort_order'] ?? null;
             }
 
             return $item;
@@ -558,7 +562,10 @@
                 'image_url' => $item['image_url'] ?? null,
                 'image_thumbnail_url' => $item['image_thumbnail_url'] ?? null,
             ];
-        })->map($translateMenuItem)->values();
+        })->map($translateMenuItem)
+            ->groupBy('category')
+            ->flatMap(fn ($items) => $items->sortBy(fn ($item) => $item['_translation_sort_order'] ?? PHP_INT_MAX))
+            ->values();
 
         $scaledMenuImages = [
             'ADOBO',
@@ -580,11 +587,11 @@
         $drinkCocktailItems = $drinks->where('category', 'Cocteles')->values();
 
         $drinkBeerItems = $drinks->filter(function ($item) {
-            return ($item['category'] ?? '') === 'Cervezas' || preg_match('/(cerveza|clara|pinta)/i', $item['name']);
+            return ($item['category'] ?? '') === 'Cervezas' || preg_match('/(cerveza|beer|clara|pinta)/i', $item['name']);
         })->map($translateMenuItem)->values();
 
         $drinkWineItems = $drinks->filter(function ($item) {
-            return preg_match('/(vino|sangria|vermut|tinto)/i', $item['name']);
+            return preg_match('/(vino|wine|sangria|vermut|tinto)/i', $item['name']);
         })->map($translateMenuItem)->values();
 
         $usedDrinkNames = $drinkCoffeeItems->pluck('name')
@@ -664,7 +671,7 @@
 
                 <div class="drinks-highlight-grid" x-show="activeTab === 'Drinks'" x-cloak>
                     <div class="drinks-showcase">
-                        <div class="drinks-showcase-title">Refrescos y Aguas</div>
+                        <div class="drinks-showcase-title">{{ __('public.menu_drinks_soft') }}</div>
                         <div class="drinks-showcase-grid cols-2">
                             @foreach($drinkSoftItems as $item)
                                 <div class="drinks-showcase-item">
@@ -700,7 +707,7 @@
                     </div>
 
                     <div class="drinks-showcase">
-                        <div class="drinks-showcase-title">Cervezas</div>
+                        <div class="drinks-showcase-title">{{ __('public.menu_drinks_beers') }}</div>
                         <div class="drinks-showcase-grid">
                             @foreach($drinkBeerItems as $item)
                                 <div class="drinks-showcase-item">
@@ -736,7 +743,7 @@
                     </div>
 
                     <div class="drinks-showcase">
-                        <div class="drinks-showcase-title">Vinos y Sangrias</div>
+                        <div class="drinks-showcase-title">{{ __('public.menu_drinks_wines') }}</div>
                         <div class="drinks-showcase-grid">
                             @foreach($drinkWineItems as $item)
                                 <div class="drinks-showcase-item">

@@ -176,13 +176,15 @@ class FinanceController extends Controller
         $endDate = $end->toDateString();
 
         $incomeRecords = Income::query()
-            ->whereBetween('date', [$startDate, $endDate])
+            ->whereDate('date', '>=', $startDate)
+            ->whereDate('date', '<=', $endDate)
             ->selectRaw('date, SUM(amount) as total')
             ->groupBy('date')
             ->pluck('total', 'date');
 
         $expenseRecords = Expense::query()
-            ->whereBetween('date', [$startDate, $endDate])
+            ->whereDate('date', '>=', $startDate)
+            ->whereDate('date', '<=', $endDate)
             ->selectRaw('date, SUM(amount) as total')
             ->groupBy('date')
             ->pluck('total', 'date');
@@ -209,25 +211,29 @@ class FinanceController extends Controller
         }
 
         $incomeByType = Income::query()
-            ->whereBetween('date', [$startDate, $endDate])
+            ->whereDate('date', '>=', $startDate)
+            ->whereDate('date', '<=', $endDate)
             ->selectRaw('type, SUM(amount) as total')
             ->groupBy('type')
             ->get();
 
         $incomeByMethod = Income::query()
-            ->whereBetween('date', [$startDate, $endDate])
+            ->whereDate('date', '>=', $startDate)
+            ->whereDate('date', '<=', $endDate)
             ->selectRaw('method, SUM(amount) as total')
             ->groupBy('method')
             ->get();
 
         $expenseByMethod = Expense::query()
-            ->whereBetween('date', [$startDate, $endDate])
+            ->whereDate('date', '>=', $startDate)
+            ->whereDate('date', '<=', $endDate)
             ->selectRaw('method, SUM(amount) as total')
             ->groupBy('method')
             ->get();
 
         $expenseByCategory = Expense::query()
-            ->whereBetween('date', [$startDate, $endDate])
+            ->whereDate('date', '>=', $startDate)
+            ->whereDate('date', '<=', $endDate)
             ->selectRaw('category, SUM(amount) as total')
             ->groupBy('category')
             ->get();

@@ -74,6 +74,9 @@ return [
     'menu_tab_starters' => 'Entrantes',
     'menu_tab_sides' => 'Sides & Starters',
     'menu_tab_drinks' => 'Bebidas',
+    'menu_drinks_soft' => 'Refrescos y Aguas',
+    'menu_drinks_beers' => 'Cervezas',
+    'menu_drinks_wines' => 'Vinos y Sangrias',
     'menu_tab_desserts' => 'Postres',
     'menu_tab_all' => 'Todos',
     'burgers_double_patty' => 'Nuestras hamburguesas cuentan con doble patty',
@@ -166,13 +169,13 @@ return [
 
     'menu_item_fallback' => 'Deliciosa receta KOYA preparada con ingredientes frescos.',
     'menu_items' => [
-        'Tartufata' => ['name' => 'TARTUFATA', 'description' => "Ternera, champiñones salteados, cebolla pochada, queso havarti con salsa trufa y perejil"],
+        'Tartufata' => ['name' => 'TARTUFATA', 'description' => "Ternera, champiñones salteados, queso havarti con salsa trufa y perejil"],
         'Smash Burger' => ['name' => 'Smash Burger', 'description' => 'Doble smash perfectamente sazonado con cheddar, lechuga crujiente, tomate, pepinillos y nuestra salsa burger.'],
         'Red Onion' => ['name' => 'RED ONION', 'description' => 'Ternera, cebolla caramelizada, queso cheddar, col morada y cebolla encurtida'],
         'SOBOKU' => ['name' => 'SOBOKU', 'description' => "Osobuco de ternera a baja temperatura, rúcula, berenjena, setas de shimeji y queso havarti con salsa de la casa"],
-        'KOYA SALAD' => ['name' => 'KOYA SALAD', 'description' => 'Mezcla fresca de hojas verdes, tomate cherry, edamame, col encurtida, aguacate y aliño de jengibre y sésamo.'],
-        'KATSUDON' => ['name' => 'KATSUDON', 'description' => 'Pollo panko crujiente, huevo, cebolla y caldo dashi dulce-salado sobre arroz al vapor.'],
-        'Mojito' => ['name' => 'Mojito', 'description' => 'Cóctel clásico y refrescante con ron, lima y menta fresca.'],
+        'KOYA SALAD' => ['name' => 'KOYA SALAD', 'description' => 'lechuga, wakame, sonomono, col valencia, cebolla crujiente y vinagreta de la casa'],
+        'KATSUDON' => ['name' => 'KATSUDON', 'description' => 'Lomo empanado, salsa tonkatsu, sésamo, pepino y cebolla encurtida *con huevo frito*'],
+        'MOJITO(Menta/fresa/piña colada)' => ['name' => 'MOJITO(Menta/fresa/piña colada)', 'description' => 'BACARDI, SIFÓN Y MENTA'],
     ],
     'menu_badges' => [
         'KOYA Favorite' => 'Favorito KOYA',

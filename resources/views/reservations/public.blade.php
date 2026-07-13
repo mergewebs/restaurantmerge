@@ -861,8 +861,42 @@
         [x-cloak] { display: none !important; }
     </style>
     @include('partials.toast-notifications')
+    <style>
+        .reservation-page .koya-toast-stack {
+            top: 6.75rem;
+            z-index: 1200;
+        }
+
+        .reservation-page .koya-toast-success {
+            background: #fffdf5;
+            color: #121212;
+            border: 3px solid #121212;
+            box-shadow: 6px 6px 0 rgba(18, 18, 18, 0.9);
+        }
+
+        .reservation-page .koya-toast-success .koya-toast-icon {
+            background: #fac021;
+            color: #121212;
+        }
+
+        .reservation-page .koya-toast-success .koya-toast-title {
+            color: #087763;
+            opacity: 1;
+        }
+
+        .reservation-page .koya-toast-success .koya-toast-progress {
+            background: #088972;
+        }
+
+        @media (max-width: 640px) {
+            .reservation-page .koya-toast-stack {
+                top: auto;
+                bottom: 0.9rem;
+            }
+        }
+    </style>
 </head>
-<body x-data="{ mobileMenuOpen: false }">
+<body class="reservation-page" x-data="{ mobileMenuOpen: false }">
     @if(session('success'))
         <div class="hidden" data-page-feedback data-feedback-level="success">{{ strip_tags(session('success')) }}</div>
     @elseif(session('error'))

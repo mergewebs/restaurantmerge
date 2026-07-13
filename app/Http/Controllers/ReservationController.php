@@ -41,9 +41,6 @@ class ReservationController extends Controller
 
     public function publicCreate()
     {
-        $locale = request()->getPreferredLanguage(['es', 'en']);
-        app()->setLocale($locale);
-
         return view('reservations.public', [
             'seo' => Seo::make([
                 'title' => __('public.seo_reservation_title'),
@@ -160,8 +157,7 @@ class ReservationController extends Controller
             optional($lock)->release();
         }
 
-        $locale = $request->getPreferredLanguage(['es', 'en']);
-        app()->setLocale($locale);
+        $locale = app()->getLocale();
 
         if ($wasCreated) {
             // Send Email to Admin
