@@ -2,7 +2,7 @@
 
 return [
     'confirmation' => [
-        'subject' => 'Tu mesa en KOYA está confirmada',
+        'subject' => 'Tu mesa en KOYA está confirmada - :date a las :time',
         'title' => '🎉 ¡Tu mesa en KOYA está confirmada!',
         'greeting' => '¡Hola :name! 👋',
         'intro' => '¡Prepárate para sabores increíbles y un gran momento! 🔥 Gracias por reservar en <strong>KOYA</strong>. Aquí tienes los detalles de tu reserva:',

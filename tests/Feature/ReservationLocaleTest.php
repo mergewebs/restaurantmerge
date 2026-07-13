@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Mail\ReservationConfirmationClient;
 use App\Mail\NewReservationAdminNotification;
+use App\Models\Reservation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
@@ -42,6 +43,19 @@ class ReservationLocaleTest extends TestCase
     public function test_confirmation_email_uses_selected_spanish_locale(): void
     {
         $this->assertConfirmationEmailUsesLocale('es', 'en-US,en;q=0.9', 'spanish-locale-token');
+    }
+
+    public function test_confirmation_email_subject_includes_reservation_date_and_time(): void
+    {
+        $reservation = new Reservation([
+            'reservation_time' => '2030-01-02 18:30:00',
+        ]);
+
+        $englishSubject = (new ReservationConfirmationClient($reservation, 'en'))->envelope()->subject;
+        $spanishSubject = (new ReservationConfirmationClient($reservation, 'es'))->envelope()->subject;
+
+        $this->assertSame('Your KOYA table is confirmed - 02/01/2030 at 18:30', $englishSubject);
+        $this->assertSame('Tu mesa en KOYA está confirmada - 02/01/2030 a las 18:30', $spanishSubject);
     }
 
     private function assertConfirmationEmailUsesLocale(string $locale, string $browserLanguage, string $token): void

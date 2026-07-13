@@ -2,7 +2,7 @@
 
 return [
     'confirmation' => [
-        'subject' => 'Your KOYA table is confirmed',
+        'subject' => 'Your KOYA table is confirmed - :date at :time',
         'title' => '🎉 Your KOYA table is confirmed!',
         'greeting' => 'Hi :name! 👋',
         'intro' => 'Get ready for bold flavors and a great time! 🔥 Thanks for reserving a table at <strong>KOYA</strong>. Here are your reservation details:',
