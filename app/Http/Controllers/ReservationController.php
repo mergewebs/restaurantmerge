@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use App\Support\Seo;
 
 class ReservationController extends Controller
 {
@@ -42,7 +43,21 @@ class ReservationController extends Controller
     {
         $locale = request()->getPreferredLanguage(['es', 'en']);
         app()->setLocale($locale);
-        return view('reservations.public');
+
+        return view('reservations.public', [
+            'seo' => Seo::make([
+                'title' => __('public.seo_reservation_title'),
+                'description' => __('public.seo_reservation_description'),
+                'keywords' => __('public.seo_reservation_keywords'),
+                'canonical' => route('reservations.public.create'),
+                'structured_data' => [
+                    Seo::websiteStructuredData([
+                        'name' => __('public.seo_reservation_title'),
+                        'url' => route('reservations.public.create'),
+                    ]),
+                ],
+            ]),
+        ]);
     }
 
     public function store(Request $request)
@@ -494,4 +509,6 @@ class ReservationController extends Controller
         ]);
     }
 }
+
+
 

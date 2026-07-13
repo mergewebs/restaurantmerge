@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ __('public.guest_title') }}</title>
+        @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => __('public.seo_login_title')])])
         <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -243,3 +243,4 @@
         @include('partials.form-submit-lock')
 </body>
 </html>
+

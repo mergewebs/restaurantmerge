@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ __('public.homepage_meta_description') }}">
-    <title>Koya Smash Burger & Bol | {{ __('public.nav_menu') }}</title>
+    @include('partials.seo', ['seo' => $seo ?? []])
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -683,7 +682,7 @@
 
                     <div class="drinks-showcase">
                         <div class="drinks-showcase-title drinks-showcase-title-image">
-                            <img src="{{ asset('images/cafe.png') }}" alt="Cafe">
+                            <img src="{{ asset('images/cafe.png') }}" alt="{{ __('public.seo_drinks_coffee_alt') }}" width="72" height="72">
                         </div>
                         <div class="drinks-showcase-grid">
                             @foreach($drinkCoffeeItems as $item)
@@ -719,7 +718,7 @@
 
                     <div class="drinks-showcase">
                         <div class="drinks-showcase-title drinks-showcase-title-image">
-                            <img src="{{ asset('images/Picture7.png') }}" alt="Cocteles">
+                            <img src="{{ asset('images/Picture7.png') }}" alt="{{ __('public.seo_drinks_cocktail_alt') }}" width="72" height="72">
                         </div>
                         <div class="drinks-showcase-grid">
                             @foreach($drinkCocktailItems as $item)
@@ -755,7 +754,7 @@
                 </div>
                 <div class="sides-showcase" x-show="activeTab === 'Starters' && {{ $sideItems->isNotEmpty() ? 'true' : 'false' }}" x-cloak>
                     <div class="sides-showcase-title sides-showcase-title-image">
-                        <img src="{{ asset('images/fritas.png') }}" alt="Acompanamientos">
+                        <img src="{{ asset('images/fritas.png') }}" alt="{{ __('public.seo_sides_alt') }}" width="72" height="72">
                     </div>
                     <div class="sides-showcase-grid">
                         @foreach($sideItems as $item)
@@ -781,4 +780,8 @@
     </div>
 </body>
 </html>
+
+
+
+
 

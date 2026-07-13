@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
     'language_switcher' => 'Language switcher',
@@ -9,6 +9,37 @@ return [
     'iframe_title' => 'Reservation - Koya Smash Burger & Bol',
     'guest_title' => 'Koya Smash Burger & Bol',
     'copyright' => '© 2026 Mergewebs Restaurant',
+    'seo_default_title' => 'Koya Smash Burger & Bol | Smash burgers and bowls in Barcelona',
+    'seo_default_description' => 'Discover KOYA in Barcelona for smash burgers, rice bowls, starters, cocktails, takeaway and table reservations.',
+    'seo_default_keywords' => 'Koya Barcelona, smash burger Barcelona, rice bowls Barcelona, restaurant Barcelona, takeaway Barcelona, reservation restaurant Barcelona',
+    'seo_home_title' => 'Koya Smash Burger & Bol | Smash burgers and bowls in Barcelona',
+    'seo_home_keywords' => 'Koya Barcelona, smash burgers Barcelona, bowls Barcelona, restaurant Barcelona, restaurant L Hospitalet',
+    'seo_home_dynamic_suffix' => 'Browse :count active menu items featuring :categories.',
+    'seo_menu_title' => 'Menu | Koya Smash Burger & Bol Barcelona',
+    'seo_menu_description' => 'Explore the KOYA menu with smash burgers, bowls, starters, drinks and desserts prepared fresh in Barcelona.',
+    'seo_menu_keywords' => 'Koya menu, smash burger menu Barcelona, bowls menu Barcelona, restaurant menu Barcelona',
+    'seo_reservation_title' => 'Reservations | Koya Smash Burger & Bol Barcelona',
+    'seo_reservation_description' => 'Book a table at KOYA in Barcelona and plan your next visit for burgers, bowls and signature dishes.',
+    'seo_reservation_keywords' => 'restaurant reservation Barcelona, book table Barcelona, Koya reservation',
+    'seo_order_title' => 'Online takeaway order | Koya Smash Burger & Bol',
+    'seo_order_description' => 'Build a takeaway order from the KOYA menu and choose your favorite burgers, bowls and sides for pickup.',
+    'seo_order_keywords' => 'takeaway Barcelona, online food order Barcelona, Koya takeaway',
+    'seo_login_title' => 'Staff login | Koya Smash Burger & Bol',
+    'seo_admin_title' => 'Admin dashboard | Koya Smash Burger & Bol',
+    'seo_image_default_alt' => 'Koya Smash Burger & Bol brand image',
+    'seo_logo_alt' => 'Koya Smash Burger & Bol logo',
+    'seo_hero_alt' => 'Koya signature smash burger',
+    'seo_hero_rotating_alt' => 'KOYA featured dish: :name',
+    'seo_drinks_coffee_alt' => 'Coffee drinks at KOYA',
+    'seo_drinks_cocktail_alt' => 'Cocktails at KOYA',
+    'seo_sides_alt' => 'Sides and starters at KOYA',
+    'seo_structured_site_name' => 'Koya Smash Burger & Bol',
+    'seo_structured_price_range' => '€€',
+    'seo_structured_serves_cuisine' => ['American', 'Asian Fusion', 'Mediterranean'],
+    'seo_structured_same_as' => [
+        'https://www.instagram.com/koya_bcn',
+        'https://www.facebook.com/profile.php?id=100094879849238',
+    ],
 
     'nav_home' => 'Home',
     'nav_menu' => 'Menu',
@@ -22,7 +53,7 @@ return [
     'nav_book_table' => 'Book a table',
     'nav_staff_login' => 'Staff login',
 
-    'homepage_meta_description' => 'We go beyond burgers, blending Asian and American flavors in every bite. Fresh, fast, modern street food in Barcelona.',
+    'homepage_meta_description' => 'We go beyond burgers, blending Asian and American flavors in every bite. Fresh, modern dining in Barcelona.',
     'homepage_hero_cta_menu' => 'View menu',
     'homepage_hero_cta_reserve' => 'Reserve',
     'homepage_gallery_title' => 'We go beyond :burgerImage, fusing Asian and Mediterranean cuisines into every bite :saladImage',
@@ -184,4 +215,7 @@ return [
         'Refreshing' => 'Refreshing',
     ],
 ];
+
+
+
 

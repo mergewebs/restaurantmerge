@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 return [
     'language_switcher' => 'Selector de idioma',
@@ -9,6 +9,37 @@ return [
     'iframe_title' => 'Reserva - Koya Smash Burger & Bol',
     'guest_title' => 'Koya Smash Burger & Bol',
     'copyright' => '© 2026 Mergewebs Restaurant',
+    'seo_default_title' => 'Koya Smash Burger & Bol | Smash burgers y bowls en Barcelona',
+    'seo_default_description' => 'Descubre KOYA en Barcelona para disfrutar smash burgers, bowls de arroz, entrantes, cócteles, pedidos para llevar y reservas.',
+    'seo_default_keywords' => 'Koya Barcelona, smash burger Barcelona, bowls Barcelona, restaurante Barcelona, comida para llevar Barcelona, reservas restaurante Barcelona',
+    'seo_home_title' => 'Koya Smash Burger & Bol | Smash burgers y bowls en Barcelona',
+    'seo_home_keywords' => 'Koya Barcelona, smash burgers Barcelona, bowls Barcelona, restaurante Barcelona, restaurante L Hospitalet',
+    'seo_home_dynamic_suffix' => 'Descubre :count productos activos con categorías como :categories.',
+    'seo_menu_title' => 'Menú | Koya Smash Burger & Bol Barcelona',
+    'seo_menu_description' => 'Explora el menú de KOYA con smash burgers, bowls, entrantes, bebidas y postres preparados al momento en Barcelona.',
+    'seo_menu_keywords' => 'menú Koya, smash burger Barcelona, bowls Barcelona, menú restaurante Barcelona',
+    'seo_reservation_title' => 'Reservas | Koya Smash Burger & Bol Barcelona',
+    'seo_reservation_description' => 'Reserva mesa en KOYA, Barcelona, y organiza tu próxima visita para disfrutar burgers, bowls y platos de la casa.',
+    'seo_reservation_keywords' => 'reserva restaurante Barcelona, reservar mesa Barcelona, Koya reserva',
+    'seo_order_title' => 'Pedido online para llevar | Koya Smash Burger & Bol',
+    'seo_order_description' => 'Prepara tu pedido para llevar en KOYA y elige tus burgers, bowls y entrantes favoritos para recoger.',
+    'seo_order_keywords' => 'pedido para llevar Barcelona, comida online Barcelona, Koya takeaway',
+    'seo_login_title' => 'Acceso del personal | Koya Smash Burger & Bol',
+    'seo_admin_title' => 'Panel de administración | Koya Smash Burger & Bol',
+    'seo_image_default_alt' => 'Imagen de marca de Koya Smash Burger & Bol',
+    'seo_logo_alt' => 'Logotipo de Koya Smash Burger & Bol',
+    'seo_hero_alt' => 'Smash burger insignia de Koya',
+    'seo_hero_rotating_alt' => 'Plato destacado de KOYA: :name',
+    'seo_drinks_coffee_alt' => 'Bebidas de café en KOYA',
+    'seo_drinks_cocktail_alt' => 'Cócteles en KOYA',
+    'seo_sides_alt' => 'Entrantes y acompañamientos en KOYA',
+    'seo_structured_site_name' => 'Koya Smash Burger & Bol',
+    'seo_structured_price_range' => '€€',
+    'seo_structured_serves_cuisine' => ['Americana', 'Fusión asiática', 'Mediterránea'],
+    'seo_structured_same_as' => [
+        'https://www.instagram.com/koya_bcn',
+        'https://www.facebook.com/profile.php?id=100094879849238',
+    ],
 
     'nav_home' => 'Inicio',
     'nav_menu' => 'Menú',
@@ -159,4 +190,9 @@ return [
         'Refreshing' => 'Refrescante',
     ],
 ];
+
+
+
+
+
 

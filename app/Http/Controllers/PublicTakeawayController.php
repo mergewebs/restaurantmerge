@@ -7,6 +7,7 @@ use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\RestaurantTable;
+use App\Support\Seo;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -35,6 +36,12 @@ class PublicTakeawayController extends Controller
             'menuItemsFlat' => $menuItemsFlat,
             'restaurantName' => config('takeaway.brand.restaurant_name', config('app.name')),
             'brandLogoUrl' => config('takeaway.brand.logo_url'),
+            'seo' => Seo::noIndex([
+                'title' => __('public.seo_order_title'),
+                'description' => __('public.seo_order_description'),
+                'keywords' => __('public.seo_order_keywords'),
+                'canonical' => route('order.public'),
+            ]),
         ]);
     }
 
@@ -48,6 +55,18 @@ class PublicTakeawayController extends Controller
         return view('menu', [
             'menuItems' => $menuItems,
             'menuItemsFlat' => $menuItemsFlat,
+            'seo' => Seo::make([
+                'title' => __('public.seo_menu_title'),
+                'description' => __('public.seo_menu_description'),
+                'keywords' => __('public.seo_menu_keywords'),
+                'canonical' => route('menu.public'),
+                'structured_data' => [
+                    Seo::websiteStructuredData([
+                        'name' => __('public.seo_menu_title'),
+                        'url' => route('menu.public'),
+                    ]),
+                ],
+            ]),
         ]);
     }
 
@@ -268,5 +287,3 @@ class PublicTakeawayController extends Controller
         return $this->hasCustomerPhoneColumn;
     }
 }
-
-

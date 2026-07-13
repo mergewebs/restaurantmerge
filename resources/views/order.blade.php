@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ __('public.site_title_order', ['restaurant' => $restaurantName]) }}</title>
+    @include('partials.seo', ['seo' => $seo ?? []])
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     
     <!-- Google Fonts -->
@@ -278,16 +278,16 @@
     <!-- Floating Graphics Background -->
     <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
         <!-- Cartoon Burger -->
-        <img src="https://koyabcn.es/wp-content/uploads/2025/07/home-cartoon-burger.png" class="floating-element float-1 opacity-20 md:opacity-30 w-24 md:w-28" style="top: 12%; left: 3%;">
+        <img src="https://koyabcn.es/wp-content/uploads/2025/07/home-cartoon-burger.png" alt="" aria-hidden="true" class="floating-element float-1 opacity-20 md:opacity-30 w-24 md:w-28" style="top: 12%; left: 3%;" loading="lazy" decoding="async" width="112" height="112">
 
         <!-- Cartoon Fritas -->
-        <img src="https://koyabcn.es/wp-content/uploads/2025/08/fritas.png" class="floating-element float-2 opacity-20 md:opacity-30 w-24 md:w-28" style="bottom: 25%; left: 4%;">
+        <img src="https://koyabcn.es/wp-content/uploads/2025/08/fritas.png" alt="" aria-hidden="true" class="floating-element float-2 opacity-20 md:opacity-30 w-24 md:w-28" style="bottom: 25%; left: 4%;" loading="lazy" decoding="async" width="112" height="112">
 
         <!-- Cartoon Rice Bowl -->
-        <img src="https://koyabcn.es/wp-content/uploads/2025/08/bol_arroz.png" class="floating-element float-3 opacity-20 md:opacity-30 w-24 md:w-28" style="top: 20%; right: 4%;">
+        <img src="https://koyabcn.es/wp-content/uploads/2025/08/bol_arroz.png" alt="" aria-hidden="true" class="floating-element float-3 opacity-20 md:opacity-30 w-24 md:w-28" style="top: 20%; right: 4%;" loading="lazy" decoding="async" width="112" height="112">
 
         <!-- Cartoon Coffee -->
-        <img src="https://koyabcn.es/wp-content/uploads/2025/08/cafe.png" class="floating-element float-4 opacity-20 md:opacity-35 w-20 md:w-24" style="bottom: 15%; right: 6%;">
+        <img src="https://koyabcn.es/wp-content/uploads/2025/08/cafe.png" alt="" aria-hidden="true" class="floating-element float-4 opacity-20 md:opacity-35 w-20 md:w-24" style="bottom: 15%; right: 6%;" loading="lazy" decoding="async" width="96" height="96">
     </div>
 
     <!-- Sticky Navigation Header -->
@@ -296,7 +296,7 @@
             <a href="/" class="flex items-center gap-3">
                 <img 
                     src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" 
-                    alt="KOYA Logo" 
+                    alt="{{ __('public.seo_logo_alt') }}" width="56" height="56" 
                     class="w-14 h-14 rounded-full border-[3px] border-[#121212] object-cover shadow-[2px_2px_0px_#121212]"
                     onerror="this.src='/favicon.ico'"
                 >
@@ -981,4 +981,8 @@
     </script>
 </body>
 </html>
+
+
+
+
 

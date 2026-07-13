@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'feature' => \App\Http\Middleware\EnsureFeatureEnabled::class,
+            'noindex' => \App\Http\Middleware\PreventSearchIndexing::class,
         ]);
 
         $middleware->web(append: [
@@ -22,7 +23,3 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();
-
-
-
-

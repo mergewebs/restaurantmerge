@@ -1,15 +1,19 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MenuItemController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicTakeawayController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantConfigController;
 use App\Http\Controllers\TableManagementController;
-use App\Http\Controllers\PublicTakeawayController;
-use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\UserController;
+use App\Models\MenuItem;
+use App\Models\RestaurantSchedule;
+use App\Support\Seo;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,39 +27,92 @@ Route::get('/', function () {
         $menuItems = collect();
         $schedule = collect();
     }
-    return view('welcome', compact('menuItems', 'schedule'));
-});
+
+    $categories = $menuItems->pluck('category')->filter()->unique()->take(3)->implode(', ');
+    $description = __('public.homepage_meta_description');
+
+    if ($menuItems->isNotEmpty() && $categories !== '') {
+        $description .= ' ' . __('public.seo_home_dynamic_suffix', [
+            'count' => $menuItems->count(),
+            'categories' => $categories,
+        ]);
+    }
+
+    $seo = Seo::make([
+        'title' => __('public.seo_home_title'),
+        'description' => $description,
+        'keywords' => __('public.seo_home_keywords'),
+        'canonical' => route('home'),
+        'structured_data' => [
+            Seo::websiteStructuredData(),
+            Seo::restaurantStructuredData($schedule),
+        ],
+    ]);
+
+    return view('welcome', compact('menuItems', 'schedule', 'seo'));
+})->name('home');
+
+Route::get('/robots.txt', function () {
+    $lines = [
+        'User-agent: *',
+        'Allow: /',
+        'Disallow: /admin',
+        'Disallow: /order',
+        'Disallow: /takeaway',
+        'Disallow: /restaurant/schedule-data',
+        'Disallow: /restaurant/closed-dates',
+        'Sitemap: ' . route('sitemap'),
+    ];
+
+    return response(implode(PHP_EOL, $lines) . PHP_EOL, 200, [
+        'Content-Type' => 'text/plain; charset=UTF-8',
+    ]);
+})->name('robots');
+
+Route::get('/sitemap.xml', function () {
+    $latestPublicUpdate = collect([
+        MenuItem::query()->max('updated_at'),
+        RestaurantSchedule::query()->max('updated_at'),
+    ])->filter()->map(fn ($value) => Carbon::parse($value))->sortDesc()->first() ?? now();
+
+    $urls = [
+        ['loc' => route('home'), 'lastmod' => $latestPublicUpdate->toAtomString(), 'changefreq' => 'weekly', 'priority' => '1.0'],
+        ['loc' => route('menu.public'), 'lastmod' => $latestPublicUpdate->toAtomString(), 'changefreq' => 'weekly', 'priority' => '0.9'],
+        ['loc' => route('reservations.public.create'), 'lastmod' => $latestPublicUpdate->toAtomString(), 'changefreq' => 'weekly', 'priority' => '0.8'],
+    ];
+
+    $xml = view('sitemap.index', ['urls' => $urls])->render();
+
+    return response($xml, 200, [
+        'Content-Type' => 'application/xml; charset=UTF-8',
+    ]);
+})->name('sitemap');
 
 Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
 
-// Public Routes (for iframe)
 Route::get('/reservation', [ReservationController::class, 'publicCreate'])->name('reservations.public.create');
 Route::post('/reservation', [ReservationController::class, 'publicStore'])->name('reservations.public.store');
-Route::get('/restaurant/schedule-data', [ReservationController::class, 'getScheduleData'])->name('restaurant.schedule.data');
-Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');
+Route::middleware('noindex')->group(function () {
+    Route::get('/restaurant/schedule-data', [ReservationController::class, 'getScheduleData'])->name('restaurant.schedule.data');
+    Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');
+});
 
-// New Menu Page (Same as Order)
 Route::get('/menu', [PublicTakeawayController::class, 'menu'])->name('menu.public');
 
-// New Order Page
-Route::middleware('feature:takeaway')->group(function () {
+Route::middleware(['feature:takeaway', 'noindex'])->group(function () {
     Route::get('/order', [PublicTakeawayController::class, 'index'])->name('order.public');
     Route::post('/order', [PublicTakeawayController::class, 'store'])->name('order.public.store');
 
-    // Legacy Takeaway Routes (pointing to same actions for compatibility and tests)
     Route::get('/takeaway', [PublicTakeawayController::class, 'index'])->name('takeaway.public');
     Route::post('/takeaway/orders', [PublicTakeawayController::class, 'store'])->name('takeaway.public.store');
 });
 
 Route::redirect('/admin', '/admin/dashboard');
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    // Reservations
     Route::resource('reservations', ReservationController::class);
 
-    // Finance (simplified)
     Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
     Route::post('/finance', [FinanceController::class, 'store'])->name('finance.store');
     Route::put('/finance/{id}', [FinanceController::class, 'update'])->name('finance.update');
@@ -63,23 +120,19 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/finance/history', [FinanceController::class, 'history'])->name('finance.history');
     Route::delete('/finance/{id}', [FinanceController::class, 'destroy'])->name('finance.destroy');
 
-    // Finance Categories
     Route::get('/finance/categories', [\App\Http\Controllers\FinanceCategoryController::class, 'index'])->name('finance.categories.index');
     Route::post('/finance/categories', [\App\Http\Controllers\FinanceCategoryController::class, 'store'])->name('finance.categories.store');
     Route::put('/finance/categories/{category}', [\App\Http\Controllers\FinanceCategoryController::class, 'update'])->name('finance.categories.update');
     Route::delete('/finance/categories/{category}', [\App\Http\Controllers\FinanceCategoryController::class, 'destroy'])->name('finance.categories.destroy');
 
-    // Users
     Route::resource('users', UserController::class)->except(['create', 'show', 'edit']);
 
-    // Restaurant Configuration
     Route::get('/restaurant/config', [RestaurantConfigController::class, 'index'])->name('restaurant.config');
     Route::put('/restaurant/schedule', [RestaurantConfigController::class, 'updateSchedule'])->name('restaurant.schedule.update');
     Route::post('/restaurant/exceptions', [RestaurantConfigController::class, 'storeException'])->name('restaurant.exceptions.store');
     Route::delete('/restaurant/exceptions/{exception}', [RestaurantConfigController::class, 'destroyException'])->name('restaurant.exceptions.destroy');
     Route::post('/restaurant/toggle-today', [RestaurantConfigController::class, 'toggleToday'])->name('restaurant.toggle-today');
 
-    // Table Management (TPV)
     Route::middleware('feature:tables')->group(function () {
         Route::get('/tables', [TableManagementController::class, 'index'])->name('tables.index');
         Route::get('/tables/completed', [TableManagementController::class, 'completedOrders'])->name('tables.completed');
@@ -104,21 +157,14 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::patch('/tables/items/{item}/kitchen-status', [TableManagementController::class, 'updateKitchenItemStatus'])->name('tables.items.kitchen-status.update');
     });
 
-    // Menu Management
     Route::get('/menu-items', [MenuItemController::class, 'index'])->name('menu-items.index');
     Route::post('/menu-items', [MenuItemController::class, 'store'])->name('menu-items.store');
     Route::put('/menu-items/{menuItem}', [MenuItemController::class, 'update'])->name('menu-items.update');
     Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
 
-    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
-
-
-
-
-

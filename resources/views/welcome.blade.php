@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ __('public.homepage_meta_description') }}">
-    <title>Koya Smash Burger & Bol</title><link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    @include('partials.seo', ['seo' => $seo ?? []])
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <!-- Preconnect to external resources -->
@@ -2297,7 +2296,7 @@
     <header :class="mobileMenuOpen ? 'header-overlay-open' : ''">
         <div class="container header-container">
             <a href="#" class="logo-wrap">
-                <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA Logo" class="logo-img" onerror="this.src='/favicon.ico'">
+                <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="logo-img" width="75" height="75" onerror="this.src='/favicon.ico'">
             </a>
 
             <nav class="nav-links">
@@ -2347,7 +2346,7 @@
                     </svg>
                 </div>
                 <div class="hero-main-img-wrap">
-                    <img src="{{ asset('images/smash-burger.png') }}" alt="KOYA Double Smash Burger" class="hero-main-img">
+                    <img src="{{ asset('images/smash-burger.png') }}" alt="{{ __('public.seo_hero_alt') }}" class="hero-main-img" width="420" height="420" fetchpriority="high">
                 </div>
             </div>
         </div>
@@ -2364,16 +2363,16 @@
             </h2>
             <div class="gallery-grid">
                 <div class="gallery-card card-rotate-1 reveal">
-                    <img src="{{ asset('images/gallery-1.jpg') }}" alt="KOYA Chef holding Smash Burger" class="gallery-img" loading="lazy">
+                    <img src="{{ asset('images/gallery-1.jpg') }}" alt="KOYA chef holding a smash burger" class="gallery-img" loading="lazy" width="720" height="720">
                 </div>
                 <div class="gallery-card card-rotate-2 reveal">
-                    <img src="{{ asset('images/gallery-2.jpg') }}" alt="KOYA Bowl food lift with fork" class="gallery-img" loading="lazy">
+                    <img src="{{ asset('images/gallery-2.jpg') }}" alt="KOYA rice bowl lifted with a fork" class="gallery-img" loading="lazy" width="720" height="720">
                 </div>
                 <div class="gallery-card card-rotate-3 reveal">
-                    <img src="{{ asset('images/gallery-3.jpg') }}" alt="Assembling a KOYA Burger" class="gallery-img" loading="lazy">
+                    <img src="{{ asset('images/gallery-3.jpg') }}" alt="Preparing a KOYA smash burger" class="gallery-img" loading="lazy" width="720" height="720">
                 </div>
                 <div class="gallery-card card-rotate-4 reveal">
-                    <img src="{{ asset('images/gallery-4.jpg') }}" alt="KOYA Chef smiling with Smash Burger" class="gallery-img" loading="lazy">
+                    <img src="{{ asset('images/gallery-4.jpg') }}" alt="KOYA chef smiling with a smash burger" class="gallery-img" loading="lazy" width="720" height="720">
                 </div>
             </div>
         </div>
@@ -2912,7 +2911,7 @@
             <div class="footer-grid">
                 <div class="footer-logo-desc">
                     <a href="#" class="footer-logo-wrap">
-                        <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA Logo" class="footer-logo-img" onerror="this.src='/favicon.ico'">
+                        <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="footer-logo-img" width="96" height="96" onerror="this.src='/favicon.ico'">
                     </a>
                     <p class="footer-p">
                         {{ __('public.homepage_meta_description') }}
@@ -2971,26 +2970,27 @@
             const heroImgWrap = document.querySelector('.hero-main-img-wrap');
             if (heroImgWrap) {
                 const heroImages = [
-                    "{{ asset('images/tartufata.png') }}",
-                    "{{ asset('images/smash-burger.png') }}",
-                    "{{ asset('images/red-onion.png') }}",
-                    "{{ asset('images/koya-salad.png') }}",
-                    "{{ asset('images/katsudon.png') }}",
-                    "{{ asset('images/soboku.png') }}"
+                    { src: "{{ asset('images/tartufata.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'Tartufata']) }}" },
+                    { src: "{{ asset('images/smash-burger.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'Smash Burger']) }}" },
+                    { src: "{{ asset('images/red-onion.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'Red Onion']) }}" },
+                    { src: "{{ asset('images/koya-salad.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'KOYA Salad']) }}" },
+                    { src: "{{ asset('images/katsudon.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'Katsudon']) }}" },
+                    { src: "{{ asset('images/soboku.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'Soboku']) }}" }
                 ];
                 let currentImgIndex = 0;
                 
                 setInterval(() => {
                     currentImgIndex = (currentImgIndex + 1) % heroImages.length;
                     
-                    const nextSrc = heroImages[currentImgIndex];
+                    const nextImage = heroImages[currentImgIndex];
+                    const nextSrc = nextImage.src;
                     const tempImg = new Image();
                     tempImg.src = nextSrc;
                     tempImg.onload = () => {
                         // Create new image element
                         const newImg = document.createElement('img');
                         newImg.src = nextSrc;
-                        newImg.alt = "KOYA Product Showcase";
+                        newImg.alt = nextImage.alt;
                         newImg.className = "hero-main-img";
                         newImg.style.opacity = '0';
                         newImg.style.transform = 'scale(0.95)';
@@ -3022,4 +3022,12 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 

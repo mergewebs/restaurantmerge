@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Sample Restaurant</title>
+        @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => __('public.seo_admin_title')])])
         <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
         <!-- Fonts -->
@@ -781,3 +781,5 @@
         @include('partials.form-submit-lock')
 </body>
 </html>
+
+

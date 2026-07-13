@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Koya Smash Burger & Bol | {{ __('public.reservation_title') }}</title> <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    @include('partials.seo', ['seo' => $seo ?? []])
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <!-- Preconnect to external resources -->
@@ -906,7 +906,7 @@
     <header :class="mobileMenuOpen ? 'header-overlay-open' : ''">
         <div class="container header-container">
             <a href="/" class="logo-wrap">
-                <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA Logo" class="logo-img" onerror="this.src='/favicon.ico'">
+                <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="logo-img" width="75" height="75" onerror="this.src='/favicon.ico'">
             </a>
 
             <nav class="nav-links">
@@ -968,9 +968,9 @@
             
             <!-- Card Header -->
             <div class="mb-8 pb-4 border-b-4 border-dashed border-[#121212]">
-                <h2 style="font-family: 'Bubbleboddy', 'Outfit', sans-serif; font-size: 2.2rem; line-height: 1.1; color: var(--color-dark); text-transform: uppercase;">
+                <h1 style="font-family: 'Bubbleboddy', 'Outfit', sans-serif; font-size: 2.2rem; line-height: 1.1; color: var(--color-dark); text-transform: uppercase;">
                     {{ __('public.reservation_title') }}
-                </h2>
+                </h1>
             </div>
 
 
@@ -1223,7 +1223,7 @@
             <div class="footer-grid">
                 <div class="footer-logo-desc">
                     <a href="/" class="footer-logo-wrap">
-                        <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA Logo" class="footer-logo-img" onerror="this.src='/favicon.ico'">
+                        <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="footer-logo-img" width="96" height="96" onerror="this.src='/favicon.ico'">
                     </a>
                     <p class="footer-p">
                         {{ __('public.homepage_meta_description') }}
@@ -1257,6 +1257,10 @@
     @include('partials.form-submit-lock')
 </body>
 </html>
+
+
+
+
 
 
 
