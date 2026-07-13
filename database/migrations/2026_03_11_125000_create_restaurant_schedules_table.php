@@ -10,12 +10,14 @@ return new class extends Migration
     {
         Schema::create('restaurant_schedules', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('day_of_week'); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            $table->tinyInteger('day_of_week');
             $table->boolean('is_closed')->default(false);
             $table->time('open_time_1')->nullable();
             $table->time('close_time_1')->nullable();
             $table->time('open_time_2')->nullable();
             $table->time('close_time_2')->nullable();
+            $table->time('open_time_3')->nullable();
+            $table->time('close_time_3')->nullable();
             $table->integer('max_party_size')->default(10);
             $table->timestamps();
         });

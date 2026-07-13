@@ -16,10 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('category')->default('Starters');
             $table->text('description')->nullable();
+            $table->string('image_path')->nullable();
+            $table->string('image_display_path')->nullable();
+            $table->string('image_thumbnail_path')->nullable();
             $table->decimal('price', 10, 2);
             $table->boolean('is_active')->default(true);
             $table->unsignedInteger('sort_order')->default(0);
-            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }
@@ -32,4 +34,3 @@ return new class extends Migration
         Schema::dropIfExists('menu_items');
     }
 };
-

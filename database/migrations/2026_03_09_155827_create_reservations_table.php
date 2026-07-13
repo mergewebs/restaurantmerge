@@ -15,13 +15,17 @@ return new class extends Migration
             $table->id();
             $table->string('customer_name');
             $table->string('customer_phone')->nullable();
+            $table->string('customer_email')->nullable();
             $table->integer('party_size');
             $table->dateTime('reservation_time');
-            $table->string('table_number')->nullable();
             $table->text('notes')->nullable();
-            $table->string('status')->default('confirmed'); // confirmed, cancelled, completed
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('submission_token', 100)->nullable();
+            $table->string('locale', 5)->default('es');
+            $table->string('status')->default('confirmed');
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
+
+            $table->unique('submission_token', 'reservations_submission_token_unique');
         });
     }
 

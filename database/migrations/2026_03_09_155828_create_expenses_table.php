@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount', 10, 2);
-            $table->enum('category', ['supplies', 'bills', 'payroll', 'other']);
+            $table->string('category')->nullable();
+            $table->enum('method', ['card', 'cash'])->default('cash');
             $table->string('description')->nullable();
             $table->date('date');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');

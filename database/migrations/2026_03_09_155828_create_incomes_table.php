@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount', 10, 2);
-            $table->string('type')->default('sale'); // sale, tip
+            $table->string('type')->nullable();
+            $table->enum('method', ['card', 'cash'])->default('cash');
             $table->string('description')->nullable();
             $table->date('date');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
