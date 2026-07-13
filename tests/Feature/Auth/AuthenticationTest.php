@@ -12,41 +12,50 @@ class AuthenticationTest extends TestCase
 
     public function test_login_screen_can_be_rendered(): void
     {
-        $response = $this->get('/login');
+        $response = $this->get('/admin/login');
 
         $response->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
+    public function test_users_can_authenticate_using_a_six_digit_passcode(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
+        $response = $this->post('/admin/login', [
+            'passcode' => '123456',
         ]);
 
-        $this->assertAuthenticated();
+        $this->assertAuthenticatedAs($user);
         $response->assertRedirect(route('dashboard', absolute: false));
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password(): void
+    public function test_users_can_not_authenticate_with_an_invalid_passcode(): void
     {
-        $user = User::factory()->create();
+        User::factory()->create();
 
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
+        $response = $this->from('/admin/login')->post('/admin/login', [
+            'passcode' => '654321',
         ]);
 
+        $response
+            ->assertRedirect('/admin/login')
+            ->assertSessionHasErrors('passcode');
+
         $this->assertGuest();
+    }
+
+    public function test_admin_pages_stay_protected_by_authentication(): void
+    {
+        $response = $this->get('/admin/dashboard');
+
+        $response->assertRedirect('/admin/login');
     }
 
     public function test_users_can_logout(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post('/logout');
+        $response = $this->actingAs($user)->post('/admin/logout');
 
         $this->assertGuest();
         $response->assertRedirect('/');

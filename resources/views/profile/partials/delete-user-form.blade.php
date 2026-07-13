@@ -25,20 +25,23 @@
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                {{ __('Please enter your password to confirm permanent deletion.') }}
+                {{ __('Please enter your 6-digit passcode to confirm permanent deletion.') }}
             </p>
 
             <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                <x-input-label for="passcode" value="{{ __('Passcode') }}" class="sr-only" />
 
                 <x-text-input
-                    id="password"
-                    name="password"
+                    id="passcode"
+                    name="passcode"
                     type="password"
-                    class="mt-1 block w-3/4"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    maxlength="6"
+                    class="mt-1 block w-3/4 text-center tracking-[0.35em]"
                 />
 
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                <x-input-error :messages="$errors->userDeletion->get('passcode')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end">

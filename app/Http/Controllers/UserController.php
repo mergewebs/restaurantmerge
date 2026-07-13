@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -14,9 +12,10 @@ class UserController extends Controller
      */
     private function denyNonAdmin()
     {
-        if (!auth()->user()->isUserAdmin()) {
+        if (! auth()->user()->isUserAdmin()) {
             return redirect()->route('dashboard')->with('error', 'Access denied.');
         }
+
         return null;
     }
 
@@ -25,9 +24,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        if ($deny = $this->denyNonAdmin()) return $deny;
+        if ($deny = $this->denyNonAdmin()) {
+            return $deny;
+        }
 
         $users = User::orderBy('name', 'asc')->get();
+
         return view('users.index', compact('users'));
     }
 
@@ -36,20 +38,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        if ($deny = $this->denyNonAdmin()) return $deny;
+        if ($deny = $this->denyNonAdmin()) {
+            return $deny;
+        }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'passcode' => ['required', 'digits:6', 'confirmed'],
             'role' => 'required|string|in:waiter,admin,owner,superadmin',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
+        User::create([
+            'name' => $validated['name'],
+            'passcode' => $validated['passcode'],
+            'role' => $validated['role'],
+        ]);
 
-        User::create($validated);
-
-        return back()->with('success', 'User created successfully.');
+        return back()->with('success', 'Staff member created successfully.');
     }
 
     /**
@@ -57,31 +62,30 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if ($deny = $this->denyNonAdmin()) return $deny;
+        if ($deny = $this->denyNonAdmin()) {
+            return $deny;
+        }
 
-        // Prevent editing yourself out of admin
         if ($user->id === auth()->id() && $request->role !== $user->role) {
             return back()->with('error', 'You cannot change your own role.');
         }
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'role' => 'required|string|in:waiter,admin,owner,superadmin',
-            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'passcode' => ['nullable', 'digits:6', 'confirmed'],
         ]);
 
         $user->name = $validated['name'];
-        $user->email = $validated['email'];
         $user->role = $validated['role'];
 
-        if (!empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
+        if (! empty($validated['passcode'])) {
+            $user->passcode = $validated['passcode'];
         }
 
         $user->save();
 
-        return back()->with('success', 'User updated successfully.');
+        return back()->with('success', 'Staff member updated successfully.');
     }
 
     /**
@@ -89,15 +93,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($deny = $this->denyNonAdmin()) return $deny;
+        if ($deny = $this->denyNonAdmin()) {
+            return $deny;
+        }
 
-        // Prevent self-deletion
         if ($user->id === auth()->id()) {
             return back()->with('error', 'You cannot delete your own account.');
         }
 
         $user->delete();
 
-        return back()->with('success', 'User deleted successfully.');
+        return back()->with('success', 'Staff member deleted successfully.');
     }
 }

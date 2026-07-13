@@ -13,11 +13,10 @@ use App\Models\RestaurantTable;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 
 class PresentationDemoSeeder extends Seeder
 {
-    private const DEMO_PASSWORD = 'password';
+    private const DEMO_PASSCODE = '123456';
 
     public function run(): void
     {
@@ -33,24 +32,24 @@ class PresentationDemoSeeder extends Seeder
         $accounts = [
             'superadmin' => [
                 'name' => 'Demo Super Admin',
-                'email' => 'superadmin@example.com',
+                'passcode' => '111111',
                 'role' => 'superadmin',
             ],
             'owner' => [
                 'name' => 'Demo Owner',
-                'email' => 'owner@example.com',
+                'passcode' => self::DEMO_PASSCODE,
                 'role' => 'owner',
             ],
             'waiter' => [
                 'name' => 'Demo Waiter',
-                'email' => 'waiter@example.com',
+                'passcode' => '222222',
                 'role' => 'waiter',
             ],
         ];
 
         return collect($accounts)
             ->mapWithKeys(function (array $account, string $key) {
-                $user = User::where('email', $account['email'])->first();
+                $user = User::where('name', $account['name'])->first();
 
                 if (! $user) {
                     $user = new User();
@@ -58,12 +57,9 @@ class PresentationDemoSeeder extends Seeder
 
                 $user->fill([
                     'name' => $account['name'],
-                    'email' => $account['email'],
-                    'password' => Hash::make(self::DEMO_PASSWORD),
+                    'passcode' => $account['passcode'],
                     'role' => $account['role'],
                 ])->save();
-
-                $user->forceFill(['email_verified_at' => now()])->save();
 
                 return [$key => $user];
             })
@@ -240,4 +236,3 @@ class PresentationDemoSeeder extends Seeder
         ]);
     }
 }
-

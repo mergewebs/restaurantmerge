@@ -19,8 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
+        'passcode',
         'role',
         'last_login_at',
     ];
@@ -31,7 +30,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
+        'passcode',
         'remember_token',
     ];
 
@@ -43,10 +42,14 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'passcode' => 'hashed',
             'last_login_at' => 'datetime',
         ];
+    }
+
+    public function getAuthPasswordName(): string
+    {
+        return 'passcode';
     }
 
     public function isAdmin(): bool
@@ -78,5 +81,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Expense::class);
     }
-
 }

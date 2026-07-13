@@ -49,7 +49,7 @@ Route::middleware('feature:takeaway')->group(function () {
 
 Route::redirect('/admin', '/admin/dashboard');
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Reservations
@@ -117,6 +117,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
 
 
 

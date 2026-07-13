@@ -13,7 +13,7 @@
                     <div>
                         <h1 class="text-lg sm:text-xl font-black">{{ auth()->user()->name }}</h1>
                         <p class="text-[11px] text-white/55 uppercase tracking-[0.2em] font-black mt-0.5">{{ auth()->user()->role }}</p>
-                        <p class="text-xs text-white/45 mt-1">{{ auth()->user()->email }}</p>
+                        <p class="text-xs text-white/45 mt-1">{{ __('Admin access is secured with your 6-digit passcode.') }}</p>
                     </div>
                 </div>
 
@@ -33,7 +33,7 @@
 
             <div class="xl:col-span-5 space-y-4">
                 <div class="glass p-5 sm:p-6 rounded-3xl border border-white/10">
-                    @include('profile.partials.update-password-form')
+                    @include('profile.partials.update-passcode-form')
                 </div>
                 <div class="glass p-5 sm:p-6 rounded-3xl border border-red-500/20">
                     @include('profile.partials.delete-user-form')
