@@ -80,7 +80,7 @@ class ReservationController extends Controller
 
         // Send Email to Admin (for notification of new manual reservation)
         $adminEmail = env('ADMIN_EMAIL', 'koyabcn@gmail.com');
-        Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation, $locale));
+        Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation));
 
         // Send Email to Client if email exists
         if ($reservation->customer_email) {
@@ -162,7 +162,7 @@ class ReservationController extends Controller
         if ($wasCreated) {
             // Send Email to Admin
             $adminEmail = env('ADMIN_EMAIL', 'koyabcn@gmail.com');
-            Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation, $locale));
+            Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation));
 
             // Send Email to Client if email exists
             if ($reservation->customer_email) {

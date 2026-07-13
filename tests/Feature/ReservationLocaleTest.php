@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Mail\ReservationConfirmationClient;
+use App\Mail\NewReservationAdminNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
@@ -66,6 +67,11 @@ class ReservationLocaleTest extends TestCase
         Mail::assertSent(
             ReservationConfirmationClient::class,
             fn (ReservationConfirmationClient $mail) => $mail->locale === $locale
+        );
+
+        Mail::assertSent(
+            NewReservationAdminNotification::class,
+            fn (NewReservationAdminNotification $mail) => $mail->locale === 'en'
         );
     }
 }
