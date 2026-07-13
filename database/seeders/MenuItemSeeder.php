@@ -24,7 +24,7 @@ class MenuItemSeeder extends Seeder
             ['Entrantes', 11, 'POP-BILLAS', 16.50, "Pulpo hervido salteado de salsa kimchi, patatas con aji amarillo y chimichurri japon\u{00E9}s"],
             ['Entrantes', 12, 'PIPARRA ROLL (POR UNIDAD)', 2.99, "Chilli verde relleno de ternera y sofrito con queso rallado y champi\u{00F1}ones al wok. Acabado con queso rallado con miel, salsa ahumada de la casa e hilos crujientes de boniato"],
 
-            "Acompañamientos" => ["Acompañamientos", "Acompa\u{00F1}amientos", "Acompa?amientos"],
+            ["Acompa\u{00F1}amientos", 1, 'BONIATO FRITO', 4.30, "Sal de katsuobushi con perejil y or\u{00E9}gano"],
             ["Acompa\u{00F1}amientos", 2, 'PATATAS FRITAS', 3.50, null],
             ["Acompa\u{00F1}amientos", 3, 'MEZCLUM FRIES', 4.50, 'Patatas y boniato'],
             ["Acompa\u{00F1}amientos", 4, 'BRAVAS', 4.00, 'Con triple salsa de la casa'],
