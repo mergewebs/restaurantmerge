@@ -967,8 +967,6 @@
 
                 getBadge(itemName) {
                     const badges = {
-                        'Spicy Korean Rice Bowl': 'New',
-                        'Cheesecake Jar': 'Favorite',
                         'Tartufata': 'Truffle',
                         'Smash Burger': 'Classic',
                         'Red Onion': 'Smoky',

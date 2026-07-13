@@ -789,32 +789,15 @@
                         'Smash Burger': 'Perfectly seasoned double smash patty with cheddar cheese, crisp lettuce, tomato, pickles, and our signature burger sauce.',
                         'Red Onion': 'Double smash patty with caramelized red onions, melted cheddar, pickles, and dynamic smoky barbecue sauce.',
                         'SOBOKU': 'A simple, clean-tasting single smash patty with cheddar cheese, yellow mustard, and pickles inside a soft bun.',
-                        'Loaded Nachos': 'Crispy tortilla chips topped with cheese sauce, guacamole, pico de gallo, and jalapeños.',
-                        'Crispy Chicken Bites': 'Tender buttermilk chicken bites served with honey mustard sauce.',
-                        'Spicy Korean Rice Bowl': 'Juicy chicken bites glazed in gochujang sauce, steamed rice, pickled radish, edamame, and sesame.',
-                        'Mediterranean Rice Bowl': 'Grilled salmon or falafel, quinoa, cherry tomatoes, cucumbers, tzatziki sauce, and fresh herbs.',
                         'KOYA SALAD': 'Fresh mix of crisp greens, cherry tomatoes, edamame, pickled cabbage, avocado, and ginger sesame dressing.',
                         'KATSUDON': 'Crispy chicken panko cutlet, simmered eggs, onions, and sweet-savory dashi broth served over steamed rice.',
-                        'House Fries': 'Golden crispy fries seasoned with our house spice blend.',
-                        'Sweet Potato Fries': 'Sweet potato fries served with chipotle garlic mayo.',
-                        'Cheesecake Jar': 'Creamy NY-style cheesecake with red berry coulis in a jar.',
-                        'Chocolate Brownie': 'Warm chocolate brownie served with a scoop of vanilla ice cream.',
-                        'Homemade Lemonade': 'Freshly squeezed lemons with a touch of mint and honey.',
-                        'Local Lager': 'Cold, refreshing local lager.',
-                        'House IPA': 'Cold, craft India Pale Ale with citrus notes.',
                         'Mojito': 'Classic refreshing cocktail with rum, lime, and fresh mint.',
-                        'Still Water': 'Refreshing mineral water.',
-                        'Espresso': 'Freshly brewed aromatic espresso.',
-                        'Lunch Combo': 'Burger or rice bowl, side, and drink.',
-                        'Family Takeaway Pack': 'Four burgers, two large fries, and four drinks.'
                     };
                     return descriptions[item.name] || '';
                 },
 
                 getBadge(itemName) {
                     const badges = {
-                        'Spicy Korean Rice Bowl': 'New',
-                        'Cheesecake Jar': 'Favorite',
                         'Tartufata': 'Truffle',
                         'Smash Burger': 'Classic',
                         'Red Onion': 'Smoky',

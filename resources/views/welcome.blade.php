@@ -2403,9 +2403,6 @@
             @php
             // Prepare items matching database content or using our high quality fallbacks
             $imageMap = [
-                'Spicy Korean Rice Bowl' => 'katsudon.png',
-                'Mediterranean Rice Bowl' => 'koya-salad.png',
-                'Teriyaki Tofu Bowl' => 'koya-salad.png',
                 'KOYA SMASH SPECIAL' => 'smash-burger.png',
                 'KIMCHI BURGER' => 'kimchI_burguer.png',
                 'TARTUFATA' => 'tartufata.png',
@@ -2470,9 +2467,7 @@
                     $description = $item->description ?? '';
 
                     $badge = null;
-                    if ($item->name === 'Spicy Korean Rice Bowl') $badge = 'New';
-                    elseif ($item->name === 'Cheesecake Jar') $badge = 'KOYA Favorite';
-                    elseif ($item->name === 'TARTUFATA') $badge = 'Truffle';
+                    if ($item->name === 'TARTUFATA') $badge = 'Truffle';
                     elseif ($item->name === 'RED ONION') $badge = 'Smoky';
                     elseif ($item->name === 'KOYA SALAD') $badge = 'Fresh';
                     elseif ($item->name === 'KATSUDON') $badge = 'Crispy';
