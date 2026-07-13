@@ -498,10 +498,20 @@
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4"
                 x-transition:enter-end="opacity-100 translate-y-0"
-                class="koya-card rounded-[24px] p-5 md:col-span-2 lg:col-span-3 bg-[#fac021]"
+                class="group relative flex flex-col rounded-[28px] bg-[#fffcf4] border-[3px] border-[#121212] shadow-[6px_6px_0px_#121212] overflow-hidden"
             >
-                <p class="font-['Biski'] text-2xl uppercase text-[#121212]">Pan vegetariano y Pan Sin Gluten disponible</p>
-                <p class="font-['Biski_2'] text-sm text-[#555] mt-2">2&euro; de suplemento</p>
+                <div class="p-6 flex flex-col h-full justify-between">
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <h3 class="font-['Biski'] text-xl text-koya-dark uppercase tracking-wide leading-tight">{!! __('public.burger_bun_availability') !!}</h3>
+                            <span class="font-bold text-xl text-koya-green whitespace-nowrap">2&euro;</span>
+                        </div>
+                        <p class="font-['Biski_2'] text-sm text-[#555] leading-relaxed">{!! __('public.burger_bun_supplement') !!}</p>
+                    </div>
+                    <div class="pt-4 mt-6 border-t border-[#ebd6b0]/50">
+                        <span class="block w-full py-3 px-4 rounded-xl text-xs font-black uppercase tracking-wider text-center bg-[#fac021]/25 text-[#121212] border-[3px] border-dashed border-[#121212]">Supplement</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -973,6 +983,4 @@
     </script>
 </body>
 </html>
-
-
 

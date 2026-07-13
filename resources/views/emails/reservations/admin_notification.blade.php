@@ -105,7 +105,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="KOYA BCN Logo">
+            <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="Koya Smash Burger & Bol Logo">
         </div>
 
         <h1>{{ __('emails.admin.title', [], $locale) }}</h1>
@@ -154,9 +154,10 @@
         <div class="divider"></div>
 
         <div class="footer">
-            <div class="footer-name">KOYA BCN</div>
+            <div class="footer-name">Koya Smash Burger & Bol</div>
             <a href="https://koyabcn.es" class="footer-link">koyabcn.es</a>
         </div>
     </div>
 </body>
 </html>
+

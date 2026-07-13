@@ -17,8 +17,12 @@ class SetLocale
         }
 
         $availableLocales = array_keys(config('app.available_locales', ['es' => 'Español', 'en' => 'English']));
-        $defaultLocale = config('app.locale', 'es');
-        $locale = $request->session()->get('locale', $defaultLocale);
+        $defaultLocale = config('app.locale', 'en');
+        $locale = $request->session()->get('locale');
+
+        if (! is_string($locale) || ! in_array($locale, $availableLocales, true)) {
+            $locale = $request->getPreferredLanguage($availableLocales) ?: $defaultLocale;
+        }
 
         if (! in_array($locale, $availableLocales, true)) {
             $locale = $defaultLocale;

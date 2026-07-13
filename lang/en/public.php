@@ -3,11 +3,11 @@
 return [
     'language_switcher' => 'Language switcher',
     'language_short' => 'Language',
-    'site_title' => 'KOYA | Smash Burger & BOL',
+    'site_title' => 'Koya Smash Burger & Bol',
     'site_title_order' => ':restaurant | Order online',
     'site_title_takeaway' => ':restaurant | Takeaway order',
-    'iframe_title' => 'Reservation - KOYA BCN',
-    'guest_title' => 'KOYA BCN',
+    'iframe_title' => 'Reservation - Koya Smash Burger & Bol',
+    'guest_title' => 'Koya Smash Burger & Bol',
     'copyright' => '© 2026 Mergewebs Restaurant',
 
     'nav_home' => 'Home',
@@ -35,7 +35,7 @@ return [
     'homepage_email_label' => 'Email',
     'homepage_hours_title' => 'Opening hours',
     'homepage_footer_description' => 'Authentic smash burgers with crispy edges and bold rice bowls loaded with premium ingredients. Street food with attitude.',
-    'homepage_footer_rights' => '© 2026 KOYA BCN. All rights reserved.',
+    'homepage_footer_rights' => '© 2026 Koya Smash Burger & Bol. All rights reserved.',
     'homepage_footer_tagline' => 'Designed with attitude',
 
     'menu_tab_burgers' => 'Burgers',
@@ -45,6 +45,10 @@ return [
     'menu_tab_drinks' => 'Drinks',
     'menu_tab_desserts' => 'Desserts',
     'menu_tab_all' => 'All items',
+    'burgers_double_patty' => 'Our burgers come with double patties',
+    'burger_bun_availability' => 'Vegetarian bun and gluten-free bun available',
+    'burger_bun_supplement' => '2&#8364; supplement',
+    'allergy_staff_notice' => 'In case of allergies, please ask our staff.',
 
     'contact_address' => 'Carrer Empecinado, 10, 08906 L\'Hospitalet de Llobregat, Barcelona',
     'contact_phone' => '931 66 86 11',
@@ -196,15 +200,4 @@ return [
         'Refreshing' => 'Refreshing',
     ],
 ];
-
-
-
-
-
-
-
-
-
-
-
 

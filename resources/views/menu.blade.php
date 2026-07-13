@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ __('public.homepage_meta_description') }}">
-    <title>KOYA | {{ __('public.nav_menu') }}</title>
+    <title>Koya Smash Burger & Bol | {{ __('public.nav_menu') }}</title>
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -621,8 +621,16 @@
                 </div>
             @else
 
-                <div class="allergy-disclaimer" x-show="activeTab === 'Smash Burgers'" x-cloak>
-                    <p class="allergy-disclaimer-text">Nuestras hamburguesas cuentan con doble patty</p>
+                <div class="menu-card-simple" x-show="activeTab === 'Smash Burgers'" x-cloak>
+                    <div class="menu-item-inner">
+                        <div class="menu-item-info">
+                            <div class="menu-item-top">
+                                <h3 class="menu-item-name">{!! __('public.burger_bun_availability') !!}</h3>
+                                <span class="menu-item-price">2&euro;</span>
+                            </div>
+                            <p class="menu-item-description">{!! __('public.burger_bun_supplement') !!}</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="menu-grid">
@@ -765,7 +773,7 @@
                 </div>
 
                 <div class="allergy-disclaimer">
-                    <p class="allergy-disclaimer-text">En caso de alergias, consulte con nuestro personal.</p>
+                    <p class="allergy-disclaimer-text">{{ __('public.allergy_staff_notice') }}</p>
                 </div>
             @endif
         </div>
@@ -773,15 +781,4 @@
     </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
 

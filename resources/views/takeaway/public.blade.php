@@ -345,10 +345,20 @@
                 x-transition:enter="transition ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4"
                 x-transition:enter-end="opacity-100 translate-y-0"
-                class="lg:col-span-3 md:col-span-2 rounded-[28px] border border-koya/30 bg-white/5 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.25)]"
+                class="group relative flex flex-col rounded-[28px] border border-koya/30 bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.25)] overflow-hidden"
             >
-                <p class="text-lg md:text-2xl font-black uppercase tracking-wide text-koya">Pan vegetariano y Pan Sin Gluten disponible</p>
-                <p class="text-sm text-white/70 mt-2">2&euro; de suplemento</p>
+                <div class="p-6 flex flex-col h-full justify-between">
+                    <div>
+                        <div class="flex justify-between items-start gap-2 mb-2">
+                            <h3 class="text-lg font-black text-white leading-tight">{!! __('public.burger_bun_availability') !!}</h3>
+                            <span class="text-lg font-black text-koya-gold whitespace-nowrap">2&euro;</span>
+                        </div>
+                        <p class="text-xs text-white/60 font-light leading-relaxed">{!! __('public.burger_bun_supplement') !!}</p>
+                    </div>
+                    <div class="pt-4 mt-6 border-t border-white/5">
+                        <span class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/5 border border-white/10 text-xs font-black uppercase tracking-wider text-white/70">Supplement</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -819,5 +829,4 @@
     </script>
 </body>
 </html>
-
 

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{ __('public.homepage_meta_description') }}">
-    <title>KOYA | Smash Burger & BOL</title><link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <title>Koya Smash Burger & Bol</title><link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <!-- Preconnect to external resources -->
@@ -339,10 +339,15 @@
         .hero {
             background: linear-gradient(135deg, var(--color-green), #0ba389, #055f4f, var(--color-green));
             background-size: 400% 400%;
+            min-height: 100vh;
+            min-height: 100svh;
+            min-height: 100dvh;
             padding: 8rem 0 5rem 0;
             border-bottom: var(--border-width) solid var(--color-dark);
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
             animation: gradientShift 15s ease infinite;
         }
 
@@ -2261,6 +2266,7 @@
         </div>
         
         <div class="mobile-actions-container">
+            <a href="https://glovoapp.com/es/es/barcelona/stores/koya-smash-burger-and-bol-barcelona" target="_blank" rel="noopener noreferrer" class="sticker sticker-large sticker-white text-center sticker-btn" @click="mobileMenuOpen = false">{{ __('public.nav_order_online') }}</a>
             <a href="{{ route('reservations.public.create') }}" class="sticker sticker-large text-center sticker-btn" @click="mobileMenuOpen = false">{{ __('public.nav_reserve') }}</a>
             @if(config('features.takeaway', false))
                 <a href="{{ route('order.public') }}" class="sticker sticker-large sticker-white text-center sticker-btn" @click="mobileMenuOpen = false">{{ __('public.nav_order_online') }}</a>
@@ -2274,10 +2280,10 @@
         <div class="mobile-socials-section">
             <p class="mobile-socials-title">Connect</p>
             <div class="mobile-socials-container">
-                <a href="https://www.instagram.com/koyabcn" target="_blank" class="social-icon" aria-label="Instagram">
+                <a href="https://www.instagram.com/koya_bcn" target="_blank" class="social-icon" aria-label="Instagram">
                     <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                 </a>
-                <a href="https://www.facebook.com/koyabcn" target="_blank" class="social-icon" aria-label="Facebook">
+                <a href="https://www.facebook.com/profile.php?id=100094879849238" target="_blank" class="social-icon" aria-label="Facebook">
                     <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
                 </a>
                 <a href="https://wa.me/34671620787" target="_blank" class="social-icon" aria-label="WhatsApp">
@@ -2302,6 +2308,7 @@
 
             <div class="nav-actions">
                 <x-language-switcher theme="dark" class="koya-lang-header-hide" style="margin-right: 0.5rem;" />
+                <a href="https://glovoapp.com/es/es/barcelona/stores/koya-smash-burger-and-bol-barcelona" target="_blank" rel="noopener noreferrer" class="btn-koya-secondary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">{{ __('public.nav_order_online') }}</a>
                 <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">{{ __('public.nav_reserve') }}</a>
                 <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="mobileMenuOpen ? 'is-open' : ''" aria-label="{{ __('public.nav_menu') }}">
                     <div class="hamburger-inner">
@@ -2377,12 +2384,12 @@
     <!-- Menu Section -->
     <section id="menu-section" class="menu-section" x-data="{ activeTab: 'Starters' }">
         <div class="container">
-            <div class="section-header reveal">
+            <div class="section-header reveal" data-reveal-trigger="1.02">
                 <h2 class="section-title">{{ __('public.homepage_menu_title') }}</h2>
             </div>
 
             <!-- Category Tabs -->
-            <div class="menu-tabs-container reveal">
+            <div class="menu-tabs-container reveal" data-reveal-trigger="1.04">
                 <div class="menu-tabs">
                     <button class="menu-tab" :class="activeTab === 'Starters' ? 'active' : ''" @click="activeTab = 'Starters'">{{ __('public.menu_tab_starters') }}</button>
                     <button class="menu-tab" :class="activeTab === 'Smash Burgers' ? 'active' : ''" @click="activeTab = 'Smash Burgers'">SMASH BURGER</button>
@@ -2568,12 +2575,6 @@
             $firstCocktailName = collect($displayItems)->firstWhere('category', 'Cocteles')['name'] ?? null;
             @endphp
 
-            <div class="allergy-disclaimer reveal" x-show="activeTab === 'Smash Burgers'"
-                 x-transition:enter="transition ease-out duration-300 transform"
-                 x-transition:enter-start="opacity-0 translate-y-4"
-                 x-transition:enter-end="opacity-100 translate-y-0">
-                <p class="allergy-disclaimer-text">Nuestras hamburguesas cuentan con doble patty</p>
-            </div>
 
             <div class="menu-grid">
                 @foreach($displayItems as $item)
@@ -2597,7 +2598,7 @@
                     ];
                     @endphp
                     @if(! $skipStandardDrinkCard)
-                        <div class="menu-card-simple reveal" x-show="activeTab === '{{ $item['tab_category'] }}'"
+                        <div class="menu-card-simple reveal" data-reveal-trigger="1.08" x-show="activeTab === '{{ $item['tab_category'] }}'"
                              x-transition:enter="transition ease-out duration-300 transform"
                              x-transition:enter-start="opacity-0 translate-y-4 scale-95"
                              x-transition:enter-end="opacity-100 translate-y-0 scale-100">
@@ -2620,6 +2621,21 @@
                         </div>
                     @endif
                 @endforeach
+            </div>
+
+            <div class="sides-showcase reveal" data-reveal-trigger="1.12" x-show="activeTab === 'Smash Burgers'" x-cloak
+                 x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 scale-100">
+                <div class="sides-showcase-grid">
+                    <div class="sides-showcase-item">
+                        <div class="sides-showcase-top">
+                            <h3 class="sides-showcase-name">{!! __('public.burger_bun_availability') !!}</h3>
+                            <span class="sides-showcase-price">2&euro;</span>
+                        </div>
+                        <p class="sides-showcase-description">{!! __('public.burger_bun_supplement') !!}</p>
+                    </div>
+                </div>
             </div>
 
             @php
@@ -2649,7 +2665,7 @@
                 })->values();
             @endphp
 
-            <div class="drinks-highlight-grid reveal" x-show="activeTab === 'Drinks'"
+            <div class="drinks-highlight-grid reveal" data-reveal-trigger="1.04" x-show="activeTab === 'Drinks'"
                  x-transition:enter="transition ease-out duration-300 transform"
                  x-transition:enter-start="opacity-0 translate-y-4 scale-95"
                  x-transition:enter-end="opacity-100 translate-y-0 scale-100">
@@ -2749,7 +2765,7 @@
                 </div>
 
             </div>
-            <div class="sides-showcase reveal" x-show="activeTab === 'Starters'"
+            <div class="sides-showcase reveal" data-reveal-trigger="1.05" x-show="activeTab === 'Starters'"
                  x-transition:enter="transition ease-out duration-300 transform"
                  x-transition:enter-start="opacity-0 translate-y-4 scale-95"
                  x-transition:enter-end="opacity-100 translate-y-0 scale-100">
@@ -2774,7 +2790,7 @@
             <!-- Allergy Disclaimer -->
             <div class="allergy-disclaimer reveal">
                 <p class="allergy-disclaimer-text">
-                    En caso de alergias, consulte con nuestro personal.
+                    {{ __('public.allergy_staff_notice') }}
                 </p>
             </div>
         </div>
@@ -2907,10 +2923,10 @@
                         {{ __('public.homepage_meta_description') }}
                     </p>
                     <div class="social-icons">
-                        <a href="#" class="social-icon" aria-label="Instagram">
+                        <a href="https://www.instagram.com/koya_bcn" target="_blank" class="social-icon" aria-label="Instagram">
                             <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                         </a>
-                        <a href="#" class="social-icon" aria-label="Facebook">
+                        <a href="https://www.facebook.com/profile.php?id=100094879849238" target="_blank" class="social-icon" aria-label="Facebook">
                             <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
                         </a>
                     </div>
@@ -2922,6 +2938,7 @@
                         <li><a href="#hero">{{ __('public.nav_home') }}</a></li>
                         <li><a href="#menu-section">{{ __('public.nav_menu') }}</a></li>
                         <li><a href="#contact">{{ __('public.nav_location_hours') }}</a></li>
+                        <li><a href="https://glovoapp.com/es/es/barcelona/stores/koya-smash-burger-and-bol-barcelona" target="_blank" rel="noopener noreferrer">{{ __('public.nav_order_online') }}</a></li>
                     </ul>
                 </div>
 
@@ -2929,7 +2946,7 @@
 
             <div class="footer-bottom">
                 <p>{{ __('public.homepage_footer_rights') }}</p>
-                <p>{{ __('public.homepage_footer_tagline') }} <a href="http://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
+                <p>{{ __('public.homepage_footer_tagline') }} <a href="https://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
             </div>
         </div>
     </footer>
@@ -2942,8 +2959,9 @@
             const reveals = document.querySelectorAll('.reveal');
             
             const revealOnScroll = () => {
-                const triggerBottom = window.innerHeight * 0.85;
                 reveals.forEach(reveal => {
+                    const triggerMultiplier = Number.parseFloat(reveal.dataset.revealTrigger || '0.85');
+                    const triggerBottom = window.innerHeight * triggerMultiplier;
                     const revealTop = reveal.getBoundingClientRect().top;
                     if (revealTop < triggerBottom) {
                         reveal.classList.add('reveal-active');
@@ -3009,24 +3027,4 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

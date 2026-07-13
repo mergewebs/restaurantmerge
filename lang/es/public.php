@@ -3,11 +3,11 @@
 return [
     'language_switcher' => 'Selector de idioma',
     'language_short' => 'Idioma',
-    'site_title' => 'KOYA | Smash Burger y BOL',
+    'site_title' => 'Koya Smash Burger & Bol',
     'site_title_order' => ':restaurant | Pedido online',
     'site_title_takeaway' => ':restaurant | Pedido para llevar',
-    'iframe_title' => 'Reserva - KOYA BCN',
-    'guest_title' => 'KOYA BCN',
+    'iframe_title' => 'Reserva - Koya Smash Burger & Bol',
+    'guest_title' => 'Koya Smash Burger & Bol',
     'copyright' => '© 2026 Mergewebs Restaurant',
 
     'nav_home' => 'Inicio',
@@ -22,7 +22,7 @@ return [
     'nav_book_table' => 'Reservar mesa',
     'nav_staff_login' => 'Acceso del personal',
 
-    'homepage_meta_description' => 'Nos aventuramos más allá de las hamburguesas, fusionando la cocina asiática y americana en cada bocado. Street food fresco, rápido y moderno en Barcelona.',
+    'homepage_meta_description' => 'Nos aventuramos más allá de las Smash Burger, fusionando la cocina asiática y mediterránea en cada bocado',
     'homepage_hero_cta_menu' => 'Ver menú',
     'homepage_hero_cta_reserve' => 'Reservar',
     'homepage_gallery_title' => "Nos aventuramos más allá de las :burgerImage, fusionando la cocina asiática y mediterránea en cada bocado :saladImage",
@@ -35,8 +35,8 @@ return [
     'homepage_email_label' => 'Correo',
     'homepage_hours_title' => 'Horario',
     'homepage_footer_description' => "NOS AVENTURAMOS MÁS ALLÁ DE LAS HAMBURGUESAS, FUSIONANDO LA COCINA ASIÁTICA Y AMERICANA EN CADA BOCADO.",
-    'homepage_footer_rights' => '© 2026 KOYA BCN. Todos los derechos reservados.',
-    'homepage_footer_tagline' => 'Diseñado con actitud',
+    'homepage_footer_rights' => '© 2026 Koya Smash Burger & Bol. Todos los derechos reservados.',
+    'homepage_footer_tagline' => 'Página web creada por',
 
     'menu_tab_burgers' => 'Burgers',
     'menu_tab_bol' => 'BOL (Bowls)',
@@ -45,6 +45,10 @@ return [
     'menu_tab_drinks' => 'Bebidas',
     'menu_tab_desserts' => 'Postres',
     'menu_tab_all' => 'Todos',
+    'burgers_double_patty' => 'Nuestras hamburguesas cuentan con doble patty',
+    'burger_bun_availability' => 'Pan vegetariano y Pan Sin Gl&uacute;ten disponible',
+    'burger_bun_supplement' => '2&#8364; de suplemento',
+    'allergy_staff_notice' => 'En caso de alergias, consulte con nuestro personal.',
 
     'contact_address' => 'Carrer Empecinado, 10, 08906 L\'Hospitalet de Llobregat, Barcelona',
     'contact_phone' => '931 66 86 11',
@@ -171,6 +175,4 @@ return [
         'Refreshing' => 'Refrescante',
     ],
 ];
-
-
 

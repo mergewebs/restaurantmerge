@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>KOYA | {{ __('public.reservation_title') }}</title> <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <title>Koya Smash Burger & Bol | {{ __('public.reservation_title') }}</title> <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
     <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
 
     <!-- Preconnect to external resources -->
@@ -882,17 +882,17 @@
         <div class="mobile-actions-container">
             <a href="{{ route('reservations.public.create') }}" class="sticker-btn text-center" @click="mobileMenuOpen = false">Reservar</a>
             @if(config('features.takeaway', false))
-                <a href="{{ route('order.public') }}" class="sticker-btn sticker-white text-center" @click="mobileMenuOpen = false">Pedir Online</a>
+                <a href="{{ route('order.public') }}" class="sticker-btn sticker-white text-center" @click="mobileMenuOpen = false">{{ __('public.nav_order_online') }}</a>
             @endif
         </div>
 
         <div class="mobile-socials-section">
             <p class="mobile-socials-title">Connect</p>
             <div class="mobile-socials-container">
-                <a href="https://www.instagram.com/koyabcn" target="_blank" class="social-icon" aria-label="Instagram">
+                <a href="https://www.instagram.com/koya_bcn" target="_blank" class="social-icon" aria-label="Instagram">
                     <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                 </a>
-                <a href="https://www.facebook.com/koyabcn" target="_blank" class="social-icon" aria-label="Facebook">
+                <a href="https://www.facebook.com/profile.php?id=100094879849238" target="_blank" class="social-icon" aria-label="Facebook">
                     <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
                 </a>
                 <a href="https://wa.me/34671620787" target="_blank" class="social-icon" aria-label="WhatsApp">
@@ -1229,10 +1229,10 @@
                         {{ __('public.homepage_meta_description') }}
                     </p>
                     <div class="social-icons">
-                        <a href="#" class="social-icon" aria-label="Instagram">
+                        <a href="https://www.instagram.com/koya_bcn" target="_blank" class="social-icon" aria-label="Instagram">
                             <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
                         </a>
-                        <a href="#" class="social-icon" aria-label="Facebook">
+                        <a href="https://www.facebook.com/profile.php?id=100094879849238" target="_blank" class="social-icon" aria-label="Facebook">
                             <svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
                         </a>
                     </div>
@@ -1249,11 +1249,14 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2026 KOYA BCN. All rights reserved.</p>
-                <p>Developed by <a href="http://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
+                <p>&copy; 2026 Koya Smash Burger & Bol. All rights reserved.</p>
+                <p>Página web creada por <a href="https://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
             </div>
         </div>
     </footer>
     @include('partials.form-submit-lock')
 </body>
 </html>
+
+
+

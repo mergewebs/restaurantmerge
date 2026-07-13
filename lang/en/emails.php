@@ -5,7 +5,7 @@ return [
         'subject' => 'Reservation ready for :date at :time!',
         'title' => 'Your reservation is confirmed!',
         'greeting' => 'Hello :name,',
-        'intro' => 'Thank you for booking with <strong>KOYA BCN</strong>. Here are your reservation details:',
+        'intro' => 'Thank you for booking with <strong>KOYA</strong>. Here are your reservation details:',
         'date_time' => 'Date and time',
         'location' => 'Location',
         'location_address' => 'Carrer de l\'Empecinado, 10, 08906 L\'Hospitalet de Llobregat, Barcelona',
@@ -18,8 +18,8 @@ return [
         'contact_email' => 'koyabcn@gmail.com',
         'contact_phone' => '931 66 86 11',
         'contact_whatsapp' => '+34 671 62 07 87',
-        'closing' => 'We look forward to seeing you soon at KOYA BCN!',
-        'footer_name' => 'KOYA BCN',
+        'closing' => 'We look forward to seeing you soon at KOYA!',
+        'footer_name' => 'KOYA',
         'footer_url' => 'koyabcn.es',
     ],
     'admin' => [
@@ -44,3 +44,4 @@ return [
         'quantity' => 'Qty',
     ],
 ];
+
