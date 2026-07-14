@@ -1,8 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        Users Management
-    </x-slot>
-
     <div data-async-region="users-index" data-async-mutations="true">
         @if(session('success'))
             <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
