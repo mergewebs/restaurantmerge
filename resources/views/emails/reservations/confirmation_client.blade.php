@@ -122,7 +122,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="Koya Smash Burger & Bol Logo">
+            <img src="{{ asset('images/koya-logo.png') }}" alt="Koya Smash Burger & Bol Logo">
         </div>
 
         <h1>{{ __('emails.confirmation.title', [], $locale) }}</h1>

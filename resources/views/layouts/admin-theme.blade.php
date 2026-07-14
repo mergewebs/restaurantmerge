@@ -553,10 +553,14 @@
         background-color: var(--koya-light) !important;
         border-color: rgba(79, 70, 229, 0.08) !important;
     }
-    nav.fixed .relative button[title="Profile"].text-indigo-600 {
-        color: var(--koya) !important;
-        background-color: var(--koya-light) !important;
-        border-color: rgba(79, 70, 229, 0.15) !important;
+    nav.fixed .relative button[title="Profile"].active {
+        color: #ffffff !important;
+        background-color: var(--koya) !important;
+        border-color: var(--koya) !important;
+    }
+    nav.fixed .relative button[title="Profile"].active svg,
+    nav.fixed .relative button[title="Profile"].active span {
+        color: #ffffff !important;
     }
 
     .dropdown-menu-container {
@@ -647,6 +651,21 @@
         max-width: 38rem !important;
         width: 100% !important;
     }
+
+    /* Keep the finance entry overlay flush with, and centered in, the viewport. */
+    .fixed.inset-0.z-\[100\]:is(.finance-add-modal, .finance-edit-modal, .reservation-add-modal, .product-add-modal, .product-edit-modal) {
+        position: fixed !important;
+        inset: 0 !important;
+        width: auto !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        margin: 0 !important;
+        align-items: center !important;
+        box-sizing: border-box;
+        isolation: isolate;
+    }
     @media (min-width: 640px) {
         .fixed.inset-0.z-\[100\] .glass.max-w-2xl {
             padding: 1.5rem !important;
@@ -659,6 +678,58 @@
         color: var(--text-primary) !important;
         letter-spacing: -0.01em !important;
         margin-top: 0.25rem !important;
+    }
+    .fixed.inset-0.z-\[100\]:is(.finance-add-modal, .finance-edit-modal, .reservation-add-modal, .product-add-modal, .product-edit-modal) h3 {
+        font-family: 'Outfit', sans-serif !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.01em !important;
+    }
+    .fixed.inset-0.z-\[100\].finance-edit-modal h3 {
+        display: flex !important;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0 !important;
+    }
+    .fixed.inset-0.z-\[100\].finance-edit-modal h3::before {
+        content: '€';
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        flex: 0 0 2.5rem;
+        border: 1px solid #a7f3d0;
+        border-radius: 0.75rem;
+        background: #ecfdf5;
+        color: #059669;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+    .fixed.inset-0.z-\[100\]:is(.product-add-modal, .product-edit-modal) h3 {
+        display: flex !important;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0 !important;
+    }
+    .fixed.inset-0.z-\[100\]:is(.product-add-modal, .product-edit-modal) h3::before {
+        content: '+';
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        flex: 0 0 2.5rem;
+        border: 1px solid #c7d2fe;
+        border-radius: 0.75rem;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-family: 'Outfit', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 800;
+    }
+    .fixed.inset-0.z-\[100\].product-edit-modal h3::before {
+        content: '✎';
     }
     .fixed.inset-0.z-\[100\] button.text-gray-400 {
         display: flex !important;
@@ -815,6 +886,31 @@
             max-height: none !important;
             overflow-y: visible !important;
             margin-bottom: 0 !important;
+        }
+        .fixed.inset-0.z-\[100\]:is(.finance-add-modal, .finance-edit-modal, .reservation-add-modal, .product-add-modal, .product-edit-modal) {
+            align-items: center !important;
+            justify-content: center !important;
+            overflow: hidden !important;
+            padding: max(0.75rem, env(safe-area-inset-top)) 0.375rem max(0.75rem, env(safe-area-inset-bottom)) !important;
+            overscroll-behavior: contain;
+        }
+        .fixed.inset-0.z-\[100\]:is(.finance-add-modal, .finance-edit-modal, .reservation-add-modal, .product-add-modal, .product-edit-modal) > .glass.max-w-2xl {
+            width: 100% !important;
+            max-width: none !important;
+            max-height: calc(100dvh - 1.5rem) !important;
+            overflow-y: auto !important;
+            overscroll-behavior: contain;
+            border-radius: 20px !important;
+            padding: 0.875rem !important;
+            scrollbar-width: thin;
+        }
+        .fixed.inset-0.z-\[100\]:is(.finance-add-modal, .finance-edit-modal, .reservation-add-modal, .product-add-modal, .product-edit-modal) button.text-gray-400 {
+            min-width: 2.5rem !important;
+            min-height: 2.5rem !important;
+            flex-shrink: 0;
+        }
+        .fixed.inset-0.z-\[100\]:is(.finance-add-modal, .finance-edit-modal, .reservation-add-modal, .product-add-modal, .product-edit-modal) button[type="submit"] {
+            min-height: 2.75rem !important;
         }
         /* Mobile specific tighter modal sizing to prevent scrolling */
         .fixed.inset-0.z-\[100\] input, 
@@ -1076,3 +1172,4 @@
         opacity: 0.6 !important;
     }
 </style>
+

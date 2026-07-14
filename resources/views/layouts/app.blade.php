@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => __('public.seo_admin_title')])])
-        <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+        @include('partials.favicon')
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -380,6 +380,9 @@
             <!-- Global Navigation (Top) -->
             <nav class="fixed top-0 left-0 right-0 z-50">
                 <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-center shadow-2xl">
+                    <a href="{{ route('dashboard') }}" class="mr-5 shrink-0" aria-label="{{ __('public.seo_logo_alt') }}">
+                        <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="h-11 w-11 rounded-full border-2 border-white/20 object-cover shadow-lg" width="44" height="44">
+                    </a>
                     <div class="bottom-primary-links flex items-center gap-10 md:gap-16 pr-1">
                         @foreach($primaryMenuItems as $item)
                             <a href="{{ $item['route'] }}" class="bottom-quick-link {{ $item['active'] ? 'active' : '' }}" @if(!empty($item['target'])) target="{{ $item['target'] }}" @endif @if(!empty($item['rel'])) rel="{{ $item['rel'] }}" @endif>

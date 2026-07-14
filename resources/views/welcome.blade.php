@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('partials.seo', ['seo' => $seo ?? []])
-    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    @include('partials.favicon')
 
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2296,7 +2296,7 @@
     <header :class="mobileMenuOpen ? 'header-overlay-open' : ''">
         <div class="container header-container">
             <a href="#" class="logo-wrap">
-                <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="logo-img" width="75" height="75" onerror="this.src='/favicon.ico'">
+                <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="logo-img" width="75" height="75" onerror="this.src='/favicon.ico'">
             </a>
 
             <nav class="nav-links">
@@ -2682,13 +2682,11 @@
                     </div>
                 </div>
 
-                <!-- 2. Cafés y Tés -->
+                <!-- 2. Cervezas -->
                 <div class="drinks-showcase">
-                    <div class="drinks-showcase-title drinks-showcase-title-image">
-                        <img src="{{ asset('images/cafe.png') }}" alt="Café">
-                    </div>
+                    <div class="drinks-showcase-title">Cervezas</div>
                     <div class="drinks-showcase-grid">
-                        @foreach($drinkCoffeeItems as $item)
+                        @foreach($drinkBeerItems as $item)
                             <div class="drinks-showcase-item">
                                 <div class="drinks-showcase-top">
                                     <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
@@ -2702,11 +2700,11 @@
                     </div>
                 </div>
 
-                <!-- 3. Cervezas -->
+                <!-- 3. Vinos y Sangrías -->
                 <div class="drinks-showcase">
-                    <div class="drinks-showcase-title">Cervezas</div>
+                    <div class="drinks-showcase-title">Vinos y Sangrías</div>
                     <div class="drinks-showcase-grid">
-                        @foreach($drinkBeerItems as $item)
+                        @foreach($drinkWineItems as $item)
                             <div class="drinks-showcase-item">
                                 <div class="drinks-showcase-top">
                                     <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
@@ -2740,11 +2738,13 @@
                     </div>
                 </div>
 
-                <!-- 5. Vinos y Vermut -->
+                <!-- 5. Café -->
                 <div class="drinks-showcase">
-                    <div class="drinks-showcase-title">Vinos y Sangrías</div>
+                    <div class="drinks-showcase-title drinks-showcase-title-image">
+                        <img src="{{ asset('images/cafe.png') }}" alt="Café">
+                    </div>
                     <div class="drinks-showcase-grid">
-                        @foreach($drinkWineItems as $item)
+                        @foreach($drinkCoffeeItems as $item)
                             <div class="drinks-showcase-item">
                                 <div class="drinks-showcase-top">
                                     <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
@@ -2757,8 +2757,8 @@
                         @endforeach
                     </div>
                 </div>
-
             </div>
+
             <div class="sides-showcase reveal" data-reveal-trigger="1.05" x-show="activeTab === 'Starters'"
                  x-transition:enter="transition ease-out duration-300 transform"
                  x-transition:enter-start="opacity-0 translate-y-4 scale-95"
@@ -2911,7 +2911,7 @@
             <div class="footer-grid">
                 <div class="footer-logo-desc">
                     <a href="#" class="footer-logo-wrap">
-                        <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="footer-logo-img" width="96" height="96" onerror="this.src='/favicon.ico'">
+                        <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="footer-logo-img" width="96" height="96" onerror="this.src='/favicon.ico'">
                     </a>
                     <p class="footer-p">
                         {{ __('public.homepage_meta_description') }}
@@ -2977,7 +2977,7 @@
                     { src: "{{ asset('images/katsudon.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'Katsudon']) }}" },
                     { src: "{{ asset('images/soboku.png') }}", alt: "{{ __('public.seo_hero_rotating_alt', ['name' => 'Soboku']) }}" }
                 ];
-                let currentImgIndex = 0;
+                let currentImgIndex = 1;
                 
                 setInterval(() => {
                     currentImgIndex = (currentImgIndex + 1) % heroImages.length;
@@ -3016,14 +3016,12 @@
                             oldImgs.forEach(oldImg => oldImg.remove());
                         }, 600);
                     };
-                }, 3500); // Cycle every 3.5 seconds
+                }, 3200); // Cycle every 3.2 seconds
             }
         });
     </script>
 </body>
 </html>
-
-
 
 
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('partials.seo', ['seo' => $seo ?? []])
-    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    @include('partials.favicon')
 
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -908,20 +908,21 @@
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay" :class="mobileMenuOpen ? 'open' : ''" x-cloak>
         <div class="mobile-links-container">
-            <a href="/" class="menu-link" @click="mobileMenuOpen = false">Home</a>
-            <a href="/#menu-section" class="menu-link" @click="mobileMenuOpen = false">Menu</a>
-            <a href="/#contact" class="menu-link" @click="mobileMenuOpen = false">Find Us</a>
+            <a href="/" class="menu-link" @click="mobileMenuOpen = false">{{ __('public.nav_home') }}</a>
+            <a href="/#menu-section" class="menu-link" @click="mobileMenuOpen = false">{{ __('public.nav_menu') }}</a>
+            <a href="/#contact" class="menu-link" @click="mobileMenuOpen = false">{{ __('public.nav_find_us') }}</a>
         </div>
         
         <div class="mobile-actions-container">
-            <a href="{{ route('reservations.public.create') }}" class="sticker-btn text-center" @click="mobileMenuOpen = false">Reservar</a>
+            <a href="{{ route('reservations.public.create') }}" class="sticker-btn text-center" @click="mobileMenuOpen = false">{{ __('public.nav_reserve') }}</a>
+            <x-language-switcher theme="dark" />
             @if(config('features.takeaway', false))
                 <a href="{{ route('order.public') }}" class="sticker-btn sticker-white text-center" @click="mobileMenuOpen = false">{{ __('public.nav_order_online') }}</a>
             @endif
         </div>
 
         <div class="mobile-socials-section">
-            <p class="mobile-socials-title">Connect</p>
+            <p class="mobile-socials-title">{{ __('public.nav_connect') }}</p>
             <div class="mobile-socials-container">
                 <a href="https://www.instagram.com/koya_bcn" target="_blank" class="social-icon" aria-label="Instagram">
                     <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -940,18 +941,19 @@
     <header :class="mobileMenuOpen ? 'header-overlay-open' : ''">
         <div class="container header-container">
             <a href="/" class="logo-wrap">
-                <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="logo-img" width="75" height="75" onerror="this.src='/favicon.ico'">
+                <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="logo-img" width="75" height="75" onerror="this.src='/favicon.ico'">
             </a>
 
             <nav class="nav-links">
-                <a href="/#hero">Home</a>
-                <a href="/#menu-section">Menu</a>
-                <a href="/#contact">Find Us</a>
+                <a href="/#hero">{{ __('public.nav_home') }}</a>
+                <a href="/#menu-section">{{ __('public.nav_menu') }}</a>
+                <a href="/#contact">{{ __('public.nav_find_us') }}</a>
             </nav>
 
             <div class="nav-actions">
-                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">Reservar</a>
-                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="mobileMenuOpen ? 'is-open' : ''" aria-label="Toggle Menu">
+                <x-language-switcher theme="dark" />
+                <a href="{{ route('reservations.public.create') }}" class="btn-koya-primary header-reserve-btn" style="font-size: 1rem; padding: 0.6rem 1.2rem; border-width: 3px; display: inline-flex;">{{ __('public.nav_reserve') }}</a>
+                <button class="mobile-toggle" @click="mobileMenuOpen = !mobileMenuOpen" :class="mobileMenuOpen ? 'is-open' : ''" aria-label="{{ __('public.nav_menu') }}">
                     <div class="hamburger-inner">
                         <span></span>
                         <span></span>
@@ -1025,6 +1027,7 @@
                 submissionToken: '',
                 showEmail: false,
                 showNotes: false,
+                spotsLeftText: @js(__('public.reservation_spots_left')),
                 createSubmissionToken() {
                     if (window.crypto && typeof window.crypto.randomUUID === 'function') {
                         return window.crypto.randomUUID();
@@ -1087,7 +1090,7 @@
                             let available = this.getAvailableSpots(timeStr);
                             if (available >= this.partySize) {
                                 const isPartiallyBooked = available < this.max_capacity;
-                                const availabilityText = isPartiallyBooked ? ` (${available} spots left)` : '';
+                                const availabilityText = isPartiallyBooked ? ` (${this.spotsLeftText.replace(':count', available)})` : '';
                                 times.push({ 
                                     value: timeStr, 
                                     label: `${slot.start.substring(0, 5)} - ${slot.end.substring(0, 5)}${availabilityText}` 
@@ -1105,7 +1108,7 @@
                                 let available = this.getAvailableSpots(timeStr);
                                 if (available >= this.partySize) {
                                     const isPartiallyBooked = available < this.max_capacity;
-                                    const availabilityText = isPartiallyBooked ? ` (${available} spots left)` : '';
+                                    const availabilityText = isPartiallyBooked ? ` (${this.spotsLeftText.replace(':count', available)})` : '';
                                     times.push({ 
                                         value: timeStr, 
                                         label: `${timeStr}${availabilityText}` 
@@ -1257,7 +1260,7 @@
             <div class="footer-grid">
                 <div class="footer-logo-desc">
                     <a href="/" class="footer-logo-wrap">
-                        <img src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" alt="{{ __('public.seo_logo_alt') }}" class="footer-logo-img" width="96" height="96" onerror="this.src='/favicon.ico'">
+                        <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="footer-logo-img" width="96" height="96" onerror="this.src='/favicon.ico'">
                     </a>
                     <p class="footer-p">
                         {{ __('public.homepage_meta_description') }}
@@ -1273,18 +1276,18 @@
                 </div>
 
                 <div>
-                    <h4 class="footer-nav-title">Quick Links</h4>
+                    <h4 class="footer-nav-title">{{ __('public.nav_quick_links') }}</h4>
                     <ul class="footer-links">
-                        <li><a href="/#hero">Home</a></li>
-                        <li><a href="/#menu-section">Menu</a></li>
-                        <li><a href="/#contact">Location & Hours</a></li>
+                        <li><a href="/#hero">{{ __('public.nav_home') }}</a></li>
+                        <li><a href="/#menu-section">{{ __('public.nav_menu') }}</a></li>
+                        <li><a href="/#contact">{{ __('public.nav_location_hours') }}</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2026 Koya Smash Burger & Bol. All rights reserved.</p>
-                <p>Página web creada por <a href="https://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
+                <p>{{ __('public.homepage_footer_rights') }}</p>
+                <p>{{ __('public.homepage_footer_tagline') }} <a href="https://mergewebs.com/" target="_blank" class="footer-credit-link">Merge</a></p>
             </div>
         </div>
     </footer>

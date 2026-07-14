@@ -60,7 +60,6 @@
                                         {{ $user->last_login_at?->format('d/m/Y H:i') ?? 'Never' }}
                                     </span>
                                 </p>
-                                <p class="text-[11px] text-gray-500 font-medium">{{ __('Protected with a 6-digit passcode') }}</p>
                             </div>
                         </div>
                         <button @click="editUser({{ $user->toJson() }})" class="p-2.5 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5">

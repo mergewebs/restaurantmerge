@@ -168,7 +168,7 @@
 
         <!-- Add Reservation Modal -->
         <div x-show="showReservationModal" 
-             class="fixed inset-0 z-[100] flex items-center justify-center px-4" 
+             class="reservation-add-modal fixed inset-0 z-[100] flex items-center justify-center px-4"
              style="display: none;"
              x-cloak>
             <div @click="showReservationModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>

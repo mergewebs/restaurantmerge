@@ -313,7 +313,7 @@ class ReservationController extends Controller
         }
 
         if ($isClosed) {
-            return $isException ? "The restaurant is closed for a holiday or special event on this date." : "The restaurant is closed on this day of the week.";
+            return $isException ? __('public.reservation_closed_special') : __('public.reservation_closed_weekday');
         }
 
         // Identify matching slot
@@ -334,7 +334,7 @@ class ReservationController extends Controller
                 $slotStrings[] = substr($slot['start'], 0, 5) . '-' . substr($slot['stop'], 0, 5);
             }
             $slotsText = implode(' / ', $slotStrings);
-            return "The restaurant is only open during these slots: {$slotsText}";
+            return __('public.reservation_open_slots', ['slots' => $slotsText]);
         }
 
         // Dynamic Seating Validation (If Session 3 exists, evening slots only allow start times)
@@ -350,7 +350,7 @@ class ReservationController extends Controller
             $reqTime = $dt->format('H:i');
             if (!in_array($reqTime, $eveningStartTimes)) {
                 $allowedFormatted = implode(' or ', $eveningStartTimes);
-                return "For this evening, we only accept reservations for the following seatings: {$allowedFormatted}.";
+                return __('public.reservation_evening_seatings', ['seatings' => $allowedFormatted]);
             }
         }
 
@@ -375,7 +375,7 @@ class ReservationController extends Controller
 
         if ($totalPeople + $partySize > $capacity) {
             $available = max(0, $capacity - $totalPeople);
-            return "This shift is full. Available spots: {$available}.";
+            return __('public.reservation_shift_full', ['available' => $available]);
         }
 
         return null;

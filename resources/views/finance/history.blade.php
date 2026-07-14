@@ -148,7 +148,7 @@
 
         {{-- ─── Add Finance Modal ──────────────────────── --}}
         <div x-show="showFinanceModal" 
-             class="fixed inset-0 z-[100] flex items-center justify-center px-4" 
+             class="finance-add-modal fixed inset-0 z-[100] flex items-center justify-center px-4"
              style="display: none;"
              x-cloak>
             <div @click="showFinanceModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
@@ -244,7 +244,7 @@
 
         {{-- ─── Edit Finance Modal ─────────────────────── --}}
         <div x-show="showEditModal" 
-             class="fixed inset-0 z-[100] flex items-center justify-center px-4" 
+             class="finance-edit-modal fixed inset-0 z-[100] flex items-center justify-center px-4"
              style="display: none;"
              x-cloak>
             <div @click="showEditModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
@@ -280,15 +280,21 @@
                     <input type="hidden" name="finance_id" :value="editingFinance.id">
                     <input type="hidden" name="type" :value="editingFinance.originalType"> {{-- for controller to find record --}}
 
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                        <input type="date" name="date" x-model="editingFinance.date" required
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                    <div class="mt-2 mb-6">
+                        <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (&euro;)</label>
+                        <div class="relative flex items-center w-full transition-all duration-300">
+                            <span class="absolute left-5 text-2xl font-black transition-colors"
+                                  :class="editingFinance.finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">&euro;</span>
+                            <input type="number" step="0.01" name="amount" placeholder="0.00" x-model="editingFinance.amount" required
+                                   class="w-full pl-12 pr-4 py-4 rounded-2xl border-2 text-3xl font-black outline-none transition-all duration-300"
+                                   :class="editingFinance.finance_type === 'income' ? 'bg-emerald-50 border-emerald-200 text-emerald-700 focus:border-emerald-500 focus:ring-emerald-500 shadow-lg shadow-emerald-500/15' : 'bg-rose-50 border-rose-200 text-rose-700 focus:border-rose-500 focus:ring-rose-500 shadow-lg shadow-rose-500/15'"
+                                   style="min-height: 4.5rem !important; padding-left: 3.5rem !important;">
+                        </div>
                     </div>
 
                     <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Amount (€)</label>
-                        <input type="number" step="0.01" name="amount" x-model="editingFinance.amount" required
+                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
+                        <input type="date" name="date" x-model="editingFinance.date" required
                                class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
                     </div>
 
@@ -309,7 +315,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="space-y-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
                             <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">

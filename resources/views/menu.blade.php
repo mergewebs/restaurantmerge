@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('partials.seo', ['seo' => $seo ?? []])
-    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    @include('partials.favicon')
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -111,6 +111,16 @@
         .btn-koya-secondary:active {
             transform: translate(2px, 2px);
             box-shadow: 2px 2px 0px var(--color-dark);
+        }
+
+        .menu-brand-logo {
+            width: 104px;
+            height: 104px;
+            margin: 0 auto 1.25rem;
+            border: 3px solid var(--color-dark);
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 4px 4px 0 var(--color-dark);
         }
 
         .section-header {
@@ -608,6 +618,9 @@
     <section id="menu-section" class="menu-section" x-data="{ activeTab: 'Starters' }">
         <div class="container">
             <div class="section-header">
+                <a href="{{ url('/') }}" aria-label="{{ __('public.seo_logo_alt') }}">
+                    <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="menu-brand-logo" width="104" height="104">
+                </a>
                 <h1 class="section-title">{{ __('public.homepage_menu_title') }}</h1>
             </div>
             <div class="menu-tabs-container">
@@ -688,47 +701,9 @@
                     </div>
 
                     <div class="drinks-showcase">
-                        <div class="drinks-showcase-title drinks-showcase-title-image">
-                            <img src="{{ asset('images/cafe.png') }}" alt="{{ __('public.seo_drinks_coffee_alt') }}" width="72" height="72">
-                        </div>
-                        <div class="drinks-showcase-grid">
-                            @foreach($drinkCoffeeItems as $item)
-                                <div class="drinks-showcase-item">
-                                    <div class="drinks-showcase-top">
-                                        <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
-                                        <span class="drinks-showcase-price">{{ number_format($item['price'], 2) }}&euro;</span>
-                                    </div>
-                                    @if(!empty($item['description']))
-                                        <p class="drinks-showcase-description">{{ $item['description'] }}</p>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="drinks-showcase">
                         <div class="drinks-showcase-title">{{ __('public.menu_drinks_beers') }}</div>
                         <div class="drinks-showcase-grid">
                             @foreach($drinkBeerItems as $item)
-                                <div class="drinks-showcase-item">
-                                    <div class="drinks-showcase-top">
-                                        <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
-                                        <span class="drinks-showcase-price">{{ number_format($item['price'], 2) }}&euro;</span>
-                                    </div>
-                                    @if(!empty($item['description']))
-                                        <p class="drinks-showcase-description">{{ $item['description'] }}</p>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="drinks-showcase">
-                        <div class="drinks-showcase-title drinks-showcase-title-image">
-                            <img src="{{ asset('images/Picture7.png') }}" alt="{{ __('public.seo_drinks_cocktail_alt') }}" width="72" height="72">
-                        </div>
-                        <div class="drinks-showcase-grid">
-                            @foreach($drinkCocktailItems as $item)
                                 <div class="drinks-showcase-item">
                                     <div class="drinks-showcase-top">
                                         <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
@@ -758,7 +733,45 @@
                             @endforeach
                         </div>
                     </div>
+                    <div class="drinks-showcase">
+                        <div class="drinks-showcase-title drinks-showcase-title-image">
+                            <img src="{{ asset('images/Picture7.png') }}" alt="{{ __('public.seo_drinks_cocktail_alt') }}" width="72" height="72">
+                        </div>
+                        <div class="drinks-showcase-grid">
+                            @foreach($drinkCocktailItems as $item)
+                                <div class="drinks-showcase-item">
+                                    <div class="drinks-showcase-top">
+                                        <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
+                                        <span class="drinks-showcase-price">{{ number_format($item['price'], 2) }}&euro;</span>
+                                    </div>
+                                    @if(!empty($item['description']))
+                                        <p class="drinks-showcase-description">{{ $item['description'] }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="drinks-showcase">
+                        <div class="drinks-showcase-title drinks-showcase-title-image">
+                            <img src="{{ asset('images/cafe.png') }}" alt="{{ __('public.seo_drinks_coffee_alt') }}" width="72" height="72">
+                        </div>
+                        <div class="drinks-showcase-grid">
+                            @foreach($drinkCoffeeItems as $item)
+                                <div class="drinks-showcase-item">
+                                    <div class="drinks-showcase-top">
+                                        <h3 class="drinks-showcase-name">{{ $item['name'] }}</h3>
+                                        <span class="drinks-showcase-price">{{ number_format($item['price'], 2) }}&euro;</span>
+                                    </div>
+                                    @if(!empty($item['description']))
+                                        <p class="drinks-showcase-description">{{ $item['description'] }}</p>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
+
                 <div class="sides-showcase" x-show="activeTab === 'Starters' && {{ $sideItems->isNotEmpty() ? 'true' : 'false' }}" x-cloak>
                     <div class="sides-showcase-title sides-showcase-title-image">
                         <img src="{{ asset('images/fritas.png') }}" alt="{{ __('public.seo_sides_alt') }}" width="72" height="72">

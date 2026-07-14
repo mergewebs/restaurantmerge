@@ -22,6 +22,9 @@ class ReservationLocaleTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Confirm reservation');
+        $response->assertSee('Find us');
+        $response->assertSee('Website created by');
+        $response->assertDontSee('Página web creada por');
     }
 
     public function test_reservation_page_uses_selected_spanish_locale_instead_of_browser_locale(): void
@@ -33,6 +36,9 @@ class ReservationLocaleTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Confirmar reserva');
+        $response->assertSee('Encuéntranos');
+        $response->assertSee('Página web creada por');
+        $response->assertDontSee('Website created by');
     }
 
     public function test_confirmation_email_uses_selected_english_locale(): void

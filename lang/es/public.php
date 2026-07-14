@@ -52,6 +52,7 @@ return [
     'nav_takeaway_delivery' => 'Para llevar y delivery',
     'nav_book_table' => 'Reservar mesa',
     'nav_staff_login' => 'Acceso del personal',
+    'nav_connect' => 'Conecta',
 
     'homepage_meta_description' => 'Nos aventuramos más allá de las Smash Burger, fusionando la cocina asiática y mediterránea en cada bocado',
     'homepage_hero_cta_menu' => 'Ver menú',
@@ -123,6 +124,12 @@ return [
     'closed' => 'El restaurante está cerrado en esta fecha.',
     'success' => 'Reserva confirmada. Estamos emocionados de recibirte pronto en KOYA.',
     'error_generic' => 'Algo salió mal. Por favor, inténtalo de nuevo.',
+    'reservation_spots_left' => 'Quedan :count plazas',
+    'reservation_closed_special' => 'El restaurante está cerrado por festivo o evento especial en esta fecha.',
+    'reservation_closed_weekday' => 'El restaurante está cerrado este día de la semana.',
+    'reservation_open_slots' => 'El restaurante solo abre en estos horarios: :slots',
+    'reservation_evening_seatings' => 'Esta noche solo aceptamos reservas en los siguientes turnos: :seatings.',
+    'reservation_shift_full' => 'Este turno está completo. Plazas disponibles: :available.',
 
     'takeaway_title' => 'Para llevar',
     'takeaway_cta' => 'Fresco y rápido. Haz tu pedido y recógelo cuando esté listo.',

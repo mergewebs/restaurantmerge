@@ -52,6 +52,7 @@ return [
     'nav_takeaway_delivery' => 'Takeaway & delivery',
     'nav_book_table' => 'Book a table',
     'nav_staff_login' => 'Staff login',
+    'nav_connect' => 'Connect',
 
     'homepage_meta_description' => 'We go beyond burgers, blending Asian and American flavors in every bite. Fresh, modern dining in Barcelona.',
     'homepage_hero_cta_menu' => 'View menu',
@@ -67,7 +68,7 @@ return [
     'homepage_hours_title' => 'Opening hours',
     'homepage_footer_description' => 'Authentic smash burgers with crispy edges and bold rice bowls loaded with premium ingredients. Street food with attitude.',
     'homepage_footer_rights' => '© 2026 Koya Smash Burger & Bol. All rights reserved.',
-    'homepage_footer_tagline' => 'Designed with attitude',
+    'homepage_footer_tagline' => 'Website created by',
 
     'menu_tab_burgers' => 'Burgers',
     'menu_tab_bol' => 'BOL (Bowls)',
@@ -123,6 +124,12 @@ return [
     'closed' => 'The restaurant is closed on this date.',
     'success' => 'Reservation confirmed. We are excited to welcome you to KOYA soon.',
     'error_generic' => 'Something went wrong. Please try again.',
+    'reservation_spots_left' => ':count spots left',
+    'reservation_closed_special' => 'The restaurant is closed for a holiday or special event on this date.',
+    'reservation_closed_weekday' => 'The restaurant is closed on this day of the week.',
+    'reservation_open_slots' => 'The restaurant is only open during these slots: :slots',
+    'reservation_evening_seatings' => 'For this evening, we only accept reservations for the following seatings: :seatings.',
+    'reservation_shift_full' => 'This shift is full. Available spots: :available.',
 
     'takeaway_title' => 'Takeaway',
     'takeaway_cta' => 'Fresh and fast. Place your order and pick it up when it is ready.',

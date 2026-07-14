@@ -38,9 +38,9 @@ class ProfileTest extends TestCase
         $this->assertSame('Test User', $user->refresh()->name);
     }
 
-    public function test_user_can_delete_their_account_with_their_passcode(): void
+    public function test_admin_can_delete_their_account_with_their_passcode(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $response = $this
             ->actingAs($user)
@@ -56,9 +56,27 @@ class ProfileTest extends TestCase
         $this->assertNull($user->fresh());
     }
 
+    public function test_non_admin_cannot_see_or_delete_their_account(): void
+    {
+        $user = User::factory()->create(['role' => 'waiter']);
+
+        $this->actingAs($user)
+            ->get('/admin/profile')
+            ->assertOk()
+            ->assertDontSee('Delete account');
+
+        $this->actingAs($user)
+            ->delete('/admin/profile', [
+                'passcode' => '123456',
+            ])
+            ->assertForbidden();
+
+        $this->assertNotNull($user->fresh());
+    }
+
     public function test_correct_passcode_must_be_provided_to_delete_account(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => 'admin']);
 
         $response = $this
             ->actingAs($user)

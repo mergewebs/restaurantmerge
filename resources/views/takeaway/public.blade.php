@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ $restaurantName }} | Takeaway & Order</title><link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
-    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    <title>{{ $restaurantName }} | Takeaway & Order</title>
+    @include('partials.favicon')
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -159,7 +159,7 @@
                 <div class="flex items-center gap-4">
                     <a href="/" class="shrink-0 group" title="Back to Homepage">
                         <img 
-                            src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" 
+                            src="{{ asset('images/koya-logo.png') }}"
                             alt="KOYA Logo" 
                             class="h-16 w-16 rounded-full border-2 border-koya object-cover shadow-lg transition-transform duration-300 group-hover:scale-105"
                             onerror="this.src='/favicon.ico'"

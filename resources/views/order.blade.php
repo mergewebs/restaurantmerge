@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @include('partials.seo', ['seo' => $seo ?? []])
-    <link rel="icon" type="image/png" href="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg">
+    @include('partials.favicon')
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -295,7 +295,7 @@
         <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
             <a href="/" class="flex items-center gap-3">
                 <img 
-                    src="https://koyabcn.es/wp-content/uploads/2025/07/koya-logo-e1744122653245.jpg" 
+                    src="{{ asset('images/koya-logo.png') }}"
                     alt="{{ __('public.seo_logo_alt') }}" width="56" height="56" 
                     class="w-14 h-14 rounded-full border-[3px] border-[#121212] object-cover shadow-[2px_2px_0px_#121212]"
                     onerror="this.src='/favicon.ico'"

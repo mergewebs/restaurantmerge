@@ -93,7 +93,7 @@
 
         <!-- Add Finance Modal -->
         <div x-show="showFinanceModal" 
-             class="fixed inset-0 z-[100] flex items-center justify-center px-4" 
+             class="finance-add-modal fixed inset-0 z-[100] flex items-center justify-center px-4"
              style="display: none;"
              x-cloak>
             <div @click="showFinanceModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
