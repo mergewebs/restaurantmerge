@@ -16,54 +16,26 @@ use Illuminate\Support\Carbon;
 
 class PresentationDemoSeeder extends Seeder
 {
-    private const DEMO_PASSCODE = '123456';
-
     public function run(): void
     {
-        $users = $this->seedUsers();
+        $admin = $this->admin();
         $this->seedSchedule();
         $this->seedTablesAndOrders();
-        $this->seedReservations($users['owner']);
-        $this->seedFinance($users['owner']);
+        $this->seedReservations($admin);
+        $this->seedFinance($admin);
     }
 
-    private function seedUsers(): array
+    private function admin(): User
     {
-        $accounts = [
-            'superadmin' => [
-                'name' => 'Demo Super Admin',
-                'passcode' => '111111',
-                'role' => 'superadmin',
-            ],
-            'owner' => [
-                'name' => 'Demo Owner',
-                'passcode' => self::DEMO_PASSCODE,
-                'role' => 'owner',
-            ],
-            'waiter' => [
-                'name' => 'Demo Waiter',
-                'passcode' => '222222',
-                'role' => 'waiter',
-            ],
-        ];
+        $name = (string) config('access.admin.name', 'Admin');
+        $admin = User::query()->where('name', $name)->where('role', 'admin')->first();
 
-        return collect($accounts)
-            ->mapWithKeys(function (array $account, string $key) {
-                $user = User::where('name', $account['name'])->first();
+        if (! $admin) {
+            $this->call(AdminAccessSeeder::class);
+            $admin = User::query()->where('name', $name)->where('role', 'admin')->firstOrFail();
+        }
 
-                if (! $user) {
-                    $user = new User();
-                }
-
-                $user->fill([
-                    'name' => $account['name'],
-                    'passcode' => $account['passcode'],
-                    'role' => $account['role'],
-                ])->save();
-
-                return [$key => $user];
-            })
-            ->all();
+        return $admin;
     }
 
     private function seedSchedule(): void
@@ -154,7 +126,7 @@ class PresentationDemoSeeder extends Seeder
         $order->recalculateTotal();
     }
 
-    private function seedReservations(User $owner): void
+    private function seedReservations(User $admin): void
     {
         Reservation::whereIn('customer_email', [
             'ana.silva@example.com',
@@ -179,13 +151,13 @@ class PresentationDemoSeeder extends Seeder
                 'reservation_time' => $time,
                 'notes' => $notes,
                 'status' => $status,
-                'user_id' => $owner->id,
-                'submission_token' => str($email . $time->toDateTimeString())->slug() . '-demo',
+                'user_id' => $admin->id,
+                'submission_token' => str($email.$time->toDateTimeString())->slug().'-demo',
             ]);
         }
     }
 
-    private function seedFinance(User $owner): void
+    private function seedFinance(User $admin): void
     {
         Income::where('description', 'like', 'Demo:%')->delete();
         Expense::where('description', 'like', 'Demo:%')->delete();
@@ -204,7 +176,7 @@ class PresentationDemoSeeder extends Seeder
         foreach ($incomeRows as [$amount, $type, $method, $description, $date]) {
             Income::create(compact('amount', 'type', 'method', 'description') + [
                 'date' => $date,
-                'user_id' => $owner->id,
+                'user_id' => $admin->id,
             ]);
         }
 
@@ -219,7 +191,7 @@ class PresentationDemoSeeder extends Seeder
         foreach ($expenseRows as [$amount, $category, $method, $description, $date]) {
             Expense::create(compact('amount', 'category', 'method', 'description') + [
                 'date' => $date,
-                'user_id' => $owner->id,
+                'user_id' => $admin->id,
             ]);
         }
 
@@ -232,7 +204,7 @@ class PresentationDemoSeeder extends Seeder
             'expected_cash' => 759.90,
             'difference' => 0,
             'notes' => 'Demo: balanced cash drawer for presentation.',
-            'user_id' => $owner->id,
+            'user_id' => $admin->id,
         ]);
     }
 }

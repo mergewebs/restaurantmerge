@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $seeders = [
+            AdminAccessSeeder::class,
             CategorySeeder::class,
             MenuItemSeeder::class,
         ];
@@ -26,4 +27,3 @@ class DatabaseSeeder extends Seeder
         $this->call($seeders);
     }
 }
-
