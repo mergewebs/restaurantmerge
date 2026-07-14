@@ -8,7 +8,6 @@ use App\Models\Income;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Reservation;
-use App\Models\RestaurantSchedule;
 use App\Models\RestaurantTable;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -19,7 +18,7 @@ class PresentationDemoSeeder extends Seeder
     public function run(): void
     {
         $admin = $this->admin();
-        $this->seedSchedule();
+        $this->call(RestaurantScheduleSeeder::class);
         $this->seedTablesAndOrders();
         $this->seedReservations($admin);
         $this->seedFinance($admin);
@@ -36,33 +35,6 @@ class PresentationDemoSeeder extends Seeder
         }
 
         return $admin;
-    }
-
-    private function seedSchedule(): void
-    {
-        foreach (range(0, 6) as $day) {
-            RestaurantSchedule::updateOrCreate(
-                ['day_of_week' => $day],
-                [
-                    'is_closed' => in_array($day, [0, 1], true),
-                    'open_time_1' => match (true) {
-                        in_array($day, [2, 3, 4], true) => '18:00',
-                        in_array($day, [5, 6], true) => '13:00',
-                        default => null,
-                    },
-                    'close_time_1' => match (true) {
-                        in_array($day, [2, 3, 4], true) => '23:00',
-                        in_array($day, [5, 6], true) => '16:30',
-                        default => null,
-                    },
-                    'open_time_2' => in_array($day, [5, 6], true) ? '19:30' : null,
-                    'close_time_2' => in_array($day, [5, 6], true) ? '23:30' : null,
-                    'open_time_3' => null,
-                    'close_time_3' => null,
-                    'max_party_size' => 12,
-                ]
-            );
-        }
     }
 
     private function seedTablesAndOrders(): void

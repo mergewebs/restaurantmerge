@@ -16,49 +16,11 @@ class RestaurantConfigController extends Controller
         return null;
     }
 
-    private function denyNonSuperAdmin()
-    {
-        if (!auth()->user()->isUserAdmin()) {
-            return redirect()->route('dashboard')->with('error', 'Access denied.');
-        }
-        return null;
-    }
-
     public function index()
     {
         if ($deny = $this->denyNonAdmin()) return $deny;
 
         $schedules = RestaurantSchedule::orderBy('day_of_week')->get();
-        if ($schedules->isEmpty()) {
-            foreach (range(0, 6) as $day) {
-                $params = [
-                    'day_of_week' => $day,
-                    'is_closed' => in_array($day, [0, 1], true),
-                    'open_time_1' => null,
-                    'close_time_1' => null,
-                    'open_time_2' => null,
-                    'close_time_2' => null,
-                    'open_time_3' => null,
-                    'close_time_3' => null,
-                    'max_party_size' => 25,
-                ];
-
-                if (in_array($day, [2, 3, 4], true)) {
-                    $params['open_time_1'] = '18:00';
-                    $params['close_time_1'] = '23:00';
-                }
-
-                if (in_array($day, [5, 6], true)) {
-                    $params['open_time_1'] = '13:00';
-                    $params['close_time_1'] = '16:30';
-                    $params['open_time_2'] = '19:30';
-                    $params['close_time_2'] = '23:30';
-                }
-
-                RestaurantSchedule::create($params);
-            }
-            $schedules = RestaurantSchedule::orderBy('day_of_week')->get();
-        }
 
         $exceptions = RestaurantException::whereDate('date', '>=', now()->toDateString())
             ->orderBy('date', 'asc')
@@ -69,7 +31,7 @@ class RestaurantConfigController extends Controller
 
     public function updateSchedule(Request $request)
     {
-        if ($deny = $this->denyNonSuperAdmin()) return $deny;
+        if ($deny = $this->denyNonAdmin()) return $deny;
 
         $data = $request->validate([
             'schedules' => 'required|array',
@@ -164,4 +126,3 @@ class RestaurantConfigController extends Controller
         return back()->with('success', $message);
     }
 }
-

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $seeders = [
             AdminAccessSeeder::class,
+            RestaurantScheduleSeeder::class,
             CategorySeeder::class,
             MenuItemSeeder::class,
         ];

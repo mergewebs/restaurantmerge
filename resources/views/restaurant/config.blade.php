@@ -29,7 +29,7 @@
     </style>
     <div class="space-y-6 pb-12">
         <!-- Weekly Schedule -->
-        @if(auth()->user()->isUserAdmin())
+        @if(auth()->user()->isAdmin())
         <div class="glass rounded-[32px] p-4 lg:p-8">
             <h3 class="text-xl font-black uppercase tracking-tight mb-6 flex items-center gap-3">
                 <span class="w-1.5 h-8 bg-koya rounded-full"></span>
