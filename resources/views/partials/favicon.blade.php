@@ -1,7 +1,7 @@
 <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
 <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('images/koya-logo-512.png') }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
-<link rel="manifest" href="/manifest.webmanifest">
+<link rel="manifest" href="/manifest.webmanifest?v=20260717-4">
 <link rel="stylesheet" href="/pwa-mobile.css?v=20260717-3">
 <meta name="theme-color" content="#17110c">
 <meta name="application-name" content="KOYA BCN">

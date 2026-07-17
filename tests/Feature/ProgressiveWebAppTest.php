@@ -14,7 +14,7 @@ class ProgressiveWebAppTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('/manifest.webmanifest', false)
+            ->assertSee('/manifest.webmanifest?v=20260717-4', false)
             ->assertSee('apple-mobile-web-app-capable', false)
             ->assertSee('viewport-fit=cover', false)
             ->assertSee('data-pwa-install-button', false);
@@ -27,17 +27,17 @@ class ProgressiveWebAppTest extends TestCase
         $this->actingAs($user)
             ->get('/admin/dashboard')
             ->assertOk()
-            ->assertSee('/manifest.webmanifest', false)
+            ->assertSee('/manifest.webmanifest?v=20260717-4', false)
             ->assertDontSee('data-pwa-install-button', false);
     }
 
-    public function test_manifest_is_valid_and_configured_for_fullscreen_installation(): void
+    public function test_manifest_is_valid_and_configured_for_standalone_installation(): void
     {
         $manifest = json_decode(file_get_contents(public_path('manifest.webmanifest')), true, flags: JSON_THROW_ON_ERROR);
 
-        $this->assertSame('fullscreen', $manifest['display']);
-        $this->assertSame(['fullscreen', 'standalone'], $manifest['display_override']);
-        $this->assertSame('/', $manifest['start_url']);
+        $this->assertSame('standalone', $manifest['display']);
+        $this->assertSame(['standalone'], $manifest['display_override']);
+        $this->assertSame('/?source=pwa', $manifest['start_url']);
         $this->assertSame('/', $manifest['scope']);
         $this->assertSame('#17110c', $manifest['theme_color']);
         $this->assertContains('maskable', array_column($manifest['icons'], 'purpose'));
