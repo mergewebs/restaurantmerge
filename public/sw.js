@@ -1,7 +1,7 @@
 'use strict';
 
 // Bump this value with every deployment that changes static assets.
-const CACHE_VERSION = 'koya-static-2026-07-17-v1';
+const CACHE_VERSION = 'koya-static-2026-07-17-v2';
 const CACHE_PREFIX = 'koya-static-';
 const STATIC_CACHE = CACHE_VERSION;
 
