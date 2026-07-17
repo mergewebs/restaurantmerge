@@ -798,7 +798,6 @@
         </div>
     </section>
     </div>
-    @include('partials.pwa-install')
 </body>
 </html>
 

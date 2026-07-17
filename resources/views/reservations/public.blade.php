@@ -919,6 +919,7 @@
             @if(config('features.takeaway', false))
                 <a href="{{ route('order.public') }}" class="sticker-btn sticker-white text-center" @click="mobileMenuOpen = false">{{ __('public.nav_order_online') }}</a>
             @endif
+            @include('partials.pwa-install')
         </div>
 
         <div class="mobile-socials-section">
@@ -1292,10 +1293,8 @@
         </div>
     </footer>
     @include('partials.form-submit-lock')
-    @include('partials.pwa-install')
 </body>
 </html>
-
 
 
 

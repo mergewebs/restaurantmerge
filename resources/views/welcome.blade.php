@@ -2270,6 +2270,7 @@
             @if(config('features.takeaway', false))
                 <a href="{{ route('order.public') }}" class="sticker sticker-large sticker-white text-center sticker-btn" @click="mobileMenuOpen = false">{{ __('public.nav_order_online') }}</a>
             @endif
+            @include('partials.pwa-install')
         </div>
 
         <div class="mobile-lang-container-wrap" style="margin-top: 0.75rem; margin-bottom: 3rem; display: flex; justify-content: center; width: 100%;">
@@ -3020,10 +3021,8 @@
             }
         });
     </script>
-    @include('partials.pwa-install')
 </body>
 </html>
-
 
 
 

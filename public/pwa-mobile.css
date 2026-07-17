@@ -51,11 +51,9 @@ video {
 }
 
 .pwa-install {
-    position: fixed;
-    left: max(1rem, var(--safe-left));
-    bottom: max(1rem, var(--safe-bottom));
-    z-index: 90;
-    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.32));
+    position: static;
+    width: min(100%, 240px);
+    margin: 0.25rem auto 0;
 }
 
 .pwa-install__button {
@@ -73,6 +71,7 @@ video {
     letter-spacing: 0.04em;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
     cursor: pointer;
+    width: 100%;
 }
 
 .pwa-install__button:active {
