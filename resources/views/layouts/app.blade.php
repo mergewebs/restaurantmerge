@@ -325,6 +325,34 @@
             <div class="bg-glow-blob bg-glow-3"></div>
         </div>
         <div class="min-h-screen relative">
+            <header class="mobile-admin-header lg:hidden">
+                <a href="{{ route('dashboard') }}" class="mobile-admin-brand" aria-label="{{ __('public.seo_logo_alt') }}">
+                    <img src="{{ asset('images/koya-logo.png') }}" alt="" width="40" height="40">
+                    <span><strong>{{ config('app.name', 'Koya BCN') }}</strong><small>{{ ucfirst(auth()->user()->role) }}</small></span>
+                </a>
+
+                <div x-data="{ open: false }" @click.outside="open = false" class="mobile-profile-menu">
+                    <button type="button" @click="open = !open" class="mobile-admin-profile-button" :aria-expanded="open" aria-haspopup="menu">
+                        <span class="mobile-admin-avatar">{{ strtoupper(mb_substr(auth()->user()->name, 0, 2)) }}</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div x-cloak x-show="open" x-transition class="mobile-profile-dropdown" role="menu">
+                        <a href="{{ route('profile.edit') }}" role="menuitem">Profile</a>
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('restaurant.config') }}" role="menuitem">Settings</a>
+                        @endif
+                        <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Are you sure you want to log out?')">
+                            @csrf
+
+                            <button type="submit" class="mobile-profile-logout" role="menuitem">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+
             <!-- Main Content -->
             <main class="px-5 pt-32 lg:pt-36 pb-8">
                 @if (isset($header))
@@ -378,7 +406,7 @@
             @endphp
 
             <!-- Global Navigation (Top) -->
-            <nav class="fixed top-0 left-0 right-0 z-50">
+            <nav class="admin-navigation fixed left-0 right-0 z-50" aria-label="Primary navigation">
                 <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-center shadow-2xl">
                     <a href="{{ route('dashboard') }}" class="mr-5 shrink-0" aria-label="{{ __('public.seo_logo_alt') }}">
                         <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="h-11 w-11 rounded-full border-2 border-white/20 object-cover shadow-lg" width="44" height="44">
@@ -432,7 +460,7 @@
                                 <hr class="my-1 border-gray-100">
                                 
                                 <!-- Logout Button -->
-                                <form method="POST" action="{{ route('logout') }}" class="w-full">
+                                <form method="POST" action="{{ route('logout') }}" class="w-full" onsubmit="return confirm('Are you sure you want to log out?')">
                                     @csrf
                                     <button type="submit" class="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-red-500 hover:text-red-700 hover:bg-red-50/50 rounded-lg transition duration-150">
                                         <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -444,8 +472,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </nav>
                 </div>
             </nav>
         </div>

@@ -291,7 +291,7 @@ video {
     }
 }
 
-@media (display-mode: standalone) {
+@media (display-mode: fullscreen), (display-mode: standalone) {
     html {
         background: #17110c;
     }

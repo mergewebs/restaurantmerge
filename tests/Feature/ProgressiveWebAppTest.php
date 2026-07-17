@@ -31,11 +31,12 @@ class ProgressiveWebAppTest extends TestCase
             ->assertDontSee('data-pwa-install-button', false);
     }
 
-    public function test_manifest_is_valid_and_configured_for_standalone_installation(): void
+    public function test_manifest_is_valid_and_configured_for_fullscreen_installation(): void
     {
         $manifest = json_decode(file_get_contents(public_path('manifest.webmanifest')), true, flags: JSON_THROW_ON_ERROR);
 
-        $this->assertSame('standalone', $manifest['display']);
+        $this->assertSame('fullscreen', $manifest['display']);
+        $this->assertSame(['fullscreen', 'standalone'], $manifest['display_override']);
         $this->assertSame('/', $manifest['start_url']);
         $this->assertSame('/', $manifest['scope']);
         $this->assertSame('#17110c', $manifest['theme_color']);

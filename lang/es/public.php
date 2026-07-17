@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 return [
     'language_switcher' => 'Selector de idioma',
@@ -8,7 +8,7 @@ return [
     'site_title_takeaway' => ':restaurant | Pedido para llevar',
     'iframe_title' => 'Reserva - Koya Smash Burger & Bol',
     'guest_title' => 'Koya Smash Burger & Bol',
-    'copyright' => '© 2026 Mergewebs Restaurant',
+    'copyright' => '© 2026 :app_name',
     'seo_default_title' => 'Koya Smash Burger & Bol | Smash burgers y bowls en Barcelona',
     'seo_default_description' => 'Descubre KOYA en Barcelona para disfrutar smash burgers, bowls de arroz, entrantes, cócteles, pedidos para llevar y reservas.',
     'seo_default_keywords' => 'Koya Barcelona, smash burger Barcelona, bowls Barcelona, restaurante Barcelona, comida para llevar Barcelona, reservas restaurante Barcelona',

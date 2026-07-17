@@ -1171,5 +1171,107 @@
         cursor: not-allowed !important;
         opacity: 0.6 !important;
     }
+
+    .mobile-admin-header { display: none; }
+
+    @media (max-width: 1023px) {
+        .mobile-admin-header {
+            position: fixed; top: 0; right: 0; left: 0; z-index: 51;
+            display: flex; min-height: calc(3.75rem + env(safe-area-inset-top));
+            align-items: center; justify-content: space-between;
+            padding: env(safe-area-inset-top) max(1rem, env(safe-area-inset-right)) 0 max(1rem, env(safe-area-inset-left));
+            border-bottom: 1px solid #e2e8f0; background: rgba(255, 255, 255, 0.96);
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+        }
+        .mobile-admin-brand { display: flex; align-items: center; }
+        .mobile-admin-brand { min-width: 0; gap: 0.7rem; color: #0f172a; text-decoration: none; }
+        .mobile-admin-brand img {
+            width: 2.1rem; height: 2.1rem; flex: none; border: 1px solid #e2e8f0;
+            border-radius: 12px; object-fit: cover; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+        }
+        .mobile-admin-brand span { display: flex; min-width: 0; flex-direction: column; line-height: 1.1; }
+        .mobile-admin-brand strong {
+            max-width: 10rem; overflow: hidden; color: #0f172a; font-size: 0.82rem;
+            font-weight: 900; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .mobile-admin-brand small {
+            margin-top: 0.3rem; color: #64748b; font-size: 0.55rem; font-weight: 800;
+            letter-spacing: 0.12em; text-transform: uppercase;
+        }
+
+        .mobile-profile-menu { position: relative; flex: none; }
+        .mobile-admin-avatar {
+            display: grid; width: 2rem; height: 2rem; min-height: 2rem;
+            place-items: center; border: 1px solid #e2e8f0; border-radius: 999px;
+            background: #fff; color: #334155; font-size: 0.68rem; font-weight: 800; text-decoration: none;
+        }
+        .mobile-admin-profile-button {
+            display: inline-flex; min-height: 2.25rem; align-items: center; gap: 0.3rem;
+            border: 0; padding: 0; background: transparent; color: #64748b; cursor: pointer;
+        }
+        .mobile-admin-profile-button > svg { width: 0.8rem; height: 0.8rem; }
+        .mobile-profile-dropdown {
+            position: absolute; top: calc(100% + 0.65rem); right: 0; z-index: 60;
+            width: 10rem; padding: 0.35rem; border: 1px solid #e2e8f0; border-radius: 14px;
+            background: #fff; box-shadow: 0 16px 35px rgba(15, 23, 42, 0.16);
+        }
+        .mobile-profile-dropdown a, .mobile-profile-dropdown button {
+            display: flex; width: 100%; min-height: 2.4rem; align-items: center;
+            border: 0; border-radius: 10px; padding: 0.55rem 0.7rem; background: transparent;
+            color: #334155; font-size: 0.75rem; font-weight: 700; text-decoration: none; cursor: pointer;
+        }
+        .mobile-profile-dropdown a:hover { background: #f1f5f9; color: #4f46e5; }
+
+        .mobile-profile-dropdown form {
+            display: block !important; margin: 0.25rem 0 0 !important;
+            padding-top: 0.35rem !important; border-top: 1px solid #e2e8f0 !important;
+        }
+        .mobile-profile-dropdown .mobile-profile-logout {
+            display: flex !important; visibility: visible !important; opacity: 1 !important;
+            min-height: 2.5rem !important; align-items: center !important; gap: 0.55rem !important;
+            background: #fff1f2 !important; color: #dc2626 !important;
+        }
+        .mobile-profile-dropdown .mobile-profile-logout svg {
+            width: 1rem !important; height: 1rem !important; flex: none;
+        }
+        .mobile-profile-dropdown .mobile-profile-logout:hover { background: #ffe4e6 !important; }
+        nav.admin-navigation.fixed {
+            top: auto !important; right: max(0.75rem, env(safe-area-inset-right)) !important;
+            bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
+            left: max(0.75rem, env(safe-area-inset-left)) !important;
+            width: auto !important; z-index: 52 !important;
+        }
+        nav.admin-navigation.fixed .glass {
+            min-height: 3.75rem; padding: 0.25rem 0.4rem !important;
+            border: 1px solid rgba(226, 232, 240, 0.95) !important;
+            border-radius: 20px !important; background: rgba(255, 255, 255, 0.96) !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16) !important;
+            backdrop-filter: blur(20px) !important; -webkit-backdrop-filter: blur(20px) !important;
+        }
+        nav.admin-navigation > .glass > a.shrink-0 { display: none !important; }
+        nav.admin-navigation .bottom-primary-links > div.relative { display: none !important; }
+        nav.admin-navigation .bottom-primary-links { gap: 0.15rem !important; }
+        nav.admin-navigation .bottom-quick-link {
+            height: 3.1rem !important; min-height: 3.1rem !important;
+            gap: 0.2rem !important; padding: 0.2rem 0.1rem !important; border-radius: 12px !important;
+        }
+        nav.admin-navigation .bottom-quick-link svg {
+            width: 1rem !important; height: 1rem !important;
+        }
+        nav.admin-navigation .bottom-quick-link span {
+            display: block !important; max-width: 100%; overflow: hidden;
+            font-size: clamp(0.45rem, 1.8vw, 0.58rem) !important;
+            text-overflow: ellipsis; white-space: nowrap;
+        }
+        nav.admin-navigation .dropdown-menu-container {
+            top: auto !important; right: 0 !important; bottom: calc(100% + 0.75rem) !important;
+            margin: 0 !important; transform-origin: bottom right;
+        }
+        main {
+            padding-top: calc(4.75rem + env(safe-area-inset-top)) !important;
+            padding-bottom: calc(6.75rem + env(safe-area-inset-bottom)) !important;
+        }
+    }
 </style>
 

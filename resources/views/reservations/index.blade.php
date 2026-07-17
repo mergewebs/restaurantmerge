@@ -1,4 +1,20 @@
 <x-app-layout>
+    <style>
+        @media (max-width: 640px) {
+            .reservations-summary {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 0.5rem !important;
+            }
+
+            .reservations-tabs {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 0.25rem !important;
+                margin-inline: 0 !important;
+                overflow: visible !important;
+            }
+        }
+    </style>
     <div data-async-region="reservations-index" data-async-mutations="true">
         @if(session('success'))
             <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
@@ -34,7 +50,7 @@
             };
             this.showEditModal = true;
         }
-    }" class="space-y-6">
+    }" class="space-y-4 md:space-y-6">
 
         <!-- Header Actions -->
         <div class="flex justify-between items-center gap-4 mb-2">
@@ -50,10 +66,10 @@
         </div>
 
         <!-- KPI Stats Grid -->
-        <div class="grid grid-cols-3 gap-2 md:gap-4">
+        <div class="reservations-summary grid grid-cols-3 gap-2 md:gap-4">
             <!-- Today's Reservations -->
-            <div class="p-3 md:p-5 bg-white border border-slate-150/80 rounded-2xl flex items-center gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow">
-                <div class="p-2 md:p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
+            <div class="min-w-0 p-2.5 sm:p-3 md:p-5 bg-white border border-slate-150/80 rounded-xl md:rounded-2xl flex items-center justify-center sm:justify-start gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow text-center sm:text-left">
+                <div class="hidden sm:block p-2 md:p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
                     <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M6 11h12M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
@@ -65,8 +81,8 @@
             </div>
 
             <!-- Upcoming Reservations -->
-            <div class="p-3 md:p-5 bg-white border border-slate-150/80 rounded-2xl flex items-center gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow">
-                <div class="p-2 md:p-3 bg-blue-50 text-blue-600 rounded-xl shrink-0">
+            <div class="min-w-0 p-2.5 sm:p-3 md:p-5 bg-white border border-slate-150/80 rounded-xl md:rounded-2xl flex items-center justify-center sm:justify-start gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow text-center sm:text-left">
+                <div class="hidden sm:block p-2 md:p-3 bg-blue-50 text-blue-600 rounded-xl shrink-0">
                     <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
@@ -78,8 +94,8 @@
             </div>
 
             <!-- Past Reservations -->
-            <div class="p-3 md:p-5 bg-white border border-slate-150/80 rounded-2xl flex items-center gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow">
-                <div class="p-2 md:p-3 bg-slate-50 text-slate-600 rounded-xl shrink-0">
+            <div class="min-w-0 p-2.5 sm:p-3 md:p-5 bg-white border border-slate-150/80 rounded-xl md:rounded-2xl flex items-center justify-center sm:justify-start gap-2 md:gap-4 shadow-sm hover:shadow transition-shadow text-center sm:text-left">
+                <div class="hidden sm:block p-2 md:p-3 bg-slate-50 text-slate-600 rounded-xl shrink-0">
                     <svg class="w-4 h-4 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                     </svg>
@@ -92,20 +108,20 @@
         </div>
 
         <!-- Reservations Content Tab Panel -->
-        <div class="bg-white border border-slate-150/80 rounded-2xl p-4 md:p-6 shadow-sm">
+        <div class="bg-white border border-slate-150/80 rounded-2xl p-3 md:p-6 shadow-sm">
             <!-- Tabs Header -->
-            <div class="flex border-b border-slate-100 pb-3 mb-6 overflow-x-auto scrollbar-none gap-2">
-                <button @click="activeTab = 'today'" :class="activeTab === 'today' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="px-4 py-2 border-b-2 font-bold text-sm rounded-xl transition duration-150 flex items-center gap-2 outline-none">
+            <div class="reservations-tabs flex border-b border-slate-100 pb-3 mb-4 md:mb-6 overflow-x-auto scrollbar-none gap-2">
+                <button @click="activeTab = 'today'" :class="activeTab === 'today' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="min-w-0 px-2 sm:px-4 py-2 border-b-2 font-bold text-xs sm:text-sm rounded-xl transition duration-150 flex justify-center items-center gap-1 sm:gap-2 outline-none">
                     Today
-                    <span class="px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'today' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $todayReservations->total() }}</span>
+                    <span class="hidden sm:inline-flex px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'today' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $todayReservations->total() }}</span>
                 </button>
-                <button @click="activeTab = 'upcoming'" :class="activeTab === 'upcoming' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="px-4 py-2 border-b-2 font-bold text-sm rounded-xl transition duration-150 flex items-center gap-2 outline-none">
+                <button @click="activeTab = 'upcoming'" :class="activeTab === 'upcoming' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="min-w-0 px-2 sm:px-4 py-2 border-b-2 font-bold text-xs sm:text-sm rounded-xl transition duration-150 flex justify-center items-center gap-1 sm:gap-2 outline-none">
                     Upcoming
-                    <span class="px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'upcoming' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $upcomingReservations->total() }}</span>
+                    <span class="hidden sm:inline-flex px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'upcoming' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $upcomingReservations->total() }}</span>
                 </button>
-                <button @click="activeTab = 'past'" :class="activeTab === 'past' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="px-4 py-2 border-b-2 font-bold text-sm rounded-xl transition duration-150 flex items-center gap-2 outline-none">
+                <button @click="activeTab = 'past'" :class="activeTab === 'past' ? 'border-indigo-600 text-indigo-600 bg-indigo-50/40' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'" class="min-w-0 px-2 sm:px-4 py-2 border-b-2 font-bold text-xs sm:text-sm rounded-xl transition duration-150 flex justify-center items-center gap-1 sm:gap-2 outline-none">
                     Past
-                    <span class="px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'past' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $pastReservations->total() }}</span>
+                    <span class="hidden sm:inline-flex px-2 py-0.5 text-xs font-bold rounded-full" :class="activeTab === 'past' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'">{{ $pastReservations->total() }}</span>
                 </button>
             </div>
 

@@ -237,7 +237,7 @@
             </div>
 
             <div class="mt-8 text-center">
-                <p class="text-gray-600 text-[10px] uppercase font-bold tracking-widest">{{ __('public.copyright') }}</p>
+                <p class="text-gray-600 text-[10px] uppercase font-bold tracking-widest">{{ __('public.copyright', ['app_name' => config('app.name')]) }}</p>
             </div>
         </div>
         @include('partials.form-submit-lock')

@@ -1,8 +1,10 @@
 (() => {
     'use strict';
 
-    const isStandalone = () =>
+    const isAppMode = () =>
+        window.matchMedia('(display-mode: fullscreen)').matches ||
         window.matchMedia('(display-mode: standalone)').matches ||
+        window.matchMedia('(display-mode: window-controls-overlay)').matches ||
         window.navigator.standalone === true;
 
     let deferredPrompt = null;
@@ -12,7 +14,7 @@
         deferredPrompt = event;
 
         const container = document.querySelector('[data-pwa-install]');
-        if (container && !isStandalone()) {
+        if (container && !isAppMode()) {
             container.hidden = false;
         }
     });
@@ -32,7 +34,7 @@
         const iosInstructions = document.querySelector('[data-pwa-ios-instructions]');
         const browserInstructions = document.querySelector('[data-pwa-browser-instructions]');
 
-        if (!container || !installButton || isStandalone()) {
+        if (!container || !installButton || isAppMode()) {
             return;
         }
 
@@ -40,7 +42,7 @@
             (/macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
 
         const showInstall = () => {
-            if (!isStandalone()) {
+            if (!isAppMode()) {
                 container.hidden = false;
             }
         };
@@ -51,6 +53,11 @@
         };
 
         window.addEventListener('appinstalled', hideInstall);
+        window.matchMedia('(display-mode: fullscreen)').addEventListener?.('change', (event) => {
+            if (event.matches) {
+                hideInstall();
+            }
+        });
         window.matchMedia('(display-mode: standalone)').addEventListener?.('change', (event) => {
             if (event.matches) {
                 hideInstall();
