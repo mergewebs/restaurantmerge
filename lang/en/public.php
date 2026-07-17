@@ -247,6 +247,11 @@ return [
         'MATCHA CHEESECAKE' => ['name' => 'MATCHA CHEESECAKE', 'description' => 'Cheesecake with matcha', 'price' => 6.00, 'sort_order' => 4],
         'TARTA DE CHOCOLATE' => ['name' => 'CHOCOLATE CAKE', 'description' => 'Dark chocolate, brown sugar, egg, milk & almonds', 'price' => 5.50, 'sort_order' => 5],
     ],
+    'pwa_install_app' => 'Install App',
+    'pwa_ios_instructions' => 'Open in Safari → Share → Add to Home Screen.',
+    'pwa_close' => 'Close',
+    'pwa_done' => 'Done',
+
     'menu_badges' => [
         'KOYA Favorite' => 'KOYA Favorite',
         'Favorite' => 'Favorite',
@@ -263,7 +268,6 @@ return [
         'Refreshing' => 'Refreshing',
     ],
 ];
-
 
 
 

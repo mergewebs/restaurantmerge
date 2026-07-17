@@ -184,6 +184,11 @@ return [
         'KATSUDON' => ['name' => 'KATSUDON', 'description' => 'Lomo empanado, salsa tonkatsu, sésamo, pepino y cebolla encurtida *con huevo frito*'],
         'MOJITO(Menta/fresa/piña colada)' => ['name' => 'MOJITO(Menta/fresa/piña colada)', 'description' => 'BACARDI, SIFÓN Y MENTA'],
     ],
+    'pwa_install_app' => 'Instalar app',
+    'pwa_ios_instructions' => 'Open in Safari → Share → Add to Home Screen.',
+    'pwa_close' => 'Cerrar',
+    'pwa_done' => 'Listo',
+
     'menu_badges' => [
         'KOYA Favorite' => 'Favorito KOYA',
         'Favorite' => 'Favorito',
@@ -200,7 +205,6 @@ return [
         'Refreshing' => 'Refrescante',
     ],
 ];
-
 
 
 

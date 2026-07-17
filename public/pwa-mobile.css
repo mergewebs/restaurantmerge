@@ -1,0 +1,232 @@
+:root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+}
+
+html {
+    min-height: 100%;
+    background: #17110c;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overscroll-behavior-y: none;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    touch-action: manipulation;
+}
+
+button,
+[role="button"],
+a {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+input,
+textarea,
+select {
+    max-width: 100%;
+}
+
+img,
+svg,
+video {
+    max-width: 100%;
+}
+
+.pwa-install[hidden] {
+    display: none !important;
+}
+
+.pwa-install {
+    position: fixed;
+    left: max(1rem, var(--safe-left));
+    bottom: max(1rem, var(--safe-bottom));
+    z-index: 90;
+    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.32));
+}
+
+.pwa-install__button {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border: 1px solid rgba(255, 247, 235, 0.2);
+    border-radius: 999px;
+    padding: 0.75rem 1.05rem;
+    background: #c89b3c;
+    color: #17110c;
+    font: 800 0.82rem/1.1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: 0.04em;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+    cursor: pointer;
+}
+
+.pwa-install__button:active {
+    transform: scale(0.97);
+}
+
+.pwa-install__button:focus-visible,
+.pwa-ios-dialog button:focus-visible {
+    outline: 3px solid #fff7eb;
+    outline-offset: 3px;
+}
+
+.pwa-ios-dialog {
+    width: min(92vw, 390px);
+    max-width: 390px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 0;
+    background: #211915;
+    color: #fff7eb;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+}
+
+.pwa-ios-dialog::backdrop {
+    background: rgba(8, 6, 4, 0.72);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.pwa-ios-dialog__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 2rem 1.25rem max(1.25rem, var(--safe-bottom));
+    text-align: center;
+}
+
+.pwa-ios-dialog img {
+    border-radius: 16px;
+}
+
+.pwa-ios-dialog h2 {
+    margin: 0;
+    color: #fff7eb;
+    font: 800 1.35rem/1.2 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.pwa-ios-dialog p {
+    margin: 0;
+    color: rgba(255, 247, 235, 0.82);
+    font: 600 1rem/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.pwa-ios-dialog__close {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff7eb;
+    font-size: 1.7rem;
+    cursor: pointer;
+}
+
+.pwa-ios-dialog__done {
+    width: 100%;
+    min-height: 48px;
+    border: 0;
+    border-radius: 14px;
+    background: #c89b3c;
+    color: #17110c;
+    font: 800 1rem/1 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    cursor: pointer;
+}
+
+@media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]),
+    select,
+    textarea {
+        min-height: 48px;
+        font-size: 16px !important;
+    }
+
+    button,
+    [role="button"],
+    input[type="submit"],
+    input[type="button"] {
+        min-height: 44px;
+    }
+
+    table {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    [role="dialog"],
+    dialog {
+        max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 1rem);
+        overscroll-behavior: contain;
+    }
+
+    .fixed.top-0 {
+        top: var(--safe-top) !important;
+    }
+
+    .fixed.bottom-0 {
+        bottom: var(--safe-bottom) !important;
+    }
+
+    .overflow-x-auto {
+        overscroll-behavior-inline: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (display-mode: standalone) {
+    html {
+        background: #17110c;
+    }
+
+    body {
+        padding-right: var(--safe-right);
+        padding-left: var(--safe-left);
+    }
+
+    body > header,
+    .sticky.top-0 {
+        top: var(--safe-top) !important;
+    }
+
+    .mobile-menu-overlay {
+        padding-top: var(--safe-top);
+        padding-right: var(--safe-right);
+        padding-bottom: var(--safe-bottom);
+        padding-left: var(--safe-left);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
