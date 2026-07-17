@@ -3021,9 +3021,9 @@
             }
         });
     </script>
+    @include('partials.pwa-install-modal')
 </body>
 </html>
-
 
 
 

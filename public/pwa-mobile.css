@@ -120,20 +120,25 @@ video {
 
 .pwa-ios-dialog {
     position: fixed;
-    inset: 0;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
     width: min(92vw, 390px);
     max-width: 390px;
-    margin: auto;
+    margin: 0;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 24px;
     padding: 0;
     background: #211915;
     color: #fff7eb;
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+    transform: translate(-50%, -50%);
 }
 
 .pwa-ios-dialog[open] {
-    place-self: center;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
 }
 
 .pwa-ios-dialog::backdrop {

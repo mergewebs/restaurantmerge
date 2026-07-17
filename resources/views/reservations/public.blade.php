@@ -1293,9 +1293,9 @@
         </div>
     </footer>
     @include('partials.form-submit-lock')
+    @include('partials.pwa-install-modal')
 </body>
 </html>
-
 
 
 
