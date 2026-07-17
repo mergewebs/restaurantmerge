@@ -5,6 +5,18 @@
         window.matchMedia('(display-mode: standalone)').matches ||
         window.navigator.standalone === true;
 
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
+
+        const container = document.querySelector('[data-pwa-install]');
+        if (container && !isStandalone()) {
+            container.hidden = false;
+        }
+    });
+
     if ('serviceWorker' in navigator && (window.isSecureContext || location.hostname === 'localhost')) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' }).catch(() => {
@@ -17,12 +29,13 @@
         const container = document.querySelector('[data-pwa-install]');
         const installButton = document.querySelector('[data-pwa-install-button]');
         const iosDialog = document.querySelector('[data-pwa-ios-dialog]');
+        const iosInstructions = document.querySelector('[data-pwa-ios-instructions]');
+        const browserInstructions = document.querySelector('[data-pwa-browser-instructions]');
 
         if (!container || !installButton || isStandalone()) {
             return;
         }
 
-        let deferredPrompt = null;
         const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
             (/macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
 
@@ -37,12 +50,6 @@
             deferredPrompt = null;
         };
 
-        window.addEventListener('beforeinstallprompt', (event) => {
-            event.preventDefault();
-            deferredPrompt = event;
-            showInstall();
-        });
-
         window.addEventListener('appinstalled', hideInstall);
         window.matchMedia('(display-mode: standalone)').addEventListener?.('change', (event) => {
             if (event.matches) {
@@ -50,30 +57,45 @@
             }
         });
 
-        if (isIos) {
-            showInstall();
-        }
+        showInstall();
+
+        const showInstructions = () => {
+            if (!iosDialog) {
+                return;
+            }
+
+            if (iosInstructions) {
+                iosInstructions.hidden = !isIos;
+            }
+            if (browserInstructions) {
+                browserInstructions.hidden = isIos;
+            }
+
+            if (typeof iosDialog.showModal === 'function') {
+                iosDialog.showModal();
+            } else {
+                iosDialog.setAttribute('open', '');
+            }
+        };
 
         installButton.addEventListener('click', async () => {
             if (deferredPrompt) {
                 const prompt = deferredPrompt;
                 deferredPrompt = null;
-                await prompt.prompt();
-                const choice = await prompt.userChoice;
+                try {
+                    await prompt.prompt();
+                    const choice = await prompt.userChoice;
 
-                if (choice.outcome === 'accepted') {
-                    hideInstall();
-                }
-                return;
-            }
-
-            if (isIos && iosDialog) {
-                if (typeof iosDialog.showModal === 'function') {
-                    iosDialog.showModal();
-                } else {
-                    iosDialog.setAttribute('open', '');
+                    if (choice.outcome === 'accepted') {
+                        hideInstall();
+                    }
+                    return;
+                } catch {
+                    // Fall through to manual browser instructions.
                 }
             }
+
+            showInstructions();
         });
 
         iosDialog?.querySelectorAll('[data-pwa-ios-close]').forEach((button) => {

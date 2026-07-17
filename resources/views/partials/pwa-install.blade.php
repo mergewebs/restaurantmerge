@@ -1,8 +1,5 @@
 <div class="pwa-install" data-pwa-install hidden>
-    <button type="button" class="pwa-install__button" data-pwa-install-button aria-haspopup="dialog">
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+    <button type="button" class="menu-link pwa-install__button" data-pwa-install-button aria-haspopup="dialog">
         <span>{{ __('public.pwa_install_app') }}</span>
     </button>
 </div>
@@ -12,7 +9,23 @@
         <button type="button" class="pwa-ios-dialog__close" data-pwa-ios-close aria-label="{{ __('public.pwa_close') }}">&times;</button>
         <img src="{{ asset('apple-touch-icon.png') }}" alt="" width="64" height="64">
         <h2 id="pwa-ios-title">{{ __('public.pwa_install_app') }}</h2>
-        <p>{{ __('public.pwa_ios_instructions') }}</p>
+        <div class="pwa-install-guide" data-pwa-ios-instructions>
+            <p class="pwa-install-guide__summary">{{ __('public.pwa_ios_instructions') }}</p>
+            <ol class="pwa-install-steps">
+                <li>{{ __('public.pwa_ios_step_safari') }}</li>
+                <li>{{ __('public.pwa_ios_step_share') }}</li>
+                <li>{{ __('public.pwa_ios_step_home') }}</li>
+                <li>{{ __('public.pwa_ios_step_add') }}</li>
+            </ol>
+        </div>
+        <div class="pwa-install-guide" data-pwa-browser-instructions hidden>
+            <p class="pwa-install-guide__summary">{{ __('public.pwa_browser_instructions') }}</p>
+            <ol class="pwa-install-steps">
+                <li>{{ __('public.pwa_browser_step_menu') }}</li>
+                <li>{{ __('public.pwa_browser_step_install') }}</li>
+                <li>{{ __('public.pwa_browser_step_confirm') }}</li>
+            </ol>
+        </div>
         <button type="button" class="pwa-ios-dialog__done" data-pwa-ios-close>{{ __('public.pwa_done') }}</button>
     </div>
 </dialog>

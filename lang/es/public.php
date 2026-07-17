@@ -186,6 +186,14 @@ return [
     ],
     'pwa_install_app' => 'Instalar app',
     'pwa_ios_instructions' => 'Open in Safari → Share → Add to Home Screen.',
+    'pwa_ios_step_safari' => 'Abre esta web en Safari.',
+    'pwa_ios_step_share' => 'Pulsa Compartir (el cuadrado con una flecha hacia arriba).',
+    'pwa_ios_step_home' => 'Baja y pulsa “Añadir a pantalla de inicio”.',
+    'pwa_ios_step_add' => 'Pulsa “Añadir” en la esquina superior derecha.',
+    'pwa_browser_instructions' => 'Instala KOYA desde el menú del navegador:',
+    'pwa_browser_step_menu' => 'Pulsa el menú de tres puntos (⋮) del navegador.',
+    'pwa_browser_step_install' => 'Pulsa “Instalar aplicación” o “Añadir a pantalla de inicio”.',
+    'pwa_browser_step_confirm' => 'Pulsa “Instalar” o “Añadir” para confirmar.',
     'pwa_close' => 'Cerrar',
     'pwa_done' => 'Listo',
 
@@ -205,8 +213,6 @@ return [
         'Refreshing' => 'Refrescante',
     ],
 ];
-
-
 
 
 
