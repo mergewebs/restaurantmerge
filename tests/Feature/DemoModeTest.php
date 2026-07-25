@@ -1,0 +1,121 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\Order;
+use App\Models\RestaurantException;
+use App\Models\Supplier;
+use App\Models\User;
+use Database\Seeders\DemoUserSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
+
+class DemoModeTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_demo_account_is_seeded_with_full_read_access(): void
+    {
+        $this->seed(DemoUserSeeder::class);
+
+        $demo = User::where('role', 'demo')->sole();
+
+        $this->assertSame('Demo User', $demo->name);
+        $this->assertTrue(Hash::check('123456', $demo->passcode));
+        $this->assertTrue($demo->isAdmin());
+        $this->assertTrue($demo->mayDiscount());
+        $this->assertTrue($demo->mayRefund());
+        $this->assertTrue($demo->mayCancelOrders());
+
+        foreach ([
+            'dashboard', 'orders.index', 'tables.index', 'tables.kitchen',
+            'reservations.index', 'finance.index', 'menu-items.index',
+            'inventory.index', 'cash-register.index', 'reports.index',
+            'users.index', 'restaurant.config', 'profile.edit',
+        ] as $route) {
+            $this->actingAs($demo)->get(route($route))->assertOk();
+        }
+    }
+
+    public function test_demo_login_does_not_update_last_login_and_shows_the_contact_experience(): void
+    {
+        $this->seed(DemoUserSeeder::class);
+        $demo = User::where('role', 'demo')->sole();
+
+        $this->post('/admin/login', ['passcode' => '123456'])
+            ->assertRedirect(route('dashboard', absolute: false));
+
+        $this->assertAuthenticatedAs($demo);
+        $this->assertNull($demo->fresh()->last_login_at);
+        $this->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('Demo mode · Read only')
+            ->assertSee('Contact Us')
+            ->assertSee('Request Full Access');
+    }
+
+    public function test_demo_form_requests_cannot_change_business_data(): void
+    {
+        $demo = User::factory()->create(['role' => 'demo']);
+
+        $this->actingAs($demo)->post(route('inventory.suppliers.store'), [
+            'name' => 'Should Not Exist',
+            'contact_name' => 'Blocked',
+        ])->assertRedirect()->assertSessionHas('demo_action_blocked');
+
+        $this->assertSame(0, Supplier::count());
+
+        $order = Order::create([
+            'status' => 'open',
+            'workflow_status' => 'new',
+            'order_type' => 'takeaway',
+            'payment_status' => 'unpaid',
+            'total' => 20,
+        ]);
+
+        $this->actingAs($demo)
+            ->patchJson(route('orders.status.update', $order), ['workflow_status' => 'completed'])
+            ->assertStatus(423)
+            ->assertJson(['demo_mode' => true]);
+
+        $this->assertSame('new', $order->fresh()->workflow_status);
+    }
+
+    public function test_demo_cannot_change_account_permissions_or_system_settings(): void
+    {
+        $demo = User::factory()->create([
+            'role' => 'demo',
+            'name' => 'Demo User',
+            'passcode' => '123456',
+        ]);
+        $originalPasscode = $demo->passcode;
+
+        $this->actingAs($demo)->put(route('passcode.update'), [
+            'current_passcode' => '123456',
+            'passcode' => '654321',
+            'passcode_confirmation' => '654321',
+        ])->assertRedirect()->assertSessionHas('demo_action_blocked');
+
+        $this->actingAs($demo)->patch(route('profile.update'), [
+            'name' => 'Changed Demo',
+        ])->assertRedirect()->assertSessionHas('demo_action_blocked');
+
+        $this->actingAs($demo)->post(route('restaurant.toggle-today'))
+            ->assertRedirect()->assertSessionHas('demo_action_blocked');
+
+        $demo->refresh();
+        $this->assertSame('Demo User', $demo->name);
+        $this->assertSame($originalPasscode, $demo->passcode);
+        $this->assertSame(0, RestaurantException::count());
+    }
+
+    public function test_demo_user_can_still_log_out(): void
+    {
+        $demo = User::factory()->create(['role' => 'demo']);
+
+        $this->actingAs($demo)->post(route('logout'))->assertRedirect(route('login'));
+
+        $this->assertGuest();
+    }
+}

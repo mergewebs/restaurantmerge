@@ -12,7 +12,7 @@ Route::prefix('admin')->middleware('noindex')->group(function () {
         Route::post('login', [AuthenticatedSessionController::class, 'store']);
     });
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'demo.readonly'])->group(function () {
         Route::put('passcode', [PasscodeController::class, 'update'])->name('passcode.update');
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])

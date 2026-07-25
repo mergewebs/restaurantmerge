@@ -16,6 +16,15 @@ class AdminAccessSeederTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_local_admin_fallback_passcode_is_987654(): void
+    {
+        config()->set('access.admin.passcode');
+
+        (new AdminAccessSeeder)->setContainer($this->app)->run();
+
+        $this->assertTrue(Hash::check('987654', User::query()->sole()->passcode));
+    }
+
     public function test_it_seeds_only_the_configured_admin_access(): void
     {
         config()->set('access.admin.name', 'Production Admin');
@@ -66,10 +75,14 @@ class AdminAccessSeederTest extends TestCase
 
         (new DatabaseSeeder)->setContainer($this->app)->run();
 
-        $this->assertDatabaseCount('users', 1);
+        $this->assertDatabaseCount('users', 2);
         $this->assertDatabaseHas('users', [
             'name' => 'Production Admin',
             'role' => 'admin',
+        ]);
+        $this->assertDatabaseHas('users', [
+            'name' => 'Demo User',
+            'role' => 'demo',
         ]);
         $this->assertSame(0, RestaurantTable::query()->count());
         $this->assertDatabaseCount('reservations', 0);

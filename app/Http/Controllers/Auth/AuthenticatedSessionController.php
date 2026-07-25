@@ -26,9 +26,11 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        $request->user()?->forceFill([
-            'last_login_at' => now(),
-        ])->save();
+        if (! $request->user()?->isDemo()) {
+            $request->user()?->forceFill([
+                'last_login_at' => now(),
+            ])->save();
+        }
 
         $request->session()->regenerate();
 

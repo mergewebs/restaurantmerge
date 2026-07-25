@@ -46,6 +46,7 @@ class LoginRequest extends FormRequest
 
         $user = User::query()
             ->whereNotNull('passcode')
+            ->orderByRaw("CASE WHEN role = 'demo' THEN 0 ELSE 1 END")
             ->get()
             ->first(fn (User $candidate) => Hash::check($passcode, $candidate->passcode));
 

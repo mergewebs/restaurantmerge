@@ -824,6 +824,9 @@
                 initializeAsyncRegions();
             });
         </script>
+        @if(auth()->user()->isDemo())
+            @include('partials.demo-mode-modal')
+        @endif
         @include('partials.form-submit-lock')
 </body>
 </html>

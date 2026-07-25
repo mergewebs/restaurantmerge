@@ -21,7 +21,7 @@ Route::redirect('/', '/admin/dashboard');
 
 Route::redirect('/admin', '/admin/dashboard');
 
-Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'noindex', 'demo.readonly'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');

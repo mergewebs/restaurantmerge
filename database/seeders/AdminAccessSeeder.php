@@ -14,7 +14,7 @@ class AdminAccessSeeder extends Seeder
         $passcode = config('access.admin.passcode');
 
         if (blank($passcode) && ! app()->environment('production')) {
-            $passcode = '111111';
+            $passcode = '987654';
         }
 
         if ($name === '') {
