@@ -366,6 +366,7 @@
                         request()->routeIs('menu-items.*') => ['Menu', 'Keep dishes, pricing and availability up to date.'],
                         request()->routeIs('inventory.*') => ['Inventory', 'Track stock, suppliers, purchasing and waste.'],
                         request()->routeIs('cash-register.*') => ['Cash Register', 'Payments, refunds and daily cash reconciliation.'],
+                        request()->routeIs('reports.*') => ['Reports', 'Sales, profit, demand and team performance.'],
                         request()->routeIs('users.*') || request()->routeIs('staff.*') => ['Staff Management', 'Schedules, attendance, assignments and permissions.'],
                         request()->routeIs('restaurant.*') => ['Restaurant Settings', 'Opening hours, closures and service capacity.'],
                         request()->routeIs('profile.*') => ['Your Profile', 'Personal details and account security.'],
@@ -412,6 +413,7 @@
                     $bottomMenuItems[] = ['route' => route('menu-items.index'), 'active' => request()->routeIs('menu-items.*'), 'label' => 'Menu', 'icon' => 'M6 3v8M9 3v8M6 7h3M7.5 11v10M15 3v20M15 3c3 0 4 2.5 4 5.5S18 14 15 14'];
                     $bottomMenuItems[] = ['route' => route('inventory.index'), 'active' => request()->routeIs('inventory.*'), 'label' => 'Inventory', 'icon' => 'M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'];
                     $bottomMenuItems[] = ['route' => route('cash-register.index'), 'active' => request()->routeIs('cash-register.*'), 'label' => 'Register', 'icon' => 'M17 9V7a5 5 0 00-10 0v2M5 9h14l1 12H4L5 9zm4 4h6'];
+                    $bottomMenuItems[] = ['route' => route('reports.index'), 'active' => request()->routeIs('reports.*'), 'label' => 'Reports', 'icon' => 'M4 19V9m5 10V5m5 14v-7m5 7V3'];
                 }
 
                 $bottomMenuItems[] = ['route' => route('users.index'), 'active' => request()->routeIs('users.*') || request()->routeIs('staff.*'), 'label' => 'Staff', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];

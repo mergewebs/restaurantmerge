@@ -8,6 +8,7 @@ use App\Http\Controllers\MenuItemOptionController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CashRegisterController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
@@ -59,6 +60,7 @@ Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::post('/staff/break/start', [StaffController::class, 'startBreak'])->name('staff.break.start');
     Route::post('/staff/break/end', [StaffController::class, 'endBreak'])->name('staff.break.end');
     Route::post('/staff/clock-out', [StaffController::class, 'clockOut'])->name('staff.clock-out');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
     Route::get('/restaurant/config', [RestaurantConfigController::class, 'index'])->name('restaurant.config');
     Route::put('/restaurant/schedule', [RestaurantConfigController::class, 'updateSchedule'])->name('restaurant.schedule.update');
