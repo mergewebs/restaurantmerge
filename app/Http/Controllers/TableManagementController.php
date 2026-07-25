@@ -8,6 +8,7 @@ use App\Models\Income;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\RestaurantTable;
+use App\Models\CashRegisterSession;
 use App\Services\InventoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -415,7 +416,10 @@ class TableManagementController extends Controller
             ]);
 
             if ((float) $order->total > 0) {
+                $registerSession = CashRegisterSession::where('status', 'open')->latest('opened_at')->first();
                 $order->payments()->create([
+                    'cash_register_session_id' => $registerSession?->id,
+                    'transaction_type' => 'payment',
                     'method' => 'cash',
                     'amount' => (float) $order->total,
                     'user_id' => auth()->id(),

@@ -6,6 +6,7 @@ use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\MenuItemOptionController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\CashRegisterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
@@ -103,6 +104,10 @@ Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::post('/inventory/movements', [InventoryController::class, 'storeMovement'])->name('inventory.movements.store');
     Route::post('/inventory/products/{menuItem}/recipe', [InventoryController::class, 'storeRecipe'])->name('inventory.recipes.store');
     Route::delete('/inventory/products/{menuItem}/recipe/{ingredient}', [InventoryController::class, 'destroyRecipe'])->name('inventory.recipes.destroy');
+    Route::get('/cash-register', [CashRegisterController::class, 'index'])->name('cash-register.index');
+    Route::post('/cash-register/open', [CashRegisterController::class, 'open'])->name('cash-register.open');
+    Route::post('/cash-register/{session}/close', [CashRegisterController::class, 'close'])->name('cash-register.close');
+    Route::post('/cash-register/payments/{payment}/refund', [CashRegisterController::class, 'refund'])->name('cash-register.refund');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

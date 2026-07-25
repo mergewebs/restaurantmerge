@@ -6,6 +6,8 @@ use App\Models\Income;
 use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\OrderPayment;
+use App\Models\CashRegisterSession;
 use App\Models\RestaurantTable;
 use App\Services\InventoryService;
 use Illuminate\Http\Request;
@@ -193,18 +195,19 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'payments' => ['required', 'array', 'min:1'],
-            'payments.*.method' => ['required', Rule::in(['cash', 'card', 'bank_transfer', 'voucher', 'other'])],
+            'payments.*.method' => ['required', Rule::in(OrderPayment::METHODS)],
             'payments.*.amount' => ['required', 'numeric', 'gt:0'],
             'payments.*.reference' => ['nullable', 'string', 'max:120'],
         ]);
 
         DB::transaction(function () use ($validated, $order) {
+            $registerSession = CashRegisterSession::where('status', 'open')->latest('opened_at')->first();
             foreach ($validated['payments'] as $paymentData) {
-                $payment = $order->payments()->create($paymentData + ['user_id' => auth()->id(), 'paid_at' => now()]);
+                $payment = $order->payments()->create($paymentData + ['cash_register_session_id' => $registerSession?->id, 'transaction_type' => 'payment', 'user_id' => auth()->id(), 'paid_at' => now()]);
                 Income::create([
                     'amount' => $payment->amount,
                     'type' => 'sale',
-                    'method' => in_array($payment->method, ['cash', 'card'], true) ? $payment->method : 'card',
+                    'method' => $payment->method === 'cash' ? 'cash' : 'card',
                     'description' => 'Order #'.$order->id.' payment',
                     'date' => now()->toDateString(),
                     'user_id' => auth()->id(),
