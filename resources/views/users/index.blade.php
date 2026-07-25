@@ -1,183 +1,50 @@
 <x-app-layout>
-    <div data-async-region="users-index" data-async-mutations="true">
-        @if(session('success'))
-            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
-        @elseif(session('error'))
-            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
-        @elseif($errors->any())
-            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
-        @endif
-        <div x-data="{
-            showCreateModal: {{ $errors->any() && !old('user_id') ? 'true' : 'false' }},
-            showEditModal: {{ $errors->any() && old('user_id') ? 'true' : 'false' }},
-            editingUser: {
-                id: '{{ old('user_id') }}',
-                name: '{{ old('name') }}',
-                role: '{{ old('role') }}'
-            },
-            editUser(user) {
-                this.editingUser = {
-                    id: user.id,
-                    name: user.name,
-                    role: user.role
-                };
-                this.showEditModal = true;
-            }
-        }" class="space-y-8">
+@php
+    $me = auth()->user();
+    $myAttendance = $todayAttendance->first(fn($a) => $a->user_id === $me->id && !$a->clocked_out_at);
+    $isManager = $me->isAdmin();
+    $userPayloads = $users->mapWithKeys(fn($user) => [$user->id => [
+        'id' => $user->id, 'name' => $user->name, 'role' => $user->role,
+        'assigned_area' => $user->assigned_area ?? '', 'can_discount' => (bool) $user->can_discount,
+        'can_refund' => (bool) $user->can_refund, 'can_cancel_orders' => (bool) $user->can_cancel_orders,
+        'table_ids' => $user->assignedTables->pluck('id')->map(fn($id) => (string) $id)->values()->all(),
+        'update_url' => route('users.update', $user), 'delete_url' => route('users.destroy', $user),
+    ]]);
+@endphp
+<div data-async-region="users-index" data-async-mutations="true">
+@if(session('success'))<div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>@endif
+@if(session('error'))<div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>@endif
+@if($errors->any())<div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>@endif
+<style>
+    .staff{--ink:#392c24;--rust:#b95738;--line:#e5d8cc}.staff-card{background:#fff;border:1px solid var(--line);border-radius:1rem;box-shadow:0 6px 18px rgba(68,44,29,.05)}
+    .staff input:not([type=checkbox]),.staff select,.staff textarea{width:100%!important;min-height:2.35rem!important;border:1px solid #dfd2c6!important;border-radius:.7rem!important;background:#fff!important;padding:.5rem .65rem!important;font-size:.78rem!important;color:var(--ink)!important}.staff input[type=checkbox]{width:1rem!important;min-height:1rem!important;height:1rem!important;padding:0!important}.staff label{display:block!important;margin:0 0 .2rem!important;padding:0!important;font-size:.58rem!important;font-weight:900!important;text-transform:uppercase!important;letter-spacing:.1em!important;color:#8d7b6e!important}
+    .staff .tab-on{background:#b95738;color:#fff!important}.staff .tab-off{background:#fff;color:#68564a!important;border:1px solid #e5d8cc}[x-cloak]{display:none!important}
+</style>
+<div class="staff space-y-3" x-data="{tab:'team',create:false,edit:false,schedule:false,editing:{},editUser(u){this.editing={...u};this.edit=true}}">
+    <header class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><div><p class="text-[10px] font-black uppercase tracking-[.2em] text-[#b95738]">People & service</p><h1 class="text-2xl font-black text-[#392c24]">Staff Management</h1></div>@if($isManager)<div class="flex gap-2"><button @click="schedule=true" class="rounded-xl border border-[#dbcbbd] bg-white px-3 py-2 text-xs font-black text-[#655246]">+ Schedule shift</button><button @click="create=true" class="rounded-xl bg-[#b95738] px-3 py-2 text-xs font-black text-white">+ Employee</button></div>@endif</header>
 
-            <div class="flex items-center justify-between border-b border-white/5 pb-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-1.5 h-8 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.4)]"></div>
-                    <div>
-                        <h3 class="text-xl font-black text-white uppercase tracking-tight">Staff Members</h3>
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-0.5">Manage access levels and passcodes</p>
-                    </div>
-                </div>
-                <button @click="showCreateModal = true" class="w-10 h-10 bg-blue-500 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 hover:scale-110 active:scale-95 transition-all">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                </button>
-            </div>
+    <section class="staff-card p-3"><div class="flex flex-col gap-3 md:flex-row md:items-center"><div class="flex-1"><div class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full {{ $myAttendance ? ($myAttendance->break_started_at?'bg-amber-500':'bg-emerald-500') : 'bg-slate-300' }}"></span><h2 class="text-sm font-black text-[#392c24]">My shift</h2></div><p class="mt-1 text-xs text-[#817064]">@if(!$myAttendance)Not clocked in @elseif($myAttendance->break_started_at)On break since {{ $myAttendance->break_started_at->format('H:i') }} @else Clocked in at {{ $myAttendance->clocked_in_at->format('H:i') }} · {{ $myAttendance->break_minutes }} break minutes @endif</p></div><div class="flex flex-wrap gap-2">@if(!$myAttendance)<form action="{{ route('staff.clock-in') }}" method="POST">@csrf<button class="rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-black text-white">Clock in</button></form>@elseif($myAttendance->break_started_at)<form action="{{ route('staff.break.end') }}" method="POST">@csrf<button class="rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-black text-white">End break</button></form>@else<form action="{{ route('staff.break.start') }}" method="POST">@csrf<button class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-2.5 text-xs font-black text-amber-800">Start break</button></form><form action="{{ route('staff.clock-out') }}" method="POST">@csrf<button class="rounded-xl bg-[#392c24] px-4 py-2.5 text-xs font-black text-white">Clock out</button></form>@endif</div></div></section>
 
-            <div class="space-y-3">
-                @foreach($users as $user)
-                    <div class="glass p-4 rounded-[24px] border border-white/5 flex justify-between items-center">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-accent font-black text-xl border border-white/10 uppercase">
-                                {{ substr($user->name, 0, 1) }}
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <h4 class="text-white font-bold text-lg leading-tight">{{ $user->name }}</h4>
-                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest {{ $user->isAdmin() ? 'bg-accent/20 text-accent' : 'bg-white/10 text-gray-400' }}">
-                                        {{ $user->role }}
-                                    </span>
-                                </div>
-                                <p class="text-[10px] text-gray-500 font-medium uppercase tracking-[0.15em] mt-1">
-                                    Last login:
-                                    <span class="text-gray-400 normal-case tracking-normal">
-                                        {{ $user->last_login_at?->format('d/m/Y H:i') ?? 'Never' }}
-                                    </span>
-                                </p>
-                            </div>
-                        </div>
-                        <button @click="editUser({{ $user->toJson() }})" class="p-2.5 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                @endforeach
-            </div>
+    @if($isManager)
+    <nav class="staff-card flex gap-1 overflow-x-auto p-1.5"><button @click="tab='team'" :class="tab==='team'?'tab-on':'tab-off'" class="rounded-lg px-3 py-2 text-xs font-black">Team</button><button @click="tab='schedule'" :class="tab==='schedule'?'tab-on':'tab-off'" class="rounded-lg px-3 py-2 text-xs font-black">Work schedule</button><button @click="tab='attendance'" :class="tab==='attendance'?'tab-on':'tab-off'" class="rounded-lg px-3 py-2 text-xs font-black">Attendance & sales</button></nav>
 
-            <div x-show="showCreateModal" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;" x-cloak>
-                <div @click="showCreateModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-                <div class="glass w-full max-w-md rounded-[32px] p-8 relative border border-white/10" x-show="showCreateModal" x-transition>
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-bold">New Staff Member</h3>
-                        <button @click="showCreateModal = false" class="text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                    </div>
+    <section x-show="tab==='team'" class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">@foreach($users as $user)
+        @php($sale=$salesByUser->get($user->id))
+        <article class="staff-card p-3"><div class="flex items-start gap-3"><div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f3e8de] font-black text-[#b95738]">{{ strtoupper(substr($user->name,0,1)) }}</div><div class="min-w-0 flex-1"><div class="flex items-center gap-2"><h3 class="truncate font-black text-[#392c24]">{{ $user->name }}</h3><span class="rounded-full bg-[#f5eee7] px-2 py-0.5 text-[9px] font-black uppercase text-[#755f50]">{{ $user->role }}</span></div><p class="mt-1 text-[11px] text-[#8c7b6e]">{{ $user->assigned_area ?: 'No area' }} · {{ $user->assignedTables->count() }} tables</p></div><button @click='editUser(@js($userPayloads[$user->id]))' class="rounded-lg border border-[#e1d5ca] px-2 py-1 text-xs font-black text-[#755f50]">Edit</button></div><div class="mt-3 grid grid-cols-2 rounded-xl bg-[#faf6f1] p-2 text-xs"><div><span class="block text-[9px] font-black uppercase text-[#9b8a7d]">Today sales</span><strong class="text-[#392c24]">€{{ number_format((float)($sale?->total_sales??0),2) }}</strong></div><div><span class="block text-[9px] font-black uppercase text-[#9b8a7d]">Orders</span><strong class="text-[#392c24]">{{ $sale?->order_count??0 }}</strong></div></div><div class="mt-2 flex flex-wrap gap-1">@if($user->mayDiscount())<span class="rounded bg-emerald-50 px-1.5 py-1 text-[9px] font-black text-emerald-700">Discounts</span>@endif @if($user->mayRefund())<span class="rounded bg-sky-50 px-1.5 py-1 text-[9px] font-black text-sky-700">Refunds</span>@endif @if($user->mayCancelOrders())<span class="rounded bg-red-50 px-1.5 py-1 text-[9px] font-black text-red-700">Cancellations</span>@endif</div></article>
+    @endforeach</section>
 
-                    @if ($errors->any() && !old('user_id'))
-                        <div class="mb-4 bg-red-500/20 border border-red-500/50 p-3 rounded-xl text-xs text-red-200">
-                            <ul class="list-disc list-inside">@foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>
-                        </div>
-                    @endif
+    <section x-show="tab==='schedule'" x-cloak class="staff-card overflow-hidden"><div class="bg-[#faf5ef] px-3 py-2.5"><h2 class="text-sm font-black text-[#392c24]">Next 7 days</h2></div><div class="divide-y divide-[#eee4da]">@forelse($schedules->groupBy(fn($s)=>$s->shift_date->format('Y-m-d')) as $day=>$shifts)<div class="grid gap-2 p-3 md:grid-cols-[120px_1fr]"><div><strong class="text-xs text-[#392c24]">{{ $shifts->first()->shift_date->format('D, d M') }}</strong></div><div class="space-y-1">@foreach($shifts as $shift)<div class="flex items-center justify-between rounded-lg bg-[#faf7f3] px-3 py-2"><div><strong class="text-xs text-[#392c24]">{{ $shift->user->name }}</strong><span class="ml-2 text-xs text-[#817064]">{{ substr($shift->starts_at,0,5) }}–{{ substr($shift->ends_at,0,5) }} · {{ $shift->area ?: 'General' }}</span></div><form action="{{ route('staff.schedules.destroy',$shift) }}" method="POST">@csrf @method('DELETE')<button class="text-red-500">×</button></form></div>@endforeach</div></div>@empty<p class="p-8 text-center text-xs text-[#958478]">No shifts scheduled.</p>@endforelse</div></section>
 
-                    <form action="{{ route('users.store') }}" method="POST" class="space-y-4">
-                        @csrf
-                        <div>
-                            <label>Display Name</label>
-                            <input type="text" name="name" value="{{ old('name') }}" required>
-                        </div>
-                        <div>
-                            <label>Role</label>
-                            <select name="role" required>
-                                <option value="waiter" {{ old('role') == 'waiter' ? 'selected' : '' }}>Waiter</option>
-                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="owner" {{ old('role') == 'owner' ? 'selected' : '' }}>Owner</option>
-                                <option value="superadmin" {{ old('role') == 'superadmin' ? 'selected' : '' }}>Super Admin</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label>6-Digit Passcode</label>
-                                <input type="password" name="passcode" inputmode="numeric" pattern="[0-9]*" maxlength="6" required>
-                            </div>
-                            <div>
-                                <label>Confirm</label>
-                                <input type="password" name="passcode_confirmation" inputmode="numeric" pattern="[0-9]*" maxlength="6" required>
-                            </div>
-                        </div>
-                        <div class="pt-2">
-                            <button type="submit" class="w-full btn-accent py-4">Create Account</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <section x-show="tab==='attendance'" x-cloak class="grid gap-3 xl:grid-cols-2"><div class="staff-card overflow-hidden"><div class="bg-[#faf5ef] px-3 py-2.5"><h2 class="text-sm font-black text-[#392c24]">Today's attendance</h2></div><div class="divide-y divide-[#eee4da]">@forelse($todayAttendance as $a)<div class="flex items-center justify-between px-3 py-2.5"><div><strong class="text-xs text-[#392c24]">{{ $a->user->name }}</strong><p class="text-[10px] text-[#8c7b6e]">In {{ $a->clocked_in_at->format('H:i') }} · {{ $a->clocked_out_at?'Out '.$a->clocked_out_at->format('H:i'):'Working' }}</p></div><span class="text-xs font-black text-[#655246]">{{ $a->break_minutes }}m break</span></div>@empty<p class="p-6 text-center text-xs text-[#958478]">No attendance records today.</p>@endforelse</div></div><div class="staff-card overflow-hidden"><div class="bg-[#faf5ef] px-3 py-2.5"><h2 class="text-sm font-black text-[#392c24]">Sales by waiter today</h2></div><div class="divide-y divide-[#eee4da]">@foreach($users as $user)@php($sale=$salesByUser->get($user->id))<div class="flex justify-between px-3 py-2.5"><span class="text-xs font-bold text-[#392c24]">{{ $user->name }}</span><strong class="text-xs text-emerald-700">€{{ number_format((float)($sale?->total_sales??0),2) }} · {{ $sale?->order_count??0 }} orders</strong></div>@endforeach</div></div></section>
+    @endif
 
-            <div x-show="showEditModal" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;" x-cloak>
-                <div @click="showEditModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-                <div class="glass w-full max-w-md rounded-[32px] p-8 relative border border-white/10" x-show="showEditModal" x-transition>
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-bold">Edit Staff</h3>
-                        <button @click="showEditModal = false" class="text-gray-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-                    </div>
+    @if($isManager)
+    <div x-show="schedule" x-cloak class="fixed inset-0 z-[110] flex items-center justify-center p-3"><div class="absolute inset-0 bg-black/50" @click="schedule=false"></div><form action="{{ route('staff.schedules.store') }}" method="POST" class="staff-card relative w-full max-w-lg space-y-3 p-5">@csrf<div class="flex justify-between"><h2 class="text-lg font-black">Schedule shift</h2><button type="button" @click="schedule=false">×</button></div><div><label>Employee</label><select name="user_id" required>@foreach($users as $u)<option value="{{ $u->id }}">{{ $u->name }}</option>@endforeach</select></div><div class="grid grid-cols-3 gap-2"><div><label>Date</label><input type="date" name="shift_date" value="{{ today()->format('Y-m-d') }}" required></div><div><label>Starts</label><input type="time" name="starts_at" required></div><div><label>Ends</label><input type="time" name="ends_at" required></div></div><div><label>Area</label><input name="area" list="staff-areas"></div><div><label>Notes</label><textarea name="notes" rows="2"></textarea></div><button class="w-full rounded-xl bg-[#b95738] py-3 text-xs font-black text-white">Save shift</button></form></div>
 
-                    @if ($errors->any() && old('user_id'))
-                        <div class="mb-4 bg-red-500/20 border border-red-500/50 p-3 rounded-xl text-xs text-red-200">
-                            <ul class="list-disc list-inside">@foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>
-                        </div>
-                    @endif
+    <div x-show="create" x-cloak class="fixed inset-0 z-[110] flex items-center justify-center p-3"><div class="absolute inset-0 bg-black/50" @click="create=false"></div><form action="{{ route('users.store') }}" method="POST" class="staff-card relative max-h-[92vh] w-full max-w-xl space-y-3 overflow-y-auto p-5">@csrf<div class="flex justify-between"><h2 class="text-lg font-black">New employee</h2><button type="button" @click="create=false">×</button></div><div class="grid grid-cols-2 gap-2"><div><label>Name</label><input name="name" required></div><div><label>Role</label><select name="role"><option value="waiter">Waiter</option><option value="admin">Admin</option><option value="owner">Owner</option></select></div><div><label>6-digit passcode</label><input type="password" name="passcode" maxlength="6" required></div><div><label>Confirm passcode</label><input type="password" name="passcode_confirmation" maxlength="6" required></div></div><div><label>Assigned area</label><input name="assigned_area" list="staff-areas"></div><div class="flex flex-wrap gap-3 text-xs"><label><input type="checkbox" name="can_discount" value="1"> Discounts</label><label><input type="checkbox" name="can_refund" value="1"> Refunds</label><label><input type="checkbox" name="can_cancel_orders" value="1"> Cancellations</label></div><button class="w-full rounded-xl bg-[#b95738] py-3 text-xs font-black text-white">Create employee</button></form></div>
 
-                    <form :action="@js(route('users.update', ['user' => '__USER__'])).replace('__USER__', editingUser.id)" method="POST" class="space-y-4">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="user_id" :value="editingUser.id">
-
-                        <div>
-                            <label>Display Name</label>
-                            <input type="text" name="name" x-model="editingUser.name" required>
-                        </div>
-                        <div>
-                            <label>Role</label>
-                            <select name="role" x-model="editingUser.role" required>
-                                <option value="waiter">Waiter</option>
-                                <option value="admin">Admin</option>
-                                <option value="owner">Owner</option>
-                                <option value="superadmin">Super Admin</option>
-                            </select>
-                        </div>
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/10">
-                            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Change Passcode (Leave blank to keep current)</p>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label>New Passcode</label>
-                                    <input type="password" name="passcode" inputmode="numeric" pattern="[0-9]*" maxlength="6">
-                                </div>
-                                <div>
-                                    <label>Confirm</label>
-                                    <input type="password" name="passcode_confirmation" inputmode="numeric" pattern="[0-9]*" maxlength="6">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-3 pt-2">
-                            <button type="button"
-                                    @click="if(confirm('Delete this user? This cannot be undone.')) $refs.deleteUserForm.submit()"
-                                    class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
-                                Delete
-                            </button>
-                            <button type="submit" class="flex-[3] btn-accent py-4">Save Changes</button>
-                        </div>
-                    </form>
-
-                    <form :action="@js(route('users.destroy', ['user' => '__USER__'])).replace('__USER__', editingUser.id)" method="POST" x-ref="deleteUserForm" class="hidden">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div x-show="edit" x-cloak class="fixed inset-0 z-[110] flex items-center justify-center p-3"><div class="absolute inset-0 bg-black/50" @click="edit=false"></div><div class="staff-card relative max-h-[92vh] w-full max-w-2xl overflow-y-auto p-5"><form :action="editing.update_url" method="POST" class="space-y-3">@csrf @method('PUT')<input type="hidden" name="user_id" :value="editing.id"><div class="flex justify-between"><h2 class="text-lg font-black">Edit employee</h2><button type="button" @click="edit=false">×</button></div><div class="grid grid-cols-2 gap-2"><div><label>Name</label><input name="name" x-model="editing.name" required></div><div><label>Role</label><select name="role" x-model="editing.role"><option value="waiter">Waiter</option><option value="admin">Admin</option><option value="owner">Owner</option><option value="superadmin">Super admin</option></select></div><div><label>Assigned area</label><input name="assigned_area" x-model="editing.assigned_area" list="staff-areas"></div><div></div><div><label>New passcode (optional)</label><input type="password" name="passcode" maxlength="6"></div><div><label>Confirm new passcode</label><input type="password" name="passcode_confirmation" maxlength="6"></div></div><div><label>Assigned tables</label><div class="flex max-h-28 flex-wrap gap-2 overflow-y-auto rounded-xl bg-[#faf7f3] p-2">@foreach($tables as $table)<label class="!mb-0 flex items-center gap-1"><input type="checkbox" name="table_ids[]" value="{{ $table->id }}" x-model="editing.table_ids">T{{ $table->number }} · {{ $table->area }}</label>@endforeach</div></div><div><label>Permissions</label><div class="flex flex-wrap gap-3"><label><input type="checkbox" name="can_discount" value="1" x-model="editing.can_discount"> Discounts</label><label><input type="checkbox" name="can_refund" value="1" x-model="editing.can_refund"> Refunds</label><label><input type="checkbox" name="can_cancel_orders" value="1" x-model="editing.can_cancel_orders"> Cancellations</label></div></div><div class="flex gap-2"><button type="button" @click="if(confirm('Delete this employee?')) $refs.deleteStaff.submit()" class="rounded-xl border border-red-200 px-3 text-xs font-black text-red-600">Delete</button><button class="ml-auto rounded-xl bg-[#b95738] px-5 py-3 text-xs font-black text-white">Save employee</button></div></form><form x-ref="deleteStaff" :action="editing.delete_url" method="POST" class="hidden">@csrf @method('DELETE')</form></div></div>
+    @endif
+    <datalist id="staff-areas">@foreach($areas as $area)<option value="{{ $area }}">@endforeach</datalist>
+</div></div>
 </x-app-layout>
