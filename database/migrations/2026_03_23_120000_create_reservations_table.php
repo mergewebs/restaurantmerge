@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('reservations', function (Blueprint $table) {
@@ -19,16 +16,16 @@ return new class extends Migration
             $table->integer('party_size');
             $table->dateTime('reservation_time');
             $table->text('notes')->nullable();
+            $table->text('allergies')->nullable();
+            $table->foreignId('restaurant_table_id')->nullable()->constrained('restaurant_tables')->nullOnDelete();
             $table->string('status')->default('confirmed');
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
 
+            $table->index(['status', 'reservation_time'], 'reservations_status_time_idx');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('reservations');

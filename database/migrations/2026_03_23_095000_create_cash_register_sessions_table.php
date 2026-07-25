@@ -22,21 +22,10 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
         });
-
-        Schema::table('order_payments', function (Blueprint $table) {
-            $table->foreignId('cash_register_session_id')->nullable()->after('order_id')->constrained()->nullOnDelete();
-            $table->string('transaction_type')->default('payment')->after('method');
-            $table->foreignId('refunded_payment_id')->nullable()->after('transaction_type')->constrained('order_payments')->nullOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::table('order_payments', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('refunded_payment_id');
-            $table->dropConstrainedForeignId('cash_register_session_id');
-            $table->dropColumn('transaction_type');
-        });
         Schema::dropIfExists('cash_register_sessions');
     }
 };

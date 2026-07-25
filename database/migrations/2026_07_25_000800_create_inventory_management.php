@@ -39,14 +39,6 @@ return new class extends Migration
             $table->unique(['menu_item_id', 'inventory_ingredient_id'], 'menu_recipe_unique');
         });
 
-        Schema::table('order_items', function (Blueprint $table) {
-            $table->foreignId('menu_item_id')->nullable()->after('order_id')->constrained()->nullOnDelete();
-        });
-
-        Schema::table('orders', function (Blueprint $table) {
-            $table->timestamp('inventory_deducted_at')->nullable()->after('completed_at');
-        });
-
         Schema::create('stock_movements', function (Blueprint $table) {
             $table->id();
             $table->string('target_type');
@@ -68,8 +60,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('stock_movements');
-        Schema::table('orders', fn (Blueprint $table) => $table->dropColumn('inventory_deducted_at'));
-        Schema::table('order_items', fn (Blueprint $table) => $table->dropConstrainedForeignId('menu_item_id'));
         Schema::dropIfExists('menu_item_ingredients');
         Schema::dropIfExists('inventory_ingredients');
         Schema::dropIfExists('suppliers');
