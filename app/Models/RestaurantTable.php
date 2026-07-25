@@ -19,6 +19,7 @@ class RestaurantTable extends Model
         'service_status',
         'seats',
         'area',
+        'assigned_user_id',
         'merged_into_table_id',
     ];
 
@@ -43,6 +44,8 @@ class RestaurantTable extends Model
     {
         return $this->hasMany(self::class, 'merged_into_table_id');
     }
+
+    public function assignedUser(){return $this->belongsTo(User::class, 'assigned_user_id');}
 
     public function getFloorOrderAttribute(): ?Order
     {

@@ -366,7 +366,7 @@
                         request()->routeIs('menu-items.*') => ['Menu', 'Keep dishes, pricing and availability up to date.'],
                         request()->routeIs('inventory.*') => ['Inventory', 'Track stock, suppliers, purchasing and waste.'],
                         request()->routeIs('cash-register.*') => ['Cash Register', 'Payments, refunds and daily cash reconciliation.'],
-                        request()->routeIs('users.*') => ['Team Access', 'Manage the people who keep service running.'],
+                        request()->routeIs('users.*') || request()->routeIs('staff.*') => ['Staff Management', 'Schedules, attendance, assignments and permissions.'],
                         request()->routeIs('restaurant.*') => ['Restaurant Settings', 'Opening hours, closures and service capacity.'],
                         request()->routeIs('profile.*') => ['Your Profile', 'Personal details and account security.'],
                         default => ['Restaurant Workspace', 'Everything your team needs for a smooth service.'],
@@ -414,9 +414,7 @@
                     $bottomMenuItems[] = ['route' => route('cash-register.index'), 'active' => request()->routeIs('cash-register.*'), 'label' => 'Register', 'icon' => 'M17 9V7a5 5 0 00-10 0v2M5 9h14l1 12H4L5 9zm4 4h6'];
                 }
 
-                if (auth()->user()->isUserAdmin()) {
-                    $bottomMenuItems[] = ['route' => route('users.index'), 'active' => request()->routeIs('users.*'), 'label' => 'Users', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
-                }
+                $bottomMenuItems[] = ['route' => route('users.index'), 'active' => request()->routeIs('users.*') || request()->routeIs('staff.*'), 'label' => 'Staff', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
 
                 $primaryMenuItems = $bottomMenuItems;
             @endphp

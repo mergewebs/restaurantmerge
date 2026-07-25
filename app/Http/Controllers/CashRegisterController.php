@@ -49,7 +49,7 @@ class CashRegisterController extends Controller
 
     public function refund(Request $request, OrderPayment $payment)
     {
-        $this->ensureAdmin();
+        abort_unless(auth()->user()?->mayRefund(), 403);
         abort_unless($payment->transaction_type === 'payment', 422);
         $refunded = abs((float) $payment->refunds()->sum('amount'));
         $validated = $request->validate(['amount' => ['required', 'numeric', 'gt:0', 'max:'.max(0, (float) $payment->amount - $refunded)], 'reference' => ['nullable', 'string', 'max:150']]);

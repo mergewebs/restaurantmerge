@@ -67,6 +67,7 @@ class OrderController extends Controller
         }
 
         $order = Order::create($validated + [
+            'assigned_user_id' => auth()->id(),
             'status' => Order::STATUS_OPEN,
             'workflow_status' => 'new',
             'kitchen_status' => Order::KITCHEN_STATUS_PENDING,
@@ -150,6 +151,9 @@ class OrderController extends Controller
     {
         $validated = $request->validate(['workflow_status' => ['required', Rule::in(Order::WORKFLOW_STATUSES)]]);
         $workflowStatus = $validated['workflow_status'];
+        if ($workflowStatus === 'cancelled') {
+            abort_unless(auth()->user()?->mayCancelOrders(), 403);
+        }
         $changes = ['workflow_status' => $workflowStatus];
 
         if ($workflowStatus === 'preparing') {
@@ -176,6 +180,7 @@ class OrderController extends Controller
 
     public function updateAdjustments(Request $request, Order $order)
     {
+        abort_unless(auth()->user()?->mayDiscount(), 403);
         $validated = $request->validate([
             'discount_amount' => ['nullable', 'numeric', 'min:0'],
             'service_charge' => ['nullable', 'numeric', 'min:0'],

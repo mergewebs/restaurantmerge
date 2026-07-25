@@ -25,6 +25,7 @@ class Order extends Model
 
     protected $fillable = [
         'restaurant_table_id',
+        'assigned_user_id',
         'status',
         'workflow_status',
         'order_type',
@@ -54,6 +55,7 @@ class Order extends Model
     {
         return $this->belongsTo(RestaurantTable::class, 'restaurant_table_id');
     }
+    public function assignedUser(){return $this->belongsTo(User::class, 'assigned_user_id');}
 
     public function items()
     {

@@ -443,6 +443,7 @@ class TableManagementController extends Controller
 
     public function deleteOrder(RestaurantTable $table)
     {
+        abort_unless(auth()->user()?->mayCancelOrders(), 403);
         /** @var Order|null $order */
         $order = $table->openOrder;
 
@@ -871,6 +872,7 @@ class TableManagementController extends Controller
         }
 
         return $table->orders()->create([
+            'assigned_user_id' => auth()->id(),
             'status' => Order::STATUS_OPEN,
             'kitchen_status' => Order::KITCHEN_STATUS_PENDING,
             'total' => 0,

@@ -21,6 +21,10 @@ class User extends Authenticatable
         'name',
         'passcode',
         'role',
+        'assigned_area',
+        'can_discount',
+        'can_refund',
+        'can_cancel_orders',
         'last_login_at',
     ];
 
@@ -44,6 +48,7 @@ class User extends Authenticatable
         return [
             'passcode' => 'hashed',
             'last_login_at' => 'datetime',
+            'can_discount' => 'boolean', 'can_refund' => 'boolean', 'can_cancel_orders' => 'boolean',
         ];
     }
 
@@ -81,4 +86,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function schedules(){return $this->hasMany(StaffSchedule::class);}
+    public function attendances(){return $this->hasMany(StaffAttendance::class);}
+    public function assignedTables(){return $this->hasMany(RestaurantTable::class, 'assigned_user_id');}
+    public function assignedOrders(){return $this->hasMany(Order::class, 'assigned_user_id');}
+    public function mayDiscount(): bool{return $this->isAdmin() || $this->can_discount;}
+    public function mayRefund(): bool{return $this->isAdmin() || $this->can_refund;}
+    public function mayCancelOrders(): bool{return $this->isAdmin() || $this->can_cancel_orders;}
 }

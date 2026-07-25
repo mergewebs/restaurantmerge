@@ -7,6 +7,7 @@ use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\MenuItemOptionController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CashRegisterController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
@@ -51,6 +52,13 @@ Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::delete('/finance/categories/{category}', [\App\Http\Controllers\FinanceCategoryController::class, 'destroy'])->name('finance.categories.destroy');
 
     Route::resource('users', UserController::class)->except(['create', 'show', 'edit']);
+    Route::post('/staff/schedules', [StaffController::class, 'storeSchedule'])->name('staff.schedules.store');
+    Route::delete('/staff/schedules/{schedule}', [StaffController::class, 'destroySchedule'])->name('staff.schedules.destroy');
+    Route::put('/staff/{user}/assignment', [StaffController::class, 'assign'])->name('staff.assignment.update');
+    Route::post('/staff/clock-in', [StaffController::class, 'clockIn'])->name('staff.clock-in');
+    Route::post('/staff/break/start', [StaffController::class, 'startBreak'])->name('staff.break.start');
+    Route::post('/staff/break/end', [StaffController::class, 'endBreak'])->name('staff.break.end');
+    Route::post('/staff/clock-out', [StaffController::class, 'clockOut'])->name('staff.clock-out');
 
     Route::get('/restaurant/config', [RestaurantConfigController::class, 'index'])->name('restaurant.config');
     Route::put('/restaurant/schedule', [RestaurantConfigController::class, 'updateSchedule'])->name('restaurant.schedule.update');
