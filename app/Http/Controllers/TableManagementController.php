@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TableManagementController extends Controller
@@ -21,13 +22,13 @@ class TableManagementController extends Controller
     {
         $tables = RestaurantTable::with([
             'openOrder.items' => fn ($query) => $query->latest(),
-        ]);
+            'parentTable.openOrder.items' => fn ($query) => $query->latest(),
+            'mergedTables',
+        ])->orderBy('area')->orderBy('number')->get();
+        $availableOrders = Order::with('table')->where('status', Order::STATUS_OPEN)->whereNull('restaurant_table_id')->latest()->get();
+        $areas = $tables->groupBy('area');
 
-        $tables->whereHas('openOrder');
-
-        $tables = $tables->orderBy('number')->get();
-
-        return view('tables.index', compact('tables'));
+        return view('tables.index', compact('tables', 'areas', 'availableOrders'));
     }
 
     public function orderPage(RestaurantTable $table)
@@ -151,6 +152,8 @@ class TableManagementController extends Controller
     {
         $validated = $request->validate([
             'number' => ['required', 'integer', 'min:1', 'max:999'],
+            'seats' => ['nullable', 'integer', 'min:1', 'max:30'],
+            'area' => ['nullable', 'string', 'max:60'],
         ]);
 
         $existingTable = RestaurantTable::where('number', $validated['number'])->first();
@@ -170,9 +173,92 @@ class TableManagementController extends Controller
 
         $table = RestaurantTable::create([
             'number' => $validated['number'],
+            'seats' => $validated['seats'] ?? 4,
+            'area' => $validated['area'] ?? 'Main Room',
         ]);
 
         return redirect()->route('tables.order', $table)->with('success', "Table {$table->number} is ready.");
+    }
+
+    public function updateFloorStatus(Request $request, RestaurantTable $table)
+    {
+        $validated = $request->validate(['service_status' => ['required', Rule::in(RestaurantTable::SERVICE_STATUSES)]]);
+        if ($table->floor_order && $validated['service_status'] !== RestaurantTable::STATUS_AVAILABLE) {
+            return back()->with('error', 'An occupied table cannot be marked reserved or cleaning.');
+        }
+        $table->update(['service_status' => $validated['service_status']]);
+
+        return back()->with('success', "Table {$table->number} is now {$validated['service_status']}.");
+    }
+
+    public function assignOrder(Request $request, RestaurantTable $table)
+    {
+        $validated = $request->validate(['order_id' => ['required', 'exists:orders,id']]);
+        $target = $table->parentTable ?: $table;
+        if ($target->openOrder()->exists()) {
+            return back()->with('error', "Table {$target->number} already has an active order.");
+        }
+        $order = Order::where('status', Order::STATUS_OPEN)->findOrFail($validated['order_id']);
+        $order->update(['restaurant_table_id' => $target->id, 'order_type' => 'dine_in']);
+        $target->update(['service_status' => RestaurantTable::STATUS_AVAILABLE]);
+
+        return back()->with('success', "Order #{$order->id} assigned to table {$target->number}.");
+    }
+
+    public function moveOrder(Request $request, RestaurantTable $table)
+    {
+        $validated = $request->validate(['target_table_id' => ['required', 'exists:restaurant_tables,id', Rule::notIn([$table->id])]]);
+        $order = $table->openOrder;
+        if (! $order) {
+            return back()->with('error', "Table {$table->number} has no active order to move.");
+        }
+        $target = RestaurantTable::with('openOrder')->findOrFail($validated['target_table_id']);
+        $target = $target->parentTable ?: $target;
+        if ($target->openOrder) {
+            return back()->with('error', "Table {$target->number} is occupied.");
+        }
+        $order->update(['restaurant_table_id' => $target->id]);
+        $table->update(['service_status' => RestaurantTable::STATUS_CLEANING]);
+        $target->update(['service_status' => RestaurantTable::STATUS_AVAILABLE]);
+
+        return back()->with('success', "Order moved from table {$table->number} to table {$target->number}.");
+    }
+
+    public function mergeTable(Request $request, RestaurantTable $table)
+    {
+        $validated = $request->validate(['target_table_id' => ['required', 'exists:restaurant_tables,id', Rule::notIn([$table->id])]]);
+        $target = RestaurantTable::with('openOrder')->findOrFail($validated['target_table_id']);
+        if ($table->merged_into_table_id || $target->merged_into_table_id) {
+            return back()->with('error', 'Choose two unmerged tables.');
+        }
+
+        DB::transaction(function () use ($table, $target) {
+            $sourceOrder = $table->openOrder;
+            $targetOrder = $target->openOrder;
+            if ($sourceOrder && $targetOrder) {
+                $sourceOrder->items()->update(['order_id' => $targetOrder->id]);
+                $sourceOrder->payments()->update(['order_id' => $targetOrder->id]);
+                $targetOrder->recalculateTotal();
+                $paid = (float) $targetOrder->payments()->sum('amount');
+                $targetOrder->update(['payment_status' => $paid <= 0 ? Order::PAYMENT_STATUS_UNPAID : ($paid >= $targetOrder->total ? Order::PAYMENT_STATUS_PAID : Order::PAYMENT_STATUS_PARTIAL)]);
+                $sourceOrder->update(['status' => Order::STATUS_CLOSED, 'workflow_status' => 'cancelled', 'cancelled_at' => now(), 'total' => 0]);
+            } elseif ($sourceOrder) {
+                $sourceOrder->update(['restaurant_table_id' => $target->id]);
+            }
+            $table->update(['merged_into_table_id' => $target->id, 'service_status' => RestaurantTable::STATUS_AVAILABLE]);
+        });
+
+        return back()->with('success', "Tables {$table->number} and {$target->number} are now joined.");
+    }
+
+    public function unmergeTable(RestaurantTable $table)
+    {
+        if (! $table->merged_into_table_id) {
+            return back()->with('error', 'This table is not part of a group.');
+        }
+        $table->update(['merged_into_table_id' => null, 'service_status' => RestaurantTable::STATUS_CLEANING]);
+
+        return back()->with('success', "Table {$table->number} was separated and marked for cleaning.");
     }
 
     public function storeItem(Request $request, RestaurantTable $table)
@@ -820,8 +906,6 @@ class TableManagementController extends Controller
     }
 
 }
-
-
 
 
 

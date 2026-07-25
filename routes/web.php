@@ -57,6 +57,11 @@ Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
         Route::get('/tables/completed', [TableManagementController::class, 'completedOrders'])->name('tables.completed');
         Route::get('/tables/{table}/order', [TableManagementController::class, 'orderPage'])->name('tables.order');
         Route::post('/tables', [TableManagementController::class, 'storeTable'])->name('tables.store');
+        Route::patch('/tables/{table}/floor-status', [TableManagementController::class, 'updateFloorStatus'])->name('tables.floor-status.update');
+        Route::post('/tables/{table}/assign-order', [TableManagementController::class, 'assignOrder'])->name('tables.assign-order');
+        Route::post('/tables/{table}/move-order', [TableManagementController::class, 'moveOrder'])->name('tables.move-order');
+        Route::post('/tables/{table}/merge', [TableManagementController::class, 'mergeTable'])->name('tables.merge');
+        Route::delete('/tables/{table}/merge', [TableManagementController::class, 'unmergeTable'])->name('tables.unmerge');
         Route::post('/tables/{table}/items', [TableManagementController::class, 'storeItem'])->name('tables.items.store');
         Route::post('/tables/{table}/menu-items', [TableManagementController::class, 'quickAddMenuItem'])->name('tables.menu-items.quick-add');
         Route::post('/tables/{table}/sync', [TableManagementController::class, 'syncOrder'])->name('tables.order.sync');

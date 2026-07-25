@@ -35,7 +35,7 @@ class OrderController extends Controller
 
         $orders = $query->paginate(24)->withQueryString();
         $statusCounts = Order::selectRaw('workflow_status, COUNT(*) as total')->groupBy('workflow_status')->pluck('total', 'workflow_status');
-        $tables = RestaurantTable::whereDoesntHave('openOrder')->orderBy('number')->get();
+        $tables = RestaurantTable::whereNull('merged_into_table_id')->whereDoesntHave('openOrder')->orderBy('number')->get();
 
         return view('orders.index', compact('orders', 'statusCounts', 'tables'));
     }
@@ -74,7 +74,9 @@ class OrderController extends Controller
     {
         $order->load(['table', 'items', 'payments.user']);
         $menuItems = MenuItem::where('is_active', true)->orderedByCategory()->orderBy('sort_order')->get()->groupBy('category');
-        $tables = RestaurantTable::whereDoesntHave('openOrder')->orWhere('id', $order->restaurant_table_id)->orderBy('number')->get();
+        $tables = RestaurantTable::whereNull('merged_into_table_id')
+            ->where(fn ($query) => $query->whereDoesntHave('openOrder')->orWhere('id', $order->restaurant_table_id))
+            ->orderBy('number')->get();
 
         return view('orders.show', compact('order', 'menuItems', 'tables'));
     }

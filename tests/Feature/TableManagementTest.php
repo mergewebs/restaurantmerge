@@ -32,6 +32,65 @@ class TableManagementTest extends TestCase
         $response->assertSee('Tables Overview');
     }
 
+    public function test_floor_plan_shows_table_states_and_assigns_an_order(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 21, 'seats' => 4, 'area' => 'Terrace']);
+        $order = Order::create([
+            'restaurant_table_id' => null,
+            'order_type' => 'pickup',
+            'status' => Order::STATUS_OPEN,
+            'workflow_status' => 'confirmed',
+            'kitchen_status' => Order::KITCHEN_STATUS_PENDING,
+            'payment_status' => Order::PAYMENT_STATUS_UNPAID,
+            'total' => 12,
+        ]);
+
+        $this->actingAs($user)->patch(route('tables.floor-status.update', $table), [
+            'service_status' => RestaurantTable::STATUS_RESERVED,
+        ])->assertRedirect();
+        $this->assertDatabaseHas('restaurant_tables', ['id' => $table->id, 'service_status' => 'reserved']);
+
+        $this->actingAs($user)->post(route('tables.assign-order', $table), ['order_id' => $order->id])->assertRedirect();
+        $this->assertDatabaseHas('orders', ['id' => $order->id, 'restaurant_table_id' => $table->id, 'order_type' => 'dine_in']);
+
+        $this->actingAs($user)->get(route('tables.index'))
+            ->assertOk()->assertSee('Terrace')->assertSee('current bill')->assertSee('occupied');
+    }
+
+    public function test_user_can_move_an_order_to_another_table(): void
+    {
+        $user = User::factory()->create();
+        $source = RestaurantTable::create(['number' => 22]);
+        $target = RestaurantTable::create(['number' => 23]);
+        $order = $source->orders()->create(['status' => 'open', 'total' => 20]);
+
+        $this->actingAs($user)->post(route('tables.move-order', $source), ['target_table_id' => $target->id])->assertRedirect();
+
+        $this->assertDatabaseHas('orders', ['id' => $order->id, 'restaurant_table_id' => $target->id]);
+        $this->assertDatabaseHas('restaurant_tables', ['id' => $source->id, 'service_status' => 'cleaning']);
+    }
+
+    public function test_user_can_merge_tables_and_combine_their_orders(): void
+    {
+        $user = User::factory()->create();
+        $source = RestaurantTable::create(['number' => 24]);
+        $target = RestaurantTable::create(['number' => 25]);
+        $sourceOrder = $source->orders()->create(['status' => 'open', 'total' => 8]);
+        $targetOrder = $target->orders()->create(['status' => 'open', 'total' => 10]);
+        $sourceOrder->items()->create(['name' => 'Soup', 'quantity' => 1, 'unit_price' => 8, 'line_total' => 8]);
+        $targetOrder->items()->create(['name' => 'Pasta', 'quantity' => 1, 'unit_price' => 10, 'line_total' => 10]);
+
+        $this->actingAs($user)->post(route('tables.merge', $source), ['target_table_id' => $target->id])->assertRedirect();
+
+        $this->assertDatabaseHas('restaurant_tables', ['id' => $source->id, 'merged_into_table_id' => $target->id]);
+        $this->assertDatabaseHas('order_items', ['order_id' => $targetOrder->id, 'name' => 'Soup']);
+        $this->assertSame(18.0, (float) $targetOrder->fresh()->total);
+
+        $this->actingAs($user)->delete(route('tables.unmerge', $source))->assertRedirect();
+        $this->assertDatabaseHas('restaurant_tables', ['id' => $source->id, 'merged_into_table_id' => null, 'service_status' => 'cleaning']);
+    }
+
     public function test_user_can_create_and_manage_table_order_items(): void
     {
         $user = User::factory()->create();
