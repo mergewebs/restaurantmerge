@@ -14,6 +14,14 @@ class TableManagementTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config()->set('features.tables', true);
+        config()->set('features.kitchen', true);
+    }
+
     public function test_authenticated_user_can_view_tables_screen(): void
     {
         $user = User::factory()->create();
@@ -62,7 +70,10 @@ class TableManagementTest extends TestCase
 
         $this->actingAs($user)->post(route('tables.close-order', $table))->assertRedirect(route('tables.index'));
 
-        $this->assertDatabaseMissing('orders', ['id' => $order->id]);
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'status' => Order::STATUS_CLOSED,
+        ]);
     }
 
     public function test_store_table_uses_existing_table_number_instead_of_failing(): void
@@ -74,8 +85,7 @@ class TableManagementTest extends TestCase
             'number' => 1,
         ]);
 
-        $response->assertRedirect(route('tables.index'));
-        $response->assertSessionHas('focus_table_id', $table->id);
+        $response->assertRedirect(route('tables.order', $table));
         $response->assertSessionHas('info');
         $this->assertEquals(1, RestaurantTable::where('number', 1)->count());
     }
@@ -145,7 +155,7 @@ class TableManagementTest extends TestCase
         $response->assertSee('Table #9');
     }
 
-    public function test_close_order_deletes_order_and_items_automatically(): void
+    public function test_close_order_keeps_order_and_items_in_completed_history(): void
     {
         $user = User::factory()->create();
         $table = RestaurantTable::create(['number' => 10]);
@@ -161,8 +171,11 @@ class TableManagementTest extends TestCase
 
         $this->actingAs($user)->post(route('tables.close-order', $table))->assertRedirect(route('tables.index'));
 
-        $this->assertDatabaseMissing('orders', ['id' => $order->id]);
-        $this->assertDatabaseMissing('order_items', ['order_id' => $order->id]);
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'status' => Order::STATUS_CLOSED,
+        ]);
+        $this->assertDatabaseHas('order_items', ['order_id' => $order->id]);
     }
 
     public function test_waiter_sync_endpoint_processes_batch_and_returns_fresh_order(): void

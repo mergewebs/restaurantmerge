@@ -10,24 +10,14 @@ class ProgressiveWebAppTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_public_website_exposes_installable_pwa_metadata_and_install_control(): void
-    {
-        $this->get('/')
-            ->assertOk()
-            ->assertSee('/manifest.webmanifest?v=20260717-4', false)
-            ->assertSee('apple-mobile-web-app-capable', false)
-            ->assertSee('viewport-fit=cover', false)
-            ->assertSee('data-pwa-install-button', false);
-    }
-
-    public function test_admin_exposes_pwa_runtime_without_an_install_control(): void
+    public function test_admin_exposes_its_pwa_runtime(): void
     {
         $user = User::factory()->create(['role' => 'admin']);
 
         $this->actingAs($user)
             ->get('/admin/dashboard')
             ->assertOk()
-            ->assertSee('/manifest.webmanifest?v=20260717-4', false)
+            ->assertSee('/manifest.webmanifest?v=20260725-1', false)
             ->assertDontSee('data-pwa-install-button', false);
     }
 
@@ -37,8 +27,8 @@ class ProgressiveWebAppTest extends TestCase
 
         $this->assertSame('standalone', $manifest['display']);
         $this->assertSame(['standalone'], $manifest['display_override']);
-        $this->assertSame('/?source=pwa', $manifest['start_url']);
-        $this->assertSame('/', $manifest['scope']);
+        $this->assertSame('/admin/dashboard?source=pwa', $manifest['start_url']);
+        $this->assertSame('/admin/', $manifest['scope']);
         $this->assertSame('#17110c', $manifest['theme_color']);
         $this->assertContains('maskable', array_column($manifest['icons'], 'purpose'));
 

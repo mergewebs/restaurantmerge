@@ -39,48 +39,38 @@ class PresentationDemoSeeder extends Seeder
 
     private function seedTablesAndOrders(): void
     {
-        foreach ([1, 2, 3, 4, 5, 6, 7, 8, 10000] as $number) {
+        foreach ([1, 2, 3, 4, 5, 6, 7, 8] as $number) {
             RestaurantTable::firstOrCreate(['number' => $number]);
         }
 
-        foreach ([2, 5, 10000] as $number) {
+        foreach ([2, 5] as $number) {
             $table = RestaurantTable::where('number', $number)->first();
             $table?->orders()->where('status', Order::STATUS_OPEN)->delete();
         }
 
-        $this->createOrder(2, Order::TYPE_TABLE, Order::KITCHEN_STATUS_PENDING, [
+        $this->createOrder(2, Order::KITCHEN_STATUS_PENDING, [
             ['KOYA SMASH SPECIAL', 2, 13.99, 'No onion on one burger', OrderItem::STATUS_PENDING],
             ['PATATAS FRITAS', 2, 3.50, null, OrderItem::STATUS_PENDING],
             ['NESTEA', 2, 2.60, null, OrderItem::STATUS_PENDING],
         ]);
 
-        $this->createOrder(5, Order::TYPE_TABLE, Order::KITCHEN_STATUS_IN_PREPARATION, [
+        $this->createOrder(5, Order::KITCHEN_STATUS_IN_PREPARATION, [
             ['TARTUFATA', 1, 12.50, 'Medium well', OrderItem::STATUS_IN_PREPARATION],
             ['ADOBO', 1, 10.00, null, OrderItem::STATUS_PENDING],
             ['ESTRELLA DAMM', 2, 2.40, null, OrderItem::STATUS_READY],
         ]);
 
-        $this->createOrder(10000, Order::TYPE_TAKEAWAY, Order::KITCHEN_STATUS_READY, [
-            ['KOYA SMASH SPECIAL', 1, 13.99, null, OrderItem::STATUS_READY],
-            ['MANGO FLOAT', 2, 5.90, null, OrderItem::STATUS_READY],
-        ], 'Lucia Martin', '+34 600 123 456');
     }
 
     private function createOrder(
         int $tableNumber,
-        string $type,
         string $kitchenStatus,
-        array $items,
-        ?string $customerName = null,
-        ?string $customerPhone = null
+        array $items
     ): void {
         $table = RestaurantTable::where('number', $tableNumber)->firstOrFail();
         $order = $table->orders()->create([
-            'order_type' => $type,
             'status' => Order::STATUS_OPEN,
             'kitchen_status' => $kitchenStatus,
-            'customer_name' => $customerName,
-            'customer_phone' => $customerPhone,
             'total' => 0,
         ]);
 
@@ -124,7 +114,6 @@ class PresentationDemoSeeder extends Seeder
                 'notes' => $notes,
                 'status' => $status,
                 'user_id' => $admin->id,
-                'submission_token' => str($email.$time->toDateTimeString())->slug().'-demo',
             ]);
         }
     }
@@ -139,7 +128,6 @@ class PresentationDemoSeeder extends Seeder
         $incomeRows = [
             [620.50, 'Sales', 'cash', 'Demo: lunch table service', $today],
             [410.80, 'Sales', 'card', 'Demo: dinner table service', $today],
-            [82.40, 'Sales', 'card', 'Demo: public takeaway orders', $today],
             [58.00, 'Services', 'cash', 'Demo: private room deposit', $today->copy()->subDay()],
             [534.20, 'Sales', 'card', 'Demo: yesterday evening service', $today->copy()->subDay()],
             [478.60, 'Sales', 'cash', 'Demo: weekday service', $today->copy()->subDays(2)],
@@ -155,7 +143,6 @@ class PresentationDemoSeeder extends Seeder
         $expenseRows = [
             [146.30, 'Food', 'card', 'Demo: fresh produce delivery', $today],
             [72.10, 'Beverages', 'cash', 'Demo: local drinks restock', $today],
-            [38.50, 'Supplies', 'cash', 'Demo: takeaway packaging', $today],
             [210.00, 'Payroll', 'card', 'Demo: extra weekend shift', $today->copy()->subDay()],
             [95.70, 'Utilities', 'card', 'Demo: electricity estimate', $today->copy()->subDays(2)],
         ];

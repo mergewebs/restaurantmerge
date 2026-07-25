@@ -12,30 +12,18 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TableManagementController extends Controller
 {
     private const KITCHEN_VERSION_CACHE_KEY = 'kitchen_board_version';
-    private ?bool $hasOrderTypeColumn = null;
-
     public function index()
     {
         $tables = RestaurantTable::with([
             'openOrder.items' => fn ($query) => $query->latest(),
         ]);
 
-        if ($this->supportsOrderTypeColumn()) {
-            $tables->whereHas('openOrder', function ($query) {
-                $query->where(function ($typeQuery) {
-                    $typeQuery->where('order_type', Order::TYPE_TABLE)
-                        ->orWhereNull('order_type');
-                });
-            });
-        } else {
-            $tables->whereHas('openOrder');
-        }
+        $tables->whereHas('openOrder');
 
         $tables = $tables->orderBy('number')->get();
 
@@ -694,16 +682,8 @@ class TableManagementController extends Controller
 
                 return [
                     'id' => $order->id,
-                    'order_type' => ($this->supportsOrderTypeColumn() ? ($order->order_type ?: Order::TYPE_TABLE) : Order::TYPE_TABLE),
-                    'source' => (($this->supportsOrderTypeColumn() && $order->order_type === Order::TYPE_TAKEAWAY)
-                        ? 'public_takeaway'
-                        : 'table'),
-                    'source_label' => (($this->supportsOrderTypeColumn() && $order->order_type === Order::TYPE_TAKEAWAY)
-                        ? 'Public Takeaway'
-                        : 'Table #' . ($order->table?->number ?? '-')),
+                    'source_label' => 'Table #' . ($order->table?->number ?? '-'),
                     'table_number' => $order->table?->number,
-                    'customer_name' => $order->customer_name,
-                    'customer_phone' => $order->customer_phone,
                     'kitchen_status' => $kitchenStatus,
                     'kitchen_status_label' => $this->orderKitchenStatusLabel($kitchenStatus),
                     'created_at' => optional($order->created_at)->toIso8601String(),
@@ -795,17 +775,11 @@ class TableManagementController extends Controller
             return $existingOrder;
         }
 
-        $payload = [
+        return $table->orders()->create([
             'status' => Order::STATUS_OPEN,
             'kitchen_status' => Order::KITCHEN_STATUS_PENDING,
             'total' => 0,
-        ];
-
-        if ($this->supportsOrderTypeColumn()) {
-            $payload['order_type'] = Order::TYPE_TABLE;
-        }
-
-        return $table->orders()->create($payload);
+        ]);
     }
 
     private function tableOrderPayload(RestaurantTable $table): array
@@ -836,18 +810,7 @@ class TableManagementController extends Controller
         ];
     }
 
-    private function supportsOrderTypeColumn(): bool
-    {
-        if ($this->hasOrderTypeColumn !== null) {
-            return $this->hasOrderTypeColumn;
-        }
-
-        $this->hasOrderTypeColumn = Schema::hasColumn('orders', 'order_type');
-
-        return $this->hasOrderTypeColumn;
-    }
 }
-
 
 
 

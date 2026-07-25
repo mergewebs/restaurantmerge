@@ -134,12 +134,8 @@
             };
             const normalize = (o) => ({
                 id: ensureNum(o.id),
-                order_type: String(o.order_type || 'table'),
-                source: String(o.source || (String(o.order_type || 'table') === 'takeaway' ? 'public_takeaway' : 'table')),
                 source_label: String(o.source_label || 'Table #-'),
                 table_number: o.table_number ?? null,
-                customer_name: o.customer_name ? String(o.customer_name) : null,
-                customer_phone: o.customer_phone ? String(o.customer_phone) : null,
                 kitchen_status: String(o.kitchen_status || 'pending'),
                 created_at: o.created_at || null,
                 created_at_label: String(o.created_at_label || '--:--'),
@@ -151,11 +147,7 @@
                 })),
             });
             const fingerprint = (o) => JSON.stringify([
-                o.order_type,
-                o.source,
                 o.source_label,
-                o.customer_name,
-                o.customer_phone,
                 o.table_number,
                 o.kitchen_status,
                 o.created_at_label,
@@ -218,7 +210,6 @@
                                 <h2 data-k="source" class="text-xl font-black leading-tight"></h2>
                                 <span data-k="new" class="hidden px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/25 text-emerald-100 border border-emerald-300/50 kitchen-pulse">New</span>
                             </div>
-                            <p data-k="customer" class="hidden text-xs text-white/70 font-semibold truncate"></p>
                             <p class="text-[10px] text-white/50 font-bold uppercase tracking-wider">Ordered: <span data-k="created-clock"></span> &middot; <span data-k="created-ago"></span></p>
                         </div>
                         <button type="button" data-order-status-order-id="${o.id}" data-status="completed" class="shrink-0 px-4 py-3 rounded-xl border border-emerald-500/40 bg-emerald-500/20 text-emerald-50 text-xs font-black uppercase tracking-wider transition hover:bg-emerald-500/30 shadow-lg shadow-emerald-500/10">Complete</button>
@@ -256,12 +247,6 @@
             function patchCard(o, el) {
                 el.className = `glass rounded-3xl p-4 border space-y-3 transition ${orderTone(o.kitchen_status)}`;
                 el.querySelector('[data-k="source"]').textContent = o.source_label;
-                const customerText = o.customer_name
-                    ? `${o.customer_name}${o.customer_phone ? ` - ${o.customer_phone}` : ''}`
-                    : '';
-                const customerNode = el.querySelector('[data-k="customer"]');
-                customerNode.textContent = customerText;
-                customerNode.classList.toggle('hidden', !customerText);
                 el.querySelector('[data-k="created-clock"]').textContent = o.created_at_label;
                 el.querySelector('[data-k="created-ago"]').textContent = createdAgoLabel(o.created_at);
                 const isBrandNew = isNew(o.created_at);
@@ -372,14 +357,8 @@
                 if (options.suppressAlerts) return;
                 const freshOrders = [...next.values()].filter((o) => !previousIds.has(o.id));
                 if (freshOrders.length > 0) {
-                    const takeawayCount = freshOrders.filter((o) => o.source === 'public_takeaway').length;
-                    if (takeawayCount > 0) {
-                        showAlert(`New public takeaway order${takeawayCount > 1 ? 's' : ''} received`);
-                        beep(2);
-                    } else {
-                        showAlert(`New order${freshOrders.length > 1 ? 's' : ''} received`);
-                        beep(1);
-                    }
+                    showAlert(`New order${freshOrders.length > 1 ? 's' : ''} received`);
+                    beep(1);
                 }
             }
             async function fetchSnapshot() {

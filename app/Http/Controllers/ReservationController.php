@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Reservation;
-use App\Models\RestaurantSchedule;
-use App\Models\RestaurantException;
 use App\Mail\NewReservationAdminNotification;
 use App\Mail\ReservationConfirmationClient;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Reservation;
+use App\Models\RestaurantException;
+use App\Models\RestaurantSchedule;
 use Carbon\Carbon;
-use App\Support\Seo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -37,24 +33,6 @@ class ReservationController extends Controller
     public function create()
     {
         return view('reservations.create');
-    }
-
-    public function publicCreate()
-    {
-        return view('reservations.public', [
-            'seo' => Seo::make([
-                'title' => __('public.seo_reservation_title'),
-                'description' => __('public.seo_reservation_description'),
-                'keywords' => __('public.seo_reservation_keywords'),
-                'canonical' => route('reservations.public.create'),
-                'structured_data' => [
-                    Seo::websiteStructuredData([
-                        'name' => __('public.seo_reservation_title'),
-                        'url' => route('reservations.public.create'),
-                    ]),
-                ],
-            ]),
-        ]);
     }
 
     public function store(Request $request)
@@ -90,153 +68,14 @@ class ReservationController extends Controller
         return back()->with('success', __('Reservation created successfully.'));
     }
 
-    public function publicStore(Request $request)
-    {
-        $validated = $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'customer_phone' => 'nullable|string|max:20',
-            'customer_email' => 'required|email|max:255',
-            'party_size' => 'required|integer|min:1',
-            'reservation_time' => 'required|date',
-            'notes' => 'nullable|string',
-            'submission_token' => 'required|string|max:100',
-        ]);
-
-        $validated['reservation_time'] = Carbon::parse($validated['reservation_time'])->format('Y-m-d H:i:s');
-        $validated['submission_token'] = trim($validated['submission_token']);
-
-        if (Reservation::where('submission_token', $validated['submission_token'])->exists()) {
-            return back()->with('success', __('public.success'));
-        }
-
-        // For public store, user_id is null (or from the migration)
-        $validated['user_id'] = null;
-
-        $error = $this->checkAvailability($validated['reservation_time'], $validated['party_size']);
-        if ($error) {
-            return back()->withInput()->with('error', $error);
-        }
-
-        $fingerprint = $this->buildSubmissionFingerprint($validated);
-        $duplicateWindowMinutes = 10;
-        $lock = Cache::lock("reservation-submit:{$fingerprint}", 20);
-
-        if (!$lock->get()) {
-            $existing = $this->findRecentDuplicateReservation($validated, $duplicateWindowMinutes);
-            if ($existing) {
-                return back()->with('success', __('public.success'));
-            }
-
-            return back()->withInput()->with('error', __('public.error_generic'));
-        }
-
-        $wasCreated = false;
-
-        try {
-            $result = DB::transaction(function () use ($validated, $duplicateWindowMinutes) {
-                $duplicate = $this->findRecentDuplicateReservation($validated, $duplicateWindowMinutes);
-
-                if ($duplicate) {
-                    return ['reservation' => $duplicate, 'created' => false];
-                }
-
-                $createdReservation = Reservation::create($validated);
-
-                return ['reservation' => $createdReservation, 'created' => true];
-            });
-
-            $reservation = $result['reservation'];
-            $wasCreated = $result['created'];
-        } catch (QueryException $exception) {
-            if ($this->isDuplicateSubmissionTokenException($exception)) {
-                return back()->with('success', __('public.success'));
-            }
-
-            throw $exception;
-        } finally {
-            optional($lock)->release();
-        }
-
-        $locale = app()->getLocale();
-
-        if ($wasCreated) {
-            // Send Email to Admin
-            $adminEmail = env('ADMIN_EMAIL', 'koyabcn@gmail.com');
-            Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation));
-
-            // Send Email to Client if email exists
-            if ($reservation->customer_email) {
-                Mail::to($reservation->customer_email)->send(new ReservationConfirmationClient($reservation, $locale));
-            }
-        }
-
-        return back()->with('success', __('public.success'));
-    }
-
-    private function buildSubmissionFingerprint(array $validated): string
-    {
-        return hash('sha256', implode('|', [
-            mb_strtolower(trim($validated['customer_name'] ?? '')),
-            preg_replace('/\s+/', '', $validated['customer_phone'] ?? ''),
-            mb_strtolower(trim($validated['customer_email'] ?? '')),
-            (string) ($validated['party_size'] ?? ''),
-            Carbon::parse($validated['reservation_time'])->format('Y-m-d H:i:s'),
-            trim($validated['notes'] ?? ''),
-        ]));
-    }
-
-    private function findRecentDuplicateReservation(array $validated, int $minutes = 10): ?Reservation
-    {
-        $normalizedName = trim($validated['customer_name'] ?? '');
-        $normalizedPhone = preg_replace('/\s+/', '', $validated['customer_phone'] ?? '');
-        $normalizedEmail = mb_strtolower(trim($validated['customer_email'] ?? ''));
-        $normalizedNotes = trim($validated['notes'] ?? '');
-        $reservationTime = Carbon::parse($validated['reservation_time'])->format('Y-m-d H:i:s');
-
-        return Reservation::query()
-            ->where('customer_name', $normalizedName)
-            ->where('party_size', $validated['party_size'])
-            ->where('reservation_time', $reservationTime)
-            ->where('created_at', '>=', now()->subMinutes($minutes))
-            ->where(function ($query) use ($normalizedPhone) {
-                if ($normalizedPhone === '') {
-                    $query->whereNull('customer_phone');
-                    return;
-                }
-
-                $query->whereRaw("REPLACE(customer_phone, ' ', '') = ?", [$normalizedPhone]);
-            })
-            ->where(function ($query) use ($normalizedEmail) {
-                if ($normalizedEmail === '') {
-                    $query->whereNull('customer_email');
-                    return;
-                }
-
-                $query->whereRaw('LOWER(customer_email) = ?', [$normalizedEmail]);
-            })
-            ->where(function ($query) use ($normalizedNotes) {
-                if ($normalizedNotes === '') {
-                    $query->whereNull('notes');
-                    return;
-                }
-
-                $query->where('notes', $normalizedNotes);
-            })
-            ->latest('id')
-            ->first();
-    }
-
-    private function isDuplicateSubmissionTokenException(QueryException $exception): bool
-    {
-        $message = mb_strtolower($exception->getMessage());
-
-        return str_contains($message, 'submission_token')
-            || str_contains($message, 'reservations_submission_token_unique');
-    }
-
     public function edit(Reservation $reservation)
     {
         return view('reservations.edit', compact('reservation'));
+    }
+
+    public function show(Reservation $reservation)
+    {
+        return redirect()->route('reservations.edit', $reservation);
     }
 
     public function update(Request $request, Reservation $reservation)
@@ -313,7 +152,9 @@ class ReservationController extends Controller
         }
 
         if ($isClosed) {
-            return $isException ? __('public.reservation_closed_special') : __('public.reservation_closed_weekday');
+            return $isException
+                ? __('Reservations are closed for this date.')
+                : __('The restaurant is closed on this weekday.');
         }
 
         // Identify matching slot
@@ -334,7 +175,7 @@ class ReservationController extends Controller
                 $slotStrings[] = substr($slot['start'], 0, 5) . '-' . substr($slot['stop'], 0, 5);
             }
             $slotsText = implode(' / ', $slotStrings);
-            return __('public.reservation_open_slots', ['slots' => $slotsText]);
+            return __('Reservations are only available during: :slots.', ['slots' => $slotsText]);
         }
 
         // Dynamic Seating Validation (If Session 3 exists, evening slots only allow start times)
@@ -350,7 +191,7 @@ class ReservationController extends Controller
             $reqTime = $dt->format('H:i');
             if (!in_array($reqTime, $eveningStartTimes)) {
                 $allowedFormatted = implode(' or ', $eveningStartTimes);
-                return __('public.reservation_evening_seatings', ['seatings' => $allowedFormatted]);
+                return __('Evening reservations can only start at :seatings.', ['seatings' => $allowedFormatted]);
             }
         }
 
@@ -375,7 +216,7 @@ class ReservationController extends Controller
 
         if ($totalPeople + $partySize > $capacity) {
             $available = max(0, $capacity - $totalPeople);
-            return __('public.reservation_shift_full', ['available' => $available]);
+            return __('This time is at capacity. Remaining seats: :available.', ['available' => $available]);
         }
 
         return null;
@@ -505,6 +346,4 @@ class ReservationController extends Controller
         ]);
     }
 }
-
-
 

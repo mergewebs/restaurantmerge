@@ -2,18 +2,28 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
+    public function test_root_redirects_to_the_admin_dashboard(): void
     {
-        $response = $this->get('/');
+        $this->get('/')
+            ->assertRedirect('/admin/dashboard');
+    }
 
-        $response->assertStatus(200);
+    public function test_public_website_endpoints_are_not_available(): void
+    {
+        foreach ([
+            '/menu',
+            '/order',
+            '/takeaway',
+            '/reservation',
+            '/robots.txt',
+            '/sitemap.xml',
+            '/locale',
+        ] as $path) {
+            $this->get($path)->assertNotFound();
+        }
     }
 }

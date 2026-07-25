@@ -9,9 +9,6 @@ class Order extends Model
 {
     use HasFactory;
 
-    public const TYPE_TABLE = 'table';
-    public const TYPE_TAKEAWAY = 'takeaway';
-
     public const STATUS_OPEN = 'open';
     public const STATUS_CLOSED = 'closed';
 
@@ -21,12 +18,9 @@ class Order extends Model
 
     protected $fillable = [
         'restaurant_table_id',
-        'order_type',
         'status',
         'kitchen_status',
         'total',
-        'customer_name',
-        'customer_phone',
     ];
 
     protected $casts = [

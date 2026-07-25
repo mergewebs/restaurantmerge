@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => __('public.seo_login_title')])])
+        @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => 'Admin Login | '.config('app.name')])])
         @include('partials.favicon')
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -237,10 +237,9 @@
             </div>
 
             <div class="mt-8 text-center">
-                <p class="text-gray-600 text-[10px] uppercase font-bold tracking-widest">{{ __('public.copyright', ['app_name' => config('app.name')]) }}</p>
+                <p class="text-gray-600 text-[10px] uppercase font-bold tracking-widest">&copy; {{ now()->year }} {{ config('app.name') }}</p>
             </div>
         </div>
         @include('partials.form-submit-lock')
 </body>
 </html>
-

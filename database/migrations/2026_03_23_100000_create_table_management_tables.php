@@ -20,16 +20,12 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('restaurant_table_id')->constrained('restaurant_tables')->cascadeOnDelete();
-            $table->string('order_type')->default('table');
             $table->string('status')->default('open');
             $table->string('kitchen_status')->default('pending');
             $table->decimal('total', 10, 2)->default(0);
-            $table->string('customer_name')->nullable();
-            $table->string('customer_phone', 30)->nullable();
             $table->timestamps();
 
             $table->index('status');
-            $table->index(['status', 'order_type', 'created_at'], 'orders_status_type_created_idx');
         });
 
         Schema::create('order_items', function (Blueprint $table) {

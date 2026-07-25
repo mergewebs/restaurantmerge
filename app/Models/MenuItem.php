@@ -46,7 +46,6 @@ class MenuItem extends Model
         'ZORSADA' => 'images/ZORSADA.PNG',
         'RED ONION' => 'images/red-onion.png',
         'SOBOKU' => 'images/soboku.png',
-        'FAMILY TAKEAWAY PACK' => 'images/smash-burger.png',
         'SPICY KOREAN RICE BOWL' => 'images/katsudon.png',
         'MEDITERRANEAN RICE BOWL' => 'images/koya-salad.png',
         'KOYA SALAD' => 'images/koya-salad.png',
@@ -121,7 +120,6 @@ class MenuItem extends Model
         return self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
     }
 }
-
 
 
 

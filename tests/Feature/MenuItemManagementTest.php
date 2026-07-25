@@ -76,33 +76,29 @@ class MenuItemManagementTest extends TestCase
         Storage::disk('product-images')->assertMissing($currentThumbnailPath);
     }
 
-    public function test_public_pages_and_ordering_share_the_same_active_products(): void
+    public function test_admin_product_page_lists_managed_products(): void
     {
-        config()->set('features.takeaway', true);
+        $admin = User::factory()->create([
+            'role' => 'owner',
+        ]);
+
         $menuItem = MenuItem::create([
-            'name' => 'Shared Product',
+            'name' => 'Managed Product',
             'category' => 'Smash Burger',
-            'description' => 'Visible everywhere',
+            'description' => 'Visible in admin',
             'price' => 11.50,
             'sort_order' => 3,
             'is_active' => true,
         ]);
 
-        $this->get('/')
+        $this->actingAs($admin)
+            ->get(route('menu-items.index'))
             ->assertOk()
-            ->assertSee('Shared Product');
-
-        $this->get(route('order.public'))
-            ->assertOk()
-            ->assertSee('Shared Product');
-
-        $this->get(route('menu.public'))
-            ->assertOk()
-            ->assertSee('Shared Product');
+            ->assertSee('Managed Product');
 
         $this->assertDatabaseHas('menu_items', [
             'id' => $menuItem->id,
-            'name' => 'Shared Product',
+            'name' => 'Managed Product',
             'is_active' => true,
         ]);
     }
@@ -123,5 +119,4 @@ class MenuItemManagementTest extends TestCase
         ])->assertForbidden();
     }
 }
-
 

@@ -2,116 +2,23 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinanceController;
-use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PublicTakeawayController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantConfigController;
 use App\Http\Controllers\TableManagementController;
 use App\Http\Controllers\UserController;
-use App\Models\MenuItem;
-use App\Models\RestaurantSchedule;
-use App\Support\Seo;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    try {
-        $menuItems = \App\Models\MenuItem::where('is_active', true)
-            ->orderedByCategory()
-            ->orderBy('sort_order')
-            ->get();
-        $schedule = \App\Models\RestaurantSchedule::orderBy('day_of_week')->get();
-    } catch (\Exception $e) {
-        $menuItems = collect();
-        $schedule = collect();
-    }
-
-    $categories = $menuItems->pluck('category')->filter()->unique()->take(3)->implode(', ');
-    $description = __('public.homepage_meta_description');
-
-    if ($menuItems->isNotEmpty() && $categories !== '') {
-        $description .= ' ' . __('public.seo_home_dynamic_suffix', [
-            'count' => $menuItems->count(),
-            'categories' => $categories,
-        ]);
-    }
-
-    $seo = Seo::make([
-        'title' => __('public.seo_home_title'),
-        'description' => $description,
-        'keywords' => __('public.seo_home_keywords'),
-        'canonical' => route('home'),
-        'structured_data' => [
-            Seo::websiteStructuredData(),
-            Seo::restaurantStructuredData($schedule),
-        ],
-    ]);
-
-    return view('welcome', compact('menuItems', 'schedule', 'seo'));
-})->name('home');
-
-Route::get('/robots.txt', function () {
-    $lines = [
-        'User-agent: *',
-        'Allow: /',
-        'Disallow: /admin',
-        'Disallow: /order',
-        'Disallow: /takeaway',
-        'Disallow: /restaurant/schedule-data',
-        'Disallow: /restaurant/closed-dates',
-        'Sitemap: ' . route('sitemap'),
-    ];
-
-    return response(implode(PHP_EOL, $lines) . PHP_EOL, 200, [
-        'Content-Type' => 'text/plain; charset=UTF-8',
-    ]);
-})->name('robots');
-
-Route::get('/sitemap.xml', function () {
-    $latestPublicUpdate = collect([
-        MenuItem::query()->max('updated_at'),
-        RestaurantSchedule::query()->max('updated_at'),
-    ])->filter()->map(fn ($value) => Carbon::parse($value))->sortDesc()->first() ?? now();
-
-    $urls = [
-        ['loc' => route('home'), 'lastmod' => $latestPublicUpdate->toAtomString(), 'changefreq' => 'weekly', 'priority' => '1.0'],
-        ['loc' => route('menu.public'), 'lastmod' => $latestPublicUpdate->toAtomString(), 'changefreq' => 'weekly', 'priority' => '0.9'],
-        ['loc' => route('reservations.public.create'), 'lastmod' => $latestPublicUpdate->toAtomString(), 'changefreq' => 'weekly', 'priority' => '0.8'],
-    ];
-
-    $xml = view('sitemap.index', ['urls' => $urls])->render();
-
-    return response($xml, 200, [
-        'Content-Type' => 'application/xml; charset=UTF-8',
-    ]);
-})->name('sitemap');
-
-Route::post('/locale', [LocaleController::class, 'update'])->name('locale.update');
-
-Route::get('/reservation', [ReservationController::class, 'publicCreate'])->name('reservations.public.create');
-Route::post('/reservation', [ReservationController::class, 'publicStore'])->name('reservations.public.store');
-Route::middleware('noindex')->group(function () {
-    Route::get('/restaurant/schedule-data', [ReservationController::class, 'getScheduleData'])->name('restaurant.schedule.data');
-    Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');
-});
-
-Route::get('/menu', [PublicTakeawayController::class, 'menu'])->name('menu.public');
-
-Route::middleware(['feature:takeaway', 'noindex'])->group(function () {
-    Route::get('/order', [PublicTakeawayController::class, 'index'])->name('order.public');
-    Route::post('/order', [PublicTakeawayController::class, 'store'])->name('order.public.store');
-
-    Route::get('/takeaway', [PublicTakeawayController::class, 'index'])->name('takeaway.public');
-    Route::post('/takeaway/orders', [PublicTakeawayController::class, 'store'])->name('takeaway.public.store');
-});
+Route::redirect('/', '/admin/dashboard');
 
 Route::redirect('/admin', '/admin/dashboard');
 
 Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('reservations', ReservationController::class);
+    Route::get('/restaurant/schedule-data', [ReservationController::class, 'getScheduleData'])->name('restaurant.schedule.data');
+    Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');
 
     Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
     Route::post('/finance', [FinanceController::class, 'store'])->name('finance.store');

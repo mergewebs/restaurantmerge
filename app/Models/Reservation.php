@@ -13,7 +13,6 @@ class Reservation extends Model
         'party_size',
         'reservation_time',
         'notes',
-        'submission_token',
         'status',
         'user_id'
     ];

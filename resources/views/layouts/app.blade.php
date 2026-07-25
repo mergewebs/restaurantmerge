@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => __('public.seo_admin_title')])])
+        @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => 'Admin Dashboard | '.config('app.name')])])
         @include('partials.favicon')
 
         <!-- Fonts -->
@@ -326,7 +326,7 @@
         </div>
         <div class="min-h-screen relative">
             <header class="mobile-admin-header lg:hidden">
-                <a href="{{ route('dashboard') }}" class="mobile-admin-brand" aria-label="{{ __('public.seo_logo_alt') }}">
+                <a href="{{ route('dashboard') }}" class="mobile-admin-brand" aria-label="KOYA Logo">
                     <img src="{{ asset('images/koya-logo.png') }}" alt="" width="40" height="40">
                     <span><strong>{{ config('app.name', 'Koya BCN') }}</strong><small>{{ ucfirst(auth()->user()->role) }}</small></span>
                 </a>
@@ -368,7 +368,6 @@
             @php
                 $tablesFeatureEnabled = config('features.tables', false);
                 $kitchenFeatureEnabled = config('features.kitchen', false);
-                $takeawayFeatureEnabled = config('features.takeaway', false);
                 $bottomMenuItems = [];
                 $bottomMenuItems[] = ['route' => route('dashboard'), 'active' => request()->routeIs('dashboard'), 'label' => 'Dashboard', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'];
 
@@ -391,25 +390,14 @@
                     $bottomMenuItems[] = ['route' => route('users.index'), 'active' => request()->routeIs('users.*'), 'label' => 'Users', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
                 }
 
-                if ($takeawayFeatureEnabled) {
-                    $bottomMenuItems[] = [
-                        'route' => route('takeaway.public'),
-                        'active' => false,
-                        'label' => 'Takeaway',
-                        'icon' => 'M3 5h18M7 5v14m10-14v14M5 19h14',
-                        'target' => '_blank',
-                        'rel' => 'noopener',
-                    ];
-                }
-
                 $primaryMenuItems = $bottomMenuItems;
             @endphp
 
             <!-- Global Navigation (Top) -->
             <nav class="admin-navigation fixed left-0 right-0 z-50" aria-label="Primary navigation">
                 <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-center shadow-2xl">
-                    <a href="{{ route('dashboard') }}" class="mr-5 shrink-0" aria-label="{{ __('public.seo_logo_alt') }}">
-                        <img src="{{ asset('images/koya-logo.png') }}" alt="{{ __('public.seo_logo_alt') }}" class="h-11 w-11 rounded-full border-2 border-white/20 object-cover shadow-lg" width="44" height="44">
+                    <a href="{{ route('dashboard') }}" class="mr-5 shrink-0" aria-label="KOYA Logo">
+                        <img src="{{ asset('images/koya-logo.png') }}" alt="KOYA Logo" class="h-11 w-11 rounded-full border-2 border-white/20 object-cover shadow-lg" width="44" height="44">
                     </a>
                     <div class="bottom-primary-links flex items-center gap-10 md:gap-16 pr-1">
                         @foreach($primaryMenuItems as $item)
@@ -810,5 +798,3 @@
         @include('partials.form-submit-lock')
 </body>
 </html>
-
-
