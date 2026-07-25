@@ -17,7 +17,7 @@ use App\Http\Controllers\TableManagementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/admin/dashboard');
+Route::view('/', 'welcome')->name('home');
 
 Route::redirect('/admin', '/admin/dashboard');
 
