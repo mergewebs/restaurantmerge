@@ -5,6 +5,7 @@ use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\MenuItemController;
 use App\Http\Controllers\MenuCategoryController;
 use App\Http\Controllers\MenuItemOptionController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
@@ -94,6 +95,14 @@ Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::delete('/menu-categories/{menuCategory}', [MenuCategoryController::class, 'destroy'])->name('menu-categories.destroy');
     Route::post('/menu-items/{menuItem}/options', [MenuItemOptionController::class, 'store'])->name('menu-items.options.store');
     Route::delete('/menu-items/{menuItem}/options/{option}', [MenuItemOptionController::class, 'destroy'])->name('menu-items.options.destroy');
+    Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
+    Route::post('/inventory/ingredients', [InventoryController::class, 'storeIngredient'])->name('inventory.ingredients.store');
+    Route::put('/inventory/ingredients/{ingredient}', [InventoryController::class, 'updateIngredient'])->name('inventory.ingredients.update');
+    Route::post('/inventory/suppliers', [InventoryController::class, 'storeSupplier'])->name('inventory.suppliers.store');
+    Route::put('/inventory/suppliers/{supplier}', [InventoryController::class, 'updateSupplier'])->name('inventory.suppliers.update');
+    Route::post('/inventory/movements', [InventoryController::class, 'storeMovement'])->name('inventory.movements.store');
+    Route::post('/inventory/products/{menuItem}/recipe', [InventoryController::class, 'storeRecipe'])->name('inventory.recipes.store');
+    Route::delete('/inventory/products/{menuItem}/recipe/{ingredient}', [InventoryController::class, 'destroyRecipe'])->name('inventory.recipes.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

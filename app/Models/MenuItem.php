@@ -120,6 +120,11 @@ class MenuItem extends Model
         return $this->hasMany(MenuItemOption::class)->orderBy('type')->orderBy('sort_order')->orderBy('name');
     }
 
+    public function recipeIngredients()
+    {
+        return $this->belongsToMany(InventoryIngredient::class, 'menu_item_ingredients')->withPivot('quantity')->withTimestamps();
+    }
+
     public function priceFor(string $orderType): float
     {
         $channelPrice = match ($orderType) {

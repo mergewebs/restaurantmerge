@@ -8,6 +8,7 @@ use App\Models\Income;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\RestaurantTable;
+use App\Services\InventoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -18,6 +19,11 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class TableManagementController extends Controller
 {
     private const KITCHEN_VERSION_CACHE_KEY = 'kitchen_board_version';
+
+    public function __construct(private readonly InventoryService $inventoryService)
+    {
+    }
+
     public function index()
     {
         $tables = RestaurantTable::with([
@@ -325,6 +331,7 @@ class TableManagementController extends Controller
             ]);
         } else {
             $order->items()->create([
+                'menu_item_id' => $menuItem->id,
                 'name' => $menuItem->name,
                 'quantity' => $quantity,
                 'unit_price' => $unitPrice,
@@ -424,6 +431,7 @@ class TableManagementController extends Controller
                 ]);
             }
         });
+        $this->inventoryService->deductCompletedOrder($order);
         $this->touchKitchenBoard();
 
         return redirect()->route('tables.index')->with('success', "Order for table {$table->number} has been closed and saved in completed orders.");
@@ -627,6 +635,7 @@ class TableManagementController extends Controller
                 ]);
             } else {
                 $targetItem = $order->items()->create([
+                    'menu_item_id' => $menuItem->id,
                     'name' => $menuItem->name,
                     'quantity' => $quantity,
                     'unit_price' => $unitPrice,

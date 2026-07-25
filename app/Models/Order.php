@@ -37,6 +37,7 @@ class Order extends Model
         'discount_amount',
         'service_charge',
         'completed_at',
+        'inventory_deducted_at',
         'cancelled_at',
     ];
 
@@ -45,6 +46,7 @@ class Order extends Model
         'discount_amount' => 'float',
         'service_charge' => 'float',
         'completed_at' => 'datetime',
+        'inventory_deducted_at' => 'datetime',
         'cancelled_at' => 'datetime',
     ];
 

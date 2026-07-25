@@ -15,6 +15,7 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
+        'menu_item_id',
         'name',
         'note',
         'station',
@@ -33,5 +34,10 @@ class OrderItem extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function menuItem()
+    {
+        return $this->belongsTo(MenuItem::class);
     }
 }

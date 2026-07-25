@@ -364,6 +364,7 @@
                         request()->routeIs('reservations.*') => ['Reservations', 'Plan the room and welcome every guest well.'],
                         request()->routeIs('finance.*') => ['Finance', 'A clear daily view of sales, costs and performance.'],
                         request()->routeIs('menu-items.*') => ['Menu', 'Keep dishes, pricing and availability up to date.'],
+                        request()->routeIs('inventory.*') => ['Inventory', 'Track stock, suppliers, purchasing and waste.'],
                         request()->routeIs('users.*') => ['Team Access', 'Manage the people who keep service running.'],
                         request()->routeIs('restaurant.*') => ['Restaurant Settings', 'Opening hours, closures and service capacity.'],
                         request()->routeIs('profile.*') => ['Your Profile', 'Personal details and account security.'],
@@ -408,6 +409,7 @@
                 if (auth()->user()->isAdmin()) {
                     $bottomMenuItems[] = ['route' => route('finance.index'), 'active' => request()->routeIs('finance.*'), 'label' => 'Finance', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'];
                     $bottomMenuItems[] = ['route' => route('menu-items.index'), 'active' => request()->routeIs('menu-items.*'), 'label' => 'Menu', 'icon' => 'M6 3v8M9 3v8M6 7h3M7.5 11v10M15 3v20M15 3c3 0 4 2.5 4 5.5S18 14 15 14'];
+                    $bottomMenuItems[] = ['route' => route('inventory.index'), 'active' => request()->routeIs('inventory.*'), 'label' => 'Inventory', 'icon' => 'M20 7l-8-4-8 4m16 0-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'];
                 }
 
                 if (auth()->user()->isUserAdmin()) {

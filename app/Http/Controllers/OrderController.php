@@ -7,12 +7,17 @@ use App\Models\MenuItem;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\RestaurantTable;
+use App\Services\InventoryService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
+    public function __construct(private readonly InventoryService $inventoryService)
+    {
+    }
+
     public function index(Request $request)
     {
         $query = Order::with(['table', 'payments'])->withCount('items')->latest();
@@ -115,6 +120,7 @@ class OrderController extends Controller
         $quantity = (int) $validated['quantity'];
         $unitPrice = $menuItem->priceFor($order->order_type);
         $order->items()->create([
+            'menu_item_id' => $menuItem->id,
             'name' => $menuItem->name,
             'quantity' => $quantity,
             'unit_price' => $unitPrice,
@@ -159,6 +165,9 @@ class OrderController extends Controller
             $changes += ['status' => Order::STATUS_OPEN, 'completed_at' => null, 'cancelled_at' => null];
         }
         $order->update($changes);
+        if ($workflowStatus === 'completed') {
+            $this->inventoryService->deductCompletedOrder($order);
+        }
 
         return back()->with('success', 'Order marked '.str_replace('_', ' ', $workflowStatus).'.');
     }
