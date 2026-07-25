@@ -358,6 +358,7 @@
                 @php
                     [$pageTitle, $pageDescription] = match (true) {
                         request()->routeIs('dashboard') => ['Today’s Service', 'Reservations, service and cash flow at a glance.'],
+                        request()->routeIs('orders.*') => ['Orders', 'Keep every order moving from the first item to payment.'],
                         request()->routeIs('tables.kitchen*') => ['Kitchen Pass', 'Keep every plate moving and every table informed.'],
                         request()->routeIs('tables.*') => ['Dining Room', 'Manage tables, orders and the rhythm of service.'],
                         request()->routeIs('reservations.*') => ['Reservations', 'Plan the room and welcome every guest well.'],
@@ -392,6 +393,7 @@
                 $kitchenFeatureEnabled = config('features.kitchen', false);
                 $bottomMenuItems = [];
                 $bottomMenuItems[] = ['route' => route('dashboard'), 'active' => request()->routeIs('dashboard'), 'label' => 'Dashboard', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'];
+                $bottomMenuItems[] = ['route' => route('orders.index'), 'active' => request()->routeIs('orders.*'), 'label' => 'Orders', 'icon' => 'M9 5h6M9 9h6M9 13h3m-7 7h14a2 2 0 002-2V4a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z'];
 
                 if ($tablesFeatureEnabled) {
                     $bottomMenuItems[] = ['route' => route('tables.index'), 'active' => request()->routeIs('tables.*') && !request()->routeIs('tables.kitchen'), 'label' => 'Tables', 'icon' => 'M4 10h16M4 14h16M8 6h8m-8 12h8M6 18h12a2 2 0 002-2V8a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2z'];

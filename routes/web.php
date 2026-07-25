@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantConfigController;
@@ -16,6 +17,17 @@ Route::redirect('/admin', '/admin/dashboard');
 
 Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}/details', [OrderController::class, 'updateDetails'])->name('orders.details.update');
+    Route::post('/orders/{order}/items', [OrderController::class, 'addItem'])->name('orders.items.store');
+    Route::delete('/orders/{order}/items/{item}', [OrderController::class, 'removeItem'])->name('orders.items.destroy');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status.update');
+    Route::put('/orders/{order}/adjustments', [OrderController::class, 'updateAdjustments'])->name('orders.adjustments.update');
+    Route::post('/orders/{order}/payments', [OrderController::class, 'storePayments'])->name('orders.payments.store');
+    Route::get('/orders/{order}/ticket', [OrderController::class, 'ticket'])->name('orders.ticket');
+    Route::get('/orders/{order}/ticket/download', [OrderController::class, 'downloadTicket'])->name('orders.ticket.download');
     Route::resource('reservations', ReservationController::class);
     Route::get('/restaurant/schedule-data', [ReservationController::class, 'getScheduleData'])->name('restaurant.schedule.data');
     Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');

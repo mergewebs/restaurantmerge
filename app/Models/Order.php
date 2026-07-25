@@ -17,18 +17,35 @@ class Order extends Model
     public const KITCHEN_STATUS_READY = 'ready';
 
     public const PAYMENT_STATUS_UNPAID = 'unpaid';
+    public const PAYMENT_STATUS_PARTIAL = 'partial';
     public const PAYMENT_STATUS_PAID = 'paid';
+
+    public const WORKFLOW_STATUSES = ['new', 'confirmed', 'preparing', 'ready', 'completed', 'cancelled'];
+    public const ORDER_TYPES = ['dine_in', 'takeaway', 'pickup', 'delivery'];
 
     protected $fillable = [
         'restaurant_table_id',
         'status',
+        'workflow_status',
+        'order_type',
+        'customer_name',
+        'customer_phone',
+        'notes',
         'kitchen_status',
         'payment_status',
         'total',
+        'discount_amount',
+        'service_charge',
+        'completed_at',
+        'cancelled_at',
     ];
 
     protected $casts = [
         'total' => 'float',
+        'discount_amount' => 'float',
+        'service_charge' => 'float',
+        'completed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
     ];
 
     public function table()
@@ -41,10 +58,25 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(OrderPayment::class);
+    }
+
+    public function getPaidAmountAttribute(): float
+    {
+        return (float) $this->payments->sum('amount');
+    }
+
+    public function getBalanceDueAttribute(): float
+    {
+        return max(0, (float) $this->total - $this->paid_amount);
+    }
+
     public function recalculateTotal(): void
     {
-        $this->update([
-            'total' => $this->items()->sum('line_total'),
-        ]);
+        $subtotal = (float) $this->items()->sum('line_total');
+
+        $this->update(['total' => max(0, $subtotal - (float) $this->discount_amount + (float) $this->service_charge)]);
     }
 }

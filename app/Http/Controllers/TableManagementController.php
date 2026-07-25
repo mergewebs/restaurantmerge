@@ -308,10 +308,18 @@ class TableManagementController extends Controller
         DB::transaction(function () use ($order, $table) {
             $order->update([
                 'status' => Order::STATUS_CLOSED,
+                'workflow_status' => 'completed',
                 'payment_status' => Order::PAYMENT_STATUS_PAID,
+                'completed_at' => now(),
             ]);
 
             if ((float) $order->total > 0) {
+                $order->payments()->create([
+                    'method' => 'cash',
+                    'amount' => (float) $order->total,
+                    'user_id' => auth()->id(),
+                    'paid_at' => now(),
+                ]);
                 Income::create([
                     'amount' => (float) $order->total,
                     'type' => 'sale',
@@ -812,8 +820,6 @@ class TableManagementController extends Controller
     }
 
 }
-
-
 
 
 
