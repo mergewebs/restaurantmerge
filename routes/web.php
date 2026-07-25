@@ -28,6 +28,8 @@ Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::post('/orders/{order}/payments', [OrderController::class, 'storePayments'])->name('orders.payments.store');
     Route::get('/orders/{order}/ticket', [OrderController::class, 'ticket'])->name('orders.ticket');
     Route::get('/orders/{order}/ticket/download', [OrderController::class, 'downloadTicket'])->name('orders.ticket.download');
+    Route::patch('/reservations/{reservation}/status', [ReservationController::class, 'updateStatus'])->name('reservations.status.update');
+    Route::patch('/reservations/{reservation}/table', [ReservationController::class, 'assignTable'])->name('reservations.table.update');
     Route::resource('reservations', ReservationController::class);
     Route::get('/restaurant/schedule-data', [ReservationController::class, 'getScheduleData'])->name('restaurant.schedule.data');
     Route::get('/restaurant/closed-dates', [ReservationController::class, 'getClosedDates'])->name('restaurant.closed-dates');

@@ -7,27 +7,32 @@ use App\Mail\ReservationConfirmationClient;
 use App\Models\Reservation;
 use App\Models\RestaurantException;
 use App\Models\RestaurantSchedule;
+use App\Models\RestaurantTable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
 
 class ReservationController extends Controller
 {
     public function index(Request $request)
     {
-        $todayReservations = Reservation::whereDate('reservation_time', now()->toDateString())
+        $todayReservations = Reservation::with('table')->whereDate('reservation_time', now()->toDateString())
             ->orderBy('reservation_time', 'asc')
-            ->paginate(10, ['*'], 'today_page');
+            ->get();
+        $month = Carbon::parse($request->query('month', now()->format('Y-m').'-01'))->startOfMonth();
+        $calendarStart = $month->copy()->startOfWeek(Carbon::MONDAY);
+        $calendarEnd = $month->copy()->endOfMonth()->endOfWeek(Carbon::SUNDAY);
+        $calendarReservations = Reservation::with('table')
+            ->whereBetween('reservation_time', [$calendarStart, $calendarEnd])
+            ->orderBy('reservation_time')->get()->groupBy(fn (Reservation $reservation) => $reservation->reservation_time->toDateString());
+        $calendarDays = collect();
+        for ($day = $calendarStart->copy(); $day->lte($calendarEnd); $day->addDay()) {
+            $calendarDays->push($day->copy());
+        }
+        $tables = RestaurantTable::whereNull('merged_into_table_id')->orderBy('number')->get();
 
-        $upcomingReservations = Reservation::whereDate('reservation_time', '>', now()->toDateString())
-            ->orderBy('reservation_time', 'asc')
-            ->paginate(10, ['*'], 'upcoming_page');
-
-        $pastReservations = Reservation::whereDate('reservation_time', '<', now()->toDateString())
-            ->orderBy('reservation_time', 'desc')
-            ->paginate(10, ['*'], 'past_page');
-
-        return view('reservations.index', compact('todayReservations', 'upcomingReservations', 'pastReservations'));
+        return view('reservations.index', compact('todayReservations', 'month', 'calendarReservations', 'calendarDays', 'tables'));
     }
 
     public function create()
@@ -40,13 +45,17 @@ class ReservationController extends Controller
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'nullable|string|max:20',
-            'customer_email' => 'required|email|max:255',
+            'customer_email' => 'nullable|email|max:255',
             'party_size' => 'required|integer|min:1',
             'reservation_time' => 'required|date',
             'notes' => 'nullable|string',
+            'allergies' => 'nullable|string|max:1000',
+            'restaurant_table_id' => 'nullable|exists:restaurant_tables,id',
+            'status' => ['nullable', Rule::in(Reservation::STATUSES)],
         ]);
 
         $validated['user_id'] = auth()->id();
+        $validated['status'] = $validated['status'] ?? 'confirmed';
 
         $error = $this->checkAvailability($validated['reservation_time'], $validated['party_size']);
         if ($error) {
@@ -87,7 +96,9 @@ class ReservationController extends Controller
             'party_size' => 'required|integer|min:1',
             'reservation_time' => 'required|date',
             'notes' => 'nullable|string',
-            'status' => 'required|string|in:confirmed,cancelled,completed',
+            'allergies' => 'nullable|string|max:1000',
+            'restaurant_table_id' => 'nullable|exists:restaurant_tables,id',
+            'status' => ['required', Rule::in(Reservation::STATUSES)],
         ]);
 
         $error = $this->checkAvailability($validated['reservation_time'], $validated['party_size'], $reservation->id);
@@ -98,6 +109,22 @@ class ReservationController extends Controller
         $reservation->update($validated);
 
         return back()->with('success', __('Reservation updated successfully.'));
+    }
+
+    public function updateStatus(Request $request, Reservation $reservation)
+    {
+        $validated = $request->validate(['status' => ['required', Rule::in(Reservation::STATUSES)]]);
+        $reservation->update($validated);
+
+        return back()->with('success', 'Reservation status updated.');
+    }
+
+    public function assignTable(Request $request, Reservation $reservation)
+    {
+        $validated = $request->validate(['restaurant_table_id' => ['nullable', 'exists:restaurant_tables,id']]);
+        $reservation->update($validated);
+
+        return back()->with('success', $validated['restaurant_table_id'] ? 'Table assigned.' : 'Table assignment removed.');
     }
 
     public function destroy(Reservation $reservation)
@@ -199,7 +226,7 @@ class ReservationController extends Controller
         $isSeatingMode = $hasSession3 && $dt->hour >= 17;
 
         $query = Reservation::whereDate('reservation_time', $date)
-            ->where('status', '!=', 'cancelled')
+            ->whereNotIn('status', ['cancelled', 'no_show'])
             ->when($excludeId, function ($q) use ($excludeId) {
             return $q->where('id', '!=', $excludeId);
         });
@@ -270,7 +297,7 @@ class ReservationController extends Controller
         $excludeId = $request->query('exclude_id');
 
         $reservations = Reservation::whereDate('reservation_time', $date)
-            ->where('status', '!=', 'cancelled')
+            ->whereNotIn('status', ['cancelled', 'no_show'])
             ->when($excludeId, function ($q) use ($excludeId) {
             return $q->where('id', '!=', $excludeId);
         })
