@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\MenuItem;
+use App\Models\MenuCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -118,5 +119,78 @@ class MenuItemManagementTest extends TestCase
             'sort_order' => 0,
         ])->assertForbidden();
     }
-}
 
+    public function test_owner_can_manage_restaurant_menu_details_and_product_choices(): void
+    {
+        $admin = User::factory()->create(['role' => 'owner']);
+
+        $this->actingAs($admin)->post(route('menu-categories.store'), [
+            'name' => 'Chef Specials',
+            'sort_order' => 2,
+            'is_active' => 1,
+        ])->assertRedirect();
+
+        $this->actingAs($admin)->post(route('menu-items.store'), [
+            'name' => 'Summer Sea Bass',
+            'category' => 'Chef Specials',
+            'description' => 'Grilled with lemon butter',
+            'ingredients' => 'Sea bass, lemon, butter, herbs',
+            'allergens' => 'Fish, milk',
+            'price' => 22.00,
+            'dine_in_price' => 22.00,
+            'takeaway_price' => 23.00,
+            'delivery_price' => 24.50,
+            'availability_status' => 'sold_out',
+            'item_kind' => 'seasonal',
+            'is_active' => 1,
+        ])->assertRedirect(route('menu-items.index'));
+
+        $item = MenuItem::where('name', 'Summer Sea Bass')->firstOrFail();
+        $category = MenuCategory::where('name', 'Chef Specials')->firstOrFail();
+        $this->assertSame($category->id, $item->menu_category_id);
+        $this->assertSame('sold_out', $item->availability_status);
+        $this->assertSame('Fish, milk', $item->allergens);
+        $this->assertSame(24.50, (float) $item->delivery_price);
+        $this->assertSame(22.00, $item->priceFor('dine_in'));
+        $this->assertSame(23.00, $item->priceFor('pickup'));
+        $this->assertSame(24.50, $item->priceFor('delivery'));
+
+        $this->actingAs($admin)->post(route('menu-items.options.store', $item), [
+            'type' => 'add_on',
+            'name' => 'Extra lemon butter',
+            'price_adjustment' => 1.50,
+            'is_active' => 1,
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('menu_item_options', [
+            'menu_item_id' => $item->id,
+            'type' => 'add_on',
+            'name' => 'Extra lemon butter',
+        ]);
+
+        $this->actingAs($admin)->get(route('menu-items.index'))
+            ->assertOk()
+            ->assertSee('Menu Management')
+            ->assertSee('Summer Sea Bass')
+            ->assertSee('Sold out');
+    }
+
+    public function test_used_menu_category_cannot_be_deleted(): void
+    {
+        $admin = User::factory()->create(['role' => 'owner']);
+        $category = MenuCategory::where('name', 'Starters')->firstOrFail();
+        MenuItem::create([
+            'name' => 'House Croquette',
+            'category' => $category->name,
+            'menu_category_id' => $category->id,
+            'price' => 3.50,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($admin)->delete(route('menu-categories.destroy', $category))
+            ->assertRedirect()
+            ->assertSessionHas('error');
+
+        $this->assertDatabaseHas('menu_categories', ['id' => $category->id]);
+    }
+}

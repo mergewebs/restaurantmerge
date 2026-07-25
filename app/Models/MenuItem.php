@@ -5,11 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 class MenuItem extends Model
 {
     use HasFactory;
+
+    public const AVAILABILITY_STATUSES = ['available', 'sold_out'];
+
+    public const ITEM_KINDS = ['regular', 'lunch_menu', 'promotion', 'seasonal'];
+
+    public const OPTION_TYPES = ['size', 'add_on', 'extra', 'variation'];
 
     public const CATEGORY_OPTIONS = [
         'Starters',
@@ -59,13 +67,21 @@ class MenuItem extends Model
     protected $fillable = [
         'name',
         'category',
+        'menu_category_id',
         'description',
+        'ingredients',
+        'allergens',
         'image_path',
         'image_display_path',
         'image_thumbnail_path',
         'price',
+        'dine_in_price',
+        'takeaway_price',
+        'delivery_price',
         'stock_quantity',
         'low_stock_threshold',
+        'availability_status',
+        'item_kind',
         'is_active',
         'sort_order',
     ];
@@ -74,6 +90,9 @@ class MenuItem extends Model
     {
         return [
             'price' => 'decimal:2',
+            'dine_in_price' => 'decimal:2',
+            'takeaway_price' => 'decimal:2',
+            'delivery_price' => 'decimal:2',
             'stock_quantity' => 'integer',
             'low_stock_threshold' => 'integer',
             'is_active' => 'boolean',
@@ -83,16 +102,31 @@ class MenuItem extends Model
 
     public function scopeOrderedByCategory(Builder $query): Builder
     {
-        $caseParts = [];
+        return $query
+            ->orderByRaw('COALESCE((SELECT sort_order FROM menu_categories WHERE menu_categories.id = menu_items.menu_category_id), 999)')
+            ->orderBy('category');
+    }
 
-        foreach (self::CATEGORY_OPTIONS as $index => $category) {
-            $safeCategory = str_replace("'", "''", $category);
-            $caseParts[] = "WHEN '{$safeCategory}' THEN {$index}";
-        }
+    public function menuCategory(): BelongsTo
+    {
+        return $this->belongsTo(MenuCategory::class);
+    }
 
-        $caseSql = 'CASE category ' . implode(' ', $caseParts) . ' ELSE 999 END';
+    public function options(): HasMany
+    {
+        return $this->hasMany(MenuItemOption::class)->orderBy('type')->orderBy('sort_order')->orderBy('name');
+    }
 
-        return $query->orderByRaw($caseSql);
+    public function priceFor(string $orderType): float
+    {
+        $channelPrice = match ($orderType) {
+            'dine_in' => $this->dine_in_price,
+            'takeaway', 'pickup' => $this->takeaway_price,
+            'delivery' => $this->delivery_price,
+            default => null,
+        };
+
+        return (float) ($channelPrice ?? $this->price);
     }
 
     public function getImageUrlAttribute(): ?string
@@ -124,4 +158,3 @@ class MenuItem extends Model
         return self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
     }
 }
-

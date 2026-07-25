@@ -73,7 +73,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load(['table', 'items', 'payments.user']);
-        $menuItems = MenuItem::where('is_active', true)->orderedByCategory()->orderBy('sort_order')->get()->groupBy('category');
+        $menuItems = MenuItem::where('is_active', true)->where('availability_status', 'available')->orderedByCategory()->orderBy('sort_order')->get()->groupBy('category');
         $tables = RestaurantTable::whereNull('merged_into_table_id')
             ->where(fn ($query) => $query->whereDoesntHave('openOrder')->orWhere('id', $order->restaurant_table_id))
             ->orderBy('number')->get();
@@ -111,13 +111,14 @@ class OrderController extends Controller
             'quantity' => ['required', 'integer', 'min:1', 'max:99'],
             'note' => ['nullable', 'string', 'max:300'],
         ]);
-        $menuItem = MenuItem::findOrFail($validated['menu_item_id']);
+        $menuItem = MenuItem::where('is_active', true)->where('availability_status', 'available')->findOrFail($validated['menu_item_id']);
         $quantity = (int) $validated['quantity'];
+        $unitPrice = $menuItem->priceFor($order->order_type);
         $order->items()->create([
             'name' => $menuItem->name,
             'quantity' => $quantity,
-            'unit_price' => $menuItem->price,
-            'line_total' => (float) $menuItem->price * $quantity,
+            'unit_price' => $unitPrice,
+            'line_total' => $unitPrice * $quantity,
             'note' => $validated['note'] ?? null,
             'status' => OrderItem::STATUS_PENDING,
         ]);

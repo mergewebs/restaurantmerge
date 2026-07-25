@@ -39,6 +39,7 @@ class TableManagementController extends Controller
 
         $menuItemsCollection = MenuItem::query()
             ->where('is_active', true)
+            ->where('availability_status', 'available')
             ->orderedByCategory()
             ->orderBy('sort_order')
             ->orderBy('name')
@@ -51,6 +52,7 @@ class TableManagementController extends Controller
                 'image_display_path',
                 'image_thumbnail_path',
                 'price',
+                'dine_in_price',
             ]);
 
         $menuItems = $menuItemsCollection->groupBy('category');
@@ -61,7 +63,7 @@ class TableManagementController extends Controller
             'description' => $item->description,
             'image_url' => $item->image_url,
             'image_thumbnail_url' => $item->image_thumbnail_url,
-            'price' => (float) $item->price,
+            'price' => $item->priceFor('dine_in'),
         ])->values()->all();
         $initialOrder = $this->tableOrderPayload($table);
 
@@ -298,12 +300,12 @@ class TableManagementController extends Controller
             'quantity' => ['required', 'integer', 'min:1', 'max:20'],
         ]);
 
-        $menuItem = MenuItem::where('is_active', true)->findOrFail($validated['menu_item_id']);
+        $menuItem = MenuItem::where('is_active', true)->where('availability_status', 'available')->findOrFail($validated['menu_item_id']);
 
         $order = $this->ensureOpenOrder($table);
 
         $quantity = (int) $validated['quantity'];
-        $unitPrice = (float) $menuItem->price;
+        $unitPrice = $menuItem->priceFor('dine_in');
 
         $existingItem = $order->items()
             ->where('name', $menuItem->name)
@@ -586,7 +588,9 @@ class TableManagementController extends Controller
         if ($type === 'add_menu_item') {
             $menuItem = MenuItem::query()
                 ->where('is_active', true)
+                ->where('availability_status', 'available')
                 ->findOrFail((int) $payload['menu_item_id']);
+            $unitPrice = $menuItem->priceFor('dine_in');
             $quantity = max(1, (int) ($payload['quantity'] ?? 1));
             $note = $this->sanitizeNote($payload['note'] ?? null);
             $localRef = isset($payload['local_ref']) ? (string) $payload['local_ref'] : null;
@@ -596,7 +600,7 @@ class TableManagementController extends Controller
             if (! $targetItem) {
                 $targetItem = $order->items()
                     ->where('name', $menuItem->name)
-                    ->where('unit_price', (float) $menuItem->price)
+                    ->where('unit_price', $unitPrice)
                     ->where(function ($query) use ($note) {
                         if ($note === null) {
                             $query->whereNull('note');
@@ -618,8 +622,8 @@ class TableManagementController extends Controller
                 $targetItem = $order->items()->create([
                     'name' => $menuItem->name,
                     'quantity' => $quantity,
-                    'unit_price' => (float) $menuItem->price,
-                    'line_total' => $quantity * (float) $menuItem->price,
+                    'unit_price' => $unitPrice,
+                    'line_total' => $quantity * $unitPrice,
                     'note' => $note,
                     'status' => OrderItem::STATUS_PENDING,
                 ]);
@@ -906,6 +910,5 @@ class TableManagementController extends Controller
     }
 
 }
-
 
 

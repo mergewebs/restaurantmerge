@@ -3,6 +3,8 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\MenuCategoryController;
+use App\Http\Controllers\MenuItemOptionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
@@ -87,6 +89,11 @@ Route::prefix('admin')->middleware(['auth', 'noindex'])->group(function () {
     Route::post('/menu-items', [MenuItemController::class, 'store'])->name('menu-items.store');
     Route::put('/menu-items/{menuItem}', [MenuItemController::class, 'update'])->name('menu-items.update');
     Route::delete('/menu-items/{menuItem}', [MenuItemController::class, 'destroy'])->name('menu-items.destroy');
+    Route::post('/menu-categories', [MenuCategoryController::class, 'store'])->name('menu-categories.store');
+    Route::put('/menu-categories/{menuCategory}', [MenuCategoryController::class, 'update'])->name('menu-categories.update');
+    Route::delete('/menu-categories/{menuCategory}', [MenuCategoryController::class, 'destroy'])->name('menu-categories.destroy');
+    Route::post('/menu-items/{menuItem}/options', [MenuItemOptionController::class, 'store'])->name('menu-items.options.store');
+    Route::delete('/menu-items/{menuItem}/options/{option}', [MenuItemOptionController::class, 'destroy'])->name('menu-items.options.destroy');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
