@@ -53,6 +53,8 @@ class TableManagementController extends Controller
                 'image_thumbnail_path',
                 'price',
                 'dine_in_price',
+                'station',
+                'allergens',
             ]);
 
         $menuItems = $menuItemsCollection->groupBy('category');
@@ -318,6 +320,8 @@ class TableManagementController extends Controller
                 'quantity' => $newQuantity,
                 'line_total' => $newQuantity * $unitPrice,
                 'status' => OrderItem::STATUS_PENDING,
+                'station' => $menuItem->station,
+                'allergens' => $menuItem->allergens,
             ]);
         } else {
             $order->items()->create([
@@ -325,6 +329,8 @@ class TableManagementController extends Controller
                 'quantity' => $quantity,
                 'unit_price' => $unitPrice,
                 'line_total' => $quantity * $unitPrice,
+                'station' => $menuItem->station,
+                'allergens' => $menuItem->allergens,
                 'status' => OrderItem::STATUS_PENDING,
             ]);
         }
@@ -464,9 +470,10 @@ class TableManagementController extends Controller
         }
 
         if ($validated['status'] === 'completed') {
-            $order->delete();
+            $order->update(['kitchen_status' => 'completed']);
+            $order->items()->update(['status' => OrderItem::STATUS_READY]);
             $this->touchKitchenBoard();
-            return response()->json(['message' => 'Order completed and deleted.', 'order_id' => $order->id, 'deleted' => true]);
+            return response()->json(['message' => 'Kitchen ticket completed.', 'order_id' => $order->id, 'completed' => true]);
         }
 
         $order->update([
@@ -625,6 +632,8 @@ class TableManagementController extends Controller
                     'unit_price' => $unitPrice,
                     'line_total' => $quantity * $unitPrice,
                     'note' => $note,
+                    'station' => $menuItem->station,
+                    'allergens' => $menuItem->allergens,
                     'status' => OrderItem::STATUS_PENDING,
                 ]);
             }
@@ -733,23 +742,8 @@ class TableManagementController extends Controller
 
     private function kitchenOrdersPayload(): array
     {
-        $drinkItemNames = MenuItem::query()
-            ->whereRaw('LOWER(category) = ?', ['drinks'])
-            ->pluck('name')
-            ->map(fn ($name) => mb_strtolower(trim((string) $name)))
-            ->filter(fn (string $name) => $name !== '')
-            ->unique()
-            ->values()
-            ->all();
-
-        // Automated Cleanup: Delete completed orders older than 2 hours (Throttled to run once every 10 minutes)
-        if (! Cache::has('kitchen_cleanup_ran')) {
-            Order::where('kitchen_status', 'completed')
-                ->where('updated_at', '<', now()->subHours(2))
-                ->delete();
-            
-            Cache::put('kitchen_cleanup_ran', true, now()->addMinutes(10));
-        }
+        $menuDetails = MenuItem::query()->get(['name', 'station', 'allergens'])
+            ->keyBy(fn (MenuItem $item) => mb_strtolower(trim($item->name)));
 
         return Order::with([
             'table:id,number',
@@ -760,20 +754,19 @@ class TableManagementController extends Controller
             ->whereHas('items')
             ->orderBy('created_at')
             ->get()
-            ->map(function (Order $order) use ($drinkItemNames) {
+            ->map(function (Order $order) use ($menuDetails) {
                 $kitchenStatus = $order->kitchen_status ?: Order::KITCHEN_STATUS_PENDING;
                 $items = $order->items
-                    ->filter(function (OrderItem $item) use ($drinkItemNames): bool {
-                        $normalizedItemName = mb_strtolower(trim((string) $item->name));
-
-                        return $normalizedItemName !== '' && ! in_array($normalizedItemName, $drinkItemNames, true);
-                    })
-                    ->map(function (OrderItem $item) {
+                    ->map(function (OrderItem $item) use ($menuDetails) {
+                    $menuItem = $menuDetails->get(mb_strtolower(trim((string) $item->name)));
                     return [
                         'id' => $item->id,
                         'name' => $item->name,
                         'quantity' => (int) $item->quantity,
                         'status' => $item->status ?: OrderItem::STATUS_PENDING,
+                        'station' => $item->station ?: ($menuItem?->station ?? 'kitchen'),
+                        'note' => $item->note,
+                        'allergens' => $item->allergens ?: $menuItem?->allergens,
                     ];
                     })
                     ->values()
@@ -781,8 +774,13 @@ class TableManagementController extends Controller
 
                 return [
                     'id' => $order->id,
-                    'source_label' => 'Table #' . ($order->table?->number ?? '-'),
+                    'source_label' => $order->table
+                        ? 'Table #'.$order->table->number
+                        : ($order->customer_name ?: ucfirst(str_replace('_', ' ', $order->order_type)).' #'.$order->id),
                     'table_number' => $order->table?->number,
+                    'customer_name' => $order->customer_name,
+                    'order_type' => $order->order_type,
+                    'notes' => $order->notes,
                     'kitchen_status' => $kitchenStatus,
                     'kitchen_status_label' => $this->orderKitchenStatusLabel($kitchenStatus),
                     'created_at' => optional($order->created_at)->toIso8601String(),
@@ -807,22 +805,7 @@ class TableManagementController extends Controller
 
     private function resolveKitchenStatusFromItems(Order $order): string
     {
-        $drinkItemNames = MenuItem::query()
-            ->whereRaw('LOWER(category) = ?', ['drinks'])
-            ->pluck('name')
-            ->map(fn ($name) => mb_strtolower(trim((string) $name)))
-            ->filter(fn (string $name) => $name !== '')
-            ->unique()
-            ->values()
-            ->all();
-
-        $kitchenItems = $order->items()
-            ->get()
-            ->filter(function (OrderItem $item) use ($drinkItemNames): bool {
-                $normalizedItemName = mb_strtolower(trim((string) $item->name));
-
-                return $normalizedItemName !== '' && ! in_array($normalizedItemName, $drinkItemNames, true);
-            });
+        $kitchenItems = $order->items()->get();
 
         if ($kitchenItems->isEmpty()) {
             return Order::KITCHEN_STATUS_PENDING;
@@ -910,5 +893,3 @@ class TableManagementController extends Controller
     }
 
 }
-
-

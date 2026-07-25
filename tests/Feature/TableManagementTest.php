@@ -333,4 +333,52 @@ class TableManagementTest extends TestCase
         $this->assertEquals(1, (int) $items->first()->quantity);
         $this->assertEquals(3.25, (float) $order->total);
     }
+
+    public function test_kitchen_display_shows_station_notes_allergies_and_keeps_completed_orders(): void
+    {
+        $user = User::factory()->create();
+        $table = RestaurantTable::create(['number' => 18]);
+        $order = $table->orders()->create([
+            'status' => Order::STATUS_OPEN,
+            'workflow_status' => 'confirmed',
+            'order_type' => 'dine_in',
+            'kitchen_status' => Order::KITCHEN_STATUS_PENDING,
+            'notes' => 'Serve all dishes together',
+            'total' => 4.50,
+        ]);
+        $item = $order->items()->create([
+            'name' => 'Almond Cocktail',
+            'quantity' => 1,
+            'unit_price' => 4.50,
+            'line_total' => 4.50,
+            'note' => 'No ice',
+            'station' => 'bar',
+            'allergens' => 'Nuts',
+            'status' => OrderItem::STATUS_PENDING,
+        ]);
+
+        $this->actingAs($user)->get(route('tables.kitchen'))
+            ->assertOk()
+            ->assertSee('Kitchen Display')
+            ->assertSee('New orders')
+            ->assertSee('All stations');
+
+        $this->actingAs($user)->getJson(route('tables.kitchen.snapshot', ['since_version' => 0]))
+            ->assertOk()
+            ->assertJsonPath('orders.0.notes', 'Serve all dishes together')
+            ->assertJsonPath('orders.0.items.0.note', 'No ice')
+            ->assertJsonPath('orders.0.items.0.station', 'bar')
+            ->assertJsonPath('orders.0.items.0.allergens', 'Nuts');
+
+        $this->actingAs($user)->patchJson(route('tables.items.kitchen-status.update', $item), [
+            'status' => OrderItem::STATUS_IN_PREPARATION,
+        ])->assertOk()->assertJsonPath('item_status', OrderItem::STATUS_IN_PREPARATION);
+
+        $this->actingAs($user)->patchJson(route('tables.orders.kitchen-status.update', $order), [
+            'status' => 'completed',
+        ])->assertOk()->assertJsonPath('completed', true);
+
+        $this->assertDatabaseHas('orders', ['id' => $order->id, 'kitchen_status' => 'completed']);
+        $this->assertDatabaseHas('order_items', ['id' => $item->id, 'status' => OrderItem::STATUS_READY]);
+    }
 }

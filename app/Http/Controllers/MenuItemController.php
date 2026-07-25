@@ -88,6 +88,7 @@ class MenuItemController extends Controller
             'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
             'availability_status' => ['nullable', Rule::in(MenuItem::AVAILABILITY_STATUSES)],
             'item_kind' => ['nullable', Rule::in(MenuItem::ITEM_KINDS)],
+            'station' => ['nullable', Rule::in(MenuItem::STATIONS)],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:999'],
             'is_active' => ['nullable', 'boolean'],
             'image' => ['nullable', 'image', 'max:5120'],
@@ -103,6 +104,7 @@ class MenuItemController extends Controller
         $validated['allergens'] = $validated['allergens'] ?? null;
         $validated['availability_status'] = $validated['availability_status'] ?? 'available';
         $validated['item_kind'] = $validated['item_kind'] ?? 'regular';
+        $validated['station'] = $validated['station'] ?? 'kitchen';
         $validated['menu_category_id'] = MenuCategory::where('name', $validated['category'])->value('id');
 
         unset($validated['image'], $validated['remove_image']);

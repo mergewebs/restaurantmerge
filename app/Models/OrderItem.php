@@ -17,6 +17,8 @@ class OrderItem extends Model
         'order_id',
         'name',
         'note',
+        'station',
+        'allergens',
         'quantity',
         'unit_price',
         'line_total',

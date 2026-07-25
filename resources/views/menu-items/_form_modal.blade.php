@@ -21,9 +21,10 @@
                 <div><label class="field-label" for="{{ $prefix }}product-price">Standard price</label><input id="{{ $prefix }}product-price" type="number" name="price" step="0.01" min="0" required placeholder="0.00" @if($isEdit) x-model="editingProduct.price" @else value="{{ old('price') }}" @endif></div>
             </div>
 
-            <div class="grid gap-3 sm:grid-cols-3">
+            <div class="grid gap-3 sm:grid-cols-4">
                 <div><label class="field-label">Availability</label><select name="availability_status" @if($isEdit) x-model="editingProduct.availability_status" @endif><option value="available">Available</option><option value="sold_out" @if(!$isEdit && old('availability_status')==='sold_out') selected @endif>Sold out</option></select></div>
                 <div><label class="field-label">Menu type</label><select name="item_kind" @if($isEdit) x-model="editingProduct.item_kind" @endif><option value="regular">Regular item</option><option value="lunch_menu" @if(!$isEdit && old('item_kind')==='lunch_menu') selected @endif>Lunch menu</option><option value="promotion" @if(!$isEdit && old('item_kind')==='promotion') selected @endif>Promotion</option><option value="seasonal" @if(!$isEdit && old('item_kind')==='seasonal') selected @endif>Seasonal</option></select></div>
+                <div><label class="field-label">Kitchen station</label><select name="station" @if($isEdit) x-model="editingProduct.station" @endif><option value="kitchen">Kitchen</option><option value="bar">Bar</option><option value="desserts">Desserts</option><option value="drinks">Drinks</option></select></div>
                 <div><label class="field-label">Display order</label><input type="number" name="sort_order" min="0" max="999" @if($isEdit) x-model="editingProduct.sort_order" @else value="{{ old('sort_order',0) }}" @endif></div>
             </div>
 

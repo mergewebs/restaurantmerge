@@ -120,6 +120,8 @@ class OrderController extends Controller
             'unit_price' => $unitPrice,
             'line_total' => $unitPrice * $quantity,
             'note' => $validated['note'] ?? null,
+            'station' => $menuItem->station,
+            'allergens' => $menuItem->allergens,
             'status' => OrderItem::STATUS_PENDING,
         ]);
         $order->recalculateTotal();

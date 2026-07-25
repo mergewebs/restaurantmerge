@@ -20,6 +20,7 @@
         'low_stock_threshold' => $item->low_stock_threshold,
         'availability_status' => $item->availability_status,
         'item_kind' => $item->item_kind,
+        'station' => $item->station,
         'sort_order' => $item->sort_order,
         'is_active' => (bool) $item->is_active,
         'image_url' => $item->image_url,

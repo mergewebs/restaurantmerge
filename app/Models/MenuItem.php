@@ -19,6 +19,8 @@ class MenuItem extends Model
 
     public const OPTION_TYPES = ['size', 'add_on', 'extra', 'variation'];
 
+    public const STATIONS = ['kitchen', 'bar', 'desserts', 'drinks'];
+
     public const CATEGORY_OPTIONS = [
         'Starters',
         'Entrantes',
@@ -82,6 +84,7 @@ class MenuItem extends Model
         'low_stock_threshold',
         'availability_status',
         'item_kind',
+        'station',
         'is_active',
         'sort_order',
     ];
