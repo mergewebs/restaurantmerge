@@ -36,7 +36,7 @@
             <form action="{{ route('tables.store') }}" method="POST" class="mt-4 flex gap-3">
                 @csrf
                 <input type="number" name="number" min="1" max="999" value="{{ old('number') }}" required placeholder="Table number">
-                <button type="submit" class="btn-koya whitespace-nowrap px-5">Add Table</button>
+                <button type="submit" class="btn-accent whitespace-nowrap px-5">Add Table</button>
             </form>
             @error('number')
                 <p class="text-xs text-red-400 mt-2">{{ $message }}</p>
@@ -49,10 +49,10 @@
                     $order = $table->openOrder;
                     $items = $order?->items ?? collect();
                 @endphp
-                <div class="glass rounded-3xl p-3 border {{ session('focus_table_id') == $table->id ? 'border-koya shadow-lg shadow-koya/20' : 'border-white/10' }}">
+                <div class="glass rounded-3xl p-3 border {{ session('focus_table_id') == $table->id ? 'border-accent shadow-lg shadow-accent/20' : 'border-white/10' }}">
                     <div class="flex items-center justify-between">
                         <h2 class="text-base font-black">Table #{{ $table->number }}</h2>
-                        <span class="text-[11px] font-black tracking-widest px-3 py-1 rounded-full {{ $order ? 'bg-koya/15 text-koya border border-koya/20' : 'bg-white/10 text-white/50 border border-white/10' }}">
+                        <span class="text-[11px] font-black tracking-widest px-3 py-1 rounded-full {{ $order ? 'bg-accent/15 text-accent border border-accent/20' : 'bg-white/10 text-white/50 border border-white/10' }}">
                             TOTAL: &euro;{{ number_format((float) ($order?->total ?? 0), 2) }}
                         </span>
                     </div>
@@ -63,7 +63,7 @@
                             <div class="rounded-xl bg-white/5 border border-white/10 px-3 py-2">
                                 <div class="flex items-center justify-between gap-2">
                                     <p class="text-[12px] font-black text-white truncate">{{ $item->name }}</p>
-                                    <p class="text-[12px] font-black text-koya whitespace-nowrap">&euro;{{ number_format((float) $item->line_total, 2) }}</p>
+                                    <p class="text-[12px] font-black text-accent whitespace-nowrap">&euro;{{ number_format((float) $item->line_total, 2) }}</p>
                                 </div>
                                 <p class="text-[10px] text-white/60 mt-0.5">{{ $item->quantity }} x &euro;{{ number_format((float) $item->unit_price, 2) }}</p>
                             </div>
@@ -75,7 +75,7 @@
                     <div class="mt-3 grid grid-cols-2 gap-2">
                         <a href="{{ route('tables.order', $table) }}" data-async="off"
                            title="{{ $order ? 'View Order' : 'Add Order' }}"
-                           class="btn-koya w-full h-10 px-2 text-[10px] tracking-widest text-center">
+                           class="btn-accent w-full h-10 px-2 text-[10px] tracking-widest text-center">
                             {{ $order ? 'VIEW ORDER' : 'ADD ORDER' }}
                         </a>
                         <form action="{{ route('tables.destroy', $table) }}" method="POST" onsubmit="return confirm('Delete table #{{ $table->number }} and all its orders? This cannot be undone.');">

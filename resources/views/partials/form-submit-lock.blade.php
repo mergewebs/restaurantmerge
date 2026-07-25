@@ -14,11 +14,11 @@
 
 <script>
     (() => {
-        if (window.__koyaFormSubmitLockInitialized) {
+        if (window.__accentFormSubmitLockInitialized) {
             return;
         }
 
-        window.__koyaFormSubmitLockInitialized = true;
+        window.__accentFormSubmitLockInitialized = true;
 
         const nativeSubmit = HTMLFormElement.prototype.submit;
         const nativeRequestSubmit = HTMLFormElement.prototype.requestSubmit;

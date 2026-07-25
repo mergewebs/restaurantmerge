@@ -47,13 +47,13 @@ class MenuItem extends Model
         'RED ONION' => 'images/red-onion.png',
         'SOBOKU' => 'images/soboku.png',
         'SPICY KOREAN RICE BOWL' => 'images/katsudon.png',
-        'MEDITERRANEAN RICE BOWL' => 'images/koya-salad.png',
-        'KOYA SALAD' => 'images/koya-salad.png',
+        'MEDITERRANEAN RICE BOWL' => 'images/house-salad.png',
+        'HOUSE SALAD' => 'images/house-salad.png',
         'SALMON SUPREME' => 'images/Salmon_supreme.png',
         'ADOBO' => 'images/adobo.png',
         'KATSUDON' => 'images/katsudon.png',
-        'KOYA SMASH' => 'images/smash-burger.png',
-        'KOYA SMASH SPECIAL' => 'images/smash-burger.png',
+        'HOUSE SMASH' => 'images/smash-burger.png',
+        'HOUSE SMASH SPECIAL' => 'images/smash-burger.png',
     ];
 
     protected $fillable = [
@@ -120,7 +120,5 @@ class MenuItem extends Model
         return self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
     }
 }
-
-
 
 

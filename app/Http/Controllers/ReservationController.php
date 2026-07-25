@@ -57,7 +57,7 @@ class ReservationController extends Controller
         $locale = request()->getPreferredLanguage(['es', 'en']);
 
         // Send Email to Admin (for notification of new manual reservation)
-        $adminEmail = env('ADMIN_EMAIL', 'koyabcn@gmail.com');
+        $adminEmail = config('restaurant.contact_email');
         Mail::to($adminEmail)->send(new NewReservationAdminNotification($reservation));
 
         // Send Email to Client if email exists
@@ -346,4 +346,3 @@ class ReservationController extends Controller
         ]);
     }
 }
-

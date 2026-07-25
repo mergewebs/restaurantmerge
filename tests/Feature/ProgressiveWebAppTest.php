@@ -17,7 +17,7 @@ class ProgressiveWebAppTest extends TestCase
         $this->actingAs($user)
             ->get('/admin/dashboard')
             ->assertOk()
-            ->assertSee('/manifest.webmanifest?v=20260725-1', false)
+            ->assertSee('/manifest.webmanifest?v=20260725-3', false)
             ->assertDontSee('data-pwa-install-button', false);
     }
 
@@ -25,12 +25,18 @@ class ProgressiveWebAppTest extends TestCase
     {
         $manifest = json_decode(file_get_contents(public_path('manifest.webmanifest')), true, flags: JSON_THROW_ON_ERROR);
 
+        $this->assertSame('Merge', $manifest['name']);
+        $this->assertSame('Merge', $manifest['short_name']);
         $this->assertSame('standalone', $manifest['display']);
         $this->assertSame(['standalone'], $manifest['display_override']);
         $this->assertSame('/admin/dashboard?source=pwa', $manifest['start_url']);
         $this->assertSame('/admin/', $manifest['scope']);
-        $this->assertSame('#17110c', $manifest['theme_color']);
-        $this->assertContains('maskable', array_column($manifest['icons'], 'purpose'));
+        $this->assertSame('#271c16', $manifest['theme_color']);
+        $this->assertTrue(
+            collect($manifest['icons'])->contains(
+                fn (array $icon): bool => str_contains($icon['purpose'] ?? '', 'maskable')
+            )
+        );
 
         foreach ($manifest['icons'] as $icon) {
             $this->assertFileExists(public_path(ltrim($icon['src'], '/')));

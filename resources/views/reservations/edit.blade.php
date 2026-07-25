@@ -100,7 +100,7 @@
 
             <div class="space-y-2">
                 <label class="text-sm font-semibold text-gray-400">Customer Name</label>
-                <input type="text" name="customer_name" value="{{ $reservation->customer_name }}" required class="w-full glass p-4 rounded-xl border border-white/10 text-white cursor-pointer transition focus:border-koya outline-none">
+                <input type="text" name="customer_name" value="{{ $reservation->customer_name }}" required class="w-full glass p-4 rounded-xl border border-white/10 text-white cursor-pointer transition focus:border-accent outline-none">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
@@ -110,7 +110,7 @@
                 </div>
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-gray-400">Party Size</label>
-                    <select name="party_size" x-model.number="partySize" required class="w-full glass p-4 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                    <select name="party_size" x-model.number="partySize" required class="w-full glass p-4 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         <template x-for="i in 25">
                             <option :value="i" x-text="i + (i === 1 ? ' Person' : ' People')" :selected="i == partySize" class="bg-gray-900"></option>
                         </template>
@@ -121,13 +121,13 @@
             <div class="space-y-4" x-show="!closed">
                 <div class="flex justify-between items-center">
                     <label class="text-sm font-semibold text-gray-400">Available Times</label>
-                    <span class="text-xs text-white/60 font-black uppercase tracking-wider" x-show="selectedTime">Remaining: <span class="text-koya" x-text="getAvailableSpots(selectedTime)"></span></span>
+                    <span class="text-xs text-white/60 font-black uppercase tracking-wider" x-show="selectedTime">Remaining: <span class="text-accent" x-text="getAvailableSpots(selectedTime)"></span></span>
                 </div>
                 
                 <div class="max-h-64 overflow-y-auto pr-2 flex flex-wrap gap-4 custom-scrollbar">
                     <template x-for="slot in slots">
                         <div x-show="isSlotAvailable(slot)" :class="has_session_3 && parseInt(slot.start.split(':')[0]) >= 17 ? 'flex-1 min-w-[140px]' : 'w-full mb-6'">
-                            <h4 class="text-[10px] font-black uppercase tracking-widest text-koya mb-3" 
+                            <h4 class="text-[10px] font-black uppercase tracking-widest text-accent mb-3" 
                                 x-show="!has_session_3 || parseInt(slot.start.split(':')[0]) < 17" 
                                 x-text="slot.start.substring(0, 5) + ' - ' + slot.end.substring(0, 5)"></h4>
                             <div :class="has_session_3 && parseInt(slot.start.split(':')[0]) >= 17 ? 'flex' : 'grid grid-cols-4 sm:grid-cols-6 gap-2'">
@@ -136,8 +136,8 @@
                                     x-show="getAvailableSpots(time) >= partySize"
                                     @click="selectedTime = (selectedTime === time ? '' : time)"
                                         :class="{
-                                            'bg-koya text-white border-koya': selectedTime === time,
-                                            'bg-white/5 text-white/60 border-white/10 hover:border-koya/40': selectedTime !== time,
+                                            'bg-accent text-white border-accent': selectedTime === time,
+                                            'bg-white/5 text-white/60 border-white/10 hover:border-accent/40': selectedTime !== time,
                                             'w-full': has_session_3 && parseInt(slot.start.split(':')[0]) >= 17
                                         }"
                                         class="py-2 px-1 text-xs font-bold rounded-xl border transition-all text-center">
@@ -163,12 +163,12 @@
 
             <div class="space-y-2">
                 <label class="text-sm font-semibold text-gray-400">Phone </label>
-                <input type="tel" name="customer_phone" value="{{ $reservation->customer_phone }}" class="w-full glass p-4 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none">
+                <input type="tel" name="customer_phone" value="{{ $reservation->customer_phone }}" class="w-full glass p-4 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none">
             </div>
 
             <div class="space-y-2">
                 <label class="text-sm font-semibold text-gray-400">Special Notes</label>
-                <textarea name="notes" rows="3" class="w-full glass p-4 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none">{{ $reservation->notes }}</textarea>
+                <textarea name="notes" rows="3" class="w-full glass p-4 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none">{{ $reservation->notes }}</textarea>
             </div>
 
              <div class="space-y-2">
@@ -177,7 +177,7 @@
                     @foreach(['confirmed', 'completed', 'cancelled'] as $status)
                         <label class="relative cursor-pointer">
                             <input type="radio" name="status" value="{{ $status }}" class="peer hidden" {{ $reservation->status == $status ? 'checked' : '' }}>
-                            <div class="glass p-3 rounded-xl border border-white/10 text-center text-xs font-bold uppercase tracking-wider peer-checked:border-koya peer-checked:bg-koya/10 peer-checked:text-koya transition">
+                            <div class="glass p-3 rounded-xl border border-white/10 text-center text-xs font-bold uppercase tracking-wider peer-checked:border-accent peer-checked:bg-accent/10 peer-checked:text-accent transition">
                                 {{ $status }}
                             </div>
                         </label>
@@ -186,7 +186,7 @@
             </div>
 
             <div class="flex gap-4 pt-4">
-                <button type="submit" class="flex-1 btn-koya py-4 shadow-xl shadow-koya/20 text-lg font-bold">
+                <button type="submit" class="flex-1 btn-accent py-4 shadow-xl shadow-accent/20 text-lg font-bold">
                     Save Changes
                 </button>
             </div>

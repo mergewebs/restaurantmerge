@@ -334,7 +334,7 @@
                 <div class="stat-tile"><div class="st-label">Cats</div><div class="st-value">{{ count($categoryOptions) }}</div></div>
                 {{-- Add button --}}
                 <button @click="addModal = true"
-                    class="btn-koya ml-2 h-full flex items-center gap-2 whitespace-nowrap px-5">
+                    class="btn-accent ml-2 h-full flex items-center gap-2 whitespace-nowrap px-5">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                     <span class="hidden sm:inline">Add Product</span>
                     <span class="sm:hidden">Add</span>
@@ -451,7 +451,7 @@
 
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-name">Product Name</label>
-                            <input id="product-name" type="text" name="name" value="{{ old('name') }}" placeholder="KOYA Smash" required
+                            <input id="product-name" type="text" name="name" value="{{ old('name') }}" placeholder="House special" required
                                 class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
                         </div>
 
@@ -506,7 +506,7 @@
                                 Cancel
                             </button>
                             <button type="submit"
-                                class="flex-[2] btn-koya py-4 shadow-xl shadow-koya/20 text-white font-bold uppercase tracking-widest">
+                                class="flex-[2] btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">
                                 Create Product
                             </button>
                         </div>
@@ -547,7 +547,7 @@
 
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="edit-product-name">Product Name</label>
-                        <input id="edit-product-name" type="text" name="name" x-model="editingProduct.name" placeholder="KOYA Smash" required
+                        <input id="edit-product-name" type="text" name="name" x-model="editingProduct.name" placeholder="House special" required
                             class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
                     </div>
 
@@ -614,7 +614,7 @@
                             Delete
                         </button>
                         <button type="submit"
-                            class="flex-[2] btn-koya py-4 shadow-xl shadow-koya/20 text-white font-bold uppercase tracking-widest">
+                            class="flex-[2] btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">
                             Save Changes
                         </button>
                     </div>
@@ -629,7 +629,6 @@
     </div>{{-- /products-page --}}
     </div>
 </x-app-layout>
-
 
 
 

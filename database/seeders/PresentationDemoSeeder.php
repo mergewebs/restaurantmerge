@@ -49,7 +49,7 @@ class PresentationDemoSeeder extends Seeder
         }
 
         $this->createOrder(2, Order::KITCHEN_STATUS_PENDING, [
-            ['KOYA SMASH SPECIAL', 2, 13.99, 'No onion on one burger', OrderItem::STATUS_PENDING],
+            ['HOUSE SMASH SPECIAL', 2, 13.99, 'No onion on one burger', OrderItem::STATUS_PENDING],
             ['PATATAS FRITAS', 2, 3.50, null, OrderItem::STATUS_PENDING],
             ['NESTEA', 2, 2.60, null, OrderItem::STATUS_PENDING],
         ]);

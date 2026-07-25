@@ -1,5 +1,5 @@
 <style>
-    .koya-toast-stack {
+    .accent-toast-stack {
         position: fixed;
         top: 1.25rem;
         right: 1.25rem;
@@ -11,7 +11,7 @@
         pointer-events: none;
     }
 
-    .koya-toast {
+    .accent-toast {
         position: relative;
         overflow: hidden;
         display: grid;
@@ -26,26 +26,26 @@
         backdrop-filter: blur(18px);
         -webkit-backdrop-filter: blur(18px);
         pointer-events: auto;
-        animation: koyaToastIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation: accentToastIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    .koya-toast[data-state="closing"] {
-        animation: koyaToastOut 0.22s ease forwards;
+    .accent-toast[data-state="closing"] {
+        animation: accentToastOut 0.22s ease forwards;
     }
 
-    .koya-toast-success {
+    .accent-toast-success {
         background: linear-gradient(135deg, rgba(6, 95, 70, 0.96), rgba(16, 185, 129, 0.86));
     }
 
-    .koya-toast-error {
+    .accent-toast-error {
         background: linear-gradient(135deg, rgba(127, 29, 29, 0.97), rgba(220, 38, 38, 0.88));
     }
 
-    .koya-toast-info {
+    .accent-toast-info {
         background: linear-gradient(135deg, rgba(30, 64, 175, 0.96), rgba(59, 130, 246, 0.88));
     }
 
-    .koya-toast-icon {
+    .accent-toast-icon {
         width: 2.2rem;
         height: 2.2rem;
         display: inline-flex;
@@ -56,11 +56,11 @@
         flex-shrink: 0;
     }
 
-    .koya-toast-body {
+    .accent-toast-body {
         min-width: 0;
     }
 
-    .koya-toast-title {
+    .accent-toast-title {
         display: block;
         margin-bottom: 0.2rem;
         font-size: 0.72rem;
@@ -70,7 +70,7 @@
         opacity: 0.78;
     }
 
-    .koya-toast-text {
+    .accent-toast-text {
         display: block;
         font-size: 0.9rem;
         font-weight: 700;
@@ -78,7 +78,7 @@
         word-break: break-word;
     }
 
-    .koya-toast-close {
+    .accent-toast-close {
         width: 2rem;
         height: 2rem;
         display: inline-flex;
@@ -93,12 +93,12 @@
         transition: background 0.2s ease, transform 0.2s ease;
     }
 
-    .koya-toast-close:hover {
+    .accent-toast-close:hover {
         background: rgba(255, 255, 255, 0.2);
         transform: scale(1.04);
     }
 
-    .koya-toast-progress {
+    .accent-toast-progress {
         position: absolute;
         left: 0;
         right: 0;
@@ -106,10 +106,10 @@
         height: 3px;
         background: rgba(255, 255, 255, 0.22);
         transform-origin: left;
-        animation: koyaToastProgress linear forwards;
+        animation: accentToastProgress linear forwards;
     }
 
-    @keyframes koyaToastIn {
+    @keyframes accentToastIn {
         from {
             opacity: 0;
             transform: translate3d(0, -12px, 0) scale(0.98);
@@ -120,7 +120,7 @@
         }
     }
 
-    @keyframes koyaToastOut {
+    @keyframes accentToastOut {
         from {
             opacity: 1;
             transform: translate3d(0, 0, 0) scale(1);
@@ -131,26 +131,26 @@
         }
     }
 
-    @keyframes koyaToastProgress {
+    @keyframes accentToastProgress {
         from { transform: scaleX(1); }
         to { transform: scaleX(0); }
     }
 
     @media (max-width: 640px) {
-        .koya-toast-stack {
+        .accent-toast-stack {
             top: auto;
             right: 0.75rem;
             bottom: 0.9rem;
             width: calc(100vw - 1.5rem);
         }
 
-        .koya-toast {
+        .accent-toast {
             grid-template-columns: auto 1fr;
             gap: 0.75rem;
             padding-right: 0.9rem;
         }
 
-        .koya-toast-close {
+        .accent-toast-close {
             position: absolute;
             top: 0.65rem;
             right: 0.65rem;
@@ -160,7 +160,7 @@
 
 <script>
     (() => {
-        if (window.KoyaNotifications) {
+        if (window.RestaurantNotifications) {
             return;
         }
 
@@ -177,11 +177,11 @@
         };
 
         const getStack = () => {
-            let stack = document.querySelector('.koya-toast-stack');
+            let stack = document.querySelector('.accent-toast-stack');
 
             if (!stack) {
                 stack = document.createElement('div');
-                stack.className = 'koya-toast-stack';
+                stack.className = 'accent-toast-stack';
                 document.body.appendChild(stack);
             }
 
@@ -205,27 +205,27 @@
             const normalizedLevel = ['success', 'error', 'info'].includes(level) ? level : 'info';
             const duration = Number(options.duration) > 0 ? Number(options.duration) : 4200;
             const toast = document.createElement('div');
-            toast.className = `koya-toast koya-toast-${normalizedLevel}`;
+            toast.className = `accent-toast accent-toast-${normalizedLevel}`;
             toast.innerHTML = `
-                <span class="koya-toast-icon">${icons[normalizedLevel]}</span>
-                <div class="koya-toast-body">
-                    <span class="koya-toast-title">${titles[normalizedLevel]}</span>
-                    <span class="koya-toast-text"></span>
+                <span class="accent-toast-icon">${icons[normalizedLevel]}</span>
+                <div class="accent-toast-body">
+                    <span class="accent-toast-title">${titles[normalizedLevel]}</span>
+                    <span class="accent-toast-text"></span>
                 </div>
-                <button type="button" class="koya-toast-close" aria-label="Dismiss notification">
+                <button type="button" class="accent-toast-close" aria-label="Dismiss notification">
                     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 6l8 8M14 6l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
                 </button>
-                <span class="koya-toast-progress"></span>
+                <span class="accent-toast-progress"></span>
             `;
 
-            toast.querySelector('.koya-toast-text').textContent = message;
+            toast.querySelector('.accent-toast-text').textContent = message;
 
-            const progress = toast.querySelector('.koya-toast-progress');
+            const progress = toast.querySelector('.accent-toast-progress');
             if (progress instanceof HTMLElement) {
                 progress.style.animationDuration = `${duration}ms`;
             }
 
-            toast.querySelector('.koya-toast-close')?.addEventListener('click', () => removeToast(toast));
+            toast.querySelector('.accent-toast-close')?.addEventListener('click', () => removeToast(toast));
             getStack().appendChild(toast);
 
             window.setTimeout(() => removeToast(toast), duration);
@@ -252,7 +252,7 @@
             });
         };
 
-        window.KoyaNotifications = {
+        window.RestaurantNotifications = {
             show,
             consumeFeedback,
         };

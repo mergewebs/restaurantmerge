@@ -11,7 +11,7 @@ class MenuItemSeeder extends Seeder
     public function run(): void
     {
         $items = [
-            ['Entrantes', 1, 'KOYA SALAD', 7.50, 'lechuga, wakame, sonomono, col valencia, cebolla crujiente y vinagreta de la casa'],
+            ['Entrantes', 1, 'HOUSE SALAD', 7.50, 'lechuga, wakame, sonomono, col valencia, cebolla crujiente y vinagreta de la casa'],
             ['Entrantes', 2, "GYOZAS FRITAS IB\u{00C9}RICAS (5 UDS.)", 10.25, "Ib\u{00E9}rico, shiitake, cebolla Japonesa, aceite de s\u{00E9}samo y salsa de mayonesa hoisin"],
             ['Entrantes', 3, 'EDAMAME AL VAPOR', 4.75, "Sal maldon, aceite de s\u{00E9}samo y shichimi"],
             ['Entrantes', 4, 'SWEET & SPICY WINGS', 7.95, 'Alitas de pollo, gomashio, cebolla japonesa y salsa teriyaki'],
@@ -29,7 +29,7 @@ class MenuItemSeeder extends Seeder
             ["Acompa\u{00F1}amientos", 3, 'MEZCLUM FRIES', 4.50, 'Patatas y boniato'],
             ["Acompa\u{00F1}amientos", 4, 'BRAVAS', 4.00, 'Con triple salsa de la casa'],
 
-            ['Smash Burger', 1, 'KOYA SMASH SPECIAL', 14.50, 'Pan cronut, rabo de toro, ternera, queso havarti, lechuga, cebolla crujiente y salsa casera'],
+            ['Smash Burger', 1, 'HOUSE SMASH SPECIAL', 14.50, 'Pan cronut, rabo de toro, ternera, queso havarti, lechuga, cebolla crujiente y salsa casera'],
             ['Smash Burger', 2, 'WAGYU', 12.95, 'Pan brioche, Wagyu, pepino, queso cheddar y salsa de la casa'],
             ['Smash Burger', 3, 'KIMCHI BURGER', 10.40, 'Pollo frito, kimchi casero, salsa hoisin, lechuga y cebolla Japonesa'],
             ['Smash Burger', 4, 'HAWAIIANA', 11.20, "Ternera, lechuga, pi\u{00F1}a, queso cheddar, bacon, salsa barbacoa y cebolla crujiente"],

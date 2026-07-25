@@ -22,7 +22,7 @@
 
 
 
-        .btn-koya:disabled {
+        .btn-accent:disabled {
             opacity: 0.4;
             cursor: not-allowed;
             pointer-events: none;
@@ -96,6 +96,53 @@
         }
     }" class="space-y-6">
 
+        <section class="service-pulse-grid {{ auth()->user()->isAdmin() ? '' : 'service-pulse-grid-compact' }}" aria-label="Today's service pulse">
+            <article class="service-pulse-card pulse-reservations">
+                <div class="service-pulse-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3M5 11h14M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <span>Guests expected</span>
+                    <strong>{{ $reservations->sum('party_size') }}</strong>
+                    <small>{{ $reservationsCount }} {{ \Illuminate\Support\Str::plural('booking', $reservationsCount) }} today</small>
+                </div>
+            </article>
+
+            <article class="service-pulse-card {{ $isClosedToday ? 'pulse-closed' : 'pulse-open' }}">
+                <div class="service-pulse-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 19h16M5 19v-7a7 7 0 0114 0v7M12 5V3m-7.5 7H2m19.5 0H22M8 15h8"></path></svg>
+                </div>
+                <div>
+                    <span>Reservations</span>
+                    <strong>{{ $isClosedToday ? 'Paused' : 'Open' }}</strong>
+                    <small>{{ $isClosedToday ? 'No new bookings today' : 'Ready for today’s service' }}</small>
+                </div>
+            </article>
+
+            @if(auth()->user()->isAdmin())
+                <article class="service-pulse-card pulse-sales">
+                    <div class="service-pulse-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v12m4-9.5C16 7.12 14.21 6 12 6S8 7.12 8 8.5 9.79 11 12 11s4 1.12 4 2.5S14.21 16 12 16s-4-1.12-4-2.5"></path></svg>
+                    </div>
+                    <div>
+                        <span>Sales today</span>
+                        <strong>€{{ number_format($dailyIncome, 2) }}</strong>
+                        <small>Cash and card combined</small>
+                    </div>
+                </article>
+
+                <article class="service-pulse-card {{ ($dailyIncome - $dailyExpenses) >= 0 ? 'pulse-balance' : 'pulse-closed' }}">
+                    <div class="service-pulse-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 18l5-5 4 4 7-8M15 9h5v5"></path></svg>
+                    </div>
+                    <div>
+                        <span>Daily balance</span>
+                        <strong>€{{ number_format($dailyIncome - $dailyExpenses, 2) }}</strong>
+                        <small>After €{{ number_format($dailyExpenses, 2) }} expenses</small>
+                    </div>
+                </article>
+            @endif
+        </section>
 
         <div class="space-y-8 @if(!auth()->user()->isAdmin()) max-w-4xl @endif mx-auto">
             <!-- First Row: Operations & Reservations -->
@@ -151,7 +198,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
                     <p class="text-gray-400">No reservations for today</p>
-                    <button @click="showReservationModal = true" class="mt-4 inline-block text-koya font-bold">Reservation Today +</button>
+                    <button @click="showReservationModal = true" class="mt-4 inline-block text-accent font-bold">Reservation Today +</button>
                 </div>
             @else
                 <div class="space-y-4">
@@ -470,13 +517,13 @@
                         <div class="grid grid-cols-3 gap-2 sm:gap-3">
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                                <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             </div>
 
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Time</label>
                                 <select name="reservation_time_raw" x-model="selectedTime" required
-                                    class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya disabled:opacity-50"
+                                    class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent disabled:opacity-50"
                                     :disabled="loading || closed">
                                     <option value="" disabled selected class="bg-gray-900" x-text="loading ? 'Searching...' : (closed ? 'Closed' : 'Choose...')"></option>
                                     <template x-for="timeOption in availableTimes">
@@ -487,7 +534,7 @@
 
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">People</label>
-                                <select name="party_size" x-model.number="partySize" required :disabled="loading" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                <select name="party_size" x-model.number="partySize" required :disabled="loading" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                     <template x-for="i in getAvailableSpots(selectedTime)">
                                         <option :value="i" x-text="i + (i === 1 ? ' Person' : ' People')" :selected="i == partySize" class="bg-gray-900"></option>
                                     </template>
@@ -518,11 +565,11 @@
 
                         <div>
                             <label>Notes (Optional)</label>
-                            <textarea name="notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none text-sm" placeholder="Allergies, special requests...">{{ old('notes') }}</textarea>
+                            <textarea name="notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none text-sm" placeholder="Allergies, special requests...">{{ old('notes') }}</textarea>
                         </div>
 
                         <div class="pt-2">
-                            <button type="submit" class="w-full btn-koya py-4 shadow-xl shadow-koya/20" x-show="!closed" :disabled="!selectedTime">Create Reservation</button>
+                            <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20" x-show="!closed" :disabled="!selectedTime">Create Reservation</button>
                         </div>
                     </form>
                 </div>
@@ -670,7 +717,7 @@
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Status</label>
-                                <select name="status" x-model="editingReservation.status" required class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none">
+                                <select name="status" x-model="editingReservation.status" required class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none">
                                     <option value="confirmed" class="bg-gray-900">Confirmed</option>
                                     <option value="completed" class="bg-gray-900">Completed</option>
                                     <option value="cancelled" class="bg-gray-900">Cancelled</option>
@@ -678,12 +725,12 @@
                             </div>
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                                <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             </div>
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Time</label>
                                 <select name="reservation_time_raw" x-model="selectedTime" required
-                                    class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya disabled:opacity-50"
+                                    class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent disabled:opacity-50"
                                     :disabled="loading || closed">
                                     <option value="" disabled selected class="bg-gray-900" x-text="loading ? 'Searching...' : (closed ? 'Closed' : 'Choose...')"></option>
                                     <template x-for="timeOption in availableTimes">
@@ -693,7 +740,7 @@
                             </div>
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">People</label>
-                                <select name="party_size" x-model.number="partySize" required :disabled="loading" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                <select name="party_size" x-model.number="partySize" required :disabled="loading" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                     <template x-for="i in 25">
                                         <option :value="i" x-text="i + (i === 1 ? ' person' : ' people')" :selected="i == partySize" class="bg-gray-900"></option>
                                     </template>
@@ -724,7 +771,7 @@
 
                         <div>
                             <label>Notes (Optional)</label>
-                            <textarea name="notes" x-model="editingReservation.notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none text-sm"></textarea>
+                            <textarea name="notes" x-model="editingReservation.notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none text-sm"></textarea>
                         </div>
 
                         <div class="flex gap-3 pt-2">
@@ -733,7 +780,7 @@
                                     class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
                                 Delete
                             </button>
-                            <button type="submit" class="flex-[3] btn-koya py-4 shadow-lg shadow-koya/20" x-show="!closed" :disabled="!selectedTime">Save Changes</button>
+                            <button type="submit" class="flex-[3] btn-accent py-4 shadow-lg shadow-accent/20" x-show="!closed" :disabled="!selectedTime">Save Changes</button>
                         </div>
                     </form>
                     
@@ -812,20 +859,20 @@
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
                             <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                                <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                     <option value="income" {{ old('finance_type') == 'income' ? 'selected' : '' }} class="bg-gray-900">Income</option>
                                     <option value="expense" {{ old('finance_type') == 'expense' ? 'selected' : '' }} class="bg-gray-900">Expense</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                            <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="cash" {{ old('method') == 'cash' ? 'selected' : '' }} class="bg-gray-900">Cash</option>
                                 <option value="card" {{ old('method') == 'card' ? 'selected' : '' }} class="bg-gray-900">Card</option>
                             </select>
@@ -835,7 +882,7 @@
                     <div x-data="{ showDesc: {{ old('description') ? 'true' : 'false' }} }" class="space-y-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                            <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="" {{ old('category') == '' ? 'selected' : '' }} class="bg-gray-900">None</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->name }}" 
@@ -853,13 +900,13 @@
                             <div x-show="showDesc" x-transition>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description</label>
                                 <input type="text" name="description" value="{{ old('description') }}"
-                                       class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                       class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             </div>
                         </div>
                     </div>
 
                     <div class="pt-2">
-                        <button type="submit" class="w-full btn-koya py-4 shadow-xl shadow-koya/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
+                        <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
                     </div>
                 </form>
             </div>
@@ -923,20 +970,20 @@
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
                         <input type="date" name="date" x-model="editingFinance.date" required
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                            <select name="finance_type" x-model="editingFinance.finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="finance_type" x-model="editingFinance.finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="income" class="bg-gray-900">Income</option>
                                 <option value="expense" class="bg-gray-900">Expense</option>
                             </select>
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                            <select name="method" x-model="editingFinance.method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="method" x-model="editingFinance.method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="cash" class="bg-gray-900">Cash</option>
                                 <option value="card" class="bg-gray-900">Card</option>
                             </select>
@@ -946,7 +993,7 @@
                     <div class="space-y-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                            <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="class" class="bg-gray-900">None</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->name }}" 
@@ -963,7 +1010,7 @@
                             <div x-show="editingFinance.showDesc" x-transition>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description</label>
                                 <input type="text" name="description" x-model="editingFinance.description"
-                                       class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                       class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             </div>
                         </div>
                     </div>
@@ -974,7 +1021,7 @@
                                 class="flex-1 bg-red-50 text-red-600 hover:bg-red-100 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all border border-red-200 active:scale-95">
                             Delete
                         </button>
-                        <button type="submit" class="flex-[3] btn-koya py-4 shadow-lg shadow-koya/20 text-white font-bold uppercase tracking-widest">Save Changes</button>
+                        <button type="submit" class="flex-[3] btn-accent py-4 shadow-lg shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Changes</button>
                     </div>
                 </form>
 

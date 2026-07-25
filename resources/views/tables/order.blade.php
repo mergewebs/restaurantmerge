@@ -25,7 +25,7 @@
                     <button
                         type="button"
                         @click="showCustomItemModal = true"
-                        class="px-3 py-2 rounded-xl border border-koya/30 bg-koya/15 text-koya font-black uppercase text-[10px] tracking-widest"
+                        class="px-3 py-2 rounded-xl border border-accent/30 bg-accent/15 text-accent font-black uppercase text-[10px] tracking-widest"
                     >
                         Custom Item
                     </button>
@@ -75,9 +75,9 @@
                     <button type="button" class="px-2.5 py-1.5 rounded-lg border border-white/15 bg-white/5 text-white/70 text-[10px] uppercase font-black" @click="showOrderPanel = false">Close</button>
                 </div>
 
-                <div class="mt-3 p-3 rounded-2xl bg-koya/10 border border-koya/20 flex items-center justify-between shrink-0">
+                <div class="mt-3 p-3 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-between shrink-0">
                     <span class="text-xs font-black uppercase tracking-widest text-white/80">Total</span>
-                    <span class="text-xl font-black text-koya" x-text="currency(order.total)"></span>
+                    <span class="text-xl font-black text-accent" x-text="currency(order.total)"></span>
                 </div>
 
                 <div class="mt-3 space-y-2 flex-1 overflow-y-auto pr-1">
@@ -91,12 +91,12 @@
                                         <span>x</span>
                                         <span x-text="currency(item.unit_price)"></span>
                                         <span class="mx-1">&middot;</span>
-                                        <span class="text-koya font-black" x-text="currency(item.line_total)"></span>
+                                        <span class="text-accent font-black" x-text="currency(item.line_total)"></span>
                                     </p>
                                 </div>
                                 <div class="flex items-center gap-1.5 shrink-0">
                                     <button type="button" class="w-8 h-8 rounded-lg border border-white/15 bg-white/5 text-white font-black" @click="decreaseQty(item)">-</button>
-                                    <div class="w-8 h-8 rounded-lg border border-koya/30 bg-koya/15 text-koya text-center text-sm font-black leading-8" x-text="item.quantity"></div>
+                                    <div class="w-8 h-8 rounded-lg border border-accent/30 bg-accent/15 text-accent text-center text-sm font-black leading-8" x-text="item.quantity"></div>
                                     <button type="button" class="w-8 h-8 rounded-lg border border-white/15 bg-white/5 text-white font-black" @click="increaseQty(item)">+</button>
                                     <button type="button" class="ml-1 w-8 h-8 rounded-lg border border-red-500/25 bg-red-500/10 text-red-400 text-base leading-none" @click="removeItem(item)" title="Remove item" aria-label="Remove item">&times;</button>
                                 </div>
@@ -111,7 +111,7 @@
             <div class="lg:col-span-5 glass rounded-3xl border border-white/10 p-4 space-y-4">
                 @forelse($menuItems as $category => $itemsInCategory)
                     <div>
-                        <p class="text-[10px] font-bold uppercase tracking-widest text-koya mb-2">{{ $category }}</p>
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-accent mb-2">{{ $category }}</p>
                         <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
                             @foreach($itemsInCategory as $menuItem)
                                 <button
@@ -121,7 +121,7 @@
                                 >
                                     <div class="flex items-center justify-between gap-2">
                                         <p class="text-[12px] font-black text-white truncate">{{ $menuItem->name }}</p>
-                                        <p class="text-[12px] text-koya font-black whitespace-nowrap">&euro;{{ number_format((float) $menuItem->price, 2) }}</p>
+                                        <p class="text-[12px] text-accent font-black whitespace-nowrap">&euro;{{ number_format((float) $menuItem->price, 2) }}</p>
                                     </div>
                                 </button>
                             @endforeach
@@ -150,7 +150,7 @@
                     <input type="text" x-model="custom.name" placeholder="Title" maxlength="100" class="!py-2.5 !px-3 !rounded-xl !text-base sm:col-span-2">
                     <input type="number" x-model.number="custom.unit_price" min="0" step="0.01" placeholder="Price" class="!py-2.5 !px-3 !rounded-xl !text-base">
                     <input type="number" x-model.number="custom.quantity" min="1" max="99" placeholder="Qty" class="!py-2.5 !px-3 !rounded-xl !text-base">
-                    <button type="button" class="btn-koya !py-2.5 !rounded-xl !text-[10px] !tracking-widest sm:col-span-4" @click="addCustomItem()">Add Item</button>
+                    <button type="button" class="btn-accent !py-2.5 !rounded-xl !text-[10px] !tracking-widest sm:col-span-4" @click="addCustomItem()">Add Item</button>
                 </div>
             </div>
         </div>
@@ -159,12 +159,12 @@
             <button
                 type="button"
                 @click="showOrderPanel = true"
-                class="pointer-events-auto relative min-w-[6.25rem] h-14 px-4 rounded-2xl border border-koya/40 bg-koya text-white shadow-2xl shadow-black/50 flex items-center justify-center active:scale-95 transition-transform"
+                class="pointer-events-auto relative min-w-[6.25rem] h-14 px-4 rounded-2xl border border-accent/40 bg-accent text-white shadow-2xl shadow-black/50 flex items-center justify-center active:scale-95 transition-transform"
                 title="Current Order"
                 aria-label="Open current order"
             >
                 <span class="text-[13px] font-black tracking-wide" x-text="currency(order.total)"></span>
-                <span class="absolute -top-1 -right-1 min-w-[1.35rem] h-5 px-1 rounded-full bg-white text-koya text-[10px] font-black leading-5 text-center" x-text="itemCount()"></span>
+                <span class="absolute -top-1 -right-1 min-w-[1.35rem] h-5 px-1 rounded-full bg-white text-accent text-[10px] font-black leading-5 text-center" x-text="itemCount()"></span>
             </button>
         </div>
 

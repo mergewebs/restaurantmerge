@@ -1,12 +1,12 @@
 'use strict';
 
 // Bump this value with every deployment that changes static assets.
-const CACHE_VERSION = 'koya-admin-static-2026-07-25-v1';
-const CACHE_PREFIX = 'koya-static-';
+const CACHE_VERSION = 'restaurant-admin-static-2026-07-25-v2';
+const CACHE_PREFIX = 'restaurant-admin-static-';
 const STATIC_CACHE = CACHE_VERSION;
 
 const PRIVATE_PATH = /^\/(?:admin(?:\/|$)|login(?:\/|$)|logout(?:\/|$)|api(?:\/|$)|sanctum(?:\/|$))/i;
-const SAFE_STATIC_PATH = /^(?:\/build\/assets\/.*\.(?:css|js)|\/fonts\/.*\.(?:woff2?|ttf|otf)|\/icons\/.*\.png|\/images\/.*\.(?:png|jpe?g|webp|gif|svg)|\/products\/(?:optimized|thumbnails)\/.*\.(?:png|jpe?g|webp|gif)|\/(?:favicon\.ico|apple-touch-icon\.png|manifest\.webmanifest|pwa-mobile\.css))$/i;
+const SAFE_STATIC_PATH = /^(?:\/build\/assets\/.*\.(?:css|js)|\/fonts\/.*\.(?:woff2?|ttf|otf)|\/images\/.*\.(?:png|jpe?g|webp|gif|svg)|\/products\/(?:optimized|thumbnails)\/.*\.(?:png|jpe?g|webp|gif)|\/(?:restaurant-mark\.svg|manifest\.webmanifest|pwa-mobile\.css))$/i;
 
 self.addEventListener('install', () => {
     self.skipWaiting();

@@ -379,20 +379,20 @@
                 <div>
                     <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
                     <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required
-                           class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                           class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                        <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                        <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             <option value="income" {{ old('finance_type') == 'income' ? 'selected' : '' }} class="bg-gray-900">Income</option>
                             <option value="expense" {{ old('finance_type') == 'expense' ? 'selected' : '' }} class="bg-gray-900">Expense</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                        <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                        <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             <option value="cash" {{ old('method') == 'cash' ? 'selected' : '' }} class="bg-gray-900">Cash</option>
                             <option value="card" {{ old('method') == 'card' ? 'selected' : '' }} class="bg-gray-900">Card</option>
                         </select>
@@ -402,7 +402,7 @@
                 <div x-data="{ showDesc: {{ old('description') ? 'true' : 'false' }} }" class="space-y-3">
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                        <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                        <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             <option value="" {{ old('category') == '' ? 'selected' : '' }} class="bg-gray-900">None</option>
                             @foreach($categories as $cat)
                                 <option value="{{ $cat->name }}" 
@@ -420,13 +420,13 @@
                         <div x-show="showDesc" x-transition>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description</label>
                             <input type="text" name="description" value="{{ old('description') }}"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                     </div>
                 </div>
 
                 <div class="pt-2">
-                    <button type="submit" class="w-full btn-koya py-4 shadow-xl shadow-koya/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
+                    <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
                 </div>
             </form>
         </div>
@@ -490,20 +490,20 @@
                 <div>
                     <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
                     <input type="date" name="date" x-model="editingFinance.date" required
-                           class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                           class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                        <select name="finance_type" x-model="editingFinance.finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                        <select name="finance_type" x-model="editingFinance.finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             <option value="income" class="bg-gray-900">Income</option>
                             <option value="expense" class="bg-gray-900">Expense</option>
                         </select>
                     </div>
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                        <select name="method" x-model="editingFinance.method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                        <select name="method" x-model="editingFinance.method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             <option value="cash" class="bg-gray-900">Cash</option>
                             <option value="card" class="bg-gray-900">Card</option>
                         </select>
@@ -513,7 +513,7 @@
                 <div class="space-y-3">
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                        <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                        <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                             <option value="" class="bg-gray-900">None</option>
                             @foreach($categories as $cat)
                                 <option value="{{ $cat->name }}" 
@@ -530,7 +530,7 @@
                         <div x-show="editingFinance.showDesc" x-transition>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description</label>
                             <input type="text" name="description" x-model="editingFinance.description"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                     </div>
                 </div>
@@ -542,7 +542,7 @@
                         Delete
                     </button>
                     <button type="submit" 
-                            class="flex-[3] btn-koya py-4 shadow-lg shadow-koya/20 text-white font-bold uppercase tracking-widest">
+                            class="flex-[3] btn-accent py-4 shadow-lg shadow-accent/20 text-white font-bold uppercase tracking-widest">
                         Save Changes
                     </button>
                 </div>

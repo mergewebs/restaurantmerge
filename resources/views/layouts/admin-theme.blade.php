@@ -1,8 +1,8 @@
 <style>
     :root {
-        --koya: #4f46e5; /* Standard brand Indigo */
-        --koya-hover: #4338ca;
-        --koya-light: rgba(79, 70, 229, 0.08);
+        --accent: #4f46e5; /* Standard brand Indigo */
+        --accent-hover: #4338ca;
+        --accent-light: rgba(79, 70, 229, 0.08);
         --bg: #f8fafc; /* Slate 50 */
         --white: #ffffff;
         --white-muted: #64748b;
@@ -125,7 +125,7 @@
     button.text-white, button .text-white,
     a.text-white, a .text-white,
     .bg-green-500, .bg-red-500, .bg-emerald-500, .bg-blue-500, .bg-indigo-600, .bg-indigo-500,
-    .btn-koya, .btn-reservation, .btn-danger,
+    .btn-accent, .btn-reservation, .btn-danger,
     [class*="bg-green-500"] .text-white, [class*="bg-emerald-500"] .text-white, [class*="bg-red-500"] .text-white, [class*="bg-blue-500"] .text-white,
     [class*="bg-green-"] .text-white, [class*="bg-emerald-"] .text-white, [class*="bg-red-"] .text-white, [class*="bg-blue-"] .text-white, [class*="bg-indigo-"] .text-white,
     button[type="submit"] {
@@ -165,7 +165,7 @@
     }
 
     input:focus, select:focus, textarea:focus {
-        border-color: var(--koya) !important;
+        border-color: var(--accent) !important;
         box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12) !important;
         background: #ffffff !important;
     }
@@ -186,10 +186,10 @@
     }
 
     /* Buttons */
-    .btn-koya, .btn-reservation, a.btn-koya, a.btn-reservation {
-        background: var(--koya) !important;
+    .btn-accent, .btn-reservation, a.btn-accent, a.btn-reservation {
+        background: var(--accent) !important;
         color: #ffffff !important;
-        border: 1px solid var(--koya) !important;
+        border: 1px solid var(--accent) !important;
         border-radius: 12px !important;
         box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2) !important;
         font-weight: 700 !important;
@@ -205,19 +205,19 @@
         gap: 0.5rem;
     }
 
-    .btn-koya:hover, .btn-reservation:hover:not(:disabled), a.btn-koya:hover {
-        background: var(--koya-hover) !important;
-        border-color: var(--koya-hover) !important;
+    .btn-accent:hover, .btn-reservation:hover:not(:disabled), a.btn-accent:hover {
+        background: var(--accent-hover) !important;
+        border-color: var(--accent-hover) !important;
         transform: translateY(-1px);
         box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3) !important;
         color: #ffffff !important;
     }
 
-    .btn-koya:active, .btn-reservation:active:not(:disabled) {
+    .btn-accent:active, .btn-reservation:active:not(:disabled) {
         transform: translateY(0);
     }
 
-    .btn-koya:disabled {
+    .btn-accent:disabled {
         background: #cbd5e1 !important;
         border-color: #cbd5e1 !important;
         color: #94a3b8 !important;
@@ -226,14 +226,14 @@
     }
 
     /* Clean bg color utility classes to prevent sizing/padding overrides */
-    .bg-koya {
-        background-color: var(--koya) !important;
+    .bg-accent {
+        background-color: var(--accent) !important;
     }
-    .text-koya {
-        color: var(--koya) !important;
+    .text-accent {
+        color: var(--accent) !important;
     }
-    .border-koya {
-        border-color: var(--koya) !important;
+    .border-accent {
+        border-color: var(--accent) !important;
     }
 
     /* Tables */
@@ -359,17 +359,17 @@
         color: inherit !important;
     }
     .bottom-quick-link:hover {
-        color: var(--koya) !important;
+        color: var(--accent) !important;
         background-color: #ffffff !important;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
     }
     .bottom-quick-link:hover svg {
-        color: var(--koya) !important;
+        color: var(--accent) !important;
         transform: translateY(-0.5px);
     }
     .bottom-quick-link.active {
         color: #ffffff !important;
-        background-color: var(--koya) !important;
+        background-color: var(--accent) !important;
         box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2) !important;
     }
     .bottom-quick-link.active svg {
@@ -377,22 +377,22 @@
     }
 
     /* Hamburger / Menu buttons */
-    button.bg-koya\/15, [class*="bg-koya/15"] {
+    button.bg-accent\/15, [class*="bg-accent/15"] {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         width: 2.25rem !important;
         height: 2.25rem !important;
         border-radius: 10px !important;
-        background-color: var(--koya-light) !important;
-        color: var(--koya) !important;
+        background-color: var(--accent-light) !important;
+        color: var(--accent) !important;
         border: 1px solid rgba(79, 70, 229, 0.12) !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    button.bg-koya\/15:hover, [class*="bg-koya/15"]:hover {
-        background-color: var(--koya) !important;
+    button.bg-accent\/15:hover, [class*="bg-accent/15"]:hover {
+        background-color: var(--accent) !important;
         color: #ffffff !important;
-        border-color: var(--koya) !important;
+        border-color: var(--accent) !important;
         transform: scale(1.05);
         box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15) !important;
     }
@@ -446,21 +446,21 @@
         letter-spacing: normal !important;
     }
     .bottom-menu-item:hover {
-        color: var(--koya) !important;
-        background-color: var(--koya-light) !important;
+        color: var(--accent) !important;
+        background-color: var(--accent-light) !important;
         border-color: rgba(79, 70, 229, 0.05) !important;
     }
     .bottom-menu-item:hover svg {
-        color: var(--koya) !important;
+        color: var(--accent) !important;
     }
     .bottom-menu-item.active {
-        color: var(--koya) !important;
-        background-color: var(--koya-light) !important;
+        color: var(--accent) !important;
+        background-color: var(--accent-light) !important;
         border-color: rgba(79, 70, 229, 0.1) !important;
         font-weight: 700 !important;
     }
     .bottom-menu-item.active svg {
-        color: var(--koya) !important;
+        color: var(--accent) !important;
     }
 
     .bottom-menu-panel form {
@@ -549,14 +549,14 @@
         cursor: pointer;
     }
     nav.fixed .relative button[title="Profile"]:hover {
-        color: var(--koya) !important;
-        background-color: var(--koya-light) !important;
+        color: var(--accent) !important;
+        background-color: var(--accent-light) !important;
         border-color: rgba(79, 70, 229, 0.08) !important;
     }
     nav.fixed .relative button[title="Profile"].active {
         color: #ffffff !important;
-        background-color: var(--koya) !important;
-        border-color: var(--koya) !important;
+        background-color: var(--accent) !important;
+        border-color: var(--accent) !important;
     }
     nav.fixed .relative button[title="Profile"].active svg,
     nav.fixed .relative button[title="Profile"].active span {
@@ -585,15 +585,15 @@
         cursor: pointer;
     }
     .dropdown-menu-container a:hover {
-        background-color: var(--koya-light) !important;
-        color: var(--koya) !important;
+        background-color: var(--accent-light) !important;
+        color: var(--accent) !important;
     }
     .dropdown-menu-container a.text-indigo-600 {
-        color: var(--koya) !important;
-        background-color: var(--koya-light) !important;
+        color: var(--accent) !important;
+        background-color: var(--accent-light) !important;
     }
     .dropdown-menu-container a:hover svg {
-        color: var(--koya) !important;
+        color: var(--accent) !important;
     }
     .dropdown-menu-container button.text-red-500 {
         color: #ef4444 !important;
@@ -621,7 +621,7 @@
     .bg-gray-100, .bg-slate-100 {
         background-color: #f1f5f9 !important;
     }
-    .bg-gray-800, .bg-gray-900, .bg-slate-800, .bg-slate-900, .bg-koya-dark {
+    .bg-gray-800, .bg-gray-900, .bg-slate-800, .bg-slate-900, .bg-accent-dark {
         background-color: #ffffff !important;
     }
 
@@ -766,7 +766,7 @@
     .fixed.inset-0.z-\[100\] select:focus, 
     .fixed.inset-0.z-\[100\] textarea:focus {
         background-color: #ffffff !important;
-        border-color: var(--koya) !important;
+        border-color: var(--accent) !important;
         box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12) !important;
     }
     .fixed.inset-0.z-\[100\] input[name="amount"] {
@@ -809,7 +809,7 @@
     .hover-lift:hover {
         transform: translateY(-2px);
         background-color: #f8fafc !important;
-        border-color: var(--koya) !important;
+        border-color: var(--accent) !important;
     }
 
     /* KPI specific colors in stats and dashboard */
@@ -837,8 +837,8 @@
 
     /* Override inline range filter button styling in stats page */
     button[style*="rgba(255,92,0"] {
-        background-color: var(--koya-light) !important;
-        color: var(--koya) !important;
+        background-color: var(--accent-light) !important;
+        color: var(--accent) !important;
         border: 1px solid rgba(79, 70, 229, 0.2) !important;
     }
 
@@ -1149,7 +1149,7 @@
     nav[role="navigation"] .shadow-sm.rounded-md > a:hover,
     nav[role="navigation"] .shadow-sm.rounded-md > span > a:hover {
         background-color: #f1f5f9 !important;
-        color: #4f46e5 !important; /* var(--koya) Brand color */
+        color: #4f46e5 !important; /* var(--accent) Brand color */
         border-color: #cbd5e1 !important;
         transform: translateY(-1px);
     }
@@ -1157,7 +1157,7 @@
     /* Active Page button */
     nav[role="navigation"] .shadow-sm.rounded-md [aria-current="page"] span,
     nav[role="navigation"] .shadow-sm.rounded-md [aria-current="page"] a {
-        background-color: #4f46e5 !important; /* var(--koya) Brand color */
+        background-color: #4f46e5 !important; /* var(--accent) Brand color */
         color: #ffffff !important;
         border-color: #4f46e5 !important;
         box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25) !important;
@@ -1275,3 +1275,636 @@
     }
 </style>
 
+<style>
+    /*
+     * Restaurant management workspace
+     * Warm, durable surfaces designed for long daily service shifts.
+     */
+    :root {
+        --accent: #b84f32;
+        --accent-hover: #963b25;
+        --accent-light: rgba(184, 79, 50, 0.1);
+        --restaurant-espresso: #271c16;
+        --restaurant-espresso-soft: #38271d;
+        --restaurant-paper: #fffdf8;
+        --restaurant-cream: #f5efe4;
+        --restaurant-cream-deep: #ede3d4;
+        --restaurant-terracotta: #b84f32;
+        --restaurant-olive: #5f704f;
+        --restaurant-brass: #c49a4a;
+        --restaurant-ink: #2d251f;
+        --restaurant-muted: #7c6f63;
+        --restaurant-border: #e5d8c6;
+        --bg: var(--restaurant-cream);
+        --white: var(--restaurant-paper);
+        --white-muted: var(--restaurant-muted);
+        --border-color: var(--restaurant-border);
+        --text-primary: var(--restaurant-ink);
+        --text-secondary: #554a40;
+        --text-muted: var(--restaurant-muted);
+    }
+
+    html {
+        background: var(--restaurant-cream) !important;
+    }
+
+    body {
+        background-color: var(--restaurant-cream) !important;
+        background-image:
+            radial-gradient(circle at 7% 4%, rgba(196, 154, 74, 0.12), transparent 24rem),
+            radial-gradient(circle at 94% 18%, rgba(95, 112, 79, 0.1), transparent 28rem),
+            linear-gradient(180deg, #faf6ef 0%, var(--restaurant-cream) 36%, #f2eadf 100%) !important;
+        background-attachment: fixed !important;
+        color: var(--restaurant-ink) !important;
+    }
+
+    body::after {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.025'/%3E%3C/svg%3E");
+        content: "";
+        opacity: 0.42;
+        pointer-events: none;
+    }
+
+    h1, h2, h3, h4,
+    main h2.font-display {
+        color: var(--restaurant-ink) !important;
+    }
+
+    h1, h2, h3,
+    .font-display {
+        font-family: "Cormorant Garamond", Georgia, serif !important;
+        letter-spacing: -0.025em !important;
+    }
+
+    .admin-main {
+        width: min(100%, 94rem);
+        margin-inline: auto;
+    }
+
+    .admin-service-heading {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 2rem;
+        margin: 0 auto 2rem;
+        padding: 0.4rem 0.25rem 1.35rem;
+        border-bottom: 1px solid rgba(124, 111, 99, 0.2);
+    }
+
+    .admin-service-heading::after {
+        position: absolute;
+        bottom: -1px;
+        left: 0.25rem;
+        width: 4.5rem;
+        height: 2px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--restaurant-terracotta), var(--restaurant-brass));
+        content: "";
+    }
+
+    .admin-service-copy {
+        min-width: 0;
+    }
+
+    .admin-service-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin: 0 0 0.25rem;
+        color: var(--restaurant-terracotta) !important;
+        font-size: 0.64rem;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+    }
+
+    .admin-service-eyebrow span {
+        display: inline-block;
+        width: 1.35rem;
+        height: 1px;
+        background: currentColor;
+    }
+
+    .admin-service-heading h1 {
+        margin: 0;
+        color: var(--restaurant-ink) !important;
+        font-size: clamp(2.15rem, 4vw, 3.4rem);
+        font-weight: 700;
+        line-height: 0.96;
+    }
+
+    .admin-service-copy > p:last-child {
+        margin: 0.6rem 0 0;
+        color: var(--restaurant-muted) !important;
+        font-size: 0.88rem;
+        font-weight: 500;
+    }
+
+    .admin-service-meta {
+        display: grid;
+        min-width: 8.6rem;
+        grid-template-columns: auto auto;
+        align-items: baseline;
+        gap: 0.05rem 0.45rem;
+        border-left: 1px solid var(--restaurant-border);
+        padding-left: 1.25rem;
+        text-align: right;
+    }
+
+    .admin-service-day {
+        grid-column: 1 / -1;
+        color: var(--restaurant-olive);
+        font-size: 0.63rem;
+        font-weight: 900;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+    }
+
+    .admin-service-meta strong {
+        grid-column: 1 / -1;
+        color: var(--restaurant-ink);
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.45rem;
+        line-height: 1;
+    }
+
+    .admin-service-meta small {
+        grid-column: 1 / -1;
+        margin-top: 0.2rem;
+        color: var(--restaurant-muted);
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .glass,
+    [class*="glass"] {
+        border: 1px solid rgba(207, 190, 168, 0.72) !important;
+        border-radius: 1.15rem !important;
+        background: rgba(255, 253, 248, 0.94) !important;
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.85) inset,
+            0 12px 34px -26px rgba(57, 38, 25, 0.5) !important;
+    }
+
+    .hover-lift:hover,
+    .glass:hover {
+        border-color: rgba(184, 79, 50, 0.28) !important;
+        box-shadow:
+            0 1px 0 rgba(255, 255, 255, 0.9) inset,
+            0 16px 36px -25px rgba(73, 42, 25, 0.55) !important;
+    }
+
+    input,
+    select,
+    textarea {
+        border-color: #dacbb7 !important;
+        border-radius: 0.8rem !important;
+        background: #fffefa !important;
+        color: var(--restaurant-ink) !important;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+        color: #aa9c8e !important;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--restaurant-terracotta) !important;
+        background: #fff !important;
+        box-shadow: 0 0 0 4px rgba(184, 79, 50, 0.11) !important;
+    }
+
+    label,
+    .text-xs.text-gray-400 {
+        color: #66594e !important;
+        letter-spacing: 0.08em !important;
+    }
+
+    .btn-accent,
+    .btn-reservation,
+    a.btn-accent,
+    a.btn-reservation,
+    button.bg-indigo-600,
+    .bg-indigo-600 {
+        border-color: var(--restaurant-terracotta) !important;
+        background: linear-gradient(135deg, #c35b3d, var(--restaurant-terracotta)) !important;
+        box-shadow: 0 8px 18px -10px rgba(132, 53, 31, 0.75) !important;
+    }
+
+    .btn-accent:hover,
+    .btn-reservation:hover:not(:disabled),
+    a.btn-accent:hover,
+    button.bg-indigo-600:hover,
+    .hover\:bg-indigo-700:hover {
+        border-color: var(--restaurant-espresso) !important;
+        background: var(--restaurant-espresso) !important;
+        box-shadow: 0 10px 22px -12px rgba(39, 28, 22, 0.8) !important;
+    }
+
+    .text-indigo-600,
+    .text-indigo-700,
+    [class*="text-indigo-"] {
+        color: var(--restaurant-terracotta) !important;
+    }
+
+    .bg-indigo-50,
+    [class*="bg-indigo-50"] {
+        border-color: #e7c8b9 !important;
+        background: #fbede7 !important;
+    }
+
+    .border-indigo-100,
+    [class*="border-indigo-100"] {
+        border-color: #e7c8b9 !important;
+    }
+
+    .bg-emerald-600,
+    button.bg-emerald-600,
+    .hover\:bg-emerald-700:hover {
+        border-color: var(--restaurant-olive) !important;
+        background: var(--restaurant-olive) !important;
+    }
+
+    th {
+        border-color: var(--restaurant-border) !important;
+        background: #f0e7db !important;
+        color: #67594d !important;
+        letter-spacing: 0.09em !important;
+    }
+
+    td {
+        border-color: #eee4d7 !important;
+        color: #554a40 !important;
+    }
+
+    tbody tr:hover td {
+        background: #fff9f1 !important;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb,
+    .kitchen-scrollbar::-webkit-scrollbar-thumb {
+        background: #cdbba4;
+    }
+
+    nav.admin-navigation.fixed {
+        top: 1rem !important;
+    }
+
+    nav.admin-navigation.fixed > .glass {
+        width: min(calc(100% - 2rem), 88rem);
+        min-height: 4.85rem;
+        margin-inline: auto;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 1.35rem !important;
+        background:
+            linear-gradient(135deg, rgba(53, 36, 26, 0.98), rgba(34, 24, 19, 0.99)) !important;
+        box-shadow: 0 18px 45px -20px rgba(35, 22, 14, 0.68) !important;
+    }
+
+    .admin-brand-lockup {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        text-decoration: none;
+    }
+
+    .admin-brand-lockup img {
+        border-color: rgba(255, 255, 255, 0.18) !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    .admin-brand-lockup > span {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+    }
+
+    .admin-brand-lockup strong {
+        color: #fff9ed;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.15rem;
+        letter-spacing: 0.08em;
+    }
+
+    .admin-brand-lockup small {
+        margin-top: 0.25rem;
+        color: #cbbcae;
+        font-size: 0.48rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    nav.admin-navigation .bottom-primary-links {
+        gap: clamp(0.8rem, 2.1vw, 2.5rem) !important;
+    }
+
+    nav.admin-navigation .bottom-quick-link {
+        min-width: 4.25rem;
+        border-radius: 0.8rem !important;
+        color: #cdbfb2 !important;
+    }
+
+    nav.admin-navigation .bottom-quick-link svg {
+        color: currentColor !important;
+    }
+
+    nav.admin-navigation .bottom-quick-link:hover {
+        background: rgba(255, 255, 255, 0.07) !important;
+        color: #fff8ea !important;
+    }
+
+    nav.admin-navigation .bottom-quick-link.active {
+        background: rgba(196, 154, 74, 0.16) !important;
+        color: #f5d493 !important;
+        box-shadow: 0 0 0 1px rgba(196, 154, 74, 0.2) inset !important;
+    }
+
+    nav.admin-navigation .dropdown-menu-container {
+        border-color: var(--restaurant-border) !important;
+        background: var(--restaurant-paper) !important;
+        box-shadow: 0 20px 45px -20px rgba(39, 28, 22, 0.45) !important;
+    }
+
+    .status-confirmed {
+        border-color: rgba(95, 112, 79, 0.25);
+        background: rgba(95, 112, 79, 0.1);
+        color: #4d603f;
+    }
+
+    .status-completed {
+        border-color: rgba(77, 104, 111, 0.23);
+        background: rgba(77, 104, 111, 0.09);
+        color: #456269;
+    }
+
+    .kpi-income {
+        border-color: rgba(95, 112, 79, 0.24) !important;
+        background: linear-gradient(145deg, #fffdf8, #f1f5eb) !important;
+    }
+
+    .kpi-expense {
+        border-color: rgba(184, 79, 50, 0.2) !important;
+        background: linear-gradient(145deg, #fffdf8, #fbede7) !important;
+    }
+
+    .kpi-profit {
+        border-color: rgba(196, 154, 74, 0.25) !important;
+        background: linear-gradient(145deg, #fffdf8, #fbf4e3) !important;
+    }
+
+    nav[role="navigation"] .shadow-sm.rounded-md [aria-current="page"] span,
+    nav[role="navigation"] .shadow-sm.rounded-md [aria-current="page"] a {
+        border-color: var(--restaurant-terracotta) !important;
+        background: var(--restaurant-terracotta) !important;
+        box-shadow: 0 5px 12px rgba(132, 53, 31, 0.2) !important;
+    }
+
+    .service-pulse-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.85rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .service-pulse-grid-compact {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .service-pulse-card {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 0.85rem;
+        overflow: hidden;
+        border: 1px solid var(--restaurant-border);
+        border-radius: 1rem;
+        padding: 1rem;
+        background: rgba(255, 253, 248, 0.9);
+        box-shadow: 0 12px 26px -24px rgba(57, 38, 25, 0.58);
+    }
+
+    .service-pulse-card::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 3px;
+        background: currentColor;
+        content: "";
+        opacity: 0.7;
+    }
+
+    .service-pulse-icon {
+        display: grid;
+        width: 2.65rem;
+        height: 2.65rem;
+        flex: 0 0 auto;
+        place-items: center;
+        border-radius: 0.85rem;
+        background: currentColor;
+    }
+
+    .service-pulse-icon svg {
+        width: 1.3rem;
+        height: 1.3rem;
+        color: #fffaf2 !important;
+    }
+
+    .service-pulse-card > div:last-child {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+    }
+
+    .service-pulse-card span {
+        color: var(--restaurant-muted);
+        font-size: 0.59rem;
+        font-weight: 900;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+    }
+
+    .service-pulse-card strong {
+        overflow: hidden;
+        margin-top: 0.12rem;
+        color: var(--restaurant-ink);
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.65rem;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .service-pulse-card small {
+        overflow: hidden;
+        margin-top: 0.28rem;
+        color: var(--restaurant-muted);
+        font-size: 0.62rem;
+        font-weight: 600;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .pulse-reservations {
+        color: var(--restaurant-terracotta);
+    }
+
+    .pulse-open,
+    .pulse-balance {
+        color: var(--restaurant-olive);
+    }
+
+    .pulse-sales {
+        color: var(--restaurant-brass);
+    }
+
+    .pulse-closed {
+        color: #a13e37;
+    }
+
+    @media (min-width: 1024px) {
+        .admin-main {
+            padding-top: 7.4rem !important;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .mobile-admin-header {
+            border-color: rgba(207, 190, 168, 0.75) !important;
+            background: rgba(255, 253, 248, 0.96) !important;
+            box-shadow: 0 8px 24px -18px rgba(57, 38, 25, 0.55) !important;
+        }
+
+        .mobile-admin-brand strong,
+        .mobile-admin-avatar {
+            color: var(--restaurant-ink) !important;
+        }
+
+        .mobile-admin-brand small {
+            color: var(--restaurant-terracotta) !important;
+        }
+
+        .mobile-admin-avatar {
+            border-color: var(--restaurant-border);
+            background: #fffaf2;
+        }
+
+        nav.admin-navigation.fixed {
+            top: auto !important;
+        }
+
+        nav.admin-navigation.fixed .glass {
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            background: rgba(39, 28, 22, 0.97) !important;
+            box-shadow: 0 18px 42px -18px rgba(39, 28, 22, 0.7) !important;
+        }
+
+        nav.admin-navigation .bottom-quick-link {
+            min-width: 0;
+            color: #cdbfb2 !important;
+        }
+
+        nav.admin-navigation .bottom-quick-link.active {
+            color: #f5d493 !important;
+        }
+
+        .admin-service-heading {
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.35rem;
+            padding-bottom: 1rem;
+        }
+
+        .admin-service-heading h1 {
+            font-size: clamp(1.9rem, 9vw, 2.5rem);
+        }
+
+        .admin-service-copy > p:last-child {
+            max-width: 24rem;
+            font-size: 0.78rem;
+        }
+
+        .admin-service-meta {
+            min-width: 5.2rem;
+            padding-left: 0.8rem;
+        }
+
+        .admin-service-day,
+        .admin-service-meta small {
+            font-size: 0.52rem;
+        }
+
+        .admin-service-meta strong {
+            font-size: 1.2rem;
+        }
+
+        .service-pulse-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 520px) {
+        .admin-main {
+            padding-inline: 0.9rem !important;
+        }
+
+        .admin-service-copy > p:last-child,
+        .admin-service-meta small {
+            display: none;
+        }
+
+        .admin-service-heading {
+            align-items: flex-end;
+        }
+
+        .admin-service-heading h1 {
+            font-size: 2rem;
+        }
+
+        .glass,
+        [class*="glass"] {
+            border-radius: 1rem !important;
+        }
+
+        .service-pulse-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.65rem;
+        }
+
+        .service-pulse-card {
+            align-items: flex-start;
+            gap: 0.6rem;
+            padding: 0.8rem;
+        }
+
+        .service-pulse-icon {
+            width: 2.1rem;
+            height: 2.1rem;
+            border-radius: 0.7rem;
+        }
+
+        .service-pulse-icon svg {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .service-pulse-card strong {
+            font-size: 1.25rem;
+        }
+
+        .service-pulse-card small {
+            display: none;
+        }
+    }
+</style>

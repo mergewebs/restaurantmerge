@@ -29,7 +29,7 @@
                 theme: {
                     extend: {
                         colors: {
-                            koya: {
+                            accent: {
                                 DEFAULT: '#4f46e5',
                                 dark: '#17110c',
                                 glass: 'rgba(35, 27, 21, 0.82)',
@@ -53,7 +53,7 @@
             }
 
             :root {
-                --koya: #c89b3c;
+                --accent: #c89b3c;
                 --bg: #17110c;
                 --white: #fff7eb;
                 --white-muted: rgba(255, 255, 255, 0.6);
@@ -76,8 +76,8 @@
                 border: 1px solid rgba(255, 255, 255, 0.08);
             }
 
-            .btn-koya { 
-                background-color: var(--koya); 
+            .btn-accent { 
+                background-color: var(--accent); 
                 color: #17110c; 
                 font-family: 'Biski', sans-serif;
                 border-radius: 12px; 
@@ -93,10 +93,10 @@
                 align-items: center;
                 justify-content: center;
             }
-            .btn-koya:active { transform: scale(0.96); }
+            .btn-accent:active { transform: scale(0.96); }
 
             .bottom-nav-active { 
-                color: var(--koya); 
+                color: var(--accent); 
                 filter: drop-shadow(0 0 10px rgba(200, 155, 60, 0.3));
             }
 
@@ -148,7 +148,7 @@
             }
 
             .bottom-quick-link.active {
-                color: var(--koya);
+                color: var(--accent);
                 filter: drop-shadow(0 0 8px rgba(255, 92, 0, 0.3));
             }
             /* Inputs */
@@ -165,7 +165,7 @@
                 transition: all 0.3s ease;
             }
             input:focus {
-                border-color: var(--koya) !important;
+                border-color: var(--accent) !important;
                 background: rgba(255, 255, 255, 0.05) !important;
             }
 
@@ -209,7 +209,7 @@
                 left: -10%;
                 width: 50vw;
                 height: 50vw;
-                background-color: var(--koya);
+                background-color: var(--accent);
                 animation-duration: 35s;
             }
             .bg-glow-2 {
@@ -307,7 +307,7 @@
                 height: 0.9rem;
                 border-radius: 999px;
                 border: 2px solid rgba(255, 247, 235, 0.25);
-                border-top-color: var(--koya);
+                border-top-color: var(--accent);
                 animation: asyncSpin 0.75s linear infinite;
                 flex-shrink: 0;
             }
@@ -326,9 +326,9 @@
         </div>
         <div class="min-h-screen relative">
             <header class="mobile-admin-header lg:hidden">
-                <a href="{{ route('dashboard') }}" class="mobile-admin-brand" aria-label="KOYA Logo">
-                    <img src="{{ asset('images/koya-logo.png') }}" alt="" width="40" height="40">
-                    <span><strong>{{ config('app.name', 'Koya BCN') }}</strong><small>{{ ucfirst(auth()->user()->role) }}</small></span>
+                <a href="{{ route('dashboard') }}" class="mobile-admin-brand" aria-label="Restaurant dashboard">
+                    <img src="{{ asset('restaurant-mark.svg') }}" alt="" width="40" height="40">
+                    <span><strong>{{ config('restaurant.name') }}</strong><small>{{ ucfirst(auth()->user()->role) }}</small></span>
                 </a>
 
                 <div x-data="{ open: false }" @click.outside="open = false" class="mobile-profile-menu">
@@ -354,14 +354,36 @@
             </header>
 
             <!-- Main Content -->
-            <main class="px-5 pt-32 lg:pt-36 pb-8">
-                @if (isset($header))
-                    <div class="mb-8 px-2">
-                        <h2 class="font-display text-4xl font-bold text-slate-900 tracking-normal">
-                            {{ $header }}
-                        </h2>
+            <main class="admin-main px-5 pt-32 lg:pt-36 pb-8">
+                @php
+                    [$pageTitle, $pageDescription] = match (true) {
+                        request()->routeIs('dashboard') => ['Today’s Service', 'Reservations, service and cash flow at a glance.'],
+                        request()->routeIs('tables.kitchen*') => ['Kitchen Pass', 'Keep every plate moving and every table informed.'],
+                        request()->routeIs('tables.*') => ['Dining Room', 'Manage tables, orders and the rhythm of service.'],
+                        request()->routeIs('reservations.*') => ['Reservations', 'Plan the room and welcome every guest well.'],
+                        request()->routeIs('finance.*') => ['Finance', 'A clear daily view of sales, costs and performance.'],
+                        request()->routeIs('menu-items.*') => ['Menu & Products', 'Keep dishes, pricing and availability up to date.'],
+                        request()->routeIs('users.*') => ['Team Access', 'Manage the people who keep service running.'],
+                        request()->routeIs('restaurant.*') => ['Restaurant Settings', 'Opening hours, closures and service capacity.'],
+                        request()->routeIs('profile.*') => ['Your Profile', 'Personal details and account security.'],
+                        default => ['Restaurant Workspace', 'Everything your team needs for a smooth service.'],
+                    };
+                @endphp
+                <section class="admin-service-heading" aria-labelledby="admin-page-title">
+                    <div class="admin-service-copy">
+                        <p class="admin-service-eyebrow">
+                            <span></span>
+                            Merge Service Desk
+                        </p>
+                        <h1 id="admin-page-title">{{ isset($header) ? $header : $pageTitle }}</h1>
+                        <p>{{ $pageDescription }}</p>
                     </div>
-                @endif
+                    <div class="admin-service-meta">
+                        <span class="admin-service-day">{{ now()->format('l') }}</span>
+                        <strong>{{ now()->format('d M') }}</strong>
+                        <small>{{ ucfirst(auth()->user()->role) }} shift</small>
+                    </div>
+                </section>
                 {{ $slot }}
             </main>
 
@@ -396,8 +418,9 @@
             <!-- Global Navigation (Top) -->
             <nav class="admin-navigation fixed left-0 right-0 z-50" aria-label="Primary navigation">
                 <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-center shadow-2xl">
-                    <a href="{{ route('dashboard') }}" class="mr-5 shrink-0" aria-label="KOYA Logo">
-                        <img src="{{ asset('images/koya-logo.png') }}" alt="KOYA Logo" class="h-11 w-11 rounded-full border-2 border-white/20 object-cover shadow-lg" width="44" height="44">
+                    <a href="{{ route('dashboard') }}" class="admin-brand-lockup mr-5 shrink-0" aria-label="Restaurant dashboard">
+                        <img src="{{ asset('restaurant-mark.svg') }}" alt="" class="h-11 w-11 rounded-xl border-2 border-white/20 object-cover shadow-lg" width="44" height="44">
+                        <span><strong>{{ config('restaurant.name') }}</strong><small>{{ config('app.name') }}</small></span>
                     </a>
                     <div class="bottom-primary-links flex items-center gap-10 md:gap-16 pr-1">
                         @foreach($primaryMenuItems as $item)
@@ -574,7 +597,7 @@
                     submitAutoSubmitForm(form);
                 });
                 const showToast = (message, level = 'info') => {
-                    window.KoyaNotifications?.show(message, level);
+                    window.RestaurantNotifications?.show(message, level);
                 };
 
                 const isSameOriginUrl = (href) => {
@@ -727,7 +750,7 @@
                         const replacedRegion = replaceRegion(region, nextRegion);
                         window.history.replaceState({}, document.title, response.url || request.url);
 
-                        window.KoyaNotifications?.consumeFeedback(replacedRegion);
+                        window.RestaurantNotifications?.consumeFeedback(replacedRegion);
 
                         const autofocusTarget = replacedRegion.querySelector('[data-async-autofocus], .text-red-500, .text-red-600, .text-red-700, [aria-invalid="true"]');
                         if (autofocusTarget instanceof HTMLElement && request.method !== 'GET') {

@@ -1,1 +1,1 @@
-<img src="{{ asset('images/koya-logo.png') }}" {{ $attributes }} alt="KOYA Logo" width="104" height="104">
+<img src="{{ asset('restaurant-mark.svg') }}" {{ $attributes }} alt="Merge" width="104" height="104">

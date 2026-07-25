@@ -14,7 +14,7 @@ class Seo
             'keywords' => '',
             'canonical' => url()->current(),
             'robots' => 'noindex, nofollow, noarchive, nosnippet, max-image-preview:none',
-            'image' => asset('images/koya-logo-512.png'),
+            'image' => asset('restaurant-mark.svg'),
             'type' => 'website',
             'site_name' => config('app.name'),
             'locale' => str_replace('_', '-', app()->getLocale()),

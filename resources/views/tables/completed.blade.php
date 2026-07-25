@@ -35,7 +35,7 @@
                 <details class="glass rounded-3xl p-4 border border-white/10">
                     <summary class="completed-summary cursor-pointer flex items-center justify-between gap-3">
                         <div class="flex items-center gap-2">
-                            <svg class="w-4 h-4 text-koya shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
                             </svg>
                             <div>
@@ -43,7 +43,7 @@
                                 <p class="text-[11px] text-white/50">{{ $order->created_at?->format('d/m/Y H:i') }} - Closed {{ $order->updated_at?->format('d/m/Y H:i') }}</p>
                             </div>
                         </div>
-                        <span class="text-[11px] font-black tracking-widest px-3 py-1 rounded-full bg-koya/15 text-koya border border-koya/20">
+                        <span class="text-[11px] font-black tracking-widest px-3 py-1 rounded-full bg-accent/15 text-accent border border-accent/20">
                             TOTAL: â‚¬{{ number_format((float) $order->total, 2) }}
                         </span>
                     </summary>
@@ -53,7 +53,7 @@
                             <div class="rounded-2xl bg-white/5 border border-white/10 p-3">
                                 <p class="text-xs font-black text-white truncate">{{ $item->name }}</p>
                                 <p class="text-[11px] text-white/60 mt-0.5">{{ $item->quantity }} x â‚¬{{ number_format((float) $item->unit_price, 2) }}</p>
-                                <p class="text-[11px] font-black text-koya mt-1">â‚¬{{ number_format((float) $item->line_total, 2) }}</p>
+                                <p class="text-[11px] font-black text-accent mt-1">â‚¬{{ number_format((float) $item->line_total, 2) }}</p>
                             </div>
                         @empty
                             <p class="text-xs text-white/50">No items found in this order.</p>

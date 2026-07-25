@@ -218,7 +218,7 @@
                 <section class="config-panel glass rounded-[28px] p-4 md:p-6 lg:p-8">
                     <div class="config-section-heading">
                         <div class="flex items-start gap-3">
-                            <span class="mt-1 h-8 w-1.5 shrink-0 rounded-full bg-koya"></span>
+                            <span class="mt-1 h-8 w-1.5 shrink-0 rounded-full bg-accent"></span>
                             <div>
                                 <h3 class="text-xl font-black uppercase tracking-tight text-white">Weekly Schedule</h3>
                                 <p class="mt-1 text-xs leading-relaxed text-white/40">Tap a day to edit service hours and booking capacity.</p>
@@ -316,7 +316,7 @@
                                                     $closeValue = $schedule->{$closeField} ? substr($schedule->{$closeField}, 0, 5) : '';
                                                 @endphp
                                                 <div class="session-card" x-show="{{ $sessionNumber }} === 1 || showExtra" x-cloak>
-                                                    <div class="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-koya">Session {{ $sessionNumber }}</div>
+                                                    <div class="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-accent">Session {{ $sessionNumber }}</div>
                                                     <div class="time-pair">
                                                         <div>
                                                             <label for="{{ $openField }}_{{ $schedule->id }}" class="config-label">Open</label>
@@ -330,7 +330,7 @@
                                                 </div>
                                             @endforeach
 
-                                            <button x-show="!showExtra" type="button" class="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-koya/30 px-3 text-xs font-black uppercase tracking-wider text-koya" @click="showExtra = true">
+                                            <button x-show="!showExtra" type="button" class="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-accent/30 px-3 text-xs font-black uppercase tracking-wider text-accent" @click="showExtra = true">
                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
                                                 Add another session
                                             </button>
@@ -352,7 +352,7 @@
 
                         @if($schedules->isNotEmpty())
                             <div class="schedule-save-bar">
-                                <button type="submit" class="btn-koya !px-8 !py-3 text-sm">
+                                <button type="submit" class="btn-accent !px-8 !py-3 text-sm">
                                     Save Schedule Changes
                                 </button>
                             </div>
@@ -364,13 +364,13 @@
             <section class="config-panel glass rounded-[28px] p-4 md:p-6 lg:p-8" x-data="{ formOpen: window.innerWidth >= 1024, closed: {{ old('is_closed') ? 'true' : 'false' }} }">
                 <div class="config-section-heading">
                     <div class="flex items-start gap-3">
-                        <span class="mt-1 h-8 w-1.5 shrink-0 rounded-full bg-koya"></span>
+                        <span class="mt-1 h-8 w-1.5 shrink-0 rounded-full bg-accent"></span>
                         <div>
                             <h3 class="text-xl font-black uppercase tracking-tight text-white">Exceptions & Holidays</h3>
                             <p class="mt-1 text-xs leading-relaxed text-white/40">Override normal hours for one specific date.</p>
                         </div>
                     </div>
-                    <button type="button" class="flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-koya px-3 py-2 text-[10px] font-black uppercase tracking-wider text-white lg:hidden" @click="formOpen = !formOpen">
+                    <button type="button" class="flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-accent px-3 py-2 text-[10px] font-black uppercase tracking-wider text-white lg:hidden" @click="formOpen = !formOpen">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
                         <span x-text="formOpen ? 'Close' : 'Add'"></span>
                     </button>
@@ -400,7 +400,7 @@
                                 <div x-show="!closed" x-cloak class="space-y-3">
                                     @foreach([1, 2, 3] as $sessionNumber)
                                         <div class="session-card">
-                                            <div class="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-koya">Session {{ $sessionNumber }}</div>
+                                            <div class="mb-2 text-[10px] font-black uppercase tracking-[0.16em] text-accent">Session {{ $sessionNumber }}</div>
                                             <div class="time-pair">
                                                 <div>
                                                     <label for="exception_open_{{ $sessionNumber }}" class="config-label">Open</label>
@@ -425,7 +425,7 @@
                                     <input id="exception_description" type="text" name="description" value="{{ old('description') }}" maxlength="255" placeholder="Example: Christmas Eve" class="config-input">
                                 </div>
 
-                                <button type="submit" class="btn-koya w-full !py-3 text-sm">Create Exception</button>
+                                <button type="submit" class="btn-accent w-full !py-3 text-sm">Create Exception</button>
                             </form>
                         </div>
                     </div>
@@ -434,7 +434,7 @@
                         <div class="flex items-center justify-between gap-3">
                             <h4 class="text-sm font-black uppercase tracking-widest text-white">Upcoming Exceptions</h4>
                             @if($exceptions->isNotEmpty())
-                                <span class="rounded-full bg-koya px-2.5 py-1 text-[10px] font-black text-white">{{ $exceptions->count() }}</span>
+                                <span class="rounded-full bg-accent px-2.5 py-1 text-[10px] font-black text-white">{{ $exceptions->count() }}</span>
                             @endif
                         </div>
 
@@ -466,7 +466,7 @@
                                                 @endif
                                             @endforeach
                                             @if($exception->max_party_size)
-                                                <span class="text-koya">Max {{ $exception->max_party_size }} guests</span>
+                                                <span class="text-accent">Max {{ $exception->max_party_size }} guests</span>
                                             @endif
                                         </div>
                                     @endif

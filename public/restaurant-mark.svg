@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Merge</title>
+  <rect width="128" height="128" rx="28" fill="#271c16"/>
+  <circle cx="64" cy="64" r="34" fill="#fff8ea" opacity=".12"/>
+  <circle cx="64" cy="64" r="25" fill="none" stroke="#f5d493" stroke-width="5"/>
+  <circle cx="64" cy="64" r="13" fill="#b84f32"/>
+  <path d="M29 35v23m-7-23v17c0 5 3 8 7 8s7-3 7-8V35M29 60v33" fill="none" stroke="#fff8ea" stroke-linecap="round" stroke-width="5"/>
+  <path d="M99 35c-7 8-9 18-9 30h9V35Zm0 30v28" fill="none" stroke="#fff8ea" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+</svg>

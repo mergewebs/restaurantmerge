@@ -47,8 +47,8 @@ class ReservationEmailTest extends TestCase
         $englishSubject = (new ReservationConfirmationClient($reservation, 'en'))->envelope()->subject;
         $spanishSubject = (new ReservationConfirmationClient($reservation, 'es'))->envelope()->subject;
 
-        $this->assertSame('Your KOYA table is confirmed - 02/01/2030 at 18:30', $englishSubject);
-        $this->assertSame('Tu mesa en KOYA está confirmada - 02/01/2030 a las 18:30', $spanishSubject);
+        $this->assertSame('Your reservation is confirmed - 02/01/2030 at 18:30', $englishSubject);
+        $this->assertSame('Tu reserva está confirmada - 02/01/2030 a las 18:30', $spanishSubject);
     }
 
     public function test_reservation_show_route_redirects_to_the_admin_editor(): void

@@ -67,7 +67,7 @@
             <form action="{{ route('finance.history') }}" method="GET" class="space-y-4">
                 <div class="relative">
                     <input type="text" name="query" value="{{ $query }}" placeholder="Search description or amount..." 
-                           class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-xs font-bold text-white placeholder-white/20 focus:border-koya outline-none transition-all">
+                           class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-xs font-bold text-white placeholder-white/20 focus:border-accent outline-none transition-all">
                     <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <button type="submit" class="flex-1 btn-koya py-3 text-xs">Apply Filters</button>
+                    <button type="submit" class="flex-1 btn-accent py-3 text-xs">Apply Filters</button>
                     @if($query || $dateFrom || $dateTo)
                         <a href="{{ route('finance.history') }}" class="px-4 bg-white/5 border border-white/10 text-white rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all text-xs font-bold">Clear</a>
                     @endif
@@ -189,26 +189,26 @@
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
                         <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Amount (€)</label>
                         <input type="number" step="0.01" name="amount" value="{{ (session('keep_finance_modal') || request()->boolean('finance_modal')) ? '' : old('amount') }}" required autofocus
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                            <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="income" {{ old('finance_type') == 'income' ? 'selected' : '' }} class="bg-gray-900">Income</option>
                                 <option value="expense" {{ old('finance_type') == 'expense' ? 'selected' : '' }} class="bg-gray-900">Expense</option>
                             </select>
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                            <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="cash" {{ old('method') == 'cash' ? 'selected' : '' }} class="bg-gray-900">Cash</option>
                                 <option value="card" {{ old('method') == 'card' ? 'selected' : '' }} class="bg-gray-900">Card</option>
                             </select>
@@ -218,7 +218,7 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                            <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="" {{ old('category') == '' ? 'selected' : '' }} class="bg-gray-900">None</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->name }}" 
@@ -231,12 +231,12 @@
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description (Optional)</label>
                             <input type="text" name="description" value="{{ old('description') }}"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                     </div>
 
                     <div class="pt-2">
-                        <button type="submit" class="w-full btn-koya py-4 shadow-xl shadow-koya/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
+                        <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
                     </div>
                 </form>
             </div>
@@ -295,20 +295,20 @@
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
                         <input type="date" name="date" x-model="editingFinance.date" required
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                            <select name="finance_type" x-model="editingFinance.finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="finance_type" x-model="editingFinance.finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="income" class="bg-gray-900">Income</option>
                                 <option value="expense" class="bg-gray-900">Expense</option>
                             </select>
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                            <select name="method" x-model="editingFinance.method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="method" x-model="editingFinance.method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="cash" class="bg-gray-900">Cash</option>
                                 <option value="card" class="bg-gray-900">Card</option>
                             </select>
@@ -318,7 +318,7 @@
                     <div class="space-y-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                            <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="" class="bg-gray-900">None</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->name }}" 
@@ -330,7 +330,7 @@
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description (Optional)</label>
                             <input type="text" name="description" x-model="editingFinance.description"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                     </div>
 
@@ -340,7 +340,7 @@
                                 class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
                             Delete
                         </button>
-                        <button type="submit" class="flex-[3] btn-koya py-4 shadow-lg shadow-koya/20 text-white font-bold uppercase tracking-widest">Save Changes</button>
+                        <button type="submit" class="flex-[3] btn-accent py-4 shadow-lg shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Changes</button>
                     </div>
                 </form>
 

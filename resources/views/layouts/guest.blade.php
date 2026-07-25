@@ -18,7 +18,7 @@
                 theme: {
                     extend: {
                         colors: {
-                            koya: {
+                            accent: {
                                 DEFAULT: '#c89b3c',
                                 dark: '#17110c',
                                 gray: '#211915',
@@ -66,7 +66,7 @@
             }
 
             /* Application Logo styling */
-            img[alt="KOYA Logo"] {
+            img[alt="Merge"] {
                 border: 1px solid #e2e8f0 !important;
                 box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04) !important;
                 border-radius: 16px !important;
@@ -76,7 +76,7 @@
                 object-fit: cover !important;
                 transition: transform 0.2s ease !important;
             }
-            img[alt="KOYA Logo"]:hover {
+            img[alt="Merge"]:hover {
                 transform: scale(1.02) !important;
             }
 
@@ -160,7 +160,7 @@
             }
 
             /* Primary Button style overrides */
-            button[type="submit"], .btn-koya {
+            button[type="submit"], .btn-accent {
                 background-color: #4f46e5 !important; /* Indigo primary */
                 color: #ffffff !important;
                 border: none !important;
@@ -180,12 +180,12 @@
                 align-items: center !important;
                 justify-content: center !important;
             }
-            button[type="submit"]:hover, .btn-koya:hover {
+            button[type="submit"]:hover, .btn-accent:hover {
                 background-color: #4338ca !important;
                 transform: translateY(-1px) !important;
                 box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3), 0 4px 6px -4px rgba(79, 70, 229, 0.3) !important;
             }
-            button[type="submit"]:active, .btn-koya:active {
+            button[type="submit"]:active, .btn-accent:active {
                 transform: translateY(0) !important;
             }
 
@@ -225,11 +225,78 @@
                 letter-spacing: 0.05em !important;
             }
         </style>
+        <style>
+            body {
+                background-color: #f5efe4 !important;
+                background-image:
+                    radial-gradient(circle at 12% 8%, rgba(196, 154, 74, 0.17), transparent 24rem),
+                    radial-gradient(circle at 88% 88%, rgba(95, 112, 79, 0.13), transparent 28rem),
+                    linear-gradient(145deg, #faf6ef, #eee4d7) !important;
+            }
+            .guest-brand-lockup {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.7rem;
+                text-align: center;
+            }
+            .guest-brand-lockup img[alt="Merge"] {
+                border: 3px solid rgba(255, 253, 248, 0.9) !important;
+                border-radius: 999px !important;
+                box-shadow: 0 18px 35px -20px rgba(57, 38, 25, 0.65) !important;
+            }
+            .guest-brand-lockup strong {
+                display: block;
+                color: #2d251f;
+                font-family: "Cormorant Garamond", Georgia, serif;
+                font-size: 1.65rem;
+                line-height: 1;
+                letter-spacing: 0.08em;
+            }
+            .guest-brand-lockup small {
+                display: block;
+                margin-top: 0.35rem;
+                color: #b84f32;
+                font-size: 0.56rem;
+                font-weight: 900;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+            }
+            body .glass {
+                border-color: #e0d2c0 !important;
+                background: rgba(255, 253, 248, 0.95) !important;
+                box-shadow: 0 24px 55px -30px rgba(57, 38, 25, 0.62) !important;
+            }
+            body button[type="submit"],
+            body .btn-accent {
+                background: linear-gradient(135deg, #c35b3d, #b84f32) !important;
+                box-shadow: 0 8px 18px -10px rgba(132, 53, 31, 0.75) !important;
+            }
+            body button[type="submit"]:hover,
+            body .btn-accent:hover {
+                background: #271c16 !important;
+                box-shadow: 0 10px 22px -12px rgba(39, 28, 22, 0.8) !important;
+            }
+            body input[type="email"],
+            body input[type="password"],
+            body input[type="text"] {
+                border-color: #dacbb7 !important;
+                background: #fffefa !important;
+            }
+            body input:focus {
+                border-color: #b84f32 !important;
+                box-shadow: 0 0 0 4px rgba(184, 79, 50, 0.11) !important;
+            }
+        </style>
     </head>
     <body class="font-sans antialiased text-gray-100">
         <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
-            <div class="mb-6 flex w-full max-w-sm items-center justify-center gap-4">
+            <div class="guest-brand-lockup mb-6 w-full max-w-sm">
                 <x-application-logo class="w-28 h-auto rounded-2xl" />
+                <div>
+                    <strong>{{ config('restaurant.name') }}</strong>
+                    <small>{{ config('app.name') }}</small>
+                </div>
             </div>
 
             <div class="w-full max-w-sm glass p-6 sm:p-8 rounded-[24px] border border-white/10 shadow-2xl overflow-hidden">

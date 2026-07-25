@@ -1,40 +1,22 @@
 {
     "id": "/admin/",
-    "name": "KOYA Admin",
-    "short_name": "KOYA Admin",
-    "description": "KOYA administration dashboard.",
+    "name": "Merge",
+    "short_name": "Merge",
+    "description": "Daily restaurant operations and management dashboard.",
     "lang": "en",
     "start_url": "/admin/dashboard?source=pwa",
     "scope": "/admin/",
     "display": "standalone",
     "display_override": ["standalone"],
     "orientation": "any",
-    "background_color": "#17110c",
-    "theme_color": "#17110c",
+    "background_color": "#f5efe4",
+    "theme_color": "#271c16",
     "icons": [
         {
-            "src": "/icons/icon-192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/icons/icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/icons/icon-maskable-192.png",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "/icons/icon-maskable-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            "src": "/restaurant-mark.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
         }
     ]
 }

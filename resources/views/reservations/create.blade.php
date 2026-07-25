@@ -153,7 +153,7 @@
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-gray-400">Date</label>
                     <div class="relative">
-                        <input type="text" x-ref="dateInput" x-model="date" readonly required class="w-full glass p-4 rounded-xl border border-white/10 text-white focus:border-koya outline-none cursor-pointer">
+                        <input type="text" x-ref="dateInput" x-model="date" readonly required class="w-full glass p-4 rounded-xl border border-white/10 text-white focus:border-accent outline-none cursor-pointer">
                         <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white/20">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
@@ -163,7 +163,7 @@
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-gray-400">Time</label>
                     <select name="reservation_time_raw" x-model="selectedTime" required
-                        class="w-full glass p-4 rounded-xl border border-white/10 text-white outline-none focus:border-koya disabled:opacity-50"
+                        class="w-full glass p-4 rounded-xl border border-white/10 text-white outline-none focus:border-accent disabled:opacity-50"
                         :disabled="loading || closed">
                         <option value="" disabled selected class="bg-gray-900" x-text="loading ? 'Searching...' : (closed ? 'Restaurant Closed' : 'Choose time...')"></option>
                         <template x-for="timeOption in availableTimes">
@@ -174,7 +174,7 @@
 
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-gray-400">Party Size</label>
-                    <select name="party_size" x-model.number="partySize" required :disabled="loading" class="w-full glass p-4 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                    <select name="party_size" x-model.number="partySize" required :disabled="loading" class="w-full glass p-4 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         <template x-for="i in getAvailableSpots(selectedTime)">
                             <option :value="i" x-text="i + (i === 1 ? ' Person' : ' People')" :selected="i == partySize" class="bg-gray-900"></option>
                         </template>
@@ -202,7 +202,7 @@
                 <textarea name="notes" rows="3" class="w-full glass p-4 rounded-xl border border-white/10 text-white"></textarea>
             </div>
 
-            <button type="submit" class="w-full btn-koya py-4 shadow-xl shadow-koya/20 text-lg font-bold" x-show="!closed">
+            <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 text-lg font-bold" x-show="!closed">
                 Confirm Reservation
             </button>
         </form>

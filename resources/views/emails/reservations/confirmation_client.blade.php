@@ -122,7 +122,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="{{ asset('images/koya-logo.png') }}" alt="Koya Smash Burger & Bol Logo">
+            <img src="{{ asset('restaurant-mark.svg') }}" alt="{{ config('restaurant.name') }}">
         </div>
 
         <h1>{{ __('emails.confirmation.title', [], $locale) }}</h1>
@@ -185,4 +185,3 @@
     </div>
 </body>
 </html>
-

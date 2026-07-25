@@ -30,7 +30,7 @@
                         </div>
                         <div class="flex justify-between pt-2">
                             <span class="text-md font-bold text-white">Expected Closing</span>
-                            <span class="text-md font-black text-koya shadow-koya shadow-lg">€ {{ number_format($expectedCash, 2) }}</span>
+                            <span class="text-md font-black text-accent shadow-accent shadow-lg">€ {{ number_format($expectedCash, 2) }}</span>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
 
                     <div class="space-y-2">
                         <label class="text-[10px] text-gray-400 uppercase font-black tracking-widest">ACTUAL CASH IN REGISTER</label>
-                        <input type="number" step="0.01" name="closing_cash" required class="w-full glass p-5 rounded-2xl border-2 border-koya text-3xl font-black text-white outline-none">
+                        <input type="number" step="0.01" name="closing_cash" required class="w-full glass p-5 rounded-2xl border-2 border-accent text-3xl font-black text-white outline-none">
                     </div>
 
                     <div class="space-y-2">
@@ -53,15 +53,15 @@
                         <textarea name="notes" rows="3" class="w-full glass p-4 rounded-xl border border-white/10 text-white text-sm outline-none"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full btn-koya py-6 shadow-2xl shadow-koya/40 text-xl font-black tracking-tighter uppercase">
+                    <button type="submit" class="w-full btn-accent py-6 shadow-2xl shadow-accent/40 text-xl font-black tracking-tighter uppercase">
                         Finalize Cashout & Lock
                     </button>
                 </form>
             </div>
         </div>
 
-        <div class="p-6 bg-koya/10 rounded-3xl border border-koya/20 text-center">
-            <p class="text-koya text-xs font-bold leading-relaxed px-4 italic">Confirming this cashout will sync the official books for this business day. Ensure all physical cash is verified by the owner.</p>
+        <div class="p-6 bg-accent/10 rounded-3xl border border-accent/20 text-center">
+            <p class="text-accent text-xs font-bold leading-relaxed px-4 italic">Confirming this cashout will sync the official books for this business day. Ensure all physical cash is verified by the owner.</p>
         </div>
     </div>
 </x-app-layout>

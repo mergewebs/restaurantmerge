@@ -53,7 +53,7 @@
                     <button type="button" data-filter="ready" class="kitchen-filter-btn px-3 py-2 rounded-xl border text-xs font-black uppercase tracking-wider transition">Ready</button>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 text-[11px] font-black uppercase tracking-wider">
-                    <span class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 text-white/90">All <span data-count="all" class="text-koya">0</span></span>
+                    <span class="px-3 py-1.5 rounded-lg border border-white/20 bg-white/10 text-white/90">All <span data-count="all" class="text-accent">0</span></span>
                     <span class="px-3 py-1.5 rounded-lg border border-slate-200/30 bg-slate-300/20 text-slate-100">Pending <span data-count="pending">0</span></span>
                     <span class="px-3 py-1.5 rounded-lg border border-amber-300/40 bg-amber-400/20 text-amber-100">In Prep <span data-count="in_preparation">0</span></span>
                     <span class="px-3 py-1.5 rounded-lg border border-emerald-300/40 bg-emerald-500/20 text-emerald-100">Ready <span data-count="ready">0</span></span>
@@ -115,7 +115,7 @@
                 if (buttonFilter === 'ready') return 'border-emerald-400/55 bg-emerald-500/20 text-emerald-100';
                 if (buttonFilter === 'in_preparation') return 'border-amber-300/55 bg-amber-400/20 text-amber-100';
                 if (buttonFilter === 'pending') return 'border-slate-200/40 bg-slate-400/25 text-slate-50';
-                return 'border-koya/50 bg-koya/20 text-koya';
+                return 'border-accent/50 bg-accent/20 text-accent';
             };
             const emptyMarkup = () => `<div data-empty class="glass rounded-3xl p-8 border border-white/10 lg:col-span-2 xl:col-span-3 2xl:col-span-4 text-center"><p class="text-base text-white/60 font-semibold">${state.filter === 'all' ? 'No active kitchen orders right now.' : `No ${state.filter.replace('_', ' ')} orders right now.`}</p></div>`;
             const connState = (m) => {

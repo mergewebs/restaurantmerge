@@ -58,7 +58,7 @@
                 <h1 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight">Reservations</h1>
                 <p class="text-xs text-slate-500 mt-0.5 hidden sm:block">Manage and track guest reservations and capacity.</p>
             </div>
-            <button @click="showReservationModal = true" class="btn-koya px-3.5 py-2 md:px-4 md:py-2.5 shadow-lg shadow-koya/20 text-xs md:text-sm font-semibold transition-all hover:scale-105 active:scale-95 flex items-center gap-1">
+            <button @click="showReservationModal = true" class="btn-accent px-3.5 py-2 md:px-4 md:py-2.5 shadow-lg shadow-accent/20 text-xs md:text-sm font-semibold transition-all hover:scale-105 active:scale-95 flex items-center gap-1">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                 <span class="hidden md:inline">New Reservation</span>
                 <span class="md:hidden inline">New</span>
@@ -282,19 +282,19 @@
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Customer Name</label>
                         <input type="text" name="customer_name" value="{{ old('customer_name') }}" required 
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                            <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
 
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Time</label>
                             <select name="reservation_time_raw" x-model="selectedTime" required
-                                class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya disabled:opacity-50"
+                                class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent disabled:opacity-50"
                                 :disabled="loading || closed">
                                 <option value="" disabled selected class="bg-gray-900" x-text="loading ? 'Searching...' : (closed ? 'Closed' : 'Choose...')"></option>
                                 <template x-for="timeOption in availableTimes">
@@ -305,7 +305,7 @@
 
                         <div :class="selectedTime ? 'opacity-100' : 'opacity-40 pointer-events-none'" class="transition-opacity">
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">People</label>
-                            <select name="party_size" x-model.number="partySize" required :disabled="loading || !selectedTime" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="party_size" x-model.number="partySize" required :disabled="loading || !selectedTime" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <template x-for="i in getAvailableSpots(selectedTime)">
                                     <option :value="i" x-text="i + (i === 1 ? ' Person' : ' People')" :selected="i == partySize" class="bg-gray-900"></option>
                                 </template>
@@ -327,22 +327,22 @@
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Phone (Optional)</label>
                             <input type="tel" name="customer_phone" value="{{ old('customer_phone') }}"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Email (Optional)</label>
                             <input type="email" name="customer_email" value="{{ old('customer_email') }}"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                     </div>
 
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Notes (Optional)</label>
-                        <textarea name="notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none text-sm" placeholder="Allergies, special requests...">{{ old('notes') }}</textarea>
+                        <textarea name="notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none text-sm" placeholder="Allergies, special requests...">{{ old('notes') }}</textarea>
                     </div>
 
                     <div class="pt-2">
-                        <button type="submit" class="w-full btn-koya py-4 shadow-xl shadow-koya/20 disabled:opacity-50 disabled:cursor-not-allowed" x-show="!closed" :disabled="!selectedTime || loading">Create Reservation</button>
+                        <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 disabled:opacity-50 disabled:cursor-not-allowed" x-show="!closed" :disabled="!selectedTime || loading">Create Reservation</button>
                     </div>
                 </form>
             </div>
@@ -475,13 +475,13 @@
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Customer Name</label>
                         <input type="text" name="customer_name" x-model="editingReservation.customer_name" required
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Status</label>
-                            <select name="status" x-model="editingReservation.status" required class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none">
+                            <select name="status" x-model="editingReservation.status" required class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none">
                                 <option value="confirmed" class="bg-gray-900">Confirmed</option>
                                 <option value="completed" class="bg-gray-900">Completed</option>
                                 <option value="cancelled" class="bg-gray-900">Cancelled</option>
@@ -489,12 +489,12 @@
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                            <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <input type="date" x-model="date" @change="fetchSlots()" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Time</label>
                             <select name="reservation_time_raw" x-model="selectedTime" required
-                                class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya disabled:opacity-50"
+                                class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent disabled:opacity-50"
                                 :disabled="loading || closed">
                                 <option value="" disabled selected class="bg-gray-900" x-text="loading ? 'Searching...' : (closed ? 'Closed' : 'Choose...')"></option>
                                 <template x-for="timeOption in availableTimes">
@@ -507,7 +507,7 @@
                     <div class="grid grid-cols-1 gap-3">
                         <div :class="selectedTime ? 'opacity-100' : 'opacity-40 pointer-events-none'" class="transition-opacity">
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">People</label>
-                            <select name="party_size" x-model.number="partySize" required :disabled="loading || !selectedTime" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="party_size" x-model.number="partySize" required :disabled="loading || !selectedTime" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <template x-for="i in getAvailableSpots(selectedTime)">
                                     <option :value="i" x-text="i + (i === 1 ? ' person' : ' people')" :selected="i == partySize" class="bg-gray-900"></option>
                                 </template>
@@ -529,18 +529,18 @@
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Phone (Optional)</label>
                             <input type="tel" name="customer_phone" x-model="editingReservation.customer_phone"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Email (Optional)</label>
                             <input type="email" name="customer_email" x-model="editingReservation.customer_email"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                     </div>
 
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Notes (Optional)</label>
-                        <textarea name="notes" x-model="editingReservation.notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-koya outline-none text-sm"></textarea>
+                        <textarea name="notes" x-model="editingReservation.notes" rows="2" class="w-full glass p-3 rounded-xl border border-white/10 text-white transition focus:border-accent outline-none text-sm"></textarea>
                     </div>
 
                     <div class="flex gap-3 pt-2">
@@ -549,7 +549,7 @@
                                 class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
                             Delete
                         </button>
-                        <button type="submit" class="flex-[3] btn-koya py-4 shadow-lg shadow-koya/20 disabled:opacity-50 disabled:cursor-not-allowed" x-show="!closed" :disabled="!selectedTime || loading">Save Changes</button>
+                        <button type="submit" class="flex-[3] btn-accent py-4 shadow-lg shadow-accent/20 disabled:opacity-50 disabled:cursor-not-allowed" x-show="!closed" :disabled="!selectedTime || loading">Save Changes</button>
                     </div>
                 </form>
                 

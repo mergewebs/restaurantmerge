@@ -44,13 +44,13 @@
                 @foreach($users as $user)
                     <div class="glass p-4 rounded-[24px] border border-white/5 flex justify-between items-center">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-koya font-black text-xl border border-white/10 uppercase">
+                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-accent font-black text-xl border border-white/10 uppercase">
                                 {{ substr($user->name, 0, 1) }}
                             </div>
                             <div>
                                 <div class="flex items-center gap-2">
                                     <h4 class="text-white font-bold text-lg leading-tight">{{ $user->name }}</h4>
-                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest {{ $user->isAdmin() ? 'bg-koya/20 text-koya' : 'bg-white/10 text-gray-400' }}">
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest {{ $user->isAdmin() ? 'bg-accent/20 text-accent' : 'bg-white/10 text-gray-400' }}">
                                         {{ $user->role }}
                                     </span>
                                 </div>
@@ -111,7 +111,7 @@
                             </div>
                         </div>
                         <div class="pt-2">
-                            <button type="submit" class="w-full btn-koya py-4">Create Account</button>
+                            <button type="submit" class="w-full btn-accent py-4">Create Account</button>
                         </div>
                     </form>
                 </div>
@@ -168,7 +168,7 @@
                                     class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
                                 Delete
                             </button>
-                            <button type="submit" class="flex-[3] btn-koya py-4">Save Changes</button>
+                            <button type="submit" class="flex-[3] btn-accent py-4">Save Changes</button>
                         </div>
                     </form>
 

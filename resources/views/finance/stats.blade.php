@@ -134,26 +134,26 @@
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
                         <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Amount (€)</label>
                         <input type="number" step="0.01" name="amount" value="{{ (session('keep_finance_modal') || request()->boolean('finance_modal')) ? '' : old('amount') }}" required autofocus
-                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                               class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                            <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="income" {{ old('finance_type') == 'income' ? 'selected' : '' }} class="bg-gray-900">Income</option>
                                 <option value="expense" {{ old('finance_type') == 'expense' ? 'selected' : '' }} class="bg-gray-900">Expense</option>
                             </select>
                         </div>
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                            <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="cash" {{ old('method') == 'cash' ? 'selected' : '' }} class="bg-gray-900">Cash</option>
                                 <option value="card" {{ old('method') == 'card' ? 'selected' : '' }} class="bg-gray-900">Card</option>
                             </select>
@@ -163,7 +163,7 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                            <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                            <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                                 <option value="" {{ old('category') == '' ? 'selected' : '' }} class="bg-gray-900">None</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->name }}" 
@@ -176,12 +176,12 @@
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description (Optional)</label>
                             <input type="text" name="description" value="{{ old('description') }}"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-koya">
+                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
                         </div>
                     </div>
 
                     <div class="pt-2">
-                        <button type="submit" class="w-full btn-koya py-4 shadow-xl shadow-koya/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
+                        <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
                     </div>
                 </form>
             </div>
