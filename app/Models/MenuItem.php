@@ -64,6 +64,8 @@ class MenuItem extends Model
         'image_display_path',
         'image_thumbnail_path',
         'price',
+        'stock_quantity',
+        'low_stock_threshold',
         'is_active',
         'sort_order',
     ];
@@ -72,6 +74,8 @@ class MenuItem extends Model
     {
         return [
             'price' => 'decimal:2',
+            'stock_quantity' => 'integer',
+            'low_stock_threshold' => 'integer',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];
@@ -120,5 +124,4 @@ class MenuItem extends Model
         return self::LEGACY_IMAGE_MAP[mb_strtoupper(trim((string) $this->name))] ?? null;
     }
 }
-
 

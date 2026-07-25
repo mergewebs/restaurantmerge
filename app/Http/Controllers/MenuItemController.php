@@ -77,6 +77,8 @@ class MenuItemController extends Controller
             'category' => ['required', 'string', 'max:80', Rule::in(MenuItem::CATEGORY_OPTIONS)],
             'description' => ['nullable', 'string', 'max:2000'],
             'price' => ['required', 'numeric', 'min:0'],
+            'stock_quantity' => ['nullable', 'integer', 'min:0'],
+            'low_stock_threshold' => ['nullable', 'integer', 'min:0'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:999'],
             'is_active' => ['nullable', 'boolean'],
             'image' => ['nullable', 'image', 'max:5120'],
@@ -85,6 +87,8 @@ class MenuItemController extends Controller
 
         $validated['is_active'] = $request->boolean('is_active');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['stock_quantity'] = $validated['stock_quantity'] ?? null;
+        $validated['low_stock_threshold'] = $validated['low_stock_threshold'] ?? 5;
         $validated['description'] = $validated['description'] ?? null;
 
         unset($validated['image'], $validated['remove_image']);

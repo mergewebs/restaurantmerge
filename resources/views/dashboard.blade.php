@@ -1,5 +1,8 @@
 <x-app-layout>
     <style>
+        /* The dashboard has its own compact service header below. */
+        .admin-service-heading { display: none !important; }
+
         /* Fade in animations */
         @keyframes fadeInUp {
             from {
@@ -28,6 +31,101 @@
             pointer-events: none;
             box-shadow: none;
         }
+
+        .restaurant-dashboard-page {
+            --rd-espresso: #241a15;
+            --rd-espresso-soft: #35261f;
+            --rd-cream: #fbf6ed;
+            --rd-paper: #fffdf8;
+            --rd-terracotta: #c65f3d;
+            --rd-terracotta-dark: #9e452d;
+            --rd-olive: #657153;
+            --rd-gold: #d7a64a;
+            --rd-ink: #30251f;
+            --rd-muted: #8c7b70;
+            --rd-line: #eadfd1;
+        }
+        .restaurant-dashboard { position: relative; }
+        .restaurant-service-hero {
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            gap: 1rem;
+            padding: 1.15rem 1.25rem;
+            color: #fffaf0;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 1.75rem;
+            background:
+                radial-gradient(circle at 88% 15%, rgba(215,166,74,.22), transparent 22%),
+                radial-gradient(circle at 74% 120%, rgba(198,95,61,.23), transparent 36%),
+                linear-gradient(135deg, var(--rd-espresso), var(--rd-espresso-soft));
+            box-shadow: 0 24px 50px rgba(47,31,23,.18);
+        }
+        /* The KPI strip is the dashboard header; avoid repeating it with a second summary hero. */
+        .restaurant-service-hero { display: none; }
+        .restaurant-service-hero::after {
+            content: '';
+            position: absolute;
+            right: -3.75rem;
+            top: -4.5rem;
+            width: 15rem;
+            height: 15rem;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 50%;
+            box-shadow: inset 0 0 0 1.25rem rgba(255,255,255,.025), inset 0 0 0 1.35rem rgba(255,255,255,.06);
+            pointer-events: none;
+        }
+        .restaurant-hero-kicker { display: flex; align-items: center; gap: .55rem; color: #e8c77f; font-size: .65rem; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; }
+        .restaurant-hero-kicker::before { content: ''; width: 1.75rem; height: 1px; background: currentColor; }
+        .restaurant-hero-title { margin-top: .4rem; max-width: 36rem; color: #fffaf0 !important; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.75rem, 4vw, 2.8rem); font-weight: 500; line-height: 1; letter-spacing: -.035em; }
+        .restaurant-hero-copy { margin-top: .5rem; max-width: 33rem; color: rgba(255,250,240,.66); font-size: .78rem; line-height: 1.45; }
+        .restaurant-live-pill { display: inline-flex; align-items: center; gap: .45rem; margin-top: .65rem; padding: .35rem .62rem; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.07); color: #fffaf0; font-size: .62rem; font-weight: 800; }
+        .restaurant-live-pill i { width: .45rem; height: .45rem; border-radius: 50%; background: #93b47e; box-shadow: 0 0 0 .22rem rgba(147,180,126,.14); }
+        .restaurant-live-pill.is-paused i { background: #e38467; box-shadow: 0 0 0 .22rem rgba(227,132,103,.14); }
+        .restaurant-hero-side { position: relative; z-index: 1; display: grid; gap: .55rem; align-content: end; }
+        .restaurant-occupancy { padding: .75rem .85rem; border: 1px solid rgba(255,255,255,.1); border-radius: 1rem; background: rgba(255,255,255,.065); backdrop-filter: blur(8px); }
+        .restaurant-occupancy-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
+        .restaurant-occupancy-head span { color: rgba(255,250,240,.58); font-size: .62rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+        .restaurant-occupancy-head strong { color: #fffaf0; font-family: Georgia, serif; font-size: 1.35rem; font-weight: 500; }
+        .restaurant-progress { height: .32rem; margin-top: .5rem; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.12); }
+        .restaurant-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #d7a64a, #e9c97e); }
+        .restaurant-quick-actions { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .55rem; }
+        .restaurant-quick-action { display: flex; min-height: 2.8rem; align-items: center; justify-content: center; gap: .4rem; padding: .45rem; border: 1px solid rgba(255,255,255,.1); border-radius: .85rem; background: rgba(255,255,255,.06); color: #fffaf0 !important; font-size: .64rem; font-weight: 800; text-align: center; transition: .2s ease; }
+        .restaurant-quick-action:hover { transform: translateY(-2px); border-color: rgba(232,199,127,.5); background: rgba(255,255,255,.11); }
+        .restaurant-quick-action svg { width: 1rem; height: 1rem; color: #e8c77f; }
+        .restaurant-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .restaurant-section-heading p { color: var(--rd-terracotta); font-size: .62rem; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; }
+        .restaurant-section-heading h2 { display: none; }
+        .restaurant-section-heading p { display: inline; }
+        .restaurant-section-heading time { color: var(--rd-muted); font-size: .72rem; font-weight: 700; }
+        .dashboard-kpi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; }
+        .dashboard-kpi { position: relative; min-height: 94px; overflow: hidden; padding: .8rem .9rem; border: 1px solid var(--rd-line) !important; border-radius: 1rem; background: var(--rd-paper) !important; box-shadow: 0 5px 16px rgba(63,43,31,.045); transition: transform .2s ease, box-shadow .2s ease; }
+        .dashboard-kpi:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(63,43,31,.09); }
+        .dashboard-kpi::after { content: ''; position: absolute; right: -.8rem; bottom: -.9rem; width: 3rem; height: 3rem; border: .5rem solid rgba(198,95,61,.05); border-radius: 50%; }
+        .dashboard-kpi:nth-child(3n+2)::after { border-color: rgba(101,113,83,.07); }
+        .dashboard-kpi:nth-child(3n+3)::after { border-color: rgba(215,166,74,.08); }
+        .dashboard-kpi-label { position: relative; z-index: 1; display: block; max-width: 11rem; color: var(--rd-muted) !important; font-size: .6rem; font-weight: 900; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
+        .dashboard-kpi-value { position: relative; z-index: 1; display: block; margin-top: .4rem; color: var(--rd-ink) !important; font-family: Georgia, 'Times New Roman', serif; font-size: 1.6rem; font-weight: 500; line-height: 1; }
+        .dashboard-kpi-note { position: relative; z-index: 1; display: block; margin-top: .35rem; overflow: hidden; color: var(--rd-muted); font-size: .61rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+        .dashboard-kpi:first-child { background: linear-gradient(145deg, #f8eadb, #fffaf1) !important; border-color: #e8cdb8 !important; }
+        .dashboard-kpi:first-child .dashboard-kpi-label, .dashboard-kpi:first-child .dashboard-kpi-value { color: var(--rd-terracotta-dark) !important; }
+        .dashboard-kpi::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 3px; background: transparent; }
+        .dashboard-kpi.kpi-pending::before, .dashboard-kpi.kpi-payment::before { background: var(--rd-gold); }
+        .dashboard-kpi.kpi-preparing::before { background: var(--rd-terracotta); }
+        .dashboard-kpi.kpi-ready::before { background: var(--rd-olive); }
+        .dashboard-kpi.kpi-alert::before { background: #a94e43; }
+        .dashboard-panel { border: 1px solid var(--rd-line) !important; border-radius: 1.2rem; background: var(--rd-paper) !important; padding: .9rem 1rem; box-shadow: 0 10px 24px rgba(63,43,31,.045); }
+        .dashboard-panel h3 { color: var(--rd-ink) !important; font-family: Georgia, 'Times New Roman', serif; font-size: 1.12rem; font-weight: 600; }
+        .dashboard-panel > div:first-child { padding-bottom: .55rem; margin-bottom: .65rem !important; border-bottom: 1px solid #f0e7db; }
+        .dashboard-panel a { color: var(--rd-terracotta-dark) !important; }
+        .restaurant-dashboard-page .bg-indigo-600 { background-color: var(--rd-terracotta) !important; }
+        .restaurant-dashboard-page .text-indigo-600, .restaurant-dashboard-page .text-indigo-700 { color: var(--rd-terracotta-dark) !important; }
+        .restaurant-dashboard-page .bg-indigo-50 { background-color: #fbefe6 !important; }
+        .restaurant-dashboard-page .border-indigo-100 { border-color: #efd5c4 !important; }
+        @media (min-width: 640px) { .dashboard-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (min-width: 900px) { .dashboard-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        @media (min-width: 1180px) { .dashboard-kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (max-width: 520px) { .restaurant-quick-action span { display: none; } .restaurant-quick-action svg { width: 1.2rem; height: 1.2rem; } }
     </style>
 
     <!-- Daily Overview Stats -->
@@ -94,9 +192,57 @@
             };
             this.showEditFinanceModal = true;
         }
-    }" class="space-y-6">
+    }" class="restaurant-dashboard-page space-y-4">
 
-        <section class="service-pulse-grid {{ auth()->user()->isAdmin() ? '' : 'service-pulse-grid-compact' }}" aria-label="Today's service pulse">
+        <section aria-labelledby="dashboard-overview-title" class="restaurant-dashboard space-y-2.5">
+            <div class="restaurant-service-hero">
+                <div class="relative z-[1]">
+                    <p class="restaurant-hero-kicker">Today’s service</p>
+                    <h2 class="restaurant-hero-title">The dining room,<br>at a glance.</h2>
+                    <p class="restaurant-hero-copy">A live view of the tables, kitchen and guests shaping today’s service.</p>
+                    <span class="restaurant-live-pill {{ $isClosedToday ? 'is-paused' : '' }}"><i></i>{{ $isClosedToday ? 'Reservations paused' : 'Reservations open' }} · Updated {{ now()->format('H:i') }}</span>
+                </div>
+                <div class="restaurant-hero-side">
+                    <div class="restaurant-occupancy">
+                        <div class="restaurant-occupancy-head"><span>Dining room occupancy</span><strong>{{ $occupiedTables }}/{{ $totalTables }}</strong></div>
+                        <div class="restaurant-progress" role="progressbar" aria-label="Table occupancy" aria-valuemin="0" aria-valuemax="{{ $totalTables }}" aria-valuenow="{{ $occupiedTables }}"><span style="width: {{ $totalTables > 0 ? round(($occupiedTables / $totalTables) * 100) : 0 }}%"></span></div>
+                    </div>
+                    <nav class="restaurant-quick-actions" aria-label="Service shortcuts">
+                        @if(config('features.tables', false))<a href="{{ route('tables.index') }}" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 10h16M6 10v9m12-9v9M8 6h8"></path></svg><span>Tables</span></a>@endif
+                        @if(config('features.kitchen', false))<a href="{{ route('tables.kitchen') }}" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 11h14M7 11a5 5 0 0110 0m-5-5V4m-8 15h16"></path></svg><span>Kitchen</span></a>@endif
+                        <button type="button" @click="showReservationModal = true" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3M5 11h14M12 14v4m-2-2h4"></path></svg><span>Book table</span></button>
+                    </nav>
+                </div>
+            </div>
+            <div class="restaurant-section-heading">
+                <div><p id="dashboard-overview-title">Today</p></div>
+                <time datetime="{{ $date }}">{{ \Carbon\Carbon::parse($date)->format('l, d F') }}</time>
+            </div>
+            <div class="dashboard-kpi-grid">
+                @if(auth()->user()->isAdmin())
+                    <article class="dashboard-kpi border-emerald-200 bg-emerald-50/70"><span class="dashboard-kpi-label text-emerald-700">Today’s Sales</span><strong class="dashboard-kpi-value text-emerald-700">&euro;{{ number_format($dailyIncome, 2) }}</strong><small class="dashboard-kpi-note">Cash and card income</small></article>
+                @endif
+                <article class="dashboard-kpi"><span class="dashboard-kpi-label">Orders</span><strong class="dashboard-kpi-value">{{ $ordersToday }}</strong><small class="dashboard-kpi-note">Started today</small></article>
+                <article class="dashboard-kpi kpi-preparing"><span class="dashboard-kpi-label">Kitchen Orders</span><strong class="dashboard-kpi-value">{{ $pendingOrders + $preparingOrders + $readyOrders }}</strong><small class="dashboard-kpi-note">{{ $pendingOrders }} waiting &middot; {{ $preparingOrders }} cooking &middot; {{ $readyOrders }} ready</small></article>
+                <article class="dashboard-kpi"><span class="dashboard-kpi-label">Reservations</span><strong class="dashboard-kpi-value">{{ $reservationsCount }}</strong><small class="dashboard-kpi-note">{{ $reservations->sum('party_size') }} guests booked</small></article>
+            </div>
+            <div class="grid gap-4 lg:grid-cols-3">
+                <article class="dashboard-panel">
+                    <div class="mb-4 flex items-center justify-between"><h3 class="font-black text-slate-800">Best Sellers</h3><span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Today</span></div>
+                    <div class="space-y-2">@forelse($topSellingItems->take(4) as $index => $item)<div class="flex items-center gap-2.5"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-[10px] font-black text-indigo-600">{{ $index + 1 }}</span><div class="min-w-0 flex-1"><p class="truncate text-xs font-bold text-slate-700">{{ $item->name }}</p><p class="text-[10px] text-slate-400">&euro;{{ number_format($item->sales_total, 2) }} sales</p></div><strong class="text-xs text-slate-800">{{ $item->quantity_sold }}</strong></div>@empty<p class="py-4 text-center text-xs text-slate-400">No items sold yet today.</p>@endforelse</div>
+                </article>
+                <article class="dashboard-panel">
+                    <div class="mb-4 flex items-center justify-between"><h3 class="font-black text-slate-800">Low Stock</h3>@if(auth()->user()->isAdmin())<a href="{{ route('menu-items.index') }}" class="text-xs font-bold text-indigo-600">Update stock</a>@endif</div>
+                    <div class="space-y-2">@forelse($lowStockProducts->take(4) as $product)<div class="flex items-center justify-between gap-3 rounded-lg bg-rose-50 px-2.5 py-1.5"><p class="truncate text-xs font-bold text-slate-700">{{ $product->name }}</p><span class="shrink-0 text-[10px] font-black text-rose-600">{{ $product->stock_quantity }} left</span></div>@empty<p class="py-4 text-center text-xs text-slate-400">No low-stock alerts.</p>@endforelse</div>
+                </article>
+                <article class="dashboard-panel">
+                    <div class="mb-4 flex items-center justify-between"><h3 class="font-black text-slate-800">Latest Updates</h3><span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Newest</span></div>
+                    <div class="space-y-2">@forelse($recentActivity->take(4) as $activity)<div class="flex gap-2.5"><span class="mt-1 h-1.5 w-1.5 shrink-0 rounded-full {{ $activity['type'] === 'order' ? 'bg-emerald-500' : 'bg-indigo-500' }}"></span><div class="min-w-0 flex-1"><p class="truncate text-xs font-bold text-slate-700">{{ $activity['title'] }}</p><p class="truncate text-[10px] text-slate-400">{{ $activity['detail'] }}</p></div><time class="shrink-0 text-[9px] font-bold text-slate-400">{{ $activity['at']->diffForHumans(null, true) }}</time></div>@empty<p class="py-4 text-center text-xs text-slate-400">No recent activity.</p>@endforelse</div>
+                </article>
+            </div>
+        </section>
+
+        <section class="hidden service-pulse-grid {{ auth()->user()->isAdmin() ? '' : 'service-pulse-grid-compact' }}" aria-label="Today's service pulse">
             <article class="service-pulse-card pulse-reservations">
                 <div class="service-pulse-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3M5 11h14M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -158,8 +304,8 @@
                 <div class="flex items-center gap-3">
                     <div class="w-1.5 h-8 bg-indigo-600 rounded-full shadow-sm"></div>
                     <div>
-                        <h3 class="text-xl font-bold text-slate-800 uppercase tracking-tight">Reservations</h3>
-                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] mt-0.5">Today's Schedule</p>
+                        <h3 class="text-xl font-bold text-slate-800 tracking-tight">Today's Reservations</h3>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-[0.14em] mt-0.5">Times and guest details</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
@@ -201,9 +347,9 @@
                     <button @click="showReservationModal = true" class="mt-4 inline-block text-accent font-bold">Reservation Today +</button>
                 </div>
             @else
-                <div class="space-y-4">
-                    @foreach($reservations as $res)
-                    <div class="glass p-4 rounded-[20px] border border-gray-200 flex items-center justify-between gap-4 text-left hover-lift transition-all duration-300 relative overflow-hidden group">
+                <div class="space-y-2.5">
+                    @foreach($reservations->take(4) as $res)
+                    <div class="glass p-3 rounded-[18px] border border-gray-200 flex items-center justify-between gap-3 text-left hover-lift transition-all duration-300 relative overflow-hidden group">
                         <!-- Vertical status strip indicator -->
                         <div class="absolute left-0 top-0 bottom-0 w-1.5 @if(($res->status ?? 'confirmed') === 'completed') bg-blue-500 @elseif(($res->status ?? 'confirmed') === 'cancelled') bg-red-500 @else bg-indigo-600 @endif"></div>
                         
@@ -271,6 +417,11 @@
                         </div>
                     </div>
                     @endforeach
+                    @if($reservationsCount > 4)
+                        <a href="{{ route('reservations.index') }}" class="flex items-center justify-center rounded-xl border border-[#eadfd1] bg-[#fffdf8] px-4 py-2 text-xs font-black text-[#9e452d] transition hover:bg-[#fbefe6]">
+                            View all {{ $reservationsCount }} reservations
+                        </a>
+                    @endif
                 </div>
             @endif
         </div>
@@ -285,7 +436,7 @@
                 <div class="flex items-center gap-3">
                     <div class="w-1.5 h-8 bg-emerald-600 rounded-full shadow-sm"></div>
                     <div>
-                        <h3 class="text-xl font-bold text-slate-800 uppercase tracking-tight">Latest Transactions</h3>
+                        <h3 class="text-xl font-bold text-slate-800 tracking-tight">Recent Payments</h3>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">

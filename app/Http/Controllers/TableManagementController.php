@@ -308,6 +308,7 @@ class TableManagementController extends Controller
         DB::transaction(function () use ($order, $table) {
             $order->update([
                 'status' => Order::STATUS_CLOSED,
+                'payment_status' => Order::PAYMENT_STATUS_PAID,
             ]);
 
             if ((float) $order->total > 0) {
@@ -811,7 +812,6 @@ class TableManagementController extends Controller
     }
 
 }
-
 
 
 

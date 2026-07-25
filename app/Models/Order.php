@@ -16,10 +16,14 @@ class Order extends Model
     public const KITCHEN_STATUS_IN_PREPARATION = 'in_preparation';
     public const KITCHEN_STATUS_READY = 'ready';
 
+    public const PAYMENT_STATUS_UNPAID = 'unpaid';
+    public const PAYMENT_STATUS_PAID = 'paid';
+
     protected $fillable = [
         'restaurant_table_id',
         'status',
         'kitchen_status',
+        'payment_status',
         'total',
     ];
 

@@ -299,6 +299,8 @@
                  name: @js(old('name', '')),
                  category: @js(old('category', '')),
                  price: @js(old('price', '')),
+                 stock_quantity: @js(old('stock_quantity', '')),
+                 low_stock_threshold: @js(old('low_stock_threshold', 5)),
                  sort_order: @js(old('sort_order', 0)),
                  description: @js(old('description', '')),
                  is_active: @js((bool) old('is_active', false)),
@@ -372,6 +374,8 @@
                                         "name" => $item->name,
                                         "category" => $item->category,
                                         "price" => (string) $item->price,
+                                        "stock_quantity" => $item->stock_quantity,
+                                        "low_stock_threshold" => $item->low_stock_threshold,
                                         "sort_order" => $item->sort_order,
                                         "description" => $item->description ?? "",
                                         "is_active" => (bool) $item->is_active,
@@ -478,6 +482,11 @@
                                 class="w-full bg-white border-2 border-indigo-100 text-slate-800 text-2xl font-black px-4 py-4 rounded-2xl outline-none focus:border-indigo-500 transition-all shadow-sm">
                         </div>
 
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-stock">Stock (optional)</label><input id="product-stock" type="number" min="0" name="stock_quantity" value="{{ old('stock_quantity') }}" placeholder="Not tracked" class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500"></div>
+                            <div><label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-stock-alert">Low-stock alert</label><input id="product-stock-alert" type="number" min="0" name="low_stock_threshold" value="{{ old('low_stock_threshold', 5) }}" class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500"></div>
+                        </div>
+
                         <div>
                             <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="product-description">Description</label>
                             <textarea id="product-description" name="description" rows="3" placeholder="Short description for customers"
@@ -574,6 +583,11 @@
                             class="w-full bg-white border-2 border-indigo-100 text-slate-800 text-2xl font-black px-4 py-4 rounded-2xl outline-none focus:border-indigo-500 transition-all shadow-sm">
                     </div>
 
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="edit-product-stock">Stock (optional)</label><input id="edit-product-stock" type="number" min="0" name="stock_quantity" x-model="editingProduct.stock_quantity" placeholder="Not tracked" class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500"></div>
+                        <div><label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="edit-product-stock-alert">Low-stock alert</label><input id="edit-product-stock-alert" type="number" min="0" name="low_stock_threshold" x-model="editingProduct.low_stock_threshold" class="w-full bg-white border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500"></div>
+                    </div>
+
                     <div>
                         <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block" for="edit-product-description">Description</label>
                         <textarea id="edit-product-description" name="description" rows="3" x-model="editingProduct.description" placeholder="Short description for customers"
@@ -629,7 +643,6 @@
     </div>{{-- /products-page --}}
     </div>
 </x-app-layout>
-
 
 
 
