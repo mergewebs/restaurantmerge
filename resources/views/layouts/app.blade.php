@@ -418,17 +418,21 @@
 
                 $bottomMenuItems[] = ['route' => route('users.index'), 'active' => request()->routeIs('users.*') || request()->routeIs('staff.*'), 'label' => 'Staff', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
 
-                $primaryMenuItems = $bottomMenuItems;
+                // Keep the navigation calm and predictable as modules are added.
+                // The five service essentials stay visible; management tools live in More.
+                $primaryMenuItems = array_slice($bottomMenuItems, 0, 5);
+                $secondaryMenuItems = array_slice($bottomMenuItems, 5);
+                $secondaryMenuActive = collect($secondaryMenuItems)->contains(fn ($item) => $item['active']);
             @endphp
 
             <!-- Global Navigation (Top) -->
             <nav class="admin-navigation fixed left-0 right-0 z-50" aria-label="Primary navigation">
-                <div class="glass border-y border-white/10 px-5 py-3 flex items-center justify-center shadow-2xl">
-                    <a href="{{ route('dashboard') }}" class="admin-brand-lockup mr-5 shrink-0" aria-label="Restaurant dashboard">
+                <div class="glass admin-navigation-shell border-y border-white/10 px-5 py-3 flex items-center shadow-2xl">
+                    <a href="{{ route('dashboard') }}" class="admin-brand-lockup shrink-0" aria-label="Restaurant dashboard">
                         <img src="{{ asset('restaurant-mark.svg') }}" alt="" class="h-11 w-11 rounded-xl border-2 border-white/20 object-cover shadow-lg" width="44" height="44">
                         <span><strong>{{ config('restaurant.name') }}</strong><small>{{ config('app.name') }}</small></span>
                     </a>
-                    <div class="bottom-primary-links flex items-center gap-10 md:gap-16 pr-1">
+                    <div class="bottom-primary-links flex items-center">
                         @foreach($primaryMenuItems as $item)
                             <a href="{{ $item['route'] }}" class="bottom-quick-link {{ $item['active'] ? 'active' : '' }}" @if(!empty($item['target'])) target="{{ $item['target'] }}" @endif @if(!empty($item['rel'])) rel="{{ $item['rel'] }}" @endif>
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -438,12 +442,51 @@
                             </a>
                         @endforeach
 
-                        <div x-data="{ dropdownOpen: false }" @click.outside="dropdownOpen = false" class="relative">
-                            <button @click="dropdownOpen = !dropdownOpen" class="bottom-quick-link {{ request()->routeIs('profile.*') ? 'active' : '' }}" title="Profile">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        @if(count($secondaryMenuItems))
+                            <div x-data="{ dropdownOpen: false }" @click.outside="dropdownOpen = false" class="relative nav-more-menu">
+                                <button type="button" @click="dropdownOpen = !dropdownOpen" class="bottom-quick-link {{ $secondaryMenuActive ? 'active' : '' }}" :aria-expanded="dropdownOpen" aria-haspopup="menu" title="More tools">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 12h.01M12 12h.01M19 12h.01"></path>
+                                    </svg>
+                                    <span class="text-[9px] font-black uppercase tracking-wider">More</span>
+                                    <span class="nav-more-count">{{ count($secondaryMenuItems) }}</span>
+                                </button>
+
+                                <div x-cloak x-show="dropdownOpen"
+                                     x-transition:enter="transition ease-out duration-150"
+                                     x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+                                     x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                                     x-transition:leave="transition ease-in duration-100"
+                                     x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+                                     x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+                                     class="nav-more-dropdown dropdown-menu-container" role="menu">
+                                    <div class="nav-more-heading">
+                                        <span>Workspace</span>
+                                        <small>{{ count($secondaryMenuItems) }} tools</small>
+                                    </div>
+                                    <div class="nav-more-grid">
+                                        @foreach($secondaryMenuItems as $item)
+                                            <a href="{{ $item['route'] }}" class="nav-more-item {{ $item['active'] ? 'active' : '' }}" role="menuitem">
+                                                <span class="nav-more-icon">
+                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon'] }}"></path>
+                                                    </svg>
+                                                </span>
+                                                <span>{{ $item['label'] }}</span>
+                                                <svg class="nav-more-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                            </a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div x-data="{ dropdownOpen: false }" @click.outside="dropdownOpen = false" class="relative nav-profile-menu">
+                            <button type="button" @click="dropdownOpen = !dropdownOpen" class="bottom-quick-link profile-menu-trigger {{ request()->routeIs('profile.*') ? 'active' : '' }}" :aria-expanded="dropdownOpen" aria-haspopup="menu" title="Profile">
+                                <svg class="w-5 h-5 profile-menu-trigger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                 </svg>
-                                <span class="text-[9px] font-black uppercase tracking-wider hidden lg:inline">Profile</span>
+                                <span class="profile-menu-trigger-label text-[9px] font-black uppercase tracking-wider hidden lg:inline">Profile</span>
                             </button>
                             
                             <!-- Dropdown Menu -->
@@ -454,10 +497,10 @@
                                  x-transition:leave="transition ease-in duration-100"
                                  x-transition:leave-start="opacity-100 scale-100"
                                  x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl p-1.5 z-50 dropdown-menu-container">
+                                 class="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-xl p-1.5 z-50 dropdown-menu-container profile-dropdown">
                                 
                                 <!-- Profile link in dropdown -->
-                                <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-700 hover:text-indigo-600 hover:bg-indigo-50/50 rounded-lg transition duration-150 {{ request()->routeIs('profile.*') ? 'text-indigo-600 bg-indigo-50/30' : '' }}">
+                                <a href="{{ route('profile.edit') }}" class="profile-dropdown-link flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition duration-150 {{ request()->routeIs('profile.*') ? 'active' : '' }}">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
@@ -466,7 +509,7 @@
                                 
                                 <!-- Config Link -->
                                 @if(auth()->user()->isAdmin())
-                                    <a href="{{ route('restaurant.config') }}" class="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-gray-700 hover:text-indigo-600 hover:bg-indigo-50/50 rounded-lg transition duration-150 {{ request()->routeIs('restaurant.config') ? 'text-indigo-600 bg-indigo-50/30' : '' }}">
+                                    <a href="{{ route('restaurant.config') }}" class="profile-dropdown-link flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition duration-150 {{ request()->routeIs('restaurant.config') ? 'active' : '' }}">
                                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                         </svg>
@@ -479,7 +522,7 @@
                                 <!-- Logout Button -->
                                 <form method="POST" action="{{ route('logout') }}" class="w-full" onsubmit="return confirm('Are you sure you want to log out?')">
                                     @csrf
-                                    <button type="submit" class="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-red-500 hover:text-red-700 hover:bg-red-50/50 rounded-lg transition duration-150">
+                                    <button type="submit" class="profile-dropdown-logout w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition duration-150">
                                         <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                         </svg>

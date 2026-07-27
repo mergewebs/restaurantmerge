@@ -1237,27 +1237,28 @@
         }
         .mobile-profile-dropdown .mobile-profile-logout:hover { background: #ffe4e6 !important; }
         nav.admin-navigation.fixed {
-            top: auto !important; right: max(0.75rem, env(safe-area-inset-right)) !important;
-            bottom: max(0.75rem, env(safe-area-inset-bottom)) !important;
-            left: max(0.75rem, env(safe-area-inset-left)) !important;
+            top: auto !important; right: env(safe-area-inset-right) !important;
+            bottom: max(0.5rem, env(safe-area-inset-bottom)) !important;
+            left: env(safe-area-inset-left) !important;
             width: auto !important; z-index: 52 !important;
         }
         nav.admin-navigation.fixed .glass {
-            min-height: 3.75rem; padding: 0.25rem 0.4rem !important;
+            min-height: 3.25rem; padding: 0.15rem 0.3rem !important;
             border: 1px solid rgba(226, 232, 240, 0.95) !important;
-            border-radius: 20px !important; background: rgba(255, 255, 255, 0.96) !important;
+            border-radius: 16px !important; background: rgba(255, 255, 255, 0.96) !important;
             box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16) !important;
             backdrop-filter: blur(20px) !important; -webkit-backdrop-filter: blur(20px) !important;
         }
         nav.admin-navigation > .glass > a.shrink-0 { display: none !important; }
         nav.admin-navigation .bottom-primary-links > div.relative { display: none !important; }
+        nav.admin-navigation .bottom-primary-links > div.nav-more-menu { display: block !important; }
         nav.admin-navigation .bottom-primary-links { gap: 0.15rem !important; }
         nav.admin-navigation .bottom-quick-link {
-            height: 3.1rem !important; min-height: 3.1rem !important;
-            gap: 0.2rem !important; padding: 0.2rem 0.1rem !important; border-radius: 12px !important;
+            height: 2.75rem !important; min-height: 2.75rem !important;
+            gap: 0.1rem !important; padding: 0.1rem !important; border-radius: 11px !important;
         }
         nav.admin-navigation .bottom-quick-link svg {
-            width: 1rem !important; height: 1rem !important;
+            width: 1.25rem !important; height: 1.25rem !important;
         }
         nav.admin-navigation .bottom-quick-link span {
             display: block !important; max-width: 100%; overflow: hidden;
@@ -1268,9 +1269,14 @@
             top: auto !important; right: 0 !important; bottom: calc(100% + 0.75rem) !important;
             margin: 0 !important; transform-origin: bottom right;
         }
+        nav.admin-navigation .nav-more-dropdown {
+            width: min(22rem, calc(100vw - 1.5rem));
+            max-height: min(70vh, 30rem);
+            overflow-y: auto;
+        }
         main {
             padding-top: calc(4.75rem + env(safe-area-inset-top)) !important;
-            padding-bottom: calc(6.75rem + env(safe-area-inset-bottom)) !important;
+            padding-bottom: calc(5.9rem + env(safe-area-inset-bottom)) !important;
         }
     }
 </style>
@@ -1560,8 +1566,8 @@
     }
 
     nav.admin-navigation.fixed > .glass {
-        width: min(calc(100% - 2rem), 88rem);
-        min-height: 4.85rem;
+        width: min(calc(100% - 2.5rem), 72rem);
+        min-height: 4.1rem;
         margin-inline: auto;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 1.35rem !important;
@@ -1570,14 +1576,22 @@
         box-shadow: 0 18px 45px -20px rgba(35, 22, 14, 0.68) !important;
     }
 
+    nav.admin-navigation .admin-navigation-shell {
+        justify-content: space-between !important;
+        gap: clamp(0.75rem, 1.8vw, 1.5rem);
+        padding: 0.55rem clamp(0.75rem, 1.5vw, 1.2rem) !important;
+    }
+
     .admin-brand-lockup {
         display: inline-flex;
         align-items: center;
-        gap: 0.7rem;
+        gap: 0.55rem;
         text-decoration: none;
     }
 
     .admin-brand-lockup img {
+        width: 2.35rem !important;
+        height: 2.35rem !important;
         border-color: rgba(255, 255, 255, 0.18) !important;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
     }
@@ -1591,7 +1605,7 @@
     .admin-brand-lockup strong {
         color: #fff9ed;
         font-family: "Cormorant Garamond", Georgia, serif;
-        font-size: 1.15rem;
+        font-size: 1rem;
         letter-spacing: 0.08em;
     }
 
@@ -1605,11 +1619,17 @@
     }
 
     nav.admin-navigation .bottom-primary-links {
-        gap: clamp(0.8rem, 2.1vw, 2.5rem) !important;
+        flex: 1 1 auto;
+        min-width: 0;
+        justify-content: flex-end !important;
+        gap: clamp(0.25rem, 0.8vw, 0.7rem) !important;
     }
 
     nav.admin-navigation .bottom-quick-link {
-        min-width: 4.25rem;
+        position: relative;
+        min-width: clamp(3.35rem, 4.8vw, 4.2rem);
+        min-height: 3rem;
+        padding: 0.35rem 0.45rem;
         border-radius: 0.8rem !important;
         color: #cdbfb2 !important;
     }
@@ -1628,6 +1648,117 @@
         color: #f5d493 !important;
         box-shadow: 0 0 0 1px rgba(196, 154, 74, 0.2) inset !important;
     }
+
+    nav.admin-navigation .nav-profile-menu > .bottom-quick-link {
+        border: 1px solid rgba(245, 212, 147, 0.2);
+        background: rgba(255, 255, 255, 0.08) !important;
+        color: #fff1d2 !important;
+    }
+
+    nav.admin-navigation .nav-profile-menu > .bottom-quick-link:hover,
+    nav.admin-navigation .nav-profile-menu > .bottom-quick-link.active {
+        border-color: rgba(245, 212, 147, 0.45);
+        background: rgba(196, 154, 74, 0.2) !important;
+        color: #ffe2a5 !important;
+    }
+
+    body nav.admin-navigation .profile-menu-trigger,
+    body nav.admin-navigation .profile-menu-trigger-label,
+    body nav.admin-navigation .profile-menu-trigger-icon {
+        color: #fff1d2 !important;
+        opacity: 1 !important;
+    }
+
+    body nav.admin-navigation .profile-menu-trigger {
+        background-color: rgba(255, 255, 255, 0.09) !important;
+    }
+
+    body nav.admin-navigation .profile-menu-trigger:hover,
+    body nav.admin-navigation .profile-menu-trigger.active {
+        color: #ffe2a5 !important;
+        background-color: rgba(196, 154, 74, 0.22) !important;
+    }
+
+    .profile-dropdown { padding: 0.45rem !important; }
+    .profile-dropdown-link {
+        color: #49382d !important;
+        background: transparent !important;
+    }
+    .profile-dropdown-link svg { color: #8b7566 !important; }
+    .profile-dropdown-link:hover,
+    .profile-dropdown-link.active {
+        color: #9f482f !important;
+        background: #fff4e5 !important;
+    }
+    .profile-dropdown-link:hover svg,
+    .profile-dropdown-link.active svg { color: #b95738 !important; }
+    button.profile-dropdown-logout {
+        color: #b42318 !important;
+        background: #fff1ef !important;
+    }
+    button.profile-dropdown-logout svg { color: #c73c30 !important; }
+    button.profile-dropdown-logout:hover { color: #8f1f16 !important; background: #ffe4df !important; }
+
+    .nav-more-count {
+        position: absolute;
+        top: 0.3rem;
+        right: 0.35rem;
+        display: grid !important;
+        width: 1.05rem;
+        height: 1.05rem;
+        place-items: center;
+        border: 1px solid rgba(245, 212, 147, 0.2);
+        border-radius: 999px;
+        background: rgba(196, 154, 74, 0.14);
+        color: #f5d493;
+        font-size: 0.55rem !important;
+        line-height: 1;
+    }
+
+    .nav-more-dropdown {
+        position: absolute;
+        top: calc(100% + 0.85rem);
+        right: 0;
+        width: min(24rem, calc(100vw - 2rem));
+        padding: 0.7rem;
+        border: 1px solid var(--restaurant-border);
+        border-radius: 1.1rem;
+        background: var(--restaurant-paper);
+        transform-origin: top right;
+        box-shadow: 0 24px 55px -24px rgba(39, 28, 22, 0.5);
+    }
+
+    .nav-more-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.25rem 0.35rem 0.7rem;
+        color: #392c24;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .nav-more-heading small { color: #9a8779; font-size: 0.6rem; }
+    .nav-more-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem; }
+    .nav-more-item {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.65rem;
+        border: 1px solid transparent;
+        border-radius: 0.8rem;
+        color: #6f5d50;
+        font-size: 0.76rem;
+        font-weight: 700;
+        transition: 160ms ease;
+    }
+    .nav-more-item:hover, .nav-more-item.active { border-color: #e5d7c5; background: #fff8ee; color: #a84e33; }
+    .nav-more-icon { display: grid; width: 1.9rem; height: 1.9rem; flex: none; place-items: center; border-radius: 0.6rem; background: #f5eadb; color: #9a6047; }
+    .nav-more-icon svg { width: 0.95rem; height: 0.95rem; }
+    .nav-more-arrow { width: 0.75rem; height: 0.75rem; margin-left: auto; color: #baa99a; }
 
     nav.admin-navigation .dropdown-menu-container {
         border-color: var(--restaurant-border) !important;
@@ -1775,7 +1906,7 @@
 
     @media (min-width: 1024px) {
         .admin-main {
-            padding-top: 7.4rem !important;
+            padding-top: 6.45rem !important;
         }
     }
 
@@ -1805,9 +1936,21 @@
         }
 
         nav.admin-navigation.fixed .glass {
+            gap: 0 !important;
+            padding: 0.15rem 0.3rem !important;
             border-color: rgba(255, 255, 255, 0.1) !important;
             background: rgba(39, 28, 22, 0.97) !important;
             box-shadow: 0 18px 42px -18px rgba(39, 28, 22, 0.7) !important;
+        }
+
+        nav.admin-navigation .nav-more-dropdown {
+            top: auto !important;
+            right: 0 !important;
+            bottom: calc(100% + 0.75rem) !important;
+            width: min(22rem, calc(100vw - 1.5rem));
+            max-height: min(70vh, 30rem);
+            overflow-y: auto;
+            transform-origin: bottom right;
         }
 
         nav.admin-navigation .bottom-quick-link {
