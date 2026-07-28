@@ -9,6 +9,7 @@ use App\Models\User;
 use Database\Seeders\DemoUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class DemoModeTest extends TestCase
@@ -117,5 +118,40 @@ class DemoModeTest extends TestCase
         $this->actingAs($demo)->post(route('logout'))->assertRedirect(route('login'));
 
         $this->assertGuest();
+    }
+
+    public function test_demo_can_explore_feature_pages_even_when_the_feature_is_disabled(): void
+    {
+        config()->set('features.tables', false);
+        config()->set('features.kitchen', false);
+
+        $demo = User::factory()->create(['role' => 'demo']);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($demo)->get(route('tables.index'))->assertOk();
+        $this->actingAs($demo)->get(route('tables.kitchen'))->assertOk();
+        $this->actingAs($admin)->get(route('tables.index'))->assertNotFound();
+    }
+
+    public function test_web_middleware_blocks_demo_writes_even_without_route_level_demo_middleware(): void
+    {
+        Route::middleware('web')->post('/demo-write-probe', fn () => response()->noContent());
+        $demo = User::factory()->create(['role' => 'demo']);
+
+        $this->actingAs($demo)
+            ->post('/demo-write-probe')
+            ->assertRedirect()
+            ->assertSessionHas('demo_action_blocked');
+    }
+
+    public function test_demo_page_includes_final_action_interception(): void
+    {
+        $demo = User::factory()->create(['role' => 'demo']);
+
+        $this->actingAs($demo)
+            ->get(route('dashboard'))
+            ->assertOk()
+            ->assertSee('finalActionPattern', false)
+            ->assertSee('demoFinalAction', false);
     }
 }

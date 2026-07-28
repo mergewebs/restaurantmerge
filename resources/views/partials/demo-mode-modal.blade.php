@@ -52,6 +52,7 @@
         const modal = document.getElementById('demo-mode-modal');
         const logoutUrl = @json(route('logout'));
         const unsafeMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+        const finalActionPattern = /^(save|update|delete|confirm|complete|pay|submit|cancel|checkout|refund)(\s|$)/i;
         const methodOf = (value) => String(value || 'GET').toUpperCase();
         const isLogoutUrl = (value) => {
             try { return new URL(value, window.location.href).pathname === new URL(logoutUrl, window.location.href).pathname; }
@@ -73,6 +74,19 @@
         document.querySelectorAll('[data-demo-modal-open]').forEach((button) => button.addEventListener('click', show));
         modal.querySelectorAll('[data-demo-modal-close]').forEach((button) => button.addEventListener('click', close));
         document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
+
+        document.addEventListener('click', (event) => {
+            const action = event.target.closest('button, [role="button"]');
+            const form = action?.closest('form');
+            if (!action || modal.contains(action) || (form && isLogoutUrl(form.action))) return;
+
+            const label = (action.dataset.demoAction || action.textContent || '').trim();
+            if (action.dataset.demoFinalAction !== undefined || finalActionPattern.test(label)) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                show();
+            }
+        }, true);
 
         document.addEventListener('submit', (event) => {
             const form = event.target;
