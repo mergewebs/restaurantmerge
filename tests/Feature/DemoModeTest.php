@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Order;
+use App\Models\Reservation;
 use App\Models\RestaurantException;
 use App\Models\Supplier;
 use App\Models\User;
@@ -153,5 +154,32 @@ class DemoModeTest extends TestCase
             ->assertOk()
             ->assertSee('finalActionPattern', false)
             ->assertSee('demoFinalAction', false);
+    }
+
+    public function test_demo_get_request_refreshes_complete_sample_data_when_enabled(): void
+    {
+        config()->set('demo.data_enabled', true);
+        $demo = User::factory()->create(['role' => 'demo']);
+
+        $this->actingAs($demo)->get(route('dashboard'))->assertOk();
+
+        $this->assertTrue(Reservation::whereDate('reservation_time', today())->exists());
+        $this->assertTrue(Order::whereDate('created_at', today())->exists());
+        $this->assertDatabaseHas('stock_movements', ['reference' => 'CLIENT-DEMO-STOCK-1']);
+        $this->assertDatabaseHas('staff_schedules', ['notes' => 'Client demo shift 1']);
+    }
+
+    public function test_demo_data_refresh_never_runs_for_real_users_or_when_disabled(): void
+    {
+        $demo = User::factory()->create(['role' => 'demo']);
+        $owner = User::factory()->create(['role' => 'owner']);
+
+        config()->set('demo.data_enabled', false);
+        $this->actingAs($demo)->get(route('dashboard'))->assertOk();
+        $this->assertDatabaseCount('reservations', 0);
+
+        config()->set('demo.data_enabled', true);
+        $this->actingAs($owner)->get(route('dashboard'))->assertOk();
+        $this->assertDatabaseCount('reservations', 0);
     }
 }

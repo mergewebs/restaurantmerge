@@ -1,18 +1,18 @@
 <?php
 
+use App\Http\Controllers\CashRegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinanceController;
-use App\Http\Controllers\MenuItemController;
-use App\Http\Controllers\MenuCategoryController;
-use App\Http\Controllers\MenuItemOptionController;
 use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\CashRegisterController;
-use App\Http\Controllers\StaffController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\MenuCategoryController;
+use App\Http\Controllers\MenuItemController;
+use App\Http\Controllers\MenuItemOptionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RestaurantConfigController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TableManagementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -21,7 +21,7 @@ Route::view('/', 'welcome')->name('home');
 
 Route::redirect('/admin', '/admin/dashboard');
 
-Route::prefix('admin')->middleware(['auth', 'noindex', 'demo.readonly'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'noindex', 'demo.data', 'demo.readonly'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');

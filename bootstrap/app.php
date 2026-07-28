@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'feature' => \App\Http\Middleware\EnsureFeatureEnabled::class,
             'noindex' => \App\Http\Middleware\PreventSearchIndexing::class,
             'demo.readonly' => \App\Http\Middleware\PreventDemoWrites::class,
+            'demo.data' => \App\Http\Middleware\EnsureDemoData::class,
         ]);
 
         $middleware->web(append: [
