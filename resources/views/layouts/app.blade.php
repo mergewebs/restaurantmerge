@@ -318,7 +318,7 @@
         @include('layouts.admin-theme')
         @include('partials.toast-notifications')
     </head>
-    <body class="font-sans antialiased relative">
+    <body class="restaurant-admin font-sans antialiased relative">
         <div class="bg-glow-container">
             <div class="bg-glow-blob bg-glow-1"></div>
             <div class="bg-glow-blob bg-glow-2"></div>

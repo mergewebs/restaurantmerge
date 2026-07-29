@@ -1279,6 +1279,253 @@
             padding-bottom: calc(5.9rem + env(safe-area-inset-bottom)) !important;
         }
     }
+    /* Unified compact restaurant modal system */
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) {
+        padding: clamp(.5rem, 2vw, 1rem) !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > .absolute.inset-0 {
+        background: rgba(27, 18, 13, .62) !important;
+        backdrop-filter: blur(5px) !important;
+        -webkit-backdrop-filter: blur(5px) !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]).flex > :is(form.relative, div.relative, section.relative):not(.modal-panel):not(.finance-modal-card) {
+        max-height: calc(100dvh - 2rem) !important;
+        overflow-y: auto !important;
+        padding: 1rem !important;
+        border: 1px solid rgba(222, 199, 178, .82) !important;
+        border-radius: 1.2rem !important;
+        background: linear-gradient(180deg, #fffdf9, #fbf3e8) !important;
+        box-shadow: 0 28px 80px rgba(33, 22, 15, .34) !important;
+        scrollbar-width: thin;
+        scrollbar-color: #cfb9a7 transparent;
+    }
+
+    body .restaurant-modal-card,
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > .modal-panel {
+        border: 1px solid rgba(222, 199, 178, .82) !important;
+        border-radius: 1.2rem !important;
+        background: linear-gradient(180deg, #fffdf9, #fbf3e8) !important;
+        box-shadow: 0 28px 80px rgba(33, 22, 15, .34) !important;
+    }
+
+    body .finance-modal-card:not(.add-finance-modal) {
+        padding: 1rem !important;
+        border: 1px solid rgba(222, 199, 178, .82) !important;
+        border-radius: 1.2rem !important;
+        background: linear-gradient(180deg, #fffdf9, #fbf3e8) !important;
+        box-shadow: 0 28px 80px rgba(33, 22, 15, .34) !important;
+    }
+
+    body .finance-modal-card:not(.add-finance-modal) > div.flex:first-child {
+        margin: -1rem -1rem .7rem !important;
+        padding: .7rem 1rem !important;
+        background: radial-gradient(circle at 88% 0, rgba(225, 172, 79, .24), transparent 36%), linear-gradient(135deg, #2b1e18, #4a3023) !important;
+    }
+
+    body .finance-modal-card:not(.add-finance-modal) > div.flex:first-child :is(h2, h3) {
+        color: #fff8ed !important;
+        font-family: Georgia, 'Times New Roman', serif !important;
+    }
+
+    body .finance-modal-card:not(.add-finance-modal) > div.flex:first-child p {
+        color: #e8b66b !important;
+    }
+
+    body .finance-modal-card:not(.add-finance-modal) > div.flex:first-child .finance-close {
+        background: rgba(255, 255, 255, .1) !important;
+        color: #fff8ed !important;
+    }
+
+    body .restaurant-modal-wrap {
+        padding: clamp(.5rem, 2vw, 1rem) !important;
+    }
+
+    body .restaurant-modal-shade {
+        background: rgba(27, 18, 13, .62) !important;
+        backdrop-filter: blur(5px) !important;
+        -webkit-backdrop-filter: blur(5px) !important;
+    }
+
+    body .restaurant-modal-card {
+        max-height: calc(100dvh - 2rem);
+        overflow-y: auto !important;
+        scrollbar-width: thin;
+        scrollbar-color: #cfb9a7 transparent;
+    }
+
+    body .restaurant-modal-head {
+        position: relative;
+        overflow: hidden;
+        margin: -1rem -1rem .7rem !important;
+        padding: .7rem 1rem !important;
+        background: radial-gradient(circle at 88% 0, rgba(225, 172, 79, .24), transparent 36%), linear-gradient(135deg, #2b1e18, #4a3023) !important;
+    }
+
+    body .restaurant-modal-head :is(h2, h3) {
+        margin: 0 !important;
+        color: #fff8ed !important;
+        font-family: Georgia, 'Times New Roman', serif !important;
+        font-size: 1.15rem !important;
+        letter-spacing: -.01em !important;
+        text-transform: none !important;
+    }
+
+    body .restaurant-modal-head button:last-child {
+        min-height: 2.1rem !important;
+        padding: 0 .7rem !important;
+        border-color: rgba(255, 255, 255, .1) !important;
+        background: rgba(255, 255, 255, .1) !important;
+        color: #fff8ed !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > .modal-panel {
+        max-height: calc(100dvh - 2rem) !important;
+        overflow-y: auto !important;
+    }
+
+    /* Dining-room header shared by simple form modals. */
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > :is(form.relative, div.relative):not(.modal-panel):not(.finance-modal-card) > div.flex:first-of-type,
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > div.relative:not(.modal-panel):not(.finance-modal-card) > form > div.flex:first-of-type {
+        position: relative;
+        overflow: hidden;
+        min-height: 3.65rem;
+        margin: -1rem -1rem .7rem !important;
+        padding: .7rem 1rem !important;
+        background: radial-gradient(circle at 88% 0, rgba(225, 172, 79, .24), transparent 36%), linear-gradient(135deg, #2b1e18, #4a3023) !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > .modal-panel > .sticky:first-child {
+        border-color: rgba(255, 255, 255, .08) !important;
+        background: radial-gradient(circle at 88% 0, rgba(225, 172, 79, .24), transparent 36%), linear-gradient(135deg, #2b1e18, #4a3023) !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > :is(form.relative, div.relative):not(.finance-modal-card) > div.flex:first-of-type :is(h2, h3),
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > div.relative:not(.finance-modal-card) > form > div.flex:first-of-type :is(h2, h3),
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > .modal-panel > .sticky:first-child :is(h2, h3) {
+        margin: 0 !important;
+        color: #fff8ed !important;
+        font-family: Georgia, 'Times New Roman', serif !important;
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -.01em !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > :is(form.relative, div.relative):not(.finance-modal-card) > div.flex:first-of-type p,
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > div.relative:not(.finance-modal-card) > form > div.flex:first-of-type p,
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > .modal-panel > .sticky:first-child p {
+        color: #e8b66b !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > :is(form.relative, div.relative):not(.finance-modal-card) > div.flex:first-of-type button:last-child,
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > div.relative:not(.finance-modal-card) > form > div.flex:first-of-type button:last-child,
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > .modal-panel > .sticky:first-child button:last-child {
+        display: inline-flex !important;
+        width: 2.15rem !important;
+        min-width: 2.15rem !important;
+        height: 2.15rem !important;
+        min-height: 2.15rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: rgba(255, 255, 255, .1) !important;
+        color: #fff8ed !important;
+        font-size: 1.25rem !important;
+        box-shadow: none !important;
+    }
+
+    /* Compact controls and form rhythm. */
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) :is(input:not([type='checkbox']):not([type='radio']):not([type='hidden']), select, textarea),
+    body .restaurant-modal-card :is(input:not([type='checkbox']):not([type='radio']):not([type='hidden']), select, textarea) {
+        min-height: 2.55rem !important;
+        padding: .42rem .65rem !important;
+        border: 1px solid #dfd1c4 !important;
+        border-radius: .68rem !important;
+        background: #fffdfb !important;
+        color: #3b2d25 !important;
+        font-size: .72rem !important;
+        box-shadow: none !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) textarea,
+    body .restaurant-modal-card textarea {
+        min-height: 3.75rem !important;
+        resize: vertical;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) :is(input, select, textarea):focus,
+    body .restaurant-modal-card :is(input, select, textarea):focus {
+        border-color: #b95738 !important;
+        background: #fff !important;
+        box-shadow: 0 0 0 3px rgba(185, 87, 56, .11) !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) label,
+    body .restaurant-modal-card label {
+        margin-bottom: .18rem !important;
+        color: #79675b !important;
+        font-size: .55rem !important;
+        font-weight: 900 !important;
+        letter-spacing: .09em !important;
+        text-transform: uppercase !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) .space-y-3 > :not([hidden]) ~ :not([hidden]),
+    body .restaurant-modal-card .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: .6rem !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) .space-y-4 > :not([hidden]) ~ :not([hidden]),
+    body .restaurant-modal-card .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+        margin-top: .7rem !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) button[type='submit']:not(.text-red-400):not(.text-red-500):not(.text-red-600):not(.text-rose-600),
+    body .restaurant-modal-card button[type='submit']:not([class*='bg-red']):not([class*='text-red']):not([class*='bg-rose']):not([class*='text-rose']) {
+        min-height: 2.75rem !important;
+        padding: .6rem 1rem !important;
+        border-radius: .7rem !important;
+        background: linear-gradient(135deg, #ad4d31, #ca653f) !important;
+        color: #fff !important;
+        font-size: .7rem !important;
+        font-weight: 900 !important;
+        letter-spacing: .04em !important;
+        box-shadow: 0 8px 18px rgba(174, 76, 47, .22) !important;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) input[type='number'] {
+        appearance: textfield;
+    }
+
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) input[type='number']::-webkit-inner-spin-button,
+    body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) input[type='number']::-webkit-outer-spin-button {
+        margin: 0;
+        appearance: none;
+    }
+
+    body .restaurant-modal-card {
+        color: #3b2d25 !important;
+    }
+
+    @media (max-width: 639px) {
+        body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) {
+            align-items: center !important;
+            padding: .5rem !important;
+        }
+
+        body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) > :is(form.relative, div.relative, section.relative) {
+            max-height: calc(100dvh - 1rem) !important;
+            border-radius: 1rem !important;
+        }
+
+        body :is(.fixed.inset-0.z-\[100\], .fixed.inset-0.z-\[110\]) .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: .5rem !important;
+        }
+    }
 </style>
 
 <style>

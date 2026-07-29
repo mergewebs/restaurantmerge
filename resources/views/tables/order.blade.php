@@ -136,12 +136,12 @@
         <div
             x-show="showCustomItemModal"
             x-cloak
-            class="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-4"
+            class="restaurant-modal-wrap fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-4"
             x-transition.opacity
         >
-            <div class="absolute inset-0 bg-black/70" @click="showCustomItemModal = false"></div>
-            <div class="relative w-full max-w-lg glass rounded-3xl border border-white/10 p-4">
-                <div class="flex items-center justify-between gap-3">
+            <div class="restaurant-modal-shade absolute inset-0 bg-black/70" @click="showCustomItemModal = false"></div>
+            <div class="restaurant-modal-card relative w-full max-w-lg glass rounded-3xl border border-white/10 p-4">
+                <div class="restaurant-modal-head flex items-center justify-between gap-3">
                     <h3 class="text-sm font-black uppercase tracking-widest">Add Custom Item</h3>
                     <button type="button" class="px-2.5 py-1.5 rounded-lg border border-white/15 bg-white/5 text-white/70 text-[10px] uppercase font-black" @click="showCustomItemModal = false">Close</button>
                 </div>
@@ -594,5 +594,4 @@
         }
     </script>
 </x-app-layout>
-
 
