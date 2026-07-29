@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\MenuCategory;
 use App\Models\MenuItem;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -10,6 +11,16 @@ class MenuItemSeeder extends Seeder
 {
     public function run(): void
     {
+        foreach ([
+            'Starters', 'Entrantes', "Acompa\u{00F1}amientos", 'Smash Burger', 'Bol de Arroz',
+            'Postres de la Casa', 'Bebidas', 'Cafes', 'Cocteles', 'Cervezas', 'Packages',
+        ] as $sortOrder => $name) {
+            MenuCategory::updateOrCreate(
+                ['name' => $name],
+                ['sort_order' => $sortOrder, 'is_active' => true],
+            );
+        }
+
         $items = [
             ['Entrantes', 1, 'HOUSE SALAD', 7.50, 'lechuga, wakame, sonomono, col valencia, cebolla crujiente y vinagreta de la casa'],
             ['Entrantes', 2, "GYOZAS FRITAS IB\u{00C9}RICAS (5 UDS.)", 10.25, "Ib\u{00E9}rico, shiitake, cebolla Japonesa, aceite de s\u{00E9}samo y salsa de mayonesa hoisin"],
@@ -20,7 +31,7 @@ class MenuItemSeeder extends Seeder
             ['Entrantes', 7, 'KROQUETAS (5 UDS.)', 10.00, 'Croquetas de ternera con rabo de toro'],
             ['Entrantes', 8, 'TACOS DE CARILLADA DE TERNERA', 11.99, 'Galtas de ternera, vino tinto y bresa al fuego lento con arroz blanco'],
             ['Entrantes', 9, 'BIL-BAO', 9.99, '2 mini pan bao relleno de cochinita pibil'],
-            ['Entrantes', 10, 'KROQUETAS DE BERENJENA CON TRUFA (POR UNIDAD)', 2.50, "Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pure"],
+            ['Entrantes', 10, 'KROQUETAS DE BERENJENA CON TRUFA (POR UNIDAD)', 2.50, 'Berenjena asada empanada de panko japonesa con trufa, miso rojo katsuobushi y pure'],
             ['Entrantes', 11, 'POP-BILLAS', 16.50, "Pulpo hervido salteado de salsa kimchi, patatas con aji amarillo y chimichurri japon\u{00E9}s"],
             ['Entrantes', 12, 'PIPARRA ROLL (POR UNIDAD)', 2.99, "Chilli verde relleno de ternera y sofrito con queso rallado y champi\u{00F1}ones al wok. Acabado con queso rallado con miel, salsa ahumada de la casa e hilos crujientes de boniato"],
 
@@ -95,7 +106,7 @@ class MenuItemSeeder extends Seeder
         ];
 
         foreach ($items as [$category, $sortOrder, $name, $price, $description]) {
-            $menuItem = $this->findExistingItem($category, $sortOrder, $name) ?? new MenuItem();
+            $menuItem = $this->findExistingItem($category, $sortOrder, $name) ?? new MenuItem;
 
             $menuItem->fill(array_merge([
                 'category' => $category,

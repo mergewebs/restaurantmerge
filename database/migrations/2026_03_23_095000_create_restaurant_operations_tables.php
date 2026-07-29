@@ -6,11 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
+        Schema::create('cash_register_sessions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('opened_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('closed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->decimal('opening_float', 10, 2)->default(0);
+            $table->decimal('expected_cash', 10, 2)->nullable();
+            $table->decimal('actual_cash', 10, 2)->nullable();
+            $table->decimal('difference', 10, 2)->nullable();
+            $table->timestamp('opened_at');
+            $table->timestamp('closed_at')->nullable();
+            $table->string('status')->default('open');
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('restaurant_tables', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('number')->unique();
@@ -82,16 +94,44 @@ return new class extends Migration
 
             $table->index(['order_id', 'paid_at']);
         });
+
+        Schema::create('reservations', function (Blueprint $table) {
+            $table->id();
+            $table->string('customer_name');
+            $table->string('customer_phone')->nullable();
+            $table->string('customer_email')->nullable();
+            $table->integer('party_size');
+            $table->dateTime('reservation_time');
+            $table->text('notes')->nullable();
+            $table->text('allergies')->nullable();
+            $table->foreignId('restaurant_table_id')->nullable()->constrained('restaurant_tables')->nullOnDelete();
+            $table->string('status')->default('confirmed');
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->timestamps();
+
+            $table->index(['status', 'reservation_time'], 'reservations_status_time_idx');
+        });
+
+        Schema::create('order_sync_actions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->string('device_id', 100);
+            $table->string('action_id', 80);
+            $table->timestamp('created_at')->useCurrent();
+
+            $table->unique(['order_id', 'device_id', 'action_id'], 'order_sync_unique_action');
+            $table->index(['order_id', 'created_at'], 'order_sync_order_created_idx');
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
+        Schema::dropIfExists('order_sync_actions');
+        Schema::dropIfExists('reservations');
         Schema::dropIfExists('order_payments');
         Schema::dropIfExists('order_items');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('restaurant_tables');
+        Schema::dropIfExists('cash_register_sessions');
     }
 };

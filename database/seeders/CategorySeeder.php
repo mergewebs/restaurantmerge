@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -22,7 +21,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Marketing', 'type' => 'expense'],
             ['name' => 'Maintenance', 'type' => 'expense'],
             ['name' => 'Other', 'type' => 'expense'],
-            
+
             ['name' => 'Sales', 'type' => 'income'],
             ['name' => 'Services', 'type' => 'income'],
             ['name' => 'Investments', 'type' => 'income'],

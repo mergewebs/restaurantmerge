@@ -8,6 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::create('contact_submissions', function (Blueprint $table) {
+            $table->id();
+            $table->string('full_name', 120);
+            $table->string('email');
+            $table->string('telephone', 30);
+            $table->timestamps();
+            $table->index('created_at');
+        });
+
         Schema::create('demo_ip_addresses', function (Blueprint $table) {
             $table->id();
             $table->string('ip_address', 45)->unique();
@@ -63,5 +72,6 @@ return new class extends Migration
         Schema::dropIfExists('demo_access_history');
         Schema::dropIfExists('demo_access_sessions');
         Schema::dropIfExists('demo_ip_addresses');
+        Schema::dropIfExists('contact_submissions');
     }
 };
