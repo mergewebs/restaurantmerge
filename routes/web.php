@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\CashRegisterController;
+use App\Http\Controllers\ContactSubmissionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DemoAccessController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MenuCategoryController;
@@ -18,11 +20,18 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('home');
+Route::post('/contact', [ContactSubmissionController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('contact-submissions.store');
 
 Route::redirect('/admin', '/admin/dashboard');
 
-Route::prefix('admin')->middleware(['auth', 'noindex', 'demo.data', 'demo.readonly'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'noindex', 'demo.track', 'demo.data', 'demo.readonly'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/contact-submissions', [ContactSubmissionController::class, 'index'])->name('contact-submissions.index');
+    Route::get('/demo-access', [DemoAccessController::class, 'index'])->name('demo-access.index');
+    Route::get('/demo-access/{demoIpAddress}', [DemoAccessController::class, 'show'])->name('demo-access.show');
+    Route::patch('/demo-access/{demoIpAddress}/block', [DemoAccessController::class, 'toggleBlock'])->name('demo-access.block');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');

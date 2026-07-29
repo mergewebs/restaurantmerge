@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\DemoAccessSession;
+use App\Services\DemoAccessTracker;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +24,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request, DemoAccessTracker $tracker): RedirectResponse
     {
         $request->authenticate();
 
@@ -34,6 +36,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if ($request->user()?->isDemo()) {
+            $tracker->startSession($request);
+        }
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
@@ -42,6 +48,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if ($request->user()?->isDemo()) {
+            DemoAccessSession::find($request->session()->get('demo_access_session_id'))
+                ?->update(['ended_at' => now(), 'last_activity_at' => now()]);
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

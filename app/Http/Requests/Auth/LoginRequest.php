@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
+use App\Models\DemoIpAddress;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,12 @@ class LoginRequest extends FormRequest
 
             throw ValidationException::withMessages([
                 'passcode' => __('That 6-digit passcode did not match our records. Please try again.'),
+            ]);
+        }
+
+        if ($user->isDemo() && DemoIpAddress::where('ip_address', $this->ip())->where('is_blocked', true)->exists()) {
+            throw ValidationException::withMessages([
+                'passcode' => 'This IP address has been blocked from accessing the demo. Please contact an administrator.',
             ]);
         }
 

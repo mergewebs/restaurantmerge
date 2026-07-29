@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'noindex' => \App\Http\Middleware\PreventSearchIndexing::class,
             'demo.readonly' => \App\Http\Middleware\PreventDemoWrites::class,
             'demo.data' => \App\Http\Middleware\EnsureDemoData::class,
+            'demo.track' => \App\Http\Middleware\TrackDemoAccess::class,
         ]);
 
         $middleware->web(append: [
