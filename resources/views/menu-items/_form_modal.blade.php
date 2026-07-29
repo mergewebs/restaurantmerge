@@ -3,25 +3,25 @@
     $modalState = $isEdit ? 'editModal' : 'addModal';
     $prefix = $isEdit ? 'edit-' : '';
 @endphp
-<div x-show="{{ $modalState }}" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center p-3">
+<div x-show="{{ $modalState }}" x-cloak class="modal-wrap fixed inset-0 z-[100] flex items-center justify-center p-3">
     <div class="modal-shade absolute inset-0" @click="{{ $modalState }}=false"></div>
     <div class="modal-panel relative w-full max-w-3xl rounded-2xl" @click.stop @keydown.escape.window="{{ $modalState }}=false">
         <div class="sticky top-0 z-10 flex items-center justify-between border-b border-[#eadfd2] bg-[#fffdf9]/95 px-4 py-3 backdrop-blur">
             <div><p class="eyebrow">{{ $isEdit ? 'Edit menu item' : 'New menu item' }}</p><h2 class="text-lg font-black text-[#30261f]" @if($isEdit) x-text="editingProduct.name || 'Menu item'" @endif>{{ $isEdit ? 'Menu item' : 'Add Menu Item' }}</h2></div>
-            <button type="button" @click="{{ $modalState }}=false" class="text-2xl leading-none text-[#9b8b7e]">&times;</button>
+            <button type="button" @click="{{ $modalState }}=false" class="modal-close" aria-label="Close">&times;</button>
         </div>
 
         <form @if($isEdit) :action="editingProduct.update_url" @else action="{{ route('menu-items.store') }}" @endif method="POST" enctype="multipart/form-data" class="space-y-3 p-4 text-left">
             @csrf
             @if($isEdit) @method('PUT') <input type="hidden" name="editing_product_id" :value="editingProduct.id"> @endif
 
-            <div class="grid gap-3 sm:grid-cols-[1.4fr_1fr_.65fr]">
+            <div class="menu-basic-grid grid gap-3 sm:grid-cols-[1.4fr_1fr_.65fr]">
                 <div><label class="field-label" for="{{ $prefix }}product-name">Product name</label><input id="{{ $prefix }}product-name" name="name" required placeholder="Grilled sea bass" @if($isEdit) x-model="editingProduct.name" @else value="{{ old('name') }}" @endif></div>
                 <div><label class="field-label" for="{{ $prefix }}product-category">Category</label><select id="{{ $prefix }}product-category" name="category" required @if($isEdit) x-model="editingProduct.category" @endif>@foreach($categoryOptions as $cat)<option value="{{ $cat }}" @if(!$isEdit && old('category')===$cat) selected @endif>{{ $cat }}</option>@endforeach</select></div>
                 <div><label class="field-label" for="{{ $prefix }}product-price">Standard price</label><input id="{{ $prefix }}product-price" type="number" name="price" step="0.01" min="0" required placeholder="0.00" @if($isEdit) x-model="editingProduct.price" @else value="{{ old('price') }}" @endif></div>
             </div>
 
-            <div class="grid gap-3 sm:grid-cols-4">
+            <div class="menu-meta-grid grid gap-3 sm:grid-cols-4">
                 <div><label class="field-label">Availability</label><select name="availability_status" @if($isEdit) x-model="editingProduct.availability_status" @endif><option value="available">Available</option><option value="sold_out" @if(!$isEdit && old('availability_status')==='sold_out') selected @endif>Sold out</option></select></div>
                 <div><label class="field-label">Menu type</label><select name="item_kind" @if($isEdit) x-model="editingProduct.item_kind" @endif><option value="regular">Regular item</option><option value="lunch_menu" @if(!$isEdit && old('item_kind')==='lunch_menu') selected @endif>Lunch menu</option><option value="promotion" @if(!$isEdit && old('item_kind')==='promotion') selected @endif>Promotion</option><option value="seasonal" @if(!$isEdit && old('item_kind')==='seasonal') selected @endif>Seasonal</option></select></div>
                 <div><label class="field-label">Kitchen station</label><select name="station" @if($isEdit) x-model="editingProduct.station" @endif><option value="kitchen">Kitchen</option><option value="bar">Bar</option><option value="desserts">Desserts</option><option value="drinks">Drinks</option></select></div>
@@ -37,11 +37,11 @@
                 </div>
             </div>
 
-            <div class="grid gap-3 sm:grid-cols-2">
+            <div class="menu-copy-grid grid gap-3 sm:grid-cols-2">
                 <div><label class="field-label">Description</label><textarea name="description" rows="2" placeholder="Short customer-facing description" @if($isEdit) x-model="editingProduct.description" @endif>{{ $isEdit ? '' : old('description') }}</textarea></div>
                 <div><label class="field-label">Ingredients</label><textarea name="ingredients" rows="2" placeholder="Beef, brioche, onion, house sauce" @if($isEdit) x-model="editingProduct.ingredients" @endif>{{ $isEdit ? '' : old('ingredients') }}</textarea></div>
             </div>
-            <div class="grid gap-3 sm:grid-cols-[1fr_.45fr_.45fr]">
+            <div class="menu-stock-grid grid gap-3 sm:grid-cols-[1fr_.45fr_.45fr]">
                 <div><label class="field-label">Allergens</label><input name="allergens" placeholder="Gluten, milk, nuts" @if($isEdit) x-model="editingProduct.allergens" @else value="{{ old('allergens') }}" @endif></div>
                 <div><label class="field-label">Stock</label><input type="number" name="stock_quantity" min="0" placeholder="Not tracked" @if($isEdit) x-model="editingProduct.stock_quantity" @else value="{{ old('stock_quantity') }}" @endif></div>
                 <div><label class="field-label">Low-stock at</label><input type="number" name="low_stock_threshold" min="0" @if($isEdit) x-model="editingProduct.low_stock_threshold" @else value="{{ old('low_stock_threshold',5) }}" @endif></div>

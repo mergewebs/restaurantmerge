@@ -10,12 +10,109 @@
 
         <style>
             .config-page {
+                --config-ink: #392c24;
+                --config-rust: #b95738;
+                --config-muted: #806d60;
+                --config-line: #e6d8cb;
+                --config-cream: #fbf6ef;
                 max-width: 88rem;
                 margin-inline: auto;
             }
 
             .config-panel {
                 overflow: visible !important;
+                border: 1px solid var(--config-line) !important;
+                background: #ffffff !important;
+                box-shadow: 0 8px 24px rgba(68, 44, 29, 0.06) !important;
+                backdrop-filter: none !important;
+            }
+
+            .config-hero {
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 0.75rem;
+                padding: 1rem;
+                border-radius: 1.35rem;
+                color: #fff8ee;
+                background: linear-gradient(135deg, #2d2119 0%, #533525 58%, #895038 100%);
+                box-shadow: 0 18px 38px rgba(53, 38, 29, 0.16);
+            }
+
+            .config-hero::after {
+                content: "";
+                position: absolute;
+                top: -4.5rem;
+                right: -3rem;
+                width: 12rem;
+                height: 12rem;
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 999px;
+                background: rgba(237, 183, 93, 0.12);
+            }
+
+            .config-summary {
+                position: relative;
+                z-index: 1;
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                margin-top: 0.8rem;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.11);
+                border-radius: 0.8rem;
+                background: rgba(255, 255, 255, 0.07);
+            }
+
+            .config-summary div {
+                min-width: 0;
+                padding: 0.55rem;
+                text-align: center;
+            }
+
+            .config-summary div + div {
+                border-left: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .config-summary span {
+                display: block;
+                color: rgba(255, 255, 255, 0.5);
+                font-size: 0.52rem;
+                font-weight: 900;
+                text-transform: uppercase;
+            }
+
+            .config-summary strong {
+                display: block;
+                overflow: hidden;
+                color: #fff8ee;
+                font-size: 0.72rem;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .config-tabs {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 0.25rem;
+                margin-bottom: 0.75rem;
+                padding: 0.3rem;
+                border: 1px solid var(--config-line);
+                border-radius: 0.9rem;
+                background: #ffffff;
+                box-shadow: 0 5px 16px rgba(68, 44, 29, 0.05);
+            }
+
+            .config-tabs button {
+                min-height: 2.65rem;
+                border-radius: 0.7rem;
+                color: #725f53;
+                font-size: 0.68rem;
+                font-weight: 900;
+            }
+
+            .config-tabs button.active {
+                color: #ffffff;
+                background: var(--config-rust);
+                box-shadow: 0 5px 12px rgba(185, 87, 56, 0.22);
             }
 
             .config-section-heading {
@@ -23,7 +120,20 @@
                 align-items: flex-start;
                 justify-content: space-between;
                 gap: 1rem;
-                margin-bottom: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .config-section-heading h3,
+            .config-panel h4 {
+                color: var(--config-ink) !important;
+            }
+
+            .config-section-heading p {
+                color: var(--config-muted) !important;
+            }
+
+            .config-section-heading > div > span {
+                background: var(--config-rust) !important;
             }
 
             .config-input {
@@ -32,6 +142,9 @@
                 padding: 0.65rem 0.8rem !important;
                 border-radius: 0.8rem !important;
                 font-size: 1rem !important;
+                color: var(--config-ink) !important;
+                background: #ffffff !important;
+                border: 1px solid #ddcfc2 !important;
             }
 
             .config-label {
@@ -47,26 +160,41 @@
             .day-card {
                 overflow: hidden;
                 border: 1px solid #dbe3ee;
-                border-radius: 1.25rem;
+                border-radius: 1rem;
                 background: #ffffff;
             }
 
             .day-card-header {
                 width: 100%;
-                min-height: 4.5rem;
-                padding: 1rem 1.1rem;
+                min-height: 3.75rem;
+                padding: 0.75rem 0.9rem;
                 text-align: left;
             }
 
             .day-card-body {
-                padding: 0 1.1rem 1.1rem;
+                padding: 0 0.9rem 0.9rem;
+            }
+
+            .day-name {
+                color: var(--config-ink) !important;
+            }
+
+            .day-summary {
+                color: var(--config-muted) !important;
+            }
+
+            .day-card-header > span {
+                width: 2rem !important;
+                height: 2rem !important;
+                color: #8b7567 !important;
+                background: var(--config-cream) !important;
             }
 
             .session-card {
                 padding: 0.9rem;
                 border: 1px solid #dbe3ee;
                 border-radius: 1rem;
-                background: #f1f5f9;
+                background: var(--config-cream);
             }
 
             .config-page .time-pair {
@@ -85,6 +213,19 @@
                 text-transform: none !important;
                 cursor: pointer;
                 user-select: none;
+            }
+
+            .config-page .closed-toggle {
+                border-color: var(--config-line) !important;
+                background: var(--config-cream) !important;
+            }
+
+            .config-page .closed-toggle .text-white {
+                color: var(--config-ink) !important;
+            }
+
+            .config-page .closed-toggle .text-slate-500 {
+                color: var(--config-muted) !important;
             }
 
             .config-page input.sr-only {
@@ -106,7 +247,7 @@
                 height: 1.7rem;
                 flex: 0 0 auto;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.14);
+                background: #d7c9bd;
                 transition: background-color 160ms ease;
             }
 
@@ -148,13 +289,27 @@
                 background: #ffffff;
             }
 
+            .exception-card .text-white {
+                color: var(--config-ink) !important;
+            }
+
+            .exception-card .text-white\/50,
+            .exception-card .text-slate-500 {
+                color: var(--config-muted) !important;
+            }
+
+            .exception-form {
+                border-color: var(--config-line) !important;
+                background: var(--config-cream) !important;
+            }
+
             @media (max-width: 767px) {
                 .config-page {
                     margin-inline: -0.15rem;
                 }
 
                 .config-panel {
-                    padding: 1rem !important;
+                    padding: 0.8rem !important;
                     border-radius: 1rem !important;
                 }
 
@@ -163,16 +318,16 @@
                 }
 
                 .config-section-heading h3 {
-                    font-size: 1.15rem !important;
+                    font-size: 0.95rem !important;
                 }
 
                 .day-card-header {
-                    min-height: 4.25rem;
-                    padding: 0.9rem;
+                    min-height: 3.6rem;
+                    padding: 0.7rem 0.8rem;
                 }
 
                 .day-card-body {
-                    padding: 0 0.9rem 0.9rem;
+                    padding: 0 0.8rem 0.8rem;
                 }
 
                 .session-card {
@@ -185,7 +340,7 @@
                 }
 
                 .config-input {
-                    min-height: 3.15rem !important;
+                    min-height: 2.8rem !important;
                     padding-inline: 0.65rem !important;
                     font-size: 1rem !important;
                 }
@@ -202,6 +357,22 @@
             }
 
             @media (min-width: 768px) {
+                .config-hero {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 1.2rem 1.35rem;
+                }
+
+                .config-summary {
+                    width: 24rem;
+                    margin-top: 0;
+                }
+
+                .config-tabs {
+                    display: none;
+                }
+
                 .schedule-save-bar {
                     display: flex;
                     justify-content: flex-end;
@@ -213,9 +384,28 @@
             }
         </style>
 
-        <div class="space-y-6 pb-12">
+        <div class="pb-12" x-data="{ view: 'hours', desktop: window.innerWidth >= 768, init() { window.addEventListener('resize', () => this.desktop = window.innerWidth >= 768) } }">
+            <header class="config-hero">
+                <div class="relative z-[1]">
+                    <p class="text-[9px] font-black uppercase tracking-[.24em] text-[#efbb77]">Restaurant operations</p>
+                    <h1 class="mt-1 font-display text-3xl font-bold leading-none">Service Settings</h1>
+                    <p class="mt-2 text-[10px] text-white/55">Opening hours, booking capacity and special dates.</p>
+                </div>
+                <div class="config-summary">
+                    <div><span>Service days</span><strong>{{ $schedules->where('is_closed', false)->count() }}</strong></div>
+                    <div><span>Exceptions</span><strong>{{ $exceptions->count() }}</strong></div>
+                    <div><span>Booking mode</span><strong>Schedule</strong></div>
+                </div>
+            </header>
+
+            <nav class="config-tabs" aria-label="Configuration sections">
+                <button type="button" @click="view='hours'" :class="view === 'hours' && 'active'">Weekly hours</button>
+                <button type="button" @click="view='exceptions'" :class="view === 'exceptions' && 'active'">Special dates</button>
+            </nav>
+
+            <div class="space-y-4">
             @if(auth()->user()->isAdmin())
-                <section class="config-panel glass rounded-[28px] p-4 md:p-6 lg:p-8">
+                <section x-show="desktop || view === 'hours'" class="config-panel glass rounded-[28px] p-4 md:p-6 lg:p-8">
                     <div class="config-section-heading">
                         <div class="flex items-start gap-3">
                             <span class="mt-1 h-8 w-1.5 shrink-0 rounded-full bg-accent"></span>
@@ -361,7 +551,7 @@
                 </section>
             @endif
 
-            <section class="config-panel glass rounded-[28px] p-4 md:p-6 lg:p-8" x-data="{ formOpen: window.innerWidth >= 1024, closed: {{ old('is_closed') ? 'true' : 'false' }} }">
+            <section x-show="desktop || view === 'exceptions'" class="config-panel glass rounded-[28px] p-4 md:p-6 lg:p-8" x-data="{ formOpen: window.innerWidth >= 1024, closed: {{ old('is_closed') ? 'true' : 'false' }} }">
                 <div class="config-section-heading">
                     <div class="flex items-start gap-3">
                         <span class="mt-1 h-8 w-1.5 shrink-0 rounded-full bg-accent"></span>
@@ -378,7 +568,7 @@
 
                 <div class="grid gap-6 lg:grid-cols-12">
                     <div class="lg:col-span-4" x-show="formOpen" x-cloak>
-                        <div class="rounded-2xl border border-white/10 bg-white/[0.035] p-4 md:p-5">
+                        <div class="exception-form rounded-2xl border border-white/10 bg-white/[0.035] p-4 md:p-5">
                             <h4 class="mb-5 text-sm font-black uppercase tracking-widest text-white">Add Exception</h4>
                             <form action="{{ route('restaurant.exceptions.store') }}" method="POST" class="space-y-4">
                                 @csrf
@@ -491,6 +681,7 @@
                     </div>
                 </div>
             </section>
+            </div>
         </div>
     </div>
 </x-app-layout>

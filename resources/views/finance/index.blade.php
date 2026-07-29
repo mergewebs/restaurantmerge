@@ -1,557 +1,103 @@
 <x-app-layout>
+    <style>
+        .admin-service-heading{display:none!important}.finance-page{--n-ink:#30251f;--n-rust:#b95536;--n-line:#e8ddd1;--n-cream:#f8f2e9;--n-paper:#fffdf9;--n-muted:#88776c;color:var(--n-ink)}
+        .finance-hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:1rem 1.1rem;border-radius:1.35rem;color:#fffaf1;background:radial-gradient(circle at 88% 12%,rgba(215,166,74,.24),transparent 28%),linear-gradient(135deg,#261b16,#3a2921);box-shadow:0 16px 36px rgba(48,31,23,.16)}.finance-hero:after{content:'';position:absolute;right:-3rem;top:-5rem;width:12rem;height:12rem;border:1px solid rgba(255,255,255,.08);border-radius:50%;pointer-events:none}.finance-hero>*{position:relative;z-index:1}.finance-hero-actions{display:flex;gap:.4rem}.finance-hero-button{display:flex;min-height:42px;align-items:center;justify-content:center;gap:.35rem;border:1px solid rgba(255,255,255,.13);border-radius:.75rem;background:rgba(255,255,255,.08);padding:.5rem .65rem;color:#fff!important;font-size:.65rem;font-weight:900}.finance-hero-button.primary{border-color:#b95536;background:#b95536}
+        .finance-panel{border:1px solid var(--n-line);border-radius:1rem;background:var(--n-paper);box-shadow:0 7px 20px rgba(55,38,27,.045)}.finance-range{display:grid;gap:.5rem;padding:.65rem}.finance-range select,.finance-range input{min-height:42px!important;border-color:#ded1c5!important;border-radius:.7rem!important;background:#fff!important;font-size:.7rem!important}.finance-range-custom{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}.finance-range-reset{display:flex;min-height:42px;align-items:center;justify-content:center;border:1px solid var(--n-line);border-radius:.7rem;background:#fff;color:#6e5c50;font-size:.65rem;font-weight:900}
+        .finance-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem;padding:.6rem;border-top:1px solid #eee5dc}.finance-kpi{min-width:0;border:1px solid var(--n-line);border-radius:.8rem;background:#fff;padding:.6rem}.finance-kpi span{display:block;overflow:hidden;color:#928176;font-size:.49rem;font-weight:900;letter-spacing:.06em;text-overflow:ellipsis;text-transform:uppercase;white-space:nowrap}.finance-kpi strong{display:block;margin-top:.25rem;overflow:hidden;font-family:Georgia,'Times New Roman',serif;font-size:clamp(.92rem,3.8vw,1.45rem);font-weight:700;letter-spacing:-.03em;text-overflow:ellipsis;white-space:nowrap}.kpi-income{border-color:#b9ddc6;background:#f4fbf6}.kpi-income strong{color:#27764a}.kpi-expense{border-color:#efc7c2;background:#fff7f5}.kpi-expense strong{color:#b3483d}.kpi-profit{border-color:#e6d19d;background:#fffbef}.kpi-profit strong{color:#8a6418}.kpi-profit.negative{border-color:#efc7c2;background:#fff7f5}.kpi-profit.negative strong{color:#b3483d}
+        .finance-breakdown{border-top:1px solid #eee5dc}.finance-breakdown summary{display:flex;min-height:40px;cursor:pointer;list-style:none;align-items:center;justify-content:space-between;padding:.45rem .7rem;color:#78675c;font-size:.61rem;font-weight:900}.finance-breakdown summary::-webkit-details-marker{display:none}.finance-breakdown summary:after{content:'+';font-size:1rem}.finance-breakdown[open] summary:after{content:'−'}.breakdown-grid{display:grid;gap:.65rem;border-top:1px solid #f0e7de;padding:.65rem}.breakdown-block h3{margin-bottom:.3rem;color:#9b897c;font-size:.52rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.breakdown-row{display:flex;justify-content:space-between;gap:.5rem;padding:.2rem 0;font-size:.62rem;font-weight:700}.breakdown-row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#78685d}
+        .ledger-head{display:flex;align-items:center;justify-content:space-between;gap:.65rem;border-bottom:1px solid #eee5dc;padding:.7rem .8rem}.ledger-head h2{font-family:Georgia,'Times New Roman',serif;font-size:1.05rem;font-weight:700}.ledger-date{color:#958477;font-size:.54rem;font-weight:900;text-transform:uppercase}.ledger-filter-toggle{display:flex;min-height:38px;align-items:center;border:1px solid var(--n-line);border-radius:.65rem;background:#fff;padding:.4rem .65rem;color:#6d5c51;font-size:.62rem;font-weight:900}.ledger-search{padding:.55rem;border-bottom:1px solid #eee5dc}.ledger-search input{min-height:42px!important;border-color:#ded1c5!important;border-radius:.7rem!important;background:#faf7f3!important;font-size:.72rem!important}.transaction-list{display:grid}.transaction-row{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr) auto 38px;align-items:center;gap:.55rem;padding:.62rem .7rem;border-bottom:1px solid #f0e7de}.transaction-row:last-child{border-bottom:0}.transaction-row:before{content:'';position:absolute;inset:.5rem auto .5rem 0;width:3px;border-radius:0 3px 3px 0}.transaction-row.income:before{background:#49a66d}.transaction-row.expense:before{background:#d75d52}.transaction-icon{display:flex;height:34px;width:34px;align-items:center;justify-content:center;border-radius:.65rem;font-size:.85rem;font-weight:900}.income .transaction-icon{background:#edf8f1;color:#28734a}.expense .transaction-icon{background:#fff0ed;color:#b1463d}.transaction-copy{min-width:0}.transaction-copy strong{display:block;overflow:hidden;font-size:.7rem;text-overflow:ellipsis;text-transform:capitalize;white-space:nowrap}.transaction-copy p{margin-top:.15rem;overflow:hidden;color:#9a897d;font-size:.53rem;font-weight:700;text-overflow:ellipsis;text-transform:uppercase;white-space:nowrap}.transaction-amount{text-align:right;font-size:.72rem;font-weight:900}.income .transaction-amount{color:#27764a}.expense .transaction-amount{color:#b3483d}.transaction-edit{display:flex;height:36px;width:36px;align-items:center;justify-content:center;border:1px solid var(--n-line);border-radius:.65rem;background:#faf7f3;color:#79685d}.finance-empty{padding:2.5rem 1rem;text-align:center;color:#8f7e72;font-size:.75rem;font-weight:700}
+        .finance-modal-card{max-height:92dvh;overflow-y:auto}.finance-modal-card input,.finance-modal-card select{font-size:.75rem!important}.finance-modal-card .amount-input{min-height:64px!important;padding-left:2.8rem!important;font-size:1.75rem!important}.finance-close{display:flex;height:40px;width:40px;align-items:center;justify-content:center;border-radius:50%;background:#f2ede8;color:#75665c;font-size:1.4rem}
+        .add-finance-modal{overflow:hidden!important;border:1px solid #e6d9ce;background:#fffdf9!important;box-shadow:0 28px 80px rgba(27,18,13,.32)}.add-finance-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1rem;border-bottom:1px solid #eee4da;background:linear-gradient(105deg,#fffaf4,#f8eee4)}.add-finance-title{display:flex;align-items:center;gap:.65rem}.add-finance-icon{display:flex;height:34px;width:34px;align-items:center;justify-content:center;border:1px solid #c8e4d2;border-radius:.7rem;background:#eff9f2;color:#24764a}.add-finance-head h2{font-family:Georgia,'Times New Roman',serif;font-size:1.15rem;font-weight:700;color:#352820}.add-finance-head p{color:#9b7966;font-size:.5rem;font-weight:900;letter-spacing:.11em;text-transform:uppercase}.add-finance-modal .finance-close{height:34px;width:34px;font-size:1.15rem}.add-finance-form{padding:.85rem 1rem 1rem}.add-finance-form label{display:block!important;margin:0 0 .25rem!important;padding:0!important;color:#746156!important;font-size:.56rem!important;font-weight:900!important;letter-spacing:.1em!important;text-transform:uppercase!important}.entry-type-switch{display:grid;grid-template-columns:1fr 1fr;gap:.25rem;padding:.25rem;border:1px solid #e3d7cb;border-radius:.75rem;background:#f5efe8}.entry-type-switch button{min-height:38px;border-radius:.58rem;color:#7d6a5e;font-size:.65rem;font-weight:900}.entry-type-switch button.income-active{background:#eaf7ef;color:#28754b;box-shadow:0 2px 7px rgba(38,104,67,.1)}.entry-type-switch button.expense-active{background:#fff0ed;color:#b3483d;box-shadow:0 2px 7px rgba(160,64,54,.1)}.entry-amount{position:relative}.entry-amount span{position:absolute;left:.85rem;top:50%;z-index:1;transform:translateY(-50%);font-size:1.15rem;font-weight:900}.add-finance-modal .entry-amount .amount-input{min-height:54px!important;padding:.55rem .8rem .55rem 2.25rem!important;border-width:1px!important;border-radius:.8rem!important;font-family:Georgia,'Times New Roman',serif!important;font-size:1.45rem!important}.entry-fields{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}.add-finance-modal input:not(.amount-input),.add-finance-modal select{min-height:43px!important;padding:.5rem .65rem!important;border:1px solid #ded2c6!important;border-radius:.7rem!important;background:#fff!important;color:#3b2d25!important;font-size:.7rem!important}.entry-description{border:1px solid #e7dcd1;border-radius:.7rem;background:#faf6f1}.entry-description summary{display:flex;min-height:40px;cursor:pointer;list-style:none;align-items:center;justify-content:space-between;padding:.45rem .65rem;color:#9a593f;font-size:.62rem;font-weight:900}.entry-description summary::-webkit-details-marker{display:none}.entry-description summary:after{content:'+';font-size:.95rem}.entry-description[open] summary:after{content:'−'}.entry-description div{padding:0 .55rem .55rem}.add-finance-submit{display:flex;min-height:46px;width:100%;align-items:center;justify-content:center;gap:.4rem;border-radius:.75rem;background:#b95536;color:#fff;font-size:.7rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 8px 18px rgba(185,85,54,.22)}
+        /* Warm, receipt-inspired quick-entry sheet */
+        .add-finance-modal{background:#fbf5ec!important;border-color:rgba(235,193,122,.35);box-shadow:0 30px 90px rgba(20,12,8,.45)}.add-finance-head{position:relative;overflow:hidden;padding:1rem 1.05rem;border-bottom:0;background:radial-gradient(circle at 85% 0,rgba(225,172,79,.25),transparent 34%),linear-gradient(135deg,#2a1e18,#4b3022)}.add-finance-head:after{content:"";position:absolute;right:-2.5rem;top:-4rem;width:9rem;height:9rem;border:1px solid rgba(255,255,255,.08);border-radius:999px}.add-finance-title,.add-finance-head .finance-close{position:relative;z-index:1}.add-finance-icon{height:38px;width:38px;border-color:rgba(238,190,105,.35);background:rgba(238,190,105,.12);color:#efbd72}.add-finance-head h2{color:#fff8ed;font-size:1.25rem}.add-finance-head p{color:#e8b66b}.add-finance-modal .finance-close{background:rgba(255,255,255,.09);color:#fff7ed}.add-finance-form{position:relative;padding:1rem;background:linear-gradient(180deg,#fffdf9,#fbf4ea)}.entry-type-switch{gap:.35rem;padding:.3rem;border-color:#e5d6c7;background:#eee2d5}.entry-type-switch button{min-height:46px;border:1px solid transparent;border-radius:.65rem;font-size:.68rem}.entry-type-switch button small{display:block;margin-top:.05rem;font-size:.48rem;font-weight:800;opacity:.65}.entry-type-switch button.income-active{border-color:#b9ddc6;background:#eff9f2;color:#256e47}.entry-type-switch button.expense-active{border-color:#efc7c2;background:#fff3f0;color:#ab443a}.entry-amount-panel{padding:.7rem;border:1px solid #e4d7ca;border-radius:.9rem;background:#fff;box-shadow:0 5px 14px rgba(74,47,30,.045)}.entry-amount-panel>label{color:#a26d4c!important}.add-finance-modal .entry-amount .amount-input{min-height:58px!important;border:0!important;background:transparent!important;box-shadow:none!important;font-size:1.8rem!important}.entry-amount:after{content:"EUR";position:absolute;right:.35rem;top:50%;transform:translateY(-50%);color:#a59386;font-size:.52rem;font-weight:900;letter-spacing:.12em}.add-finance-modal input:not(.amount-input),.add-finance-modal select{min-height:48px!important;border-color:#e1d4c8!important;background:#fffdfb!important}.entry-description{border-style:dashed;border-color:#d9c7b7;background:#fffaf4}.entry-description summary{min-height:44px;color:#96553b}.add-finance-submit{min-height:50px;background:linear-gradient(135deg,#ad4d31,#ca653f);box-shadow:0 10px 22px rgba(174,76,47,.25)}.add-finance-submit:active{transform:scale(.985)}.sheet-handle{display:none}
+        @media(min-width:640px){.finance-range{grid-template-columns:minmax(180px,1fr) auto auto;align-items:center}.finance-range-custom{grid-template-columns:150px 150px}.breakdown-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.finance-hero{padding:1.15rem 1.25rem}.transaction-row{grid-template-columns:40px minmax(0,1fr) auto 40px;padding:.7rem .85rem}}
+        @media(max-width:639px){.finance-page{margin-inline:-.25rem}.finance-hero h1{font-size:1.4rem}.finance-hero .hero-copy{display:none}.finance-hero-button span{display:none}.finance-range-reset{display:none}.finance-kpis{padding:.45rem}.finance-kpi{padding:.52rem}.finance-modal-wrap{align-items:flex-end!important;padding:0!important}.finance-modal-card{max-height:92dvh;border-radius:1.35rem 1.35rem 0 0!important;padding:1rem!important}.finance-modal-card.add-finance-modal{padding:0!important;border-radius:1.5rem 1.5rem 0 0!important}.sheet-handle{position:absolute;z-index:3;top:.42rem;left:50%;display:block;width:2.4rem;height:.22rem;transform:translateX(-50%);border-radius:99px;background:rgba(255,255,255,.32)}.add-finance-head{padding-top:1.25rem}.add-finance-form{padding-bottom:calc(.8rem + env(safe-area-inset-bottom))}.add-finance-submit{position:sticky;bottom:0;z-index:2}.transaction-row{gap:.4rem;padding-inline:.55rem}.transaction-icon{height:32px;width:32px}.ledger-date span{display:none}}
+    </style>
+
+    @php
+        $statsRangeOptions=['today'=>'Today','yesterday'=>'Yesterday','this_week'=>'This week','last_week'=>'Last week','this_month'=>'This month','last_month'=>'Last month','this_year'=>'This year','last_year'=>'Last year','last_3_months'=>'Last 3 months','custom'=>'Custom date range'];
+    @endphp
+
     <div data-async-region="finance-index" data-async-mutations="true">
-        @if(session('success'))
-            <div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>
-        @elseif(session('error'))
-            <div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>
-        @elseif($errors->any())
-            <div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>
-        @endif
-@php
-    $statsRangeOptions = [
-        'today' => 'Today',
-        'yesterday' => 'Yesterday',
-        'this_week' => 'This week',
-        'last_week' => 'Last week',
-        'this_month' => 'This month',
-        'last_month' => 'Last month',
-        'this_year' => 'This year',
-        'last_year' => 'Last year',
-        'last_3_months' => 'Last 3 months',
-        'custom' => 'Custom date range',
-    ];
+        @if(session('success'))<div class="hidden" data-async-feedback data-feedback-level="success">{{ session('success') }}</div>@elseif(session('error'))<div class="hidden" data-async-feedback data-feedback-level="error">{{ session('error') }}</div>@elseif($errors->any())<div class="hidden" data-async-feedback data-feedback-level="error">{{ $errors->first() }}</div>@endif
 
-@endphp
-<div x-data="{ 
-    showFinanceModal: {{ (($errors->any() && old('amount') && !old('finance_id')) || session('keep_finance_modal') || request()->boolean('finance_modal')) ? 'true' : 'false' }}, 
-    showEditModal: {{ $errors->any() && old('finance_id') ? 'true' : 'false' }}, 
-    finance_type: '{{ old('finance_type', 'income') }}', 
-    editingFinance: { 
-        id: '{{ old('finance_id') }}', 
-        amount: '{{ old('amount') }}', 
-        date: '{{ old('date') }}', 
-        finance_type: '{{ old('finance_type') }}', 
-        originalType: '{{ old('type') }}', 
-        method: '{{ old('method') }}', 
-        category: '{{ old('category') }}', 
-        description: '{{ old('description') }}',
-        showDesc: {{ old('description') ? 'true' : 'false' }}
-    }, 
-    editFinance(item) { 
-        this.editingFinance = { 
-            id: item.id, 
-            amount: item.amount, 
-            date: item.date ? (typeof item.date === 'string' ? item.date.substring(0, 10) : item.date) : '', 
-            finance_type: item.transaction_type, 
-            originalType: item.transaction_type, 
-            method: item.method, 
-            category: item.category || '', 
-            description: item.description || '',
-            showDesc: item.description ? true : false
-        }; 
-        this.showEditModal = true; 
-    } 
-}" class="space-y-6">
+        <div class="finance-page space-y-3" x-data="financePage()">
+            <header class="finance-hero"><div><p class="text-[9px] font-black uppercase tracking-[.18em] text-[#e7bd72]">Cash flow</p><h1 class="text-2xl font-black text-[#fffaf1]">Finance Overview</h1><p class="hero-copy text-xs text-white/55">Sales, costs and margin in one calm view.</p></div><div class="finance-hero-actions"><a href="{{ route('finance.categories.index') }}" data-async="off" class="finance-hero-button"><span>Categories</span><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M5 7h14M5 12h14M5 17h9"/></svg></a><button type="button" @click="showFinanceModal=true" class="finance-hero-button primary"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2.2" d="M12 5v14M5 12h14"/></svg><span>Add entry</span></button></div></header>
 
-    <div class="flex items-center justify-between border-b border-gray-200 pb-4">
-        <div class="flex items-center gap-3">
-            <div class="w-1.5 h-8 bg-indigo-600 rounded-full shadow-sm"></div>
-            <div>
-                <h1 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Finance Overview</h1>
-            </div>
-        </div>
-        <div class="flex items-center gap-2">
-            <a href="{{ route('finance.categories.index') }}" data-async="off" 
-               class="w-10 h-10 bg-gray-50 border border-gray-200 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-100 rounded-xl flex items-center justify-center transition-all shadow-sm active:scale-95" 
-               title="Manage Categories">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                </svg>
-            </a>
-            <button @click="showFinanceModal = true" 
-                    class="w-10 h-10 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl flex items-center justify-center shadow-md shadow-emerald-600/10 hover:scale-105 active:scale-95 transition-all">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-            </button>
-        </div>
-    </div>
+            <section class="finance-panel">
+                <form method="GET" action="{{ route('finance.index') }}" class="finance-range" data-auto-submit-form><input type="hidden" name="history_query" value="{{ $query }}"><select name="mode" data-range-toggle-target="finance-summary-custom-range" data-range-toggle-value="custom" data-auto-submit-skip-on="custom">@foreach($statsRangeOptions as $value=>$label)<option value="{{ $value }}" @selected($mode===$value)>{{ $label }}</option>@endforeach</select><div id="finance-summary-custom-range" data-range-toggle-panel="finance-summary-custom-range" @class(['finance-range-custom','hidden'=>$mode!=='custom'])><input type="date" name="date_from" value="{{ $dateFrom }}"><input type="date" name="date_to" value="{{ $dateTo }}"></div><a href="{{ route('finance.index') }}" class="finance-range-reset">Reset</a></form>
+                <p class="px-3 pb-1 text-[8px] font-black uppercase tracking-widest text-[#9a897c]">{{ $start->format('d M Y') }} - {{ $end->format('d M Y') }}</p>
+                <div class="finance-kpis"><article class="finance-kpi kpi-income"><span>Total income</span><strong>&euro;{{ number_format($totalIncome,2) }}</strong></article><article class="finance-kpi kpi-expense"><span>Expenses</span><strong>&euro;{{ number_format($totalExpenses,2) }}</strong></article><article class="finance-kpi kpi-profit {{ $netProfit<0?'negative':'' }}"><span>Net profit</span><strong>{{ $netProfit<0?'-':'' }}&euro;{{ number_format(abs($netProfit),2) }}</strong></article></div>
+                <details class="finance-breakdown"><summary>Payment and category breakdown</summary><div class="breakdown-grid"><div class="breakdown-block" data-payment-method-summary="income"><h3>Income by payment</h3>@forelse($incomeByMethod as $item)<div class="breakdown-row"><span class="capitalize">{{ $item->method }}</span><strong class="text-emerald-700">&euro;{{ number_format($item->total,2) }}</strong></div>@empty<p class="text-[10px] text-slate-400">No income</p>@endforelse</div><div class="breakdown-block" data-payment-method-summary="expense"><h3>Expenses by payment</h3>@forelse($expenseByMethod as $item)<div class="breakdown-row"><span class="capitalize">{{ $item->method }}</span><strong class="text-rose-700">&euro;{{ number_format($item->total,2) }}</strong></div>@empty<p class="text-[10px] text-slate-400">No expenses</p>@endforelse</div><div class="breakdown-block"><h3>Income sources</h3>@forelse($incomeByType as $item)<div class="breakdown-row"><span>{{ $item->type?:'Uncategorized' }}</span><strong>&euro;{{ number_format($item->total,2) }}</strong></div>@empty<p class="text-[10px] text-slate-400">No sources</p>@endforelse</div><div class="breakdown-block"><h3>Expense categories</h3>@forelse($expenseByCategory as $item)<div class="breakdown-row"><span>{{ $item->category?:'Uncategorized' }}</span><strong>&euro;{{ number_format($item->total,2) }}</strong></div>@empty<p class="text-[10px] text-slate-400">No categories</p>@endforelse</div></div></details>
+            </section>
 
+            <section id="transactions" class="finance-panel overflow-hidden">
+                <div class="ledger-head"><div><p class="text-[8px] font-black uppercase tracking-widest text-[#b95536]">Ledger</p><h2>Transactions</h2></div><div class="flex items-center gap-2"><p class="ledger-date">From: {{ \Carbon\Carbon::parse($dateFrom)->format('d M Y') }} &middot; To: {{ \Carbon\Carbon::parse($dateTo)->format('d M Y') }}</p><button type="button" @click="filters=!filters" class="ledger-filter-toggle">Search</button></div></div>
+                <form x-show="filters" x-cloak action="{{ route('finance.index') }}#transactions" method="GET" class="ledger-search" data-auto-submit-form data-auto-submit-delay="700"><input type="hidden" name="mode" value="{{ $mode }}"><input type="hidden" name="date_from" value="{{ $dateFrom }}"><input type="hidden" name="date_to" value="{{ $dateTo }}"><input type="text" name="history_query" value="{{ $query }}" placeholder="Description or amount..." data-auto-submit-search></form>
+                <div class="transaction-list">@forelse($history as $item)<article class="transaction-row {{ $item->transaction_type }}"><div class="transaction-icon">{{ $item->transaction_type==='income'?'↑':'↓' }}</div><div class="transaction-copy"><strong>{{ $item->description?:($item->transaction_type==='income'?'Income entry':'Expense entry') }}</strong><p>{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }} &middot; {{ $item->method }} @if($item->category)&middot; {{ $item->category }}@endif</p></div><p class="transaction-amount">{{ $item->transaction_type==='income'?'+':'-' }}&euro;{{ number_format($item->amount,2) }}</p><button type="button" @click="editFinance(@js($item))" class="transaction-edit" aria-label="Edit transaction"><svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="m15 5 4 4L8 20H4v-4L15 5Z"/></svg></button></article>@empty<div class="finance-empty">No transactions match your search filter.</div>@endforelse</div>
+                @if($history->hasPages())<div class="border-t border-[#eee5dc] p-3">{{ $history->links() }}</div>@endif
+            </section>
 
-    <section class="glass p-6 rounded-[28px] space-y-4">
-        <div class="flex items-center justify-between gap-4 flex-wrap">
-            <div class="flex items-center gap-2.5">
-                <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-                <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Summary Overview</h2>
-            </div>
-            <form method="GET" action="{{ route('finance.index') }}" class="w-full lg:w-auto lg:ml-auto" data-auto-submit-form>
-                <input type="hidden" name="history_query" value="{{ $query }}">
+            <details class="finance-panel finance-breakdown"><summary>Latest Transactions <span class="text-[9px] font-bold text-slate-400">All dates</span></summary><div class="transaction-list">@forelse($latestTransactions as $item)<div class="transaction-row {{ $item->transaction_type }}"><div class="transaction-icon">{{ $item->transaction_type==='income'?'↑':'↓' }}</div><div class="transaction-copy"><strong>{{ $item->description?:($item->transaction_type==='income'?'Income entry':'Expense entry') }}</strong><p>{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }} &middot; {{ $item->method }}</p></div><p class="transaction-amount">{{ $item->transaction_type==='income'?'+':'-' }}&euro;{{ number_format($item->amount,2) }}</p><span></span></div>@empty<div class="finance-empty">No recent transactions.</div>@endforelse</div></details>
 
-                <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-                    <select
-                        name="mode"
-                        data-range-toggle-target="finance-summary-custom-range"
-                        data-range-toggle-value="custom"
-                        data-auto-submit-skip-on="custom"
-                        class="w-full sm:w-auto !w-full sm:!w-auto bg-gray-50 border border-gray-200 px-4 py-2.5 rounded-xl text-slate-700 text-xs font-bold transition focus:border-indigo-500 outline-none"
-                    >
-                        @foreach($statsRangeOptions as $value => $label)
-                            <option value="{{ $value }}" @selected($mode === $value) class="bg-white text-slate-800">{{ $label }}</option>
-                        @endforeach
-                    </select>
-
-                    <div
-                        data-range-toggle-panel="finance-summary-custom-range"
-                        @class(['flex flex-col gap-3 sm:flex-row sm:items-center', 'hidden' => $mode !== 'custom'])
-                    >
-                        <input type="date" name="date_from" value="{{ $dateFrom }}" class="bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl text-slate-700 text-xs font-bold outline-none focus:border-indigo-500">
-                        <input type="date" name="date_to" value="{{ $dateTo }}" class="bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl text-slate-700 text-xs font-bold outline-none focus:border-indigo-500">
-                    </div>
-                    <a href="{{ route('finance.index') }}" class="w-full sm:w-auto px-5 py-3 bg-gray-50 border border-gray-200 hover:bg-gray-100 text-slate-700 rounded-2xl text-xs font-bold uppercase tracking-widest flex items-center justify-center transition-all shadow-sm active:scale-95">Reset</a>
-                </div>
-            </form>
-        </div>
-        <p class="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest leading-none">{{ $start->format('d M Y') }} - {{ $end->format('d M Y') }}</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Income Card -->
-            <div class="glass kpi-card kpi-income rounded-[24px] p-5 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between">
-                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">Total Income</p>
-                        <span class="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 11l5-5m0 0l5 5m-5-5v12"></path></svg>
-                        </span>
-                    </div>
-                    <div class="mt-3 flex items-end justify-between gap-3">
-                        <p class="text-2xl font-black text-emerald-600">€{{ number_format($totalIncome, 2) }}</p>
-                        @if($incomeByMethod->isNotEmpty())
-                            <div data-payment-method-summary="income" class="min-w-[6.5rem] shrink-0 border-l border-emerald-100 pl-3 text-right">
-                                <p class="mb-1 text-[8px] font-black uppercase tracking-widest text-slate-400">Payment</p>
-                                @foreach($incomeByMethod as $item)
-                                    <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
-                                        <span class="capitalize text-slate-500">{{ $item->method }}</span>
-                                        <span class="font-black text-emerald-700">&euro;{{ number_format($item->total, 2) }}</span>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-                </div>
-                
-                @if($incomeByType->isNotEmpty())
-                <div class="mt-4 pt-3 border-t border-emerald-100/50 space-y-1.5 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                    @foreach($incomeByType as $item)
-                        <div class="flex justify-between items-center gap-2">
-                            <span class="truncate">{{ $item->type ?: 'Uncategorized' }}</span>
-                            <span class="text-emerald-600 font-extrabold shrink-0">€{{ number_format($item->total, 2) }}</span>
+            <div x-show="showFinanceModal" x-cloak @keydown.escape.window="showFinanceModal=false" class="finance-modal-wrap fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <div class="absolute inset-0 bg-black/60 backdrop-blur-[2px]" @click="showFinanceModal=false"></div>
+                <section class="finance-modal-card add-finance-modal relative w-full max-w-md rounded-3xl" role="dialog" aria-modal="true" aria-labelledby="add-finance-title" x-effect="if(showFinanceModal) $nextTick(() => $refs.financeAmount?.focus())">
+                    <span class="sheet-handle" aria-hidden="true"></span>
+                    <header class="add-finance-head">
+                        <div class="add-finance-title">
+                            <span class="add-finance-icon" aria-hidden="true">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="8" stroke-width="2"/><path d="M14.5 9.5c-.5-.8-1.3-1.2-2.5-1.2-1.4 0-2.4.7-2.4 1.8 0 2.8 5.1 1.2 5.1 3.9 0 1.1-1 1.8-2.5 1.8-1.2 0-2.2-.5-2.8-1.4M12 6.8v10.4" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            </span>
+                            <div><p>Cash flow entry</p><h2 id="add-finance-title">Add Finance</h2></div>
                         </div>
-                    @endforeach
-                </div>
-                @endif
-            </div>
-            <!-- Expense Card -->
-            <div class="glass kpi-card kpi-expense rounded-[24px] p-5 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between">
-                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">Total Expenses</p>
-                        <span class="w-8 h-8 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
-                        </span>
-                    </div>
-                    <div class="mt-3 flex items-end justify-between gap-3">
-                        <p class="text-2xl font-black text-rose-600">€{{ number_format($totalExpenses, 2) }}</p>
-                        @if($expenseByMethod->isNotEmpty())
-                            <div data-payment-method-summary="expense" class="min-w-[6.5rem] shrink-0 border-l border-rose-100 pl-3 text-right">
-                                <p class="mb-1 text-[8px] font-black uppercase tracking-widest text-slate-400">Payment</p>
-                                @foreach($expenseByMethod as $item)
-                                    <div class="flex items-center justify-between gap-2 text-[10px] font-bold">
-                                        <span class="capitalize text-slate-500">{{ $item->method }}</span>
-                                        <span class="font-black text-rose-700">&euro;{{ number_format($item->total, 2) }}</span>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-                    </div>
-                </div>
-                
-                @if($expenseByCategory->isNotEmpty())
-                <div class="mt-4 pt-3 border-t border-rose-100/50 space-y-1.5 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-                    @foreach($expenseByCategory as $item)
-                        <div class="flex justify-between items-center gap-2">
-                            <span class="truncate">{{ $item->category ?: 'Uncategorized' }}</span>
-                            <span class="text-rose-600 font-extrabold shrink-0">€{{ number_format($item->total, 2) }}</span>
+                        <button type="button" @click="showFinanceModal=false" class="finance-close" aria-label="Close">&times;</button>
+                    </header>
+
+                    @if(($errors->any()||session('error'))&&old('amount')&&!old('finance_id'))
+                        <div class="mx-4 mt-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800">{{ session('error')?:$errors->first() }}</div>
+                    @endif
+
+                    <form action="{{ route('finance.store') }}" method="POST" class="add-finance-form space-y-3">
+                        @csrf
+                        <input type="hidden" name="finance_type" :value="finance_type">
+
+                        <div class="entry-type-switch" aria-label="Entry type">
+                            <button type="button" @click="finance_type='income'" :class="finance_type==='income' && 'income-active'" :aria-pressed="(finance_type==='income').toString()">+ Money in<small>Sales & other income</small></button>
+                            <button type="button" @click="finance_type='expense'" :class="finance_type==='expense' && 'expense-active'" :aria-pressed="(finance_type==='expense').toString()">− Expense<small>Supplies & costs</small></button>
                         </div>
-                    @endforeach
-                </div>
-                @endif
-            </div>
-            <!-- Profit Card -->
-            <div class="glass kpi-card kpi-profit {{ $netProfit < 0 ? 'negative' : '' }} rounded-[24px] p-5 flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between">
-                        <p class="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold">Net Profit</p>
-                        <span class="w-8 h-8 rounded-full {{ $netProfit >= 0 ? 'bg-amber-50 border-amber-100 text-amber-600' : 'bg-rose-50 border-rose-100 text-rose-600' }} flex items-center justify-center shrink-0">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </span>
-                    </div>
-                    <p class="text-2xl font-black {{ $netProfit >= 0 ? 'text-amber-600' : 'text-rose-600' }} mt-3">{{ $netProfit >= 0 ? '' : '-' }}€{{ number_format(abs($netProfit), 2) }}</p>
-                </div>
-            </div>
-        </div>
 
-    </section>
-
-    <section id="transactions" class="glass p-6 rounded-[28px] space-y-4">
-        <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <div class="flex items-center gap-2.5">
-                <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-                <div>
-                    <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Filtered Transactions</h2>
-                    <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Uses the summary date range above</p>
-                </div>
-            </div>
-            <div class="flex flex-wrap items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                <span class="px-3 py-2 rounded-2xl border border-gray-200 bg-gray-50">From: {{ \Carbon\Carbon::parse($dateFrom)->format('d M Y') }}</span>
-                <span class="px-3 py-2 rounded-2xl border border-gray-200 bg-gray-50">To: {{ \Carbon\Carbon::parse($dateTo)->format('d M Y') }}</span>
-            </div>
-        </div>
-
-        <form action="{{ route('finance.index') }}#transactions" method="GET" class="space-y-3" data-auto-submit-form data-auto-submit-delay="700">
-            <input type="hidden" name="mode" value="{{ $mode }}">
-            <input type="hidden" name="date_from" value="{{ $dateFrom }}">
-
-            <input type="hidden" name="date_to" value="{{ $dateTo }}">
-
-            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <input type="text" name="history_query" value="{{ $query }}" placeholder="Search description or amount..." data-auto-submit-search class="w-full lg:max-w-xl bg-gray-50 border border-gray-200 text-slate-800 text-sm px-4 py-3 rounded-2xl outline-none focus:border-indigo-500 focus:bg-white transition-all">
-            </div>
-        </form>
-
-        <div class="space-y-3">
-            @forelse($history as $item)
-                <div class="glass p-4 rounded-3xl border border-gray-100 flex items-center justify-between hover-lift transition-all duration-300 relative overflow-hidden group">
-                    <!-- Left dynamic stripe indicator -->
-                    <div class="absolute left-0 top-0 bottom-0 w-1.5 {{ $item->transaction_type === 'income' ? 'bg-emerald-500' : 'bg-rose-500' }}"></div>
-                    
-                    <div class="flex items-center gap-3 pl-2 min-w-0">
-                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center border {{ $item->transaction_type === 'income' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-rose-50 border-rose-100 text-rose-600' }} shrink-0">
-                            @if($item->transaction_type === 'income')
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 11l5-5m0 0l5 5m-5-5v12"></path></svg>
-                            @else
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path></svg>
-                            @endif
-                        </div>
-                        
-                        <div class="text-left min-w-0">
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <p class="text-sm font-bold text-slate-800 capitalize leading-tight truncate max-w-[140px] sm:max-w-none">
-                                    {{ $item->description ?: ($item->transaction_type === 'income' ? 'Income Entry' : 'Expense Entry') }}
-                                </p>
-                                <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-lg border {{ $item->method === 'cash' ? 'border-amber-200 text-amber-700 bg-amber-50' : 'border-indigo-100 text-indigo-600 bg-indigo-50' }} shrink-0">
-                                    {{ $item->method }}
-                                </span>
-                            </div>
-                            <div class="flex items-center gap-2 mt-1.5 flex-wrap">
-                                <span class="text-[10px] text-slate-400 font-bold tracking-wider uppercase leading-none">
-                                    {{ \Carbon\Carbon::parse($item->date)->format('d M Y') }}
-                                </span>
-                                @if($item->category)
-                                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-none">
-                                    • #{{ $item->category }}
-                                </span>
-                                @endif
+                        <div class="entry-amount-panel">
+                            <label for="finance-amount">Amount (€)</label>
+                            <div class="entry-amount">
+                                <span :class="finance_type==='income'?'text-emerald-600':'text-rose-600'">&euro;</span>
+                                <input x-ref="financeAmount" @focus="$event.target.select()" id="finance-amount" class="amount-input w-full font-black" :class="finance_type==='income'?'text-emerald-700':'text-rose-700'" type="number" inputmode="decimal" step="0.01" min="0.01" name="amount" value="{{ (session('keep_finance_modal')||request()->boolean('finance_modal'))?'':old('amount') }}" placeholder="0.00" required>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="text-right flex items-center gap-3 shrink-0">
-                        <p class="text-sm font-black {{ $item->transaction_type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
-                            {{ $item->transaction_type === 'income' ? '+' : '-' }}€{{ number_format($item->amount, 2) }}
-                        </p>
-                        
-                        <button @click="editFinance({{ $item->toJson() }})" 
-                                title="Edit Entry"
-                                class="w-10 h-10 flex items-center justify-center bg-gray-50 border border-gray-200 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-100 rounded-xl transition-all shadow-sm active:scale-95">
-                            <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
+
+                        <div class="entry-fields">
+                            <div><label for="finance-date">Date</label><input id="finance-date" type="date" name="date" value="{{ old('date',date('Y-m-d')) }}" required></div>
+                            <div><label for="finance-method">Payment</label><select id="finance-method" name="method" required><option value="cash" @selected(old('method')==='cash')>Cash</option><option value="card" @selected(old('method')==='card')>Card</option></select></div>
+                        </div>
+
+                        <div><label for="finance-category">Category</label><select id="finance-category" name="category"><option value="">No category</option>@foreach($categories as $cat)<option value="{{ $cat->name }}" x-show="finance_type==='{{ $cat->type }}'" @selected(old('category')===$cat->name)>{{ $cat->name }}</option>@endforeach</select></div>
+
+                        <details class="entry-description" @if(old('description')) open @endif>
+                            <summary>Add description <span class="sr-only">Optional</span></summary>
+                            <div><input aria-label="Description" name="description" value="{{ old('description') }}" placeholder="Supplier, event or short note"></div>
+                        </details>
+
+                        <button class="add-finance-submit">
+                            <span x-text="finance_type==='income'?'Add to today’s ledger':'Record restaurant expense'"></span>
+                            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="m9 18 6-6-6-6"/></svg>
                         </button>
-                    </div>
-                </div>
-            @empty
-                <div class="glass p-12 rounded-3xl border border-gray-100 text-center">
-                    <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                    </svg>
-                    <p class="text-slate-400 font-medium">No transactions match your search filter</p>
-                </div>
-            @endforelse
-        </div>
-
-        @if($history->hasPages())
-            <div class="pt-2">{{ $history->links() }}</div>
-        @endif
-    </section>
-
-    <section class="glass p-6 rounded-[28px] space-y-4">
-        <div class="flex items-center gap-2.5">
-            <div class="w-1.5 h-6 bg-indigo-600 rounded-full"></div>
-            <h2 class="text-lg font-black text-slate-800 uppercase tracking-tight">Latest Transactions</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            @foreach($latestTransactions as $item)
-                <div class="glass p-4 rounded-3xl border border-gray-100 flex items-center justify-between hover-lift transition-all duration-300 relative overflow-hidden group">
-                    <!-- Left dynamic stripe indicator -->
-                    <div class="absolute left-0 top-0 bottom-0 w-1.5 {{ $item->transaction_type === 'income' ? 'bg-emerald-500' : 'bg-rose-500' }}"></div>
-                    
-                    <div class="flex items-center gap-3 pl-2 min-w-0">
-                        <div class="text-left min-w-0">
-                            <p class="text-sm font-bold text-slate-800 capitalize leading-tight truncate">
-                                {{ $item->description ?: ($item->transaction_type === 'income' ? 'Income Entry' : 'Expense Entry') }}
-                            </p>
-                            <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-1 leading-none">
-                                {{ \Carbon\Carbon::parse($item->date)->format('d M Y') }} | {{ $item->method }}
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <p class="text-sm font-black {{ $item->transaction_type === 'income' ? 'text-emerald-600' : 'text-rose-600' }} shrink-0">
-                        {{ $item->transaction_type === 'income' ? '+' : '-' }}€{{ number_format($item->amount, 2) }}
-                    </p>
-                </div>
-            @endforeach
-        </div>
-    </section>
-
-    <!-- Modals moved to root layout wrapper level to overlay top header completely -->
-    <!-- Add Finance Modal -->
-    <div x-show="showFinanceModal" 
-         class="finance-add-modal fixed inset-0 z-[100] flex items-center justify-center px-4"
-         style="display: none;"
-         x-cloak>
-        <div @click="showFinanceModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-        <div class="glass w-full max-w-2xl rounded-[32px] p-8 relative border border-white/10"
-             x-show="showFinanceModal"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 scale-90"
-             x-transition:enter-end="opacity-100 scale-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 scale-100"
-             x-transition:leave-end="opacity-0 scale-90">
-            
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-slate-800">Add Finance</h3>
-                <button @click="showFinanceModal = false" class="text-gray-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+                    </form>
+                </section>
             </div>
 
-            @if (($errors->any() || session('error')) && old('amount') && !old('finance_id'))
-                <div class="mb-4 bg-red-50 border border-red-200 p-3 rounded-xl text-xs text-red-800">
-                    @if(session('error'))
-                        <p class="mb-2 font-bold">{{ session('error') }}</p>
-                    @endif
-                    @if($errors->any())
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-            @endif
-
-            <form action="{{ route('finance.store') }}" method="POST" class="space-y-3 sm:space-y-4 text-left">
-                @csrf
-                
-                <div class="mt-2 mb-6">
-                    <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (€)</label>
-                    <div class="relative flex items-center w-full transition-all duration-300">
-                        <span class="absolute left-5 text-2xl font-black transition-colors"
-                              :class="finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">€</span>
-                        <input type="number" step="0.01" name="amount" placeholder="0.00" value="{{ (session('keep_finance_modal') || request()->boolean('finance_modal')) ? '' : old('amount') }}" required autofocus
-                            class="w-full pl-12 pr-4 py-4 rounded-2xl border-2 text-3xl font-black outline-none transition-all duration-300"
-                            :class="finance_type === 'income' ? 'bg-emerald-50 border-emerald-200 text-emerald-700 focus:border-emerald-500 focus:ring-emerald-500 shadow-lg shadow-emerald-500/15' : 'bg-rose-50 border-rose-200 text-rose-700 focus:border-rose-500 focus:ring-rose-500 shadow-lg shadow-rose-500/15'"
-                            style="min-height: 4.5rem !important; padding-left: 3.5rem !important;">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                    <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required
-                           class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                        <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                            <option value="income" {{ old('finance_type') == 'income' ? 'selected' : '' }} class="bg-gray-900">Income</option>
-                            <option value="expense" {{ old('finance_type') == 'expense' ? 'selected' : '' }} class="bg-gray-900">Expense</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                        <select name="method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                            <option value="cash" {{ old('method') == 'cash' ? 'selected' : '' }} class="bg-gray-900">Cash</option>
-                            <option value="card" {{ old('method') == 'card' ? 'selected' : '' }} class="bg-gray-900">Card</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div x-data="{ showDesc: {{ old('description') ? 'true' : 'false' }} }" class="space-y-3">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                        <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                            <option value="" {{ old('category') == '' ? 'selected' : '' }} class="bg-gray-900">None</option>
-                            @foreach($categories as $cat)
-                                <option value="{{ $cat->name }}" 
-                                        x-show="finance_type === '{{ $cat->type }}'"
-                                        {{ old('category') == $cat->name ? 'selected' : '' }} 
-                                        class="bg-gray-900">{{ $cat->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="pt-1">
-                        <button x-show="!showDesc" type="button" @click="showDesc = true" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-1">
-                            <span>+ Add Description</span>
-                        </button>
-                        <div x-show="showDesc" x-transition>
-                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description</label>
-                            <input type="text" name="description" value="{{ old('description') }}"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
-                </div>
-            </form>
+            <div x-show="showEditModal" x-cloak class="finance-modal-wrap fixed inset-0 z-[100] flex items-center justify-center p-4"><div class="absolute inset-0 bg-black/55" @click="showEditModal=false"></div><div class="finance-modal-card relative w-full max-w-xl space-y-3 rounded-3xl bg-white p-5"><div class="flex items-center justify-between"><div><p class="text-[9px] font-black uppercase tracking-widest text-[#b95536]">Transaction details</p><h2 class="text-xl font-black">Edit Finance Entry</h2></div><button type="button" @click="showEditModal=false" class="finance-close" aria-label="Close">&times;</button></div>@if(($errors->any()||session('error'))&&old('finance_id'))<div class="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-800">{{ session('error')?:$errors->first() }}</div>@endif<form :action="@js(route('finance.update',['id'=>'__FINANCE__'])).replace('__FINANCE__',editingFinance.id)" method="POST" class="space-y-3">@csrf @method('PUT')<input type="hidden" name="finance_id" :value="editingFinance.id"><input type="hidden" name="type" :value="editingFinance.originalType"><div class="relative"><span class="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-black" :class="editingFinance.finance_type==='income'?'text-emerald-600':'text-rose-600'">&euro;</span><input class="amount-input w-full rounded-xl border-2 font-black" :class="editingFinance.finance_type==='income'?'border-emerald-200 bg-emerald-50 text-emerald-700':'border-rose-200 bg-rose-50 text-rose-700'" type="number" step="0.01" min="0" name="amount" x-model="editingFinance.amount" required></div><div class="grid grid-cols-3 gap-2"><div><label class="text-[10px] font-bold">Date</label><input type="date" name="date" x-model="editingFinance.date" required></div><div><label class="text-[10px] font-bold">Type</label><select name="finance_type" x-model="editingFinance.finance_type"><option value="income">Income</option><option value="expense">Expense</option></select></div><div><label class="text-[10px] font-bold">Method</label><select name="method" x-model="editingFinance.method"><option value="cash">Cash</option><option value="card">Card</option></select></div></div><div><label class="text-[10px] font-bold">Category</label><select name="category" x-model="editingFinance.category"><option value="">None</option>@foreach($categories as $cat)<option value="{{ $cat->name }}" x-show="editingFinance.finance_type==='{{ $cat->type }}'">{{ $cat->name }}</option>@endforeach</select></div><div><label class="text-[10px] font-bold">Description</label><input name="description" x-model="editingFinance.description"></div><div class="flex gap-2"><button type="button" @click="if(confirm('Delete this entry?')){$refs.deleteEntryForm.action=@js(route('finance.destroy',['id'=>'__FINANCE__'])).replace('__FINANCE__',editingFinance.id)+'?type='+editingFinance.originalType;$refs.deleteEntryForm.submit()}" class="rounded-xl border border-red-200 px-4 text-xs font-black text-red-600">Delete</button><button class="flex-1 rounded-xl bg-[#b95536] py-3 text-xs font-black text-white">Save Changes</button></div></form><form method="POST" x-ref="deleteEntryForm" class="hidden">@csrf @method('DELETE')</form></div></div>
         </div>
     </div>
 
-    <!-- Edit Finance Modal -->
-    <div x-show="showEditModal" 
-         class="finance-edit-modal fixed inset-0 z-[100] flex items-center justify-center px-4"
-         style="display: none;"
-         x-cloak>
-        <div @click="showEditModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-        <div class="glass w-full max-w-2xl rounded-[32px] p-8 relative border border-white/10"
-             x-show="showEditModal"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 scale-90"
-             x-transition:enter-end="opacity-100 scale-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100 scale-100"
-             x-transition:leave-end="opacity-0 scale-90">
-            
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-slate-800">Edit Finance Entry</h3>
-                <button @click="showEditModal = false" class="text-gray-400">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-
-            @if (($errors->any() || session('error')) && old('finance_id'))
-                <div class="mb-4 bg-red-50 border border-red-200 p-3 rounded-xl text-xs text-red-800">
-                    @if(session('error'))
-                        <p class="mb-2 font-bold">{{ session('error') }}</p>
-                    @endif
-                    @if($errors->any())
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-            @endif
-
-            <form :action="@js(route('finance.update', ['id' => '__FINANCE__'])).replace('__FINANCE__', editingFinance.id)" method="POST" class="space-y-3 sm:space-y-4">
-                @csrf
-                @method('PUT')
-                <input type="hidden" name="finance_id" :value="editingFinance.id">
-                <input type="hidden" name="type" :value="editingFinance.originalType">
-
-                <div class="mt-2 mb-6">
-                    <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (€)</label>
-                    <div class="relative flex items-center w-full transition-all duration-300">
-                        <span class="absolute left-5 text-2xl font-black transition-colors"
-                              :class="editingFinance.finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">€</span>
-                        <input type="number" step="0.01" name="amount" placeholder="0.00" x-model="editingFinance.amount" required
-                            class="w-full pl-12 pr-4 py-4 rounded-2xl border-2 text-3xl font-black outline-none transition-all duration-300"
-                            :class="editingFinance.finance_type === 'income' ? 'bg-emerald-50 border-emerald-200 text-emerald-700 focus:border-emerald-500 focus:ring-emerald-500 shadow-lg shadow-emerald-500/15' : 'bg-rose-50 border-rose-200 text-rose-700 focus:border-rose-500 focus:ring-rose-500 shadow-lg shadow-rose-500/15'"
-                            style="min-height: 4.5rem !important; padding-left: 3.5rem !important;">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                    <input type="date" name="date" x-model="editingFinance.date" required
-                           class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
-                        <select name="finance_type" x-model="editingFinance.finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                            <option value="income" class="bg-gray-900">Income</option>
-                            <option value="expense" class="bg-gray-900">Expense</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Method</label>
-                        <select name="method" x-model="editingFinance.method" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                            <option value="cash" class="bg-gray-900">Cash</option>
-                            <option value="card" class="bg-gray-900">Card</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="space-y-3">
-                    <div>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                        <select name="category" x-model="editingFinance.category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                            <option value="" class="bg-gray-900">None</option>
-                            @foreach($categories as $cat)
-                                <option value="{{ $cat->name }}" 
-                                        x-show="editingFinance.finance_type === '{{ $cat->type }}'"
-                                        class="bg-gray-900">{{ $cat->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="pt-1">
-                        <button x-show="!editingFinance.showDesc" type="button" @click="editingFinance.showDesc = true" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-1">
-                            <span>+ Add Description</span>
-                        </button>
-                        <div x-show="editingFinance.showDesc" x-transition>
-                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description</label>
-                            <input type="text" name="description" x-model="editingFinance.description"
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-3 pt-2">
-                    <button type="button" 
-                            @click="if(confirm('Delete this entry?')) $refs.deleteEntryForm.action = @js(route('finance.destroy', ['id' => '__FINANCE__'])).replace('__FINANCE__', editingFinance.id) + '?type=' + editingFinance.originalType; $refs.deleteEntryForm.submit()" 
-                            class="flex-1 bg-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-500/20 transition-all border border-red-500/20 active:scale-95">
-                        Delete
-                    </button>
-                    <button type="submit" 
-                            class="flex-[3] btn-accent py-4 shadow-lg shadow-accent/20 text-white font-bold uppercase tracking-widest">
-                        Save Changes
-                    </button>
-                </div>
-            </form>
-            <form method="POST" x-ref="deleteEntryForm" class="hidden">@csrf @method('DELETE')</form>
-        </div>
-    </div>
-</div>
-    </div>
+    <script>function financePage(){return{showFinanceModal:@js((($errors->any()&&old('amount')&&!old('finance_id'))||session('keep_finance_modal')||request()->boolean('finance_modal'))),showEditModal:@js($errors->any()&&old('finance_id')),filters:@js((bool)$query),finance_type:@js(old('finance_type','income')),editingFinance:{id:@js(old('finance_id')),amount:@js(old('amount')),date:@js(old('date')),finance_type:@js(old('finance_type')),originalType:@js(old('type')),method:@js(old('method')),category:@js(old('category')),description:@js(old('description'))},editFinance(item){this.editingFinance={id:item.id,amount:item.amount,date:item.date?String(item.date).substring(0,10):'',finance_type:item.transaction_type,originalType:item.transaction_type,method:item.method,category:item.category||'',description:item.description||''};this.showEditModal=true}}}</script>
 </x-app-layout>
-
-

@@ -325,7 +325,7 @@
             <div class="bg-glow-blob bg-glow-3"></div>
         </div>
         <div class="min-h-screen relative">
-            <header class="mobile-admin-header lg:hidden">
+            <header class="mobile-admin-header">
                 <a href="{{ route('dashboard') }}" class="mobile-admin-brand" aria-label="Restaurant dashboard">
                     <img src="{{ asset('restaurant-mark.svg') }}" alt="" width="40" height="40">
                     <span><strong>{{ config('restaurant.name') }}</strong><small>{{ ucfirst(auth()->user()->role) }}</small></span>
@@ -338,6 +338,7 @@
                     </button>
                     <div x-cloak x-show="open" x-transition class="mobile-profile-dropdown" role="menu">
                         <a href="{{ route('profile.edit') }}" role="menuitem">Profile</a>
+                        <a href="{{ route('users.index') }}" role="menuitem">Staff & Users</a>
                         @if(auth()->user()->isAdmin())
                             <a href="{{ route('restaurant.config') }}" role="menuitem">Settings</a>
                         @endif
@@ -424,8 +425,6 @@
                     }
                 }
 
-                $bottomMenuItems[] = ['route' => route('users.index'), 'active' => request()->routeIs('users.*') || request()->routeIs('staff.*'), 'label' => 'Staff', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'];
-
                 // Keep the navigation calm and predictable as modules are added.
                 // The five service essentials stay visible; management tools live in More.
                 $primaryMenuItems = array_slice($bottomMenuItems, 0, 5);
@@ -433,7 +432,7 @@
                 $secondaryMenuActive = collect($secondaryMenuItems)->contains(fn ($item) => $item['active']);
             @endphp
 
-            <!-- Global Navigation (Top) -->
+            <!-- Global Navigation Dock -->
             <nav class="admin-navigation fixed left-0 right-0 z-50" aria-label="Primary navigation">
                 <div class="glass admin-navigation-shell border-y border-white/10 px-5 py-3 flex items-center shadow-2xl">
                     <a href="{{ route('dashboard') }}" class="admin-brand-lockup shrink-0" aria-label="Restaurant dashboard">
@@ -447,6 +446,15 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="{{ $item['icon'] }}"></path>
                                 </svg>
                                 <span class="text-[9px] font-black uppercase tracking-wider hidden lg:inline">{{ $item['label'] }}</span>
+                            </a>
+                        @endforeach
+
+                        @foreach($secondaryMenuItems as $item)
+                            <a href="{{ $item['route'] }}" class="desktop-secondary-link bottom-quick-link {{ $item['active'] ? 'active' : '' }}" @if(!empty($item['target'])) target="{{ $item['target'] }}" @endif @if(!empty($item['rel'])) rel="{{ $item['rel'] }}" @endif>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="{{ $item['icon'] }}"></path>
+                                </svg>
+                                <span>{{ $item['label'] }}</span>
                             </a>
                         @endforeach
 
@@ -513,6 +521,13 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
                                     Profile
+                                </a>
+
+                                <a href="{{ route('users.index') }}" class="profile-dropdown-link flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg transition duration-150 {{ request()->routeIs('users.*') || request()->routeIs('staff.*') ? 'active' : '' }}">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"></path>
+                                    </svg>
+                                    Staff & Users
                                 </a>
                                 
                                 <!-- Config Link -->

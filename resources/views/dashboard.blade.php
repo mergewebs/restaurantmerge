@@ -44,25 +44,24 @@
             --rd-ink: #30251f;
             --rd-muted: #8c7b70;
             --rd-line: #eadfd1;
+            color: var(--rd-ink);
         }
         .restaurant-dashboard { position: relative; }
         .restaurant-service-hero {
             position: relative;
             overflow: hidden;
             display: grid;
-            gap: 1rem;
-            padding: 1.15rem 1.25rem;
+            gap: .85rem;
+            padding: 1rem;
             color: #fffaf0;
             border: 1px solid rgba(255,255,255,.08);
-            border-radius: 1.75rem;
+            border-radius: 1.35rem;
             background:
                 radial-gradient(circle at 88% 15%, rgba(215,166,74,.22), transparent 22%),
                 radial-gradient(circle at 74% 120%, rgba(198,95,61,.23), transparent 36%),
                 linear-gradient(135deg, var(--rd-espresso), var(--rd-espresso-soft));
-            box-shadow: 0 24px 50px rgba(47,31,23,.18);
+            box-shadow: 0 16px 38px rgba(47,31,23,.16);
         }
-        /* The KPI strip is the dashboard header; avoid repeating it with a second summary hero. */
-        .restaurant-service-hero { display: none; }
         .restaurant-service-hero::after {
             content: '';
             position: absolute;
@@ -77,8 +76,9 @@
         }
         .restaurant-hero-kicker { display: flex; align-items: center; gap: .55rem; color: #e8c77f; font-size: .65rem; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; }
         .restaurant-hero-kicker::before { content: ''; width: 1.75rem; height: 1px; background: currentColor; }
-        .restaurant-hero-title { margin-top: .4rem; max-width: 36rem; color: #fffaf0 !important; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(1.75rem, 4vw, 2.8rem); font-weight: 500; line-height: 1; letter-spacing: -.035em; }
-        .restaurant-hero-copy { margin-top: .5rem; max-width: 33rem; color: rgba(255,250,240,.66); font-size: .78rem; line-height: 1.45; }
+        .restaurant-hero-title { max-width: 36rem; margin-top: .38rem; color: #fffaf0 !important; font-family: 'Outfit', sans-serif !important; font-size: clamp(1.55rem, 4.5vw, 2.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -.045em !important; text-wrap: balance; }
+        .restaurant-hero-title span { color: #efc77a; font: inherit; letter-spacing: inherit; }
+        .restaurant-hero-copy { display: none; margin-top: .45rem; max-width: 33rem; color: rgba(255,250,240,.66); font-size: .75rem; line-height: 1.45; }
         .restaurant-live-pill { display: inline-flex; align-items: center; gap: .45rem; margin-top: .65rem; padding: .35rem .62rem; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.07); color: #fffaf0; font-size: .62rem; font-weight: 800; }
         .restaurant-live-pill i { width: .45rem; height: .45rem; border-radius: 50%; background: #93b47e; box-shadow: 0 0 0 .22rem rgba(147,180,126,.14); }
         .restaurant-live-pill.is-paused i { background: #e38467; box-shadow: 0 0 0 .22rem rgba(227,132,103,.14); }
@@ -86,27 +86,27 @@
         .restaurant-occupancy { padding: .75rem .85rem; border: 1px solid rgba(255,255,255,.1); border-radius: 1rem; background: rgba(255,255,255,.065); backdrop-filter: blur(8px); }
         .restaurant-occupancy-head { display: flex; align-items: end; justify-content: space-between; gap: 1rem; }
         .restaurant-occupancy-head span { color: rgba(255,250,240,.58); font-size: .62rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-        .restaurant-occupancy-head strong { color: #fffaf0; font-family: Georgia, serif; font-size: 1.35rem; font-weight: 500; }
+        .restaurant-occupancy-head strong { color: #fffaf0; font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 800; letter-spacing: -.04em; }
         .restaurant-progress { height: .32rem; margin-top: .5rem; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.12); }
         .restaurant-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #d7a64a, #e9c97e); }
         .restaurant-quick-actions { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: .55rem; }
-        .restaurant-quick-action { display: flex; min-height: 2.8rem; align-items: center; justify-content: center; gap: .4rem; padding: .45rem; border: 1px solid rgba(255,255,255,.1); border-radius: .85rem; background: rgba(255,255,255,.06); color: #fffaf0 !important; font-size: .64rem; font-weight: 800; text-align: center; transition: .2s ease; }
+        .restaurant-quick-action { display: flex; min-height: 3rem; align-items: center; justify-content: center; gap: .4rem; padding: .5rem; border: 1px solid rgba(255,255,255,.12); border-radius: .85rem; background: rgba(255,255,255,.08); color: #fffaf0 !important; font-size: .68rem; font-weight: 800; text-align: center; transition: .2s ease; touch-action: manipulation; }
         .restaurant-quick-action:hover { transform: translateY(-2px); border-color: rgba(232,199,127,.5); background: rgba(255,255,255,.11); }
         .restaurant-quick-action svg { width: 1rem; height: 1rem; color: #e8c77f; }
-        .restaurant-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+        .restaurant-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0 .15rem; }
         .restaurant-section-heading p { color: var(--rd-terracotta); font-size: .62rem; font-weight: 900; letter-spacing: .2em; text-transform: uppercase; }
         .restaurant-section-heading h2 { display: none; }
         .restaurant-section-heading p { display: inline; }
         .restaurant-section-heading time { color: var(--rd-muted); font-size: .72rem; font-weight: 700; }
         .dashboard-kpi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; }
-        .dashboard-kpi { position: relative; min-height: 94px; overflow: hidden; padding: .8rem .9rem; border: 1px solid var(--rd-line) !important; border-radius: 1rem; background: var(--rd-paper) !important; box-shadow: 0 5px 16px rgba(63,43,31,.045); transition: transform .2s ease, box-shadow .2s ease; }
+        .dashboard-kpi { position: relative; min-height: 78px; overflow: hidden; padding: .68rem .75rem; border: 1px solid var(--rd-line) !important; border-radius: .9rem; background: var(--rd-paper) !important; box-shadow: 0 4px 14px rgba(63,43,31,.04); transition: transform .2s ease, box-shadow .2s ease; }
         .dashboard-kpi:hover { transform: translateY(-3px); box-shadow: 0 16px 34px rgba(63,43,31,.09); }
         .dashboard-kpi::after { content: ''; position: absolute; right: -.8rem; bottom: -.9rem; width: 3rem; height: 3rem; border: .5rem solid rgba(198,95,61,.05); border-radius: 50%; }
         .dashboard-kpi:nth-child(3n+2)::after { border-color: rgba(101,113,83,.07); }
         .dashboard-kpi:nth-child(3n+3)::after { border-color: rgba(215,166,74,.08); }
         .dashboard-kpi-label { position: relative; z-index: 1; display: block; max-width: 11rem; color: var(--rd-muted) !important; font-size: .6rem; font-weight: 900; letter-spacing: .11em; line-height: 1.25; text-transform: uppercase; }
-        .dashboard-kpi-value { position: relative; z-index: 1; display: block; margin-top: .4rem; color: var(--rd-ink) !important; font-family: Georgia, 'Times New Roman', serif; font-size: 1.6rem; font-weight: 500; line-height: 1; }
-        .dashboard-kpi-note { position: relative; z-index: 1; display: block; margin-top: .35rem; overflow: hidden; color: var(--rd-muted); font-size: .61rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+        .dashboard-kpi-value { position: relative; z-index: 1; display: block; margin-top: .28rem; color: var(--rd-ink) !important; font-family: Georgia, 'Times New Roman', serif; font-size: 1.4rem; font-weight: 500; line-height: 1; }
+        .dashboard-kpi-note { position: relative; z-index: 1; display: block; margin-top: .25rem; overflow: hidden; color: var(--rd-muted); font-size: .58rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
         .dashboard-kpi:first-child { background: linear-gradient(145deg, #f8eadb, #fffaf1) !important; border-color: #e8cdb8 !important; }
         .dashboard-kpi:first-child .dashboard-kpi-label, .dashboard-kpi:first-child .dashboard-kpi-value { color: var(--rd-terracotta-dark) !important; }
         .dashboard-kpi::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 3px; background: transparent; }
@@ -114,7 +114,9 @@
         .dashboard-kpi.kpi-preparing::before { background: var(--rd-terracotta); }
         .dashboard-kpi.kpi-ready::before { background: var(--rd-olive); }
         .dashboard-kpi.kpi-alert::before { background: #a94e43; }
-        .dashboard-panel { border: 1px solid var(--rd-line) !important; border-radius: 1.2rem; background: var(--rd-paper) !important; padding: .9rem 1rem; box-shadow: 0 10px 24px rgba(63,43,31,.045); }
+        .dashboard-insights { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(82%, 1fr); gap: .65rem; overflow-x: auto; padding: .1rem .05rem .55rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
+        .dashboard-insights::-webkit-scrollbar { display: none; }
+        .dashboard-panel { min-height: 166px; scroll-snap-align: start; border: 1px solid var(--rd-line) !important; border-radius: 1.05rem; background: var(--rd-paper) !important; padding: .8rem .9rem; box-shadow: 0 8px 20px rgba(63,43,31,.04); }
         .dashboard-panel h3 { color: var(--rd-ink) !important; font-family: Georgia, 'Times New Roman', serif; font-size: 1.12rem; font-weight: 600; }
         .dashboard-panel > div:first-child { padding-bottom: .55rem; margin-bottom: .65rem !important; border-bottom: 1px solid #f0e7db; }
         .dashboard-panel a { color: var(--rd-terracotta-dark) !important; }
@@ -122,10 +124,33 @@
         .restaurant-dashboard-page .text-indigo-600, .restaurant-dashboard-page .text-indigo-700 { color: var(--rd-terracotta-dark) !important; }
         .restaurant-dashboard-page .bg-indigo-50 { background-color: #fbefe6 !important; }
         .restaurant-dashboard-page .border-indigo-100 { border-color: #efd5c4 !important; }
-        @media (min-width: 640px) { .dashboard-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (min-width: 900px) { .dashboard-kpi-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-        @media (min-width: 1180px) { .dashboard-kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-        @media (max-width: 520px) { .restaurant-quick-action span { display: none; } .restaurant-quick-action svg { width: 1.2rem; height: 1.2rem; } }
+        .dashboard-workspace { display: grid; gap: 1.25rem; }
+        .dashboard-workspace > div { min-width: 0; }
+        .dashboard-workspace .glass { background: var(--rd-paper) !important; border-color: var(--rd-line) !important; box-shadow: 0 5px 16px rgba(63,43,31,.035); }
+        @media (min-width: 640px) {
+            .restaurant-service-hero { grid-template-columns: 1.25fr .75fr; align-items: end; padding: 1.15rem 1.25rem; }
+            .restaurant-hero-copy { display: block; }
+            .dashboard-kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .dashboard-insights { grid-auto-flow: initial; grid-auto-columns: initial; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; padding-bottom: 0; }
+        }
+        @media (min-width: 1100px) {
+            .dashboard-workspace { grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr); align-items: start; }
+            .dashboard-workspace > .dashboard-finance-section { border-top: 0 !important; padding-top: 0 !important; }
+        }
+        @media (max-width: 639px) {
+            .restaurant-dashboard-page { margin-inline: -.25rem; }
+            .restaurant-service-hero::after { width: 11rem; height: 11rem; }
+            .restaurant-hero-kicker { font-size: .58rem; }
+            .restaurant-hero-title br { display: none; }
+            .restaurant-live-pill { margin-top: .5rem; }
+            .restaurant-occupancy { padding: .62rem .72rem; }
+            .restaurant-quick-action span { display: inline; }
+            .restaurant-quick-action svg { width: 1.1rem; height: 1.1rem; }
+            .dashboard-workspace { gap: 1rem; }
+            .dashboard-workspace .glass { padding: .7rem !important; border-radius: 1rem !important; }
+            .dashboard-workspace .glass p { line-height: 1.15; }
+            .dashboard-workspace .space-y-6 { row-gap: .8rem; }
+        }
     </style>
 
     <!-- Daily Overview Stats -->
@@ -198,7 +223,7 @@
             <div class="restaurant-service-hero">
                 <div class="relative z-[1]">
                     <p class="restaurant-hero-kicker">Today’s service</p>
-                    <h2 class="restaurant-hero-title">The dining room,<br>at a glance.</h2>
+                    <h2 class="restaurant-hero-title"><span>The dining room,</span><br>at a glance.</h2>
                     <p class="restaurant-hero-copy">A live view of the tables, kitchen and guests shaping today’s service.</p>
                     <span class="restaurant-live-pill {{ $isClosedToday ? 'is-paused' : '' }}"><i></i>{{ $isClosedToday ? 'Reservations paused' : 'Reservations open' }} · Updated {{ now()->format('H:i') }}</span>
                 </div>
@@ -208,8 +233,8 @@
                         <div class="restaurant-progress" role="progressbar" aria-label="Table occupancy" aria-valuemin="0" aria-valuemax="{{ $totalTables }}" aria-valuenow="{{ $occupiedTables }}"><span style="width: {{ $totalTables > 0 ? round(($occupiedTables / $totalTables) * 100) : 0 }}%"></span></div>
                     </div>
                     <nav class="restaurant-quick-actions" aria-label="Service shortcuts">
-                        @if(config('features.tables', false))<a href="{{ route('tables.index') }}" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 10h16M6 10v9m12-9v9M8 6h8"></path></svg><span>Tables</span></a>@endif
-                        @if(config('features.kitchen', false))<a href="{{ route('tables.kitchen') }}" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 11h14M7 11a5 5 0 0110 0m-5-5V4m-8 15h16"></path></svg><span>Kitchen</span></a>@endif
+                        <a href="{{ route('reservations.index') }}" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3M5 11h14M7 15h4m-4 3h7"></path></svg><span>Bookings</span></a>
+                        <a href="{{ route('orders.index') }}" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 4h10l1 16H6L7 4Zm2 4h6"></path></svg><span>Orders</span></a>
                         <button type="button" @click="showReservationModal = true" class="restaurant-quick-action"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3M5 11h14M12 14v4m-2-2h4"></path></svg><span>Book table</span></button>
                     </nav>
                 </div>
@@ -226,7 +251,7 @@
                 <article class="dashboard-kpi kpi-preparing"><span class="dashboard-kpi-label">Kitchen Orders</span><strong class="dashboard-kpi-value">{{ $pendingOrders + $preparingOrders + $readyOrders }}</strong><small class="dashboard-kpi-note">{{ $pendingOrders }} waiting &middot; {{ $preparingOrders }} cooking &middot; {{ $readyOrders }} ready</small></article>
                 <article class="dashboard-kpi"><span class="dashboard-kpi-label">Reservations</span><strong class="dashboard-kpi-value">{{ $reservationsCount }}</strong><small class="dashboard-kpi-note">{{ $reservations->sum('party_size') }} guests booked</small></article>
             </div>
-            <div class="grid gap-4 lg:grid-cols-3">
+            <div class="dashboard-insights" aria-label="Today’s restaurant insights">
                 <article class="dashboard-panel">
                     <div class="mb-4 flex items-center justify-between"><h3 class="font-black text-slate-800">Best Sellers</h3><span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Today</span></div>
                     <div class="space-y-2">@forelse($topSellingItems->take(4) as $index => $item)<div class="flex items-center gap-2.5"><span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-[10px] font-black text-indigo-600">{{ $index + 1 }}</span><div class="min-w-0 flex-1"><p class="truncate text-xs font-bold text-slate-700">{{ $item->name }}</p><p class="text-[10px] text-slate-400">&euro;{{ number_format($item->sales_total, 2) }} sales</p></div><strong class="text-xs text-slate-800">{{ $item->quantity_sold }}</strong></div>@empty<p class="py-4 text-center text-xs text-slate-400">No items sold yet today.</p>@endforelse</div>
@@ -290,11 +315,11 @@
             @endif
         </section>
 
-        <div class="space-y-8 @if(!auth()->user()->isAdmin()) max-w-4xl @endif mx-auto">
+        <div class="dashboard-workspace @if(!auth()->user()->isAdmin()) max-w-4xl @endif mx-auto">
             <!-- First Row: Operations & Reservations -->
-            <div class="space-y-6 animate-fade-in-up">
+            <div class="space-y-4 animate-fade-in-up">
                 <!-- Reservations Section -->
-                <div class="space-y-6">
+                <div class="space-y-4">
             @if($isClosedToday && $date == now()->toDateString())
                 <div class="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-center font-bold text-sm uppercase tracking-widest animate-pulse">
                     Reservations are STOPPED for today
@@ -429,9 +454,9 @@
 
     @if(auth()->user()->isAdmin())
     <!-- Second Row: Finances & Quick Actions -->
-    <div class="space-y-6 animate-fade-in-up delay-75 border-t border-gray-200 pt-6">
+    <div class="dashboard-finance-section space-y-4 animate-fade-in-up delay-75 border-t border-gray-200 pt-5">
         <!-- Finance Stats Section -->
-        <div class="space-y-6">
+        <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-gray-200 pb-4">
                 <div class="flex items-center gap-3">
                     <div class="w-1.5 h-8 bg-emerald-600 rounded-full shadow-sm"></div>
@@ -942,13 +967,169 @@
                 </div>
             </div>
 
+            <style>
+                /* Compact, receipt-inspired finance entry modal */
+                #dashboard-finance-add-modal .finance-add-card {
+                    max-width: 32rem !important;
+                    max-height: calc(100dvh - 2rem);
+                    overflow-y: auto;
+                    padding: 0 !important;
+                    border: 1px solid rgba(222, 199, 178, .75) !important;
+                    border-radius: 1.35rem !important;
+                    background: #fffaf3 !important;
+                    box-shadow: 0 28px 80px rgba(33, 22, 15, .35) !important;
+                }
+                #dashboard-finance-add-modal .finance-add-head {
+                    position: relative;
+                    overflow: hidden;
+                    margin: 0 !important;
+                    padding: .9rem 1rem;
+                    background: radial-gradient(circle at 86% 0, rgba(225, 172, 79, .25), transparent 36%), linear-gradient(135deg, #2b1e18, #4a3023);
+                }
+                #dashboard-finance-add-modal .finance-add-head::after {
+                    content: '';
+                    position: absolute;
+                    top: -4.5rem;
+                    right: -2.5rem;
+                    width: 9rem;
+                    height: 9rem;
+                    border: 1px solid rgba(255, 255, 255, .08);
+                    border-radius: 999px;
+                    pointer-events: none;
+                }
+                #dashboard-finance-add-modal .finance-add-head > * { position: relative; z-index: 1; }
+                #dashboard-finance-add-modal .finance-add-head-icon {
+                    width: 2.35rem;
+                    height: 2.35rem;
+                    border-color: rgba(239, 189, 114, .32) !important;
+                    background: rgba(239, 189, 114, .12) !important;
+                    color: #efbd72 !important;
+                }
+                #dashboard-finance-add-modal .finance-add-eyebrow {
+                    margin-bottom: .05rem;
+                    color: #e8b66b;
+                    font-size: .5rem;
+                    font-weight: 900;
+                    letter-spacing: .13em;
+                    text-transform: uppercase;
+                }
+                #dashboard-finance-add-modal .finance-add-head h3 {
+                    margin: 0 !important;
+                    color: #fff8ed !important;
+                    font-family: Georgia, 'Times New Roman', serif !important;
+                    font-size: 1.3rem !important;
+                }
+                #dashboard-finance-add-modal .finance-add-head .text-gray-400 {
+                    width: 2.15rem !important;
+                    height: 2.15rem !important;
+                    background: rgba(255, 255, 255, .09) !important;
+                    color: #fff7ed !important;
+                }
+                #dashboard-finance-add-modal .finance-add-form {
+                    display: grid;
+                    gap: .65rem !important;
+                    padding: .8rem 1rem 1rem;
+                    background: linear-gradient(180deg, #fffdf9, #fbf3e8);
+                }
+                #dashboard-finance-add-modal .finance-add-card > .mb-4 {
+                    margin: .65rem 1rem 0 !important;
+                }
+                #dashboard-finance-add-modal .finance-add-form label {
+                    margin-bottom: .22rem !important;
+                    color: #79675b !important;
+                    font-size: .55rem !important;
+                    letter-spacing: .1em !important;
+                }
+                #dashboard-finance-add-modal .finance-amount-card {
+                    margin: 0 !important;
+                    padding: .38rem .65rem .42rem;
+                    border: 1px solid #e5d7ca;
+                    border-radius: .75rem;
+                    background: #fff;
+                    box-shadow: 0 5px 14px rgba(74, 47, 30, .045);
+                }
+                #dashboard-finance-add-modal .finance-amount-card > label {
+                    margin-bottom: 0 !important;
+                }
+                #dashboard-finance-add-modal .finance-amount-card input[name='amount'] {
+                    min-height: 2.45rem !important;
+                    padding: .15rem 2.7rem .15rem 1.85rem !important;
+                    border: 0 !important;
+                    border-radius: 0 !important;
+                    background: transparent !important;
+                    box-shadow: none !important;
+                    font-family: Georgia, 'Times New Roman', serif;
+                    font-size: 1.45rem !important;
+                    line-height: 1 !important;
+                    appearance: textfield;
+                }
+                #dashboard-finance-add-modal .finance-amount-card input[name='amount']::-webkit-inner-spin-button,
+                #dashboard-finance-add-modal .finance-amount-card input[name='amount']::-webkit-outer-spin-button {
+                    margin: 0;
+                    appearance: none;
+                }
+                #dashboard-finance-add-modal .finance-amount-card .absolute {
+                    left: .15rem !important;
+                    font-size: 1rem !important;
+                }
+                #dashboard-finance-add-modal .finance-amount-row::after {
+                    content: 'EUR';
+                    position: absolute;
+                    right: .15rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #a49386;
+                    font-size: .5rem;
+                    font-weight: 900;
+                    letter-spacing: .12em;
+                }
+                #dashboard-finance-add-modal .finance-add-form input:not([name='amount']),
+                #dashboard-finance-add-modal .finance-add-form select {
+                    min-height: 2.65rem !important;
+                    padding: .45rem .65rem !important;
+                    border: 1px solid #e1d4c8 !important;
+                    border-radius: .7rem !important;
+                    background: #fffdfb !important;
+                    color: #3b2d25 !important;
+                    font-size: .7rem !important;
+                }
+                #dashboard-finance-add-modal .finance-details-grid { gap: .55rem !important; }
+                #dashboard-finance-add-modal .finance-description-area { gap: .5rem !important; }
+                #dashboard-finance-add-modal .finance-description-toggle {
+                    min-height: 2.25rem;
+                    width: 100%;
+                    justify-content: space-between;
+                    padding: .35rem .6rem;
+                    border: 1px dashed #d9c7b7;
+                    border-radius: .65rem;
+                    background: #fffaf4;
+                    color: #96553b !important;
+                    font-size: .62rem !important;
+                }
+                #dashboard-finance-add-modal .finance-submit-wrap { padding-top: .1rem !important; }
+                #dashboard-finance-add-modal .finance-submit {
+                    min-height: 2.9rem !important;
+                    padding: .65rem 1rem !important;
+                    border-radius: .72rem !important;
+                    background: linear-gradient(135deg, #ad4d31, #ca653f) !important;
+                    box-shadow: 0 9px 20px rgba(174, 76, 47, .24) !important;
+                    font-size: .7rem !important;
+                }
+                @media (max-width: 639px) {
+                    #dashboard-finance-add-modal { padding: .5rem !important; }
+                    #dashboard-finance-add-modal .finance-add-card { max-height: calc(100dvh - 1rem) !important; border-radius: 1.15rem !important; }
+                    #dashboard-finance-add-modal .finance-add-head { padding: .75rem .85rem; }
+                    #dashboard-finance-add-modal .finance-add-form { gap: .5rem !important; padding: .65rem .75rem .75rem; }
+                }
+            </style>
+
             <!-- Add Finance Modal -->
-            <div x-show="showFinanceModal" 
+            <div id="dashboard-finance-add-modal" x-show="showFinanceModal"
                  class="finance-add-modal fixed inset-0 z-[100] flex items-center justify-center px-4"
                  style="display: none;"
                  x-cloak>
                 <div @click="showFinanceModal = false" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
-                <div class="glass w-full max-w-2xl rounded-[32px] p-8 relative border border-white/10"
+                <div class="finance-add-card glass w-full max-w-2xl rounded-[32px] p-8 relative border border-white/10"
                      x-show="showFinanceModal"
                      x-transition:enter="transition ease-out duration-300"
                      x-transition:enter-start="opacity-0 scale-90"
@@ -957,14 +1138,17 @@
                      x-transition:leave-start="opacity-100 scale-100"
                      x-transition:leave-end="opacity-0 scale-90">
                     
-                    <div class="flex justify-between items-center mb-6">
+                    <div class="finance-add-head flex justify-between items-center mb-6">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100 text-emerald-600">
+                            <div class="finance-add-head-icon w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100 text-emerald-600">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-bold text-slate-800">Add Finance</h3>
+                            <div>
+                                <p class="finance-add-eyebrow">Daily ledger</p>
+                                <h3 class="text-xl font-bold text-slate-800">Add Finance</h3>
+                            </div>
                         </div>
                         <button @click="showFinanceModal = false" class="text-gray-400">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -992,28 +1176,41 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('finance.store') }}" method="POST" class="space-y-3 sm:space-y-4 text-left">
+                    <form action="{{ route('finance.store') }}" method="POST" class="finance-add-form space-y-3 sm:space-y-4 text-left">
                         @csrf
                         
-                        <div class="mt-2 mb-6">
+                        <div class="finance-amount-card mt-2 mb-6">
                             <label class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 block">Amount (&euro;)</label>
-                            <div class="relative flex items-center w-full transition-all duration-300">
+                            <div class="finance-amount-row relative flex items-center w-full transition-all duration-300">
                                 <span class="absolute left-5 text-2xl font-black transition-colors"
                                       :class="finance_type === 'income' ? 'text-emerald-500' : 'text-rose-500'">&euro;</span>
                                 <input type="number" step="0.01" name="amount" placeholder="0.00" value="{{ (session('keep_finance_modal') || request()->boolean('finance_modal')) ? '' : old('amount') }}" required autofocus
                                     class="w-full pl-12 pr-4 py-4 rounded-2xl border-2 text-3xl font-black outline-none transition-all duration-300"
-                                    :class="finance_type === 'income' ? 'bg-emerald-50 border-emerald-200 text-emerald-700 focus:border-emerald-500 focus:ring-emerald-500 shadow-lg shadow-emerald-500/15' : 'bg-rose-50 border-rose-200 text-rose-700 focus:border-rose-500 focus:ring-rose-500 shadow-lg shadow-rose-500/15'"
-                                    style="min-height: 4.5rem !important; padding-left: 3.5rem !important;">
+                                    :class="finance_type === 'income' ? 'bg-emerald-50 border-emerald-200 text-emerald-700 focus:border-emerald-500 focus:ring-emerald-500 shadow-lg shadow-emerald-500/15' : 'bg-rose-50 border-rose-200 text-rose-700 focus:border-rose-500 focus:ring-rose-500 shadow-lg shadow-rose-500/15'">
                             </div>
                         </div>
 
-                        <div>
-                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
-                            <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required
-                                   class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
+                        <div class="finance-details-grid grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Date</label>
+                                <input type="date" name="date" value="{{ old('date', date('Y-m-d')) }}" required
+                                       class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
+                            </div>
+                            <div>
+                                <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
+                                <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
+                                    <option value="" {{ old('category') == '' ? 'selected' : '' }} class="bg-gray-900">None</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat->name }}"
+                                                x-show="finance_type === '{{ $cat->type }}'"
+                                                {{ old('category') == $cat->name ? 'selected' : '' }}
+                                                class="bg-gray-900">{{ $cat->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="finance-details-grid grid grid-cols-2 gap-3">
                             <div>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Type</label>
                                 <select name="finance_type" x-model="finance_type" required class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
@@ -1030,23 +1227,10 @@
                         </div>
                     </div>
                     
-                    <div x-data="{ showDesc: {{ old('description') ? 'true' : 'false' }} }" class="space-y-3">
-                        <div>
-                            <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Category</label>
-                            <select name="category" class="w-full glass p-3 rounded-xl border border-white/10 text-white outline-none focus:border-accent">
-                                <option value="" {{ old('category') == '' ? 'selected' : '' }} class="bg-gray-900">None</option>
-                                @foreach($categories as $cat)
-                                    <option value="{{ $cat->name }}" 
-                                            x-show="finance_type === '{{ $cat->type }}'"
-                                            {{ old('category') == $cat->name ? 'selected' : '' }} 
-                                            class="bg-gray-900">{{ $cat->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
+                    <div x-data="{ showDesc: {{ old('description') ? 'true' : 'false' }} }" class="finance-description-area space-y-3">
                         <div class="pt-1">
-                            <button x-show="!showDesc" type="button" @click="showDesc = true" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-1">
-                                <span>+ Add Description</span>
+                            <button x-show="!showDesc" type="button" @click="showDesc = true" class="finance-description-toggle text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors flex items-center gap-1">
+                                <span>+ Add a note</span><span class="text-[9px] uppercase tracking-wider opacity-60">Optional</span>
                             </button>
                             <div x-show="showDesc" x-transition>
                                 <label class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Description</label>
@@ -1056,8 +1240,8 @@
                         </div>
                     </div>
 
-                    <div class="pt-2">
-                        <button type="submit" class="w-full btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">Save Entry</button>
+                    <div class="finance-submit-wrap pt-2">
+                        <button type="submit" class="finance-submit w-full btn-accent py-4 shadow-xl shadow-accent/20 text-white font-bold uppercase tracking-widest">Add to ledger</button>
                     </div>
                 </form>
             </div>

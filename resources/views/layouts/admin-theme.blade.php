@@ -1341,8 +1341,9 @@
 
     h1, h2, h3,
     .font-display {
-        font-family: "Cormorant Garamond", Georgia, serif !important;
-        letter-spacing: -0.025em !important;
+        font-family: "Outfit", sans-serif !important;
+        font-weight: 800;
+        letter-spacing: -0.035em !important;
     }
 
     .admin-main {
@@ -2048,6 +2049,291 @@
 
         .service-pulse-card small {
             display: none;
+        }
+    }
+
+    /*
+     * One navigation model on every device.
+     * Large screens use the same bottom dock as mobile, with roomier targets.
+     */
+    .desktop-secondary-link {
+        display: none !important;
+    }
+
+    @media (min-width: 1024px) {
+        .mobile-admin-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 51;
+            display: flex;
+            min-height: 4.25rem;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 max(2rem, calc((100vw - 90rem) / 2));
+            border-bottom: 1px solid rgba(207, 190, 168, 0.72);
+            background: rgba(255, 253, 248, 0.96);
+            box-shadow: 0 8px 28px -22px rgba(57, 38, 25, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .mobile-admin-brand {
+            display: flex;
+            min-width: 0;
+            align-items: center;
+            gap: 0.7rem;
+            color: var(--restaurant-ink);
+            text-decoration: none;
+        }
+
+        .mobile-admin-brand img {
+            width: 2.35rem;
+            height: 2.35rem;
+            flex: none;
+            border: 1px solid var(--restaurant-border);
+            border-radius: 0.75rem;
+            background: #fffaf2;
+            object-fit: cover;
+            box-shadow: 0 5px 14px rgba(57, 38, 25, 0.1);
+        }
+
+        .mobile-admin-brand > span {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            line-height: 1.05;
+        }
+
+        .mobile-admin-brand strong {
+            overflow: hidden;
+            color: var(--restaurant-ink);
+            font-size: 0.82rem;
+            font-weight: 900;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .mobile-admin-brand small {
+            margin-top: 0.28rem;
+            color: var(--restaurant-terracotta);
+            font-size: 0.52rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .mobile-profile-menu {
+            position: relative;
+            flex: none;
+        }
+
+        .mobile-admin-profile-button {
+            display: inline-flex;
+            min-height: 2.65rem;
+            align-items: center;
+            gap: 0.4rem;
+            border: 1px solid var(--restaurant-border);
+            border-radius: 999px;
+            padding: 0.25rem 0.55rem 0.25rem 0.28rem;
+            background: #fffaf2;
+            color: var(--restaurant-muted);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(57, 38, 25, 0.06);
+        }
+
+        .mobile-admin-profile-button > svg {
+            width: 0.8rem;
+            height: 0.8rem;
+        }
+
+        .mobile-admin-avatar {
+            display: grid;
+            width: 2rem;
+            height: 2rem;
+            place-items: center;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #3a291f, #70442e);
+            color: #fff7e9;
+            font-size: 0.65rem;
+            font-weight: 900;
+        }
+
+        .mobile-profile-dropdown {
+            position: absolute;
+            top: calc(100% + 0.65rem);
+            right: 0;
+            z-index: 60;
+            width: 12rem;
+            padding: 0.4rem;
+            border: 1px solid var(--restaurant-border);
+            border-radius: 0.9rem;
+            background: #fffdf9;
+            box-shadow: 0 18px 42px rgba(50, 32, 21, 0.18);
+        }
+
+        .mobile-profile-dropdown a,
+        .mobile-profile-dropdown button {
+            display: flex;
+            width: 100%;
+            min-height: 2.55rem;
+            align-items: center;
+            border: 0;
+            border-radius: 0.65rem;
+            padding: 0.55rem 0.7rem;
+            background: transparent;
+            color: #49392f;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .mobile-profile-dropdown a:hover {
+            background: #f7ede3;
+            color: var(--restaurant-terracotta);
+        }
+
+        .mobile-profile-dropdown form {
+            display: block !important;
+            margin-top: 0.25rem !important;
+            padding-top: 0.35rem !important;
+            border-top: 1px solid var(--restaurant-border) !important;
+        }
+
+        .mobile-profile-dropdown .mobile-profile-logout {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.55rem !important;
+            background: #fff1ee !important;
+            color: #b6352b !important;
+        }
+
+        .mobile-profile-dropdown .mobile-profile-logout svg {
+            width: 1rem;
+            height: 1rem;
+            flex: none;
+        }
+
+        .admin-main {
+            padding-top: 6rem !important;
+            padding-bottom: 5rem !important;
+        }
+
+        nav.admin-navigation.fixed {
+            top: auto !important;
+            right: 0 !important;
+            bottom: max(0.45rem, env(safe-area-inset-bottom)) !important;
+            left: 0 !important;
+            width: 100% !important;
+            pointer-events: none;
+        }
+
+        nav.admin-navigation.fixed > .glass {
+            width: min(calc(100% - 2rem), 54rem) !important;
+            min-height: 3rem !important;
+            margin-inline: auto !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
+            border-radius: 0.9rem !important;
+            background: rgba(39, 28, 22, 0.97) !important;
+            box-shadow: 0 22px 55px -20px rgba(35, 22, 14, 0.72) !important;
+            backdrop-filter: blur(22px) !important;
+            -webkit-backdrop-filter: blur(22px) !important;
+            pointer-events: auto;
+        }
+
+        nav.admin-navigation .admin-navigation-shell {
+            justify-content: center !important;
+            gap: 0 !important;
+            padding: 0.1rem 0.2rem !important;
+        }
+
+        nav.admin-navigation .admin-brand-lockup {
+            display: none !important;
+        }
+
+        nav.admin-navigation .bottom-primary-links {
+            width: 100% !important;
+            max-width: none !important;
+            flex: 1 1 auto !important;
+            justify-content: space-between !important;
+            gap: 0.1rem !important;
+            margin: 0 !important;
+            overflow-x: auto !important;
+            scrollbar-width: none;
+        }
+
+        nav.admin-navigation .bottom-primary-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        nav.admin-navigation .bottom-primary-links > a,
+        nav.admin-navigation .bottom-primary-links > div {
+            min-width: 0 !important;
+            flex: 1 1 0 !important;
+        }
+
+        nav.admin-navigation .bottom-quick-link {
+            display: flex !important;
+            width: 100% !important;
+            min-width: 0 !important;
+            min-height: 2.5rem !important;
+            flex-direction: column !important;
+            gap: 0.04rem !important;
+            padding: 0.12rem 0.08rem !important;
+            border-radius: 0.62rem !important;
+        }
+
+        nav.admin-navigation .desktop-secondary-link {
+            display: flex !important;
+        }
+
+        nav.admin-navigation .nav-more-menu {
+            display: none !important;
+        }
+
+        nav.admin-navigation .nav-profile-menu {
+            display: none !important;
+        }
+
+        nav.admin-navigation .bottom-quick-link svg {
+            width: 1.15rem !important;
+            height: 1.15rem !important;
+        }
+
+        nav.admin-navigation .bottom-quick-link span,
+        nav.admin-navigation .profile-menu-trigger-label {
+            display: block !important;
+            max-width: 100%;
+            overflow: hidden;
+            font-size: 0.56rem !important;
+            font-weight: 800 !important;
+            line-height: 1.1;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        nav.admin-navigation .nav-more-count {
+            top: 0.2rem;
+            right: 0.35rem;
+        }
+
+        nav.admin-navigation .dropdown-menu-container,
+        nav.admin-navigation .nav-more-dropdown,
+        nav.admin-navigation .profile-dropdown {
+            top: auto !important;
+            right: 0 !important;
+            bottom: calc(100% + 0.75rem) !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            transform-origin: bottom right;
+        }
+
+        nav.admin-navigation .nav-more-dropdown {
+            width: min(24rem, calc(100vw - 2rem));
+            max-height: min(68vh, 32rem);
+            overflow-y: auto;
         }
     }
 </style>

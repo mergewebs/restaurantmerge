@@ -1,82 +1,50 @@
 <x-app-layout>
     <style>
-        .kds { color:#362a22; }
-        .kds h1,.kds h2,.kds h3,.kds strong { color:inherit; }
-        .kds-panel { background:#fffdf9; border:1px solid #e6d9cc; box-shadow:0 8px 24px rgba(73,47,31,.06); }
-        .kds-ticket { background:#fff; border:1px solid #e5d8ca; box-shadow:0 8px 20px rgba(73,47,31,.07); }
-        .kds-ticket.urgent { border-color:#ef4444; box-shadow:0 0 0 1px rgba(239,68,68,.2),0 12px 30px rgba(0,0,0,.25); }
-        .kds-scroll::-webkit-scrollbar { width:7px; }.kds-scroll::-webkit-scrollbar-thumb { background:#d4c2b2; border-radius:99px; }
-        .kds .kds-title { color:#362a22!important; }
-        .kds .kds-muted { color:#8c7b6e!important; }
-        .kds .station-active { border-color:#bd5738; background:#bd5738; color:#fff!important; }
-        .kds .station-inactive { border-color:#dfd3c8; background:#fff; color:#6f6054!important; }
-        .kds .station-inactive:hover { background:#f8efe6; border-color:#cdb8a7; }
-        .kds .wait-normal { background:#f1ece6; color:#59493e; }
-        .kds .wait-warning { background:#f59e0b; color:#2f251d; }
-        .kds .wait-urgent { background:#dc2626; color:#fff; }
-        .kds .item-pending { border-color:#e4d8cd; background:#faf7f3; color:#382c24; }
-        .kds .item-preparing { border-color:#f3bd55; background:#fff8e7; color:#5e4215; }
-        .kds .item-ready { border-color:#75c892; background:#edf9f1; color:#205d36; }
-        .kds .station-kitchen { background:#fff0e8; color:#ae4d2f; }.kds .station-bar { background:#f3eefe; color:#7350a6; }.kds .station-desserts { background:#fff0f5; color:#a84268; }.kds .station-drinks { background:#eaf7fd; color:#28789b; }
-        @keyframes newPulse { 50% { opacity:.6; } }.kds-new { animation:newPulse 1.5s ease-in-out infinite; }
+        .admin-service-heading{display:none!important}.kds{--k-ink:#30251f;--k-rust:#b95536;--k-line:#e5d8ca;--k-cream:#f6efe6;--k-paper:#fffdf9;color:var(--k-ink)}.kds h1,.kds h2,.kds h3,.kds strong{color:inherit}
+        .kds-header{position:sticky;top:.25rem;z-index:40;border:1px solid rgba(255,255,255,.08);border-radius:1.15rem;background:radial-gradient(circle at 90% 0,rgba(214,164,73,.2),transparent 24%),linear-gradient(135deg,#261b16,#3a2921);padding:.8rem;color:#fffaf1;box-shadow:0 14px 34px rgba(48,31,23,.2)}.kds-live{display:flex;align-items:center;gap:.35rem;color:rgba(255,250,241,.62);font-size:.62rem;font-weight:800}.kds-live i{height:.45rem;width:.45rem;border-radius:50%}.kds-header-action{display:flex;min-height:40px;align-items:center;border:1px solid rgba(255,255,255,.12);border-radius:.7rem;background:rgba(255,255,255,.08);padding:.45rem .65rem;color:#fff!important;font-size:.65rem;font-weight:900}
+        .station-rail,.lane-tabs{display:flex;gap:.4rem;overflow-x:auto;padding-top:.65rem;scrollbar-width:none}.station-rail::-webkit-scrollbar,.lane-tabs::-webkit-scrollbar{display:none}.station-button{flex:none;min-height:38px;border:1px solid rgba(255,255,255,.13);border-radius:.7rem;background:rgba(255,255,255,.06);padding:.45rem .7rem;color:rgba(255,250,241,.7);font-size:.61rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase}.station-button.active{border-color:#d77755;background:#bd5738;color:#fff}.lane-tab{display:flex;min-height:40px;flex:1;align-items:center;justify-content:center;gap:.35rem;border:1px solid var(--k-line);border-radius:.75rem;background:var(--k-paper);padding:.45rem;color:#756459;font-size:.64rem;font-weight:900;text-transform:uppercase}.lane-tab.active{border-color:var(--k-rust);background:var(--k-rust);color:#fff}.lane-tab span{border-radius:999px;background:rgba(0,0,0,.08);padding:.1rem .35rem;font-size:.56rem}
+        .kds-panel{border:1px solid var(--k-line);border-radius:1rem;background:var(--k-paper);box-shadow:0 7px 20px rgba(73,47,31,.045)}.kds-lane-head{display:flex;align-items:center;justify-content:space-between;padding:.65rem .75rem;border-bottom:1px solid #eee4da}.kds-lane-count{border-radius:999px;background:#f1e8df;padding:.2rem .5rem;color:#59483c;font-size:.65rem;font-weight:900}
+        .kds-ticket{overflow:hidden;border:1px solid var(--k-line);border-radius:.9rem;background:#fff;box-shadow:0 6px 16px rgba(73,47,31,.055)}.kds-ticket.urgent{border-color:#dc5d51;box-shadow:0 0 0 1px rgba(220,93,81,.17),0 10px 24px rgba(91,33,27,.12)}.ticket-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;border-bottom:1px solid #eadfd5;padding:.65rem .7rem}.wait-box{flex:none;border-radius:.6rem;padding:.38rem .5rem;text-align:center}.wait-normal{background:#f1ece6;color:#59493e}.wait-warning{background:#f5b942;color:#3b2b12}.wait-urgent{background:#c84e43;color:#fff}
+        .ticket-alert{margin:.5rem .65rem 0;border-radius:.6rem;padding:.45rem .55rem;font-size:.66rem;font-weight:900}.ticket-note{border:1px solid #e5b84f;background:#fff8df;color:#765514}.ticket-allergy{border:2px solid #dc5d51;background:#fff0ed;color:#9b3029}
+        .ticket-items{display:grid;gap:.4rem;padding:.6rem}.ticket-item{width:100%;min-height:52px;border:1px solid;border-radius:.65rem;padding:.5rem;text-align:left;transition:.15s;touch-action:manipulation}.ticket-item:active{transform:scale(.985)}.item-pending{border-color:#e4d8cd;background:#faf7f3;color:#382c24}.item-preparing{border-color:#edb64b;background:#fff8e7;color:#5e4215}.item-ready{border-color:#69bd87;background:#edf9f1;color:#205d36}.station-kitchen{background:#fff0e8;color:#ae4d2f}.station-bar{background:#f3eefe;color:#7350a6}.station-desserts{background:#fff0f5;color:#a84268}.station-drinks{background:#eaf7fd;color:#28789b}
+        .ticket-action{border-top:1px solid #eadfd5;padding:.6rem}.ticket-action button{min-height:44px;width:100%;border-radius:.7rem;font-size:.7rem;font-weight:900;text-transform:uppercase;touch-action:manipulation}.action-start{background:#e9aa32;color:#34250f}.action-ready{background:#49a96e;color:#fff}.action-complete{background:#3d8ca8;color:#fff}
+        .kds-empty{padding:2.5rem 1rem;text-align:center}.kds-new{animation:newPulse 1.5s ease-in-out infinite}@keyframes newPulse{50%{opacity:.55}}.kds-scroll{scrollbar-width:thin;scrollbar-color:#d4c2b2 transparent}.kds-alert{border:1px solid #ddac4d;border-radius:.75rem;background:#fff4d9;padding:.65rem .8rem;color:#714f12;font-size:.72rem;font-weight:900}
+        @media(min-width:768px){.ticket-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kds-header{padding:.9rem 1rem}}
+        @media(min-width:1024px){.lane-tabs{display:none}.kds-board{grid-template-columns:repeat(3,minmax(0,1fr))}.ticket-grid{display:grid;grid-template-columns:1fr;max-height:calc(100dvh - 13rem);overflow-y:auto;padding-right:.15rem}.kds-panel{align-self:start}.kds-lane-head{border-bottom:0}.kds-header{top:.25rem}}
+        @media(max-width:639px){.kds{margin:-.75rem!important;padding:.65rem!important;padding-bottom:5.5rem!important}.kds-header h1{font-size:1rem}.kds-header-icon{display:none}.kds-header-action span{display:none}.kds-header-action:after{content:'Tables'}.station-button{padding:.4rem .58rem}.kds-lane-head{display:none}.kds-board{margin-top:.55rem!important}.ticket-grid{padding:.45rem}.ticket-items{padding:.5rem}.ticket-head{padding:.55rem .6rem}}
     </style>
 
-    <div class="kds -m-3 min-h-[calc(100vh-5rem)] bg-[#f6efe6] p-3 sm:-m-5 sm:p-4" x-data="kitchenDisplay()" x-init="init()">
-        <header class="kds-panel sticky top-1 z-30 rounded-2xl p-3 shadow-2xl">
-            <div class="flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#bd5738] text-xl text-white">♨</div>
-                    <div><h1 class="kds-title text-lg font-black uppercase tracking-wide sm:text-xl">Kitchen Display</h1><p class="kds-muted text-[11px] font-bold"><span class="mr-1 inline-block h-2 w-2 rounded-full" :class="connected?'bg-emerald-500':'bg-amber-500'"></span><span x-text="connected ? 'Live kitchen updates' : 'Reconnecting…'"></span></p></div>
-                </div>
-                <div class="flex items-center gap-2"><span class="rounded-lg bg-[#f1e8df] px-3 py-2 text-xs font-black text-[#59483c]"><span x-text="visibleOrders.length"></span> tickets</span><a href="{{ route('tables.index') }}" class="rounded-lg border border-[#dacbbd] bg-white px-3 py-2 text-xs font-black text-[#59483c]">Tables</a></div>
+    <div class="kds -m-3 min-h-[calc(100dvh-5rem)] bg-[#f6efe6] p-3 sm:-m-5 sm:p-4" x-data="kitchenDisplay()" x-init="init()">
+        <header class="kds-header">
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex min-w-0 items-center gap-2.5"><div class="kds-header-icon flex h-9 w-9 items-center justify-center rounded-xl bg-[#bd5738] text-lg">&#9832;</div><div class="min-w-0"><h1 class="truncate text-lg font-black uppercase tracking-wide">Kitchen Display</h1><p class="kds-live"><i :class="connected?'bg-emerald-400':'bg-amber-400'"></i><span x-text="connected ? 'Live service' : 'Reconnecting...' "></span><span>&middot;</span><span x-text="visibleOrders.length+' tickets'"></span></p></div></div>
+                <a href="{{ route('tables.index') }}" class="kds-header-action"><span>Dining room</span></a>
             </div>
-            <div class="mt-3 flex gap-1.5 overflow-x-auto pb-0.5">
-                <template x-for="option in stations" :key="option.value"><button type="button" @click="station=option.value" class="whitespace-nowrap rounded-lg border px-3 py-2 text-xs font-black uppercase tracking-wide transition" :class="station===option.value?'station-active':'station-inactive'" x-text="option.label + ' ' + stationCount(option.value)"></button></template>
-            </div>
+            <div class="station-rail" aria-label="Kitchen station filters"><template x-for="option in stations" :key="option.value"><button type="button" @click="station=option.value" class="station-button" :class="station===option.value?'active':''"><span x-text="option.label"></span> <span x-text="stationCount(option.value)"></span></button></template></div>
         </header>
 
-        <div x-show="newAlert" x-transition class="mt-3 rounded-xl border border-orange-400 bg-orange-500/20 px-4 py-3 text-sm font-black text-orange-100">New kitchen ticket received</div>
+        <nav class="lane-tabs" aria-label="Kitchen workflow"><template x-for="lane in lanes" :key="lane.status"><button type="button" @click="mobileLane=lane.status" class="lane-tab" :class="mobileLane===lane.status?'active':''"><span class="h-2 w-2 !p-0" :class="lane.dot"></span><span x-text="lane.shortLabel"></span><span x-text="ordersFor(lane.status).length"></span></button></template></nav>
+        <div x-show="newAlert" x-transition class="kds-alert mt-2">New kitchen ticket received</div>
 
-        <section x-show="visibleOrders.length===0" class="kds-panel mt-3 rounded-2xl px-5 py-12 text-center">
-            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f5e8dc] text-2xl text-[#bd5738]">✓</div>
-            <h2 class="kds-title mt-3 text-lg font-black">Kitchen is clear</h2>
-            <p class="kds-muted mt-1 text-sm font-semibold" x-text="station==='all' ? 'New tickets will appear here automatically.' : 'No active tickets for this station.'"></p>
+        <section x-show="visibleOrders.length===0" class="kds-panel kds-empty mt-2">
+            <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#f5e8dc] text-xl text-[#bd5738]">&#10003;</div><h2 class="mt-2 text-lg font-black">Kitchen is clear</h2><p class="mt-1 text-xs font-semibold text-[#8c7b6e]" x-text="station==='all' ? 'New tickets will appear automatically.' : 'No active tickets for this station.'"></p>
         </section>
 
-        <main x-show="visibleOrders.length>0" class="mt-3 grid gap-3 xl:grid-cols-3">
+        <main x-show="visibleOrders.length>0" class="kds-board mt-2 grid gap-2.5">
             <template x-for="lane in lanes" :key="lane.status">
-                <section class="kds-panel rounded-2xl p-2.5">
-                    <div class="mb-2 flex items-center justify-between px-1 py-1">
-                        <div class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full" :class="lane.dot"></span><h2 class="text-sm font-black uppercase tracking-widest" x-text="lane.label"></h2></div>
-                        <span class="rounded-full bg-[#f1e8df] px-2.5 py-1 text-xs font-black text-[#59483c]" x-text="ordersFor(lane.status).length"></span>
-                    </div>
-                    <div class="kds-scroll grid max-h-[calc(100vh-13rem)] gap-2.5 overflow-y-auto pr-0.5 md:grid-cols-2 xl:grid-cols-1">
+                <section x-show="isDesktop || mobileLane===lane.status" class="kds-panel">
+                    <div class="kds-lane-head"><div class="flex items-center gap-2"><span class="h-2.5 w-2.5 rounded-full" :class="lane.dot"></span><h2 class="text-xs font-black uppercase tracking-widest" x-text="lane.label"></h2></div><span class="kds-lane-count" x-text="ordersFor(lane.status).length"></span></div>
+                    <div class="ticket-grid kds-scroll grid gap-2 p-2">
                         <template x-for="order in ordersFor(lane.status)" :key="order.id">
-                            <article class="kds-ticket overflow-hidden rounded-xl" :class="waitMinutes(order)>=20?'urgent':''">
-                                <div class="flex items-start justify-between gap-2 border-b border-[#eadfd5] p-3">
-                                    <div><div class="flex flex-wrap items-center gap-2"><h3 class="text-lg font-black" x-text="order.source_label"></h3><span x-show="waitMinutes(order)<3 && order.kitchen_status==='pending'" class="kds-new rounded-full bg-orange-500 px-2 py-0.5 text-[9px] font-black uppercase">New</span></div><p class="mt-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-400" x-text="orderTypeLabel(order.order_type)+' · Order #'+order.id"></p></div>
-                                    <div class="rounded-lg px-2.5 py-1.5 text-right" :class="waitTone(order)"><strong class="block text-lg leading-none" x-text="waitMinutes(order)+'m'"></strong><span class="text-[8px] font-black uppercase">waiting</span></div>
-                                </div>
-
-                                <div x-show="order.notes" class="mx-3 mt-3 rounded-lg border border-amber-400 bg-amber-50 px-3 py-2 text-xs font-black text-amber-900"><span class="mr-1">NOTE:</span><span x-text="order.notes"></span></div>
-                                <div x-show="orderAllergies(order).length" class="mx-3 mt-2 rounded-lg border-2 border-red-500 bg-red-50 px-3 py-2 text-sm font-black text-red-800"><span class="mr-1">⚠ ALLERGY:</span><span x-text="orderAllergies(order).join(', ')"></span></div>
-
-                                <div class="space-y-1.5 p-3">
-                                    <template x-for="item in itemsFor(order)" :key="item.id">
-                                        <button type="button" @click="advanceItem(item)" class="w-full rounded-lg border p-2.5 text-left transition" :class="itemTone(item.status)">
-                                            <div class="flex items-start gap-2"><span class="min-w-8 rounded-md bg-black/10 px-1.5 py-1 text-center text-sm font-black" x-text="item.quantity+'×'"></span><div class="min-w-0 flex-1"><div class="flex items-start justify-between gap-2"><strong class="text-sm leading-tight" x-text="item.name"></strong><span class="rounded px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wide" :class="stationTone(item.station)" x-text="item.station"></span></div><p x-show="item.note" class="mt-1 text-xs font-black text-amber-800" x-text="'↳ '+item.note"></p><p x-show="item.allergens" class="mt-1 text-[11px] font-black text-red-700" x-text="'⚠ '+item.allergens"></p></div></div>
-                                        </button>
-                                    </template>
-                                </div>
-
-                                <div class="border-t border-[#eadfd5] p-3">
-                                    <button x-show="order.kitchen_status==='pending'" @click="setOrderStatus(order,'in_preparation')" class="w-full rounded-lg bg-amber-500 py-3 text-sm font-black uppercase text-slate-950">Start preparing</button>
-                                    <button x-show="order.kitchen_status==='in_preparation'" @click="setOrderStatus(order,'ready')" class="w-full rounded-lg bg-emerald-500 py-3 text-sm font-black uppercase text-slate-950">Mark ready</button>
-                                    <button x-show="order.kitchen_status==='ready'" @click="setOrderStatus(order,'completed')" class="w-full rounded-lg bg-sky-500 py-3 text-sm font-black uppercase text-white">Complete ticket</button>
-                                </div>
+                            <article class="kds-ticket" :class="waitMinutes(order)>=20?'urgent':''">
+                                <div class="ticket-head"><div class="min-w-0"><div class="flex items-center gap-1.5"><h3 class="truncate text-base font-black" x-text="order.source_label"></h3><span x-show="waitMinutes(order)<3 && order.kitchen_status==='pending'" class="kds-new rounded-full bg-orange-500 px-1.5 py-0.5 text-[8px] font-black uppercase text-white">New</span></div><p class="mt-0.5 truncate text-[9px] font-bold uppercase tracking-wide text-slate-400" x-text="orderTypeLabel(order.order_type)+' · Order #'+order.id"></p></div><div class="wait-box" :class="waitTone(order)"><strong class="block text-base leading-none" x-text="waitMinutes(order)+'m'"></strong><span class="text-[7px] font-black uppercase">waiting</span></div></div>
+                                <div x-show="order.notes" class="ticket-alert ticket-note"><span>NOTE: </span><span x-text="order.notes"></span></div>
+                                <div x-show="orderAllergies(order).length" class="ticket-alert ticket-allergy"><span>&#9888; ALLERGY: </span><span x-text="orderAllergies(order).join(', ')"></span></div>
+                                <div class="ticket-items"><template x-for="item in itemsFor(order)" :key="item.id"><button type="button" @click="advanceItem(item)" class="ticket-item" :class="itemTone(item.status)" :aria-label="'Advance '+item.name"><div class="flex items-start gap-2"><span class="min-w-7 rounded bg-black/10 px-1 py-1 text-center text-xs font-black" x-text="item.quantity+'×'"></span><div class="min-w-0 flex-1"><div class="flex items-start justify-between gap-1"><strong class="text-xs leading-tight" x-text="item.name"></strong><span class="rounded px-1.5 py-0.5 text-[7px] font-black uppercase" :class="stationTone(item.station)" x-text="item.station"></span></div><p x-show="item.note" class="mt-1 text-[10px] font-black text-amber-800" x-text="'↳ '+item.note"></p><p x-show="item.allergens" class="mt-1 text-[10px] font-black text-red-700" x-text="'⚠ '+item.allergens"></p></div></div></button></template></div>
+                                <div class="ticket-action"><button x-show="order.kitchen_status==='pending'" @click="setOrderStatus(order,'in_preparation')" class="action-start">Start preparing</button><button x-show="order.kitchen_status==='in_preparation'" @click="setOrderStatus(order,'ready')" class="action-ready">Mark ready</button><button x-show="order.kitchen_status==='ready'" @click="setOrderStatus(order,'completed')" class="action-complete">Complete ticket</button></div>
                             </article>
                         </template>
-                        <div x-show="ordersFor(lane.status).length===0" class="rounded-xl border border-dashed border-[#dfd3c8] bg-[#faf7f3] p-6 text-center text-xs font-bold text-[#9a897c]" x-text="'No '+lane.label.toLowerCase()+' tickets'"></div>
+                        <div x-show="ordersFor(lane.status).length===0" class="rounded-xl border border-dashed border-[#dfd3c8] bg-[#faf7f3] p-7 text-center text-xs font-bold text-[#9a897c]" x-text="'No '+lane.label.toLowerCase()+' tickets'"></div>
                     </div>
                 </section>
             </template>
@@ -84,28 +52,18 @@
     </div>
 
     <script>
-        function kitchenDisplay() {
-            return {
-                orders: @json($initialOrders), version: Number(@json($initialKitchenVersion)), station: 'all', connected: true, newAlert: false, timer: null, clock: Date.now(),
-                stations: [{value:'all',label:'All stations'},{value:'kitchen',label:'Kitchen'},{value:'bar',label:'Bar'},{value:'desserts',label:'Desserts'},{value:'drinks',label:'Drinks'}],
-                lanes: [{status:'pending',label:'New orders',dot:'bg-orange-400'},{status:'in_preparation',label:'Preparing',dot:'bg-amber-400'},{status:'ready',label:'Ready',dot:'bg-emerald-400'}],
-                init() { this.normalize(); this.timer=setInterval(()=>this.refresh(),4000); setInterval(()=>this.clock=Date.now(),30000); },
-                normalize() { this.orders=(this.orders||[]).map(o=>({...o,items:(o.items||[]).map(i=>({...i,station:i.station||'kitchen'}))})); },
-                get visibleOrders() { return this.orders.filter(o=>this.station==='all'||o.items.some(i=>i.station===this.station)); },
-                itemsFor(order) { return this.station==='all' ? order.items : order.items.filter(i=>i.station===this.station); },
-                ordersFor(status) { return this.visibleOrders.filter(o=>o.kitchen_status===status); },
-                stationCount(value) { return value==='all' ? this.orders.length : this.orders.filter(o=>o.items.some(i=>i.station===value)).length; },
-                waitMinutes(order) { this.clock; const time=new Date(order.created_at).getTime(); return Number.isFinite(time)?Math.max(0,Math.floor((Date.now()-time)/60000)):0; },
-                waitTone(order) { const m=this.waitMinutes(order); return m>=20?'wait-urgent':(m>=10?'wait-warning':'wait-normal'); },
-                orderTypeLabel(type) { return ({dine_in:'Dine-in',takeaway:'Takeaway',pickup:'Pickup',delivery:'Delivery'})[type]||'Dine-in'; },
-                orderAllergies(order) { return [...new Set(order.items.flatMap(i=>(i.allergens||'').split(',')).map(v=>v.trim()).filter(Boolean))]; },
-                itemTone(status) { return status==='ready'?'item-ready':(status==='in_preparation'?'item-preparing':'item-pending'); },
-                stationTone(station) { return ({kitchen:'station-kitchen',bar:'station-bar',desserts:'station-desserts',drinks:'station-drinks'})[station]||'station-kitchen'; },
-                async refresh(force=false) { try { const res=await fetch(`{{ route('tables.kitchen.snapshot') }}?since_version=${force?0:this.version}`,{headers:{Accept:'application/json'}}); if(!res.ok) throw Error(); const data=await res.json(); this.connected=true; if(data.changed){const previous=new Set(this.orders.map(o=>o.id));this.orders=data.orders;this.version=Number(data.version);this.normalize();if(this.orders.some(o=>!previous.has(o.id))){this.newAlert=true;setTimeout(()=>this.newAlert=false,3500);}} } catch(e){this.connected=false;} },
-                async patch(url,status) { const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':document.querySelector('meta[name=csrf-token]').content},body:JSON.stringify({status})}); if(!res.ok) throw Error('Update failed'); await this.refresh(true); },
-                async setOrderStatus(order,status) { try { await this.patch(@json(route('tables.orders.kitchen-status.update',['order'=>'__ID__'])).replace('__ID__',order.id),status); } catch(e){this.connected=false;} },
-                async advanceItem(item) { const next=item.status==='pending'?'in_preparation':(item.status==='in_preparation'?'ready':'pending'); try { await this.patch(@json(route('tables.items.kitchen-status.update',['item'=>'__ID__'])).replace('__ID__',item.id),next); } catch(e){this.connected=false;} }
-            }
-        }
+        function kitchenDisplay(){return{
+            orders:@json($initialOrders),version:Number(@json($initialKitchenVersion)),station:'all',mobileLane:'pending',isDesktop:window.innerWidth>=1024,connected:true,newAlert:false,timer:null,clock:Date.now(),
+            stations:[{value:'all',label:'All stations'},{value:'kitchen',label:'Kitchen'},{value:'bar',label:'Bar'},{value:'desserts',label:'Desserts'},{value:'drinks',label:'Drinks'}],
+            lanes:[{status:'pending',label:'New orders',shortLabel:'New',dot:'bg-orange-400'},{status:'in_preparation',label:'Preparing',shortLabel:'Cooking',dot:'bg-amber-400'},{status:'ready',label:'Ready',shortLabel:'Ready',dot:'bg-emerald-400'}],
+            init(){this.normalize();this.timer=setInterval(()=>this.refresh(),4000);setInterval(()=>this.clock=Date.now(),30000);window.addEventListener('resize',()=>this.isDesktop=window.innerWidth>=1024)},
+            normalize(){this.orders=(this.orders||[]).map(o=>({...o,items:(o.items||[]).map(i=>({...i,station:i.station||'kitchen'}))}))},
+            get visibleOrders(){return this.orders.filter(o=>this.station==='all'||o.items.some(i=>i.station===this.station))},
+            itemsFor(order){return this.station==='all'?order.items:order.items.filter(i=>i.station===this.station)},ordersFor(status){return this.visibleOrders.filter(o=>o.kitchen_status===status)},stationCount(value){return value==='all'?this.orders.length:this.orders.filter(o=>o.items.some(i=>i.station===value)).length},
+            waitMinutes(order){this.clock;const time=new Date(order.created_at).getTime();return Number.isFinite(time)?Math.max(0,Math.floor((Date.now()-time)/60000)):0},waitTone(order){const m=this.waitMinutes(order);return m>=20?'wait-urgent':(m>=10?'wait-warning':'wait-normal')},
+            orderTypeLabel(type){return({dine_in:'Dine-in',takeaway:'Takeaway',pickup:'Pickup',delivery:'Delivery'})[type]||'Dine-in'},orderAllergies(order){return[...new Set(order.items.flatMap(i=>(i.allergens||'').split(',')).map(v=>v.trim()).filter(Boolean))]},itemTone(status){return status==='ready'?'item-ready':(status==='in_preparation'?'item-preparing':'item-pending')},stationTone(station){return({kitchen:'station-kitchen',bar:'station-bar',desserts:'station-desserts',drinks:'station-drinks'})[station]||'station-kitchen'},
+            async refresh(force=false){try{const res=await fetch(`{{ route('tables.kitchen.snapshot') }}?since_version=${force?0:this.version}`,{headers:{Accept:'application/json'}});if(!res.ok)throw Error();const data=await res.json();this.connected=true;if(data.changed){const previous=new Set(this.orders.map(o=>o.id));this.orders=data.orders;this.version=Number(data.version);this.normalize();if(this.orders.some(o=>!previous.has(o.id))){this.newAlert=true;setTimeout(()=>this.newAlert=false,3500)}}}catch(e){this.connected=false}},
+            async patch(url,status){const res=await fetch(url,{method:'PATCH',headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':document.querySelector('meta[name=csrf-token]').content},body:JSON.stringify({status})});if(!res.ok)throw Error('Update failed');await this.refresh(true)},async setOrderStatus(order,status){try{await this.patch(@json(route('tables.orders.kitchen-status.update',['order'=>'__ID__'])).replace('__ID__',order.id),status)}catch(e){this.connected=false}},async advanceItem(item){const next=item.status==='pending'?'in_preparation':(item.status==='in_preparation'?'ready':'pending');try{await this.patch(@json(route('tables.items.kitchen-status.update',['item'=>'__ID__'])).replace('__ID__',item.id),next)}catch(e){this.connected=false}}
+        }}
     </script>
 </x-app-layout>
