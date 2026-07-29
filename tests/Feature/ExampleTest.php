@@ -13,7 +13,9 @@ class ExampleTest extends TestCase
             ->assertViewIs('welcome')
             ->assertSee('Run every service', false)
             ->assertSee('with clarity.', false)
-            ->assertSee('Request a Demo');
+            ->assertSee('Request a Demo')
+            ->assertSee('id="demo-request"', false)
+            ->assertSee('data-demo-modal-close', false);
     }
 
     public function test_public_website_endpoints_are_not_available(): void

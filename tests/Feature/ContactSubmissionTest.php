@@ -41,6 +41,22 @@ class ContactSubmissionTest extends TestCase
         $this->assertSame(0, ContactSubmission::count());
     }
 
+    public function test_contact_form_supports_submission_without_a_page_reload(): void
+    {
+        Mail::fake();
+
+        $this->postJson(route('contact-submissions.store'), [
+            'full_name' => 'Ana Garcia',
+            'email' => 'ana@example.com',
+            'telephone' => '+34 600 123 456',
+        ])->assertCreated()->assertJson([
+            'message' => 'Thanks! Your enquiry has been sent. We will contact you shortly.',
+        ]);
+
+        $this->assertDatabaseHas('contact_submissions', ['email' => 'ana@example.com']);
+        Mail::assertSent(ContactSubmissionNotification::class);
+    }
+
     public function test_administrators_can_view_contact_submissions(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);

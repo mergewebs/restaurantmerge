@@ -12,8 +12,9 @@ class PreventDemoWrites
     {
         $isReadRequest = in_array($request->method(), ['GET', 'HEAD', 'OPTIONS'], true);
         $isLogout = $request->routeIs('logout');
+        $isContactSubmission = $request->routeIs('contact-submissions.store');
 
-        if (! $request->user()?->isDemo() || $isReadRequest || $isLogout) {
+        if (! $request->user()?->isDemo() || $isReadRequest || $isLogout || $isContactSubmission) {
             return $next($request);
         }
 

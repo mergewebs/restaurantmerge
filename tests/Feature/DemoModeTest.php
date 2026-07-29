@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Mail\ContactSubmissionNotification;
+use App\Models\ContactSubmission;
 use App\Models\Order;
 use App\Models\Reservation;
 use App\Models\RestaurantException;
@@ -10,6 +12,7 @@ use App\Models\User;
 use Database\Seeders\DemoUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
@@ -53,8 +56,23 @@ class DemoModeTest extends TestCase
         $this->get(route('dashboard'))
             ->assertOk()
             ->assertSee('Demo mode · Read only')
-            ->assertSee('Contact Us')
-            ->assertSee('Request Full Access');
+            ->assertSee('Let’s build your restaurant workspace.')
+            ->assertSee('Request my demo');
+    }
+
+    public function test_demo_user_can_submit_the_contact_form(): void
+    {
+        Mail::fake();
+        $demo = User::factory()->create(['role' => 'demo']);
+
+        $this->actingAs($demo)->postJson(route('contact-submissions.store'), [
+            'full_name' => 'Demo Visitor',
+            'email' => 'visitor@example.com',
+            'telephone' => '+34 600 000 000',
+        ])->assertCreated();
+
+        $this->assertDatabaseHas(ContactSubmission::class, ['email' => 'visitor@example.com']);
+        Mail::assertSent(ContactSubmissionNotification::class);
     }
 
     public function test_demo_form_requests_cannot_change_business_data(): void
