@@ -5,7 +5,7 @@
     .demo-modal-wrap.is-open { display: grid; }
     .demo-modal-backdrop { position: absolute; inset: 0; background: rgba(12,8,5,.78); backdrop-filter: blur(9px); }
     .demo-modal-card { position: relative; width: min(100%, 31rem); overflow: hidden; border: 1px solid rgba(224,181,88,.3); border-radius: 1.5rem; background: linear-gradient(150deg,#241a12 0%,#17110c 62%,#21170f 100%); color: #fff7eb; box-shadow: 0 35px 90px rgba(0,0,0,.55); }
-    .demo-modal-card::before { content: ''; position: absolute; width: 15rem; height: 15rem; right: -7rem; top: -8rem; border-radius: 999px; background: rgba(210,165,67,.17); filter: blur(4px); }
+    .demo-modal-card::before { content: ''; position: absolute; width: 15rem; height: 15rem; right: -7rem; top: -8rem; border-radius: 999px; background: rgba(210,165,67,.17); filter: blur(4px); pointer-events: none; }
     .demo-modal-content { position: relative; padding: 2rem; }
     .demo-modal-icon { display: grid; width: 3.2rem; height: 3.2rem; place-items: center; border-radius: 1rem; background: #d5a744; color: #17110c; box-shadow: 0 14px 30px rgba(213,167,68,.24); }
     .demo-modal-eyebrow { margin: 1.35rem 0 .4rem; color: #deb963; font-size: .68rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
@@ -16,7 +16,7 @@
     .demo-modal-action:hover { transform: translateY(-1px); }
     .demo-modal-primary { background: #d5a744; color: #17110c; }
     .demo-modal-secondary { border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06); color: #fff7eb; }
-    .demo-modal-close { position: absolute; top: 1rem; right: 1rem; display: grid; width: 2.35rem; height: 2.35rem; place-items: center; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.06); color: #fff7eb; cursor: pointer; }
+    .demo-modal-close { position: absolute; z-index: 5; top: 1rem; right: 1rem; display: grid; width: 2.35rem; height: 2.35rem; place-items: center; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.06); color: #fff7eb; cursor: pointer; }
     .demo-contact-form { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; margin-top: 1.4rem; }
     .demo-contact-field { display: grid; gap: .38rem; text-align: left; }
     .demo-contact-field:first-child { grid-column: 1 / -1; }
@@ -31,6 +31,14 @@
     .demo-contact-feedback { margin-top: 1.25rem; border: 1px solid rgba(125,196,139,.28); border-radius: .9rem; padding: 1rem; background: rgba(72,139,84,.13); color: #dff5e3; font-size: .82rem; line-height: 1.5; }
     .demo-contact-feedback.is-error { border-color: rgba(233,139,118,.35); background: rgba(166,67,48,.14); color: #ffd8cf; }
     .demo-contact-feedback[hidden] { display: none; }
+    #demo-mode-modal .demo-modal-eyebrow { color: #f1c866 !important; }
+    #demo-mode-modal .demo-modal-title { color: #fffaf1 !important; font-family: 'Cormorant Garamond',Georgia,serif !important; opacity: 1 !important; }
+    #demo-mode-modal .demo-modal-copy { color: #eee3d6 !important; }
+    #demo-mode-modal .demo-contact-field label { color: #f3e3c8 !important; opacity: 1 !important; }
+    #demo-mode-modal .demo-contact-field input { border-color: #d8c9b5 !important; background: #fffaf1 !important; color: #241a12 !important; opacity: 1 !important; }
+    #demo-mode-modal .demo-contact-field input::placeholder { color: #8b7a6e !important; opacity: 1 !important; }
+    #demo-mode-modal .demo-contact-field input:focus { border-color: #e3b64d !important; background: #fff !important; box-shadow: 0 0 0 3px rgba(227,182,77,.18) !important; }
+    #demo-mode-modal .demo-contact-submit { background: #e3b142 !important; color: #21160f !important; }
     @media (max-width: 520px) { .demo-modal-content { padding: 1.5rem; } .demo-contact-form { grid-template-columns: 1fr; } .demo-contact-field:first-child,.demo-contact-submit { grid-column: auto; } .demo-mode-pill { bottom: 5.5rem; } }
 </style>
 
@@ -91,7 +99,9 @@
 
         window.DemoMode = { show, close };
         document.querySelectorAll('[data-demo-modal-open]').forEach((button) => button.addEventListener('click', show));
-        modal.querySelectorAll('[data-demo-modal-close]').forEach((button) => button.addEventListener('click', close));
+        modal.addEventListener('click', (event) => {
+            if (event.target.closest('[data-demo-modal-close]')) close();
+        });
         document.addEventListener('keydown', (event) => { if (event.key === 'Escape') close(); });
 
         contactForm.addEventListener('submit', async (event) => {
