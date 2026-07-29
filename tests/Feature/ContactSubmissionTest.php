@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Mail\ContactSubmissionNotification;
 use App\Models\ContactSubmission;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class ContactSubmissionTest extends TestCase
@@ -13,6 +15,8 @@ class ContactSubmissionTest extends TestCase
 
     public function test_contact_form_stores_a_submission(): void
     {
+        Mail::fake();
+
         $this->post(route('contact-submissions.store'), [
             'full_name' => 'Ana Garcia', 'email' => 'ana@example.com', 'telephone' => '+34 600 123 456',
         ])->assertRedirect(route('home').'#contact')->assertSessionHas('contact_success');
@@ -20,6 +24,12 @@ class ContactSubmissionTest extends TestCase
         $this->assertDatabaseHas('contact_submissions', [
             'full_name' => 'Ana Garcia', 'email' => 'ana@example.com', 'telephone' => '+34 600 123 456',
         ]);
+
+        Mail::assertSent(ContactSubmissionNotification::class, function (ContactSubmissionNotification $mail): bool {
+            return $mail->hasTo('mergewebs@gmail.com')
+                && $mail->hasReplyTo('ana@example.com')
+                && $mail->submission->full_name === 'Ana Garcia';
+        });
     }
 
     public function test_contact_form_validates_all_fields(): void

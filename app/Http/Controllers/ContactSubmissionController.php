@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactSubmissionNotification;
 use App\Models\ContactSubmission;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class ContactSubmissionController extends Controller
@@ -26,7 +28,10 @@ class ContactSubmissionController extends Controller
             'telephone' => ['required', 'string', 'max:30'],
         ]);
 
-        ContactSubmission::create($validated);
+        $submission = ContactSubmission::create($validated);
+
+        Mail::to(config('restaurant.contact_form_recipient'))
+            ->send(new ContactSubmissionNotification($submission));
 
         return redirect()->to(route('home').'#contact')
             ->with('contact_success', 'Thanks for getting in touch. We will contact you shortly.');

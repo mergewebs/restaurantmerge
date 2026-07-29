@@ -14,7 +14,13 @@ class AuthenticationTest extends TestCase
     {
         $response = $this->get('/admin/login');
 
-        $response->assertStatus(200);
+        $response
+            ->assertStatus(200)
+            ->assertSee('autocomplete="current-password"', false)
+            ->assertSee('value="123456"', false)
+            ->assertSee('Show passcode')
+            ->assertSee('Demo passcode:')
+            ->assertDontSee('Autofill demo passcode');
     }
 
     public function test_users_can_authenticate_using_a_six_digit_passcode(): void
