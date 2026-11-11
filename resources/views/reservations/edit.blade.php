@@ -66,7 +66,6 @@
                         times.push(current.toTimeString().substring(0, 5));
                         current.setMinutes(current.getMinutes() + 15);
                     }
-                    }
                     // Ensure current/old time is in list if editing
                     if (this.selectedTime && !times.find(t => t === this.selectedTime)) {
                         times.push(this.selectedTime);

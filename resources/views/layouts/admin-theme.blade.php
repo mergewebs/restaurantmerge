@@ -853,10 +853,6 @@
             padding: 1.25rem !important;
             border-radius: 12px !important;
         }
-        .grid-cols-2, .grid-cols-3, .grid-cols-4 {
-            grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-            gap: 1rem !important;
-        }
         /* Make tables horizontal scrollable on mobile */
         .overflow-x-auto {
             border-radius: 12px;

@@ -97,9 +97,9 @@
                         const closedData = await resp.json();
                         
                         flatpickr(this.$refs.dateInput, {
-                            minDate: "today",
+                            minDate: 'today',
                             defaultDate: this.date,
-                            dateFormat: "Y-m-d",
+                            dateFormat: 'Y-m-d',
                             disable: [
                                 (date) => {
                                     const day = date.getDay();
@@ -117,7 +117,7 @@
                                 this.date = dateStr;
                                 this.fetchSlots();
                             },
-                            locale: "{{ app()->getLocale() }}" === "es" ? "es" : "en"
+                            locale: '{{ app()->getLocale() }}' === 'es' ? 'es' : 'en'
                         });
                     } catch (e) {
                         console.error('Error initializing flatpickr:', e);

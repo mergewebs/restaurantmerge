@@ -15,14 +15,17 @@
 
         <!-- Scripts & Styles -->
         <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        @if(request()->routeIs('finance.stats'))
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        @endif
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         
-        <!-- Flatpickr -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_orange.css">
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+        @if(request()->routeIs('reservations.create'))
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_orange.css">
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+            <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+        @endif
         
         <script>
             tailwind.config = {
@@ -337,8 +340,8 @@
                     <span><strong>{{ config('restaurant.name') }}</strong><small>{{ ucfirst(auth()->user()->role) }}</small></span>
                 </a>
 
-                <div x-data="{ open: false }" @click.outside="open = false" class="mobile-profile-menu">
-                    <button type="button" @click="open = !open" class="mobile-admin-profile-button" :aria-expanded="open" aria-haspopup="menu">
+                <div x-data="{ open: false }" @click.outside="open = false" @keydown.escape.window="open = false" class="mobile-profile-menu">
+                    <button type="button" @click="open = !open" class="mobile-admin-profile-button" :aria-expanded="open" aria-haspopup="menu" aria-label="Account menu">
                         <span class="mobile-admin-avatar">{{ strtoupper(mb_substr(auth()->user()->name, 0, 2)) }}</span>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
@@ -348,6 +351,8 @@
                         @if(auth()->user()->isAdmin())
                             <a href="{{ route('restaurant.config') }}" role="menuitem">Settings</a>
                         @endif
+                        <button type="button" data-pwa-install-button hidden>Install admin app</button>
+                        <p data-pwa-install-help hidden>To install: open the Share menu in Safari, then Add to Home Screen.</p>
                         <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Are you sure you want to log out?')">
                             @csrf
 
@@ -362,6 +367,7 @@
 
             <!-- Main Content -->
             <main class="admin-main px-5 pt-32 lg:pt-36 pb-8">
+                <p class="admin-connection-status" data-admin-connection role="status" hidden>You're offline. Displayed information may be out of date. Reconnect and check the current record before retrying a save.</p>
                 @php
                     [$pageTitle, $pageDescription] = match (true) {
                         request()->routeIs('dashboard') => ['Today’s Service', 'Reservations, service and cash flow at a glance.'],
@@ -450,11 +456,11 @@
                     </a>
                     <div class="bottom-primary-links flex items-center">
                         @foreach($primaryMenuItems as $item)
-                            <a href="{{ $item['route'] }}" class="bottom-quick-link {{ $item['active'] ? 'active' : '' }}" @if(!empty($item['target'])) target="{{ $item['target'] }}" @endif @if(!empty($item['rel'])) rel="{{ $item['rel'] }}" @endif>
+                            <a href="{{ $item['route'] }}" class="bottom-quick-link {{ $loop->index === 4 ? 'mobile-nav-overflow' : '' }} {{ $item['active'] ? 'active' : '' }}" aria-label="{{ $item['label'] }}" @if($item['active']) aria-current="page" @endif @if(!empty($item['target'])) target="{{ $item['target'] }}" @endif @if(!empty($item['rel'])) rel="{{ $item['rel'] }}" @endif>
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="{{ $item['icon'] }}"></path>
                                 </svg>
-                                <span class="text-[9px] font-black uppercase tracking-wider hidden lg:inline">{{ $item['label'] }}</span>
+                                <span class="text-[9px] font-black uppercase tracking-wider hidden lg:inline" data-mobile-label="{{ $item['label'] === 'Dashboard' ? 'Home' : ($item['label'] === 'Reservations' ? 'Bookings' : $item['label']) }}">{{ $item['label'] }}</span>
                             </a>
                         @endforeach
 
@@ -467,9 +473,9 @@
                             </a>
                         @endforeach
 
-                        @if(count($secondaryMenuItems))
-                            <div x-data="{ dropdownOpen: false }" @click.outside="dropdownOpen = false" class="relative nav-more-menu">
-                                <button type="button" @click="dropdownOpen = !dropdownOpen" class="bottom-quick-link {{ $secondaryMenuActive ? 'active' : '' }}" :aria-expanded="dropdownOpen" aria-haspopup="menu" title="More tools">
+                        @if(count($secondaryMenuItems) || count($primaryMenuItems) > 4)
+                            <div x-data="{ dropdownOpen: false }" @click.outside="dropdownOpen = false" @keydown.escape.window="dropdownOpen = false" class="relative nav-more-menu">
+                                <button type="button" @click="dropdownOpen = !dropdownOpen" class="bottom-quick-link {{ $secondaryMenuActive || ($primaryMenuItems[4]['active'] ?? false) ? 'active' : '' }}" :aria-expanded="dropdownOpen" aria-haspopup="menu" title="More tools">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 12h.01M12 12h.01M19 12h.01"></path>
                                     </svg>
@@ -490,6 +496,13 @@
                                         <small>{{ count($secondaryMenuItems) }} tools</small>
                                     </div>
                                     <div class="nav-more-grid">
+                                        @if(isset($primaryMenuItems[4]))
+                                            @php($mobileItem = $primaryMenuItems[4])
+                                            <a href="{{ $mobileItem['route'] }}" class="nav-mobile-only nav-more-item {{ $mobileItem['active'] ? 'active' : '' }}" role="menuitem" @if($mobileItem['active']) aria-current="page" @endif>
+                                                <span class="nav-more-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $mobileItem['icon'] }}"></path></svg></span>
+                                                <span>{{ $mobileItem['label'] }}</span>
+                                            </a>
+                                        @endif
                                         @foreach($secondaryMenuItems as $item)
                                             <a href="{{ $item['route'] }}" class="nav-more-item {{ $item['active'] ? 'active' : '' }}" role="menuitem">
                                                 <span class="nav-more-icon">

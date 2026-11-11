@@ -1,3 +1,5 @@
+﻿/* Loaded only by /admin. Important declarations are layered so existing page
+   styles cannot shrink phone controls; desktop and print retain their styling. */
 :root {
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
@@ -5,104 +7,161 @@
     --safe-left: env(safe-area-inset-left, 0px);
 }
 
-html {
-    min-height: 100%;
-    background: #271c16;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-    overscroll-behavior-y: none;
+[data-pwa-install-button][hidden],
+[data-pwa-install-help][hidden],
+[data-admin-connection][hidden] { display: none !important; }
+.nav-mobile-only { display: none !important; }
+
+.admin-connection-status {
+    border: 1px solid #e0c38a;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    background: #fff8e6;
+    color: #704615;
+    font: 500 14px/1.5 system-ui, sans-serif;
 }
 
-body {
-    min-height: 100vh;
-    min-height: 100dvh;
-    -webkit-tap-highlight-color: transparent;
-}
+@layer admin-mobile {
+    @media screen and (max-width: 1023px) {
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(5rem + var(--safe-top)); }
+        body { min-height: 100vh; min-height: 100dvh; }
+        .restaurant-admin { overflow-wrap: break-word; }
+        .restaurant-admin .admin-main {
+            min-width: 0;
+            padding: calc(4.5rem + var(--safe-top)) max(.75rem, var(--safe-right)) calc(5.5rem + var(--safe-bottom)) max(.75rem, var(--safe-left)) !important;
+        }
+        .restaurant-admin .admin-main :is(.grid, .flex) > * { min-width: 0; }
+        .restaurant-admin :is(button, a, input, select, textarea, summary) { touch-action: manipulation; }
+        .restaurant-admin :is(img, video, canvas) { max-width: 100%; }
+        .restaurant-admin .mobile-admin-header { top: 0 !important; }
+        .restaurant-admin .mobile-admin-profile-button { min-height: 44px !important; min-width: 44px !important; justify-content: center; }
+        .restaurant-admin .mobile-profile-dropdown :is(a, button) { min-height: 44px !important; }
+        .restaurant-admin .admin-service-heading { margin-bottom: 1rem !important; padding-bottom: .75rem !important; }
+        .restaurant-admin .admin-service-eyebrow { margin-bottom: .25rem !important; }
+        .restaurant-admin .admin-service-heading h1 { font-size: clamp(1.65rem, 7vw, 2rem) !important; line-height: 1.15 !important; }
+        .restaurant-admin .admin-main > footer { margin-top: 1rem !important; }
+        /* Several legacy page rules style every main, including nested sections. */
+        .restaurant-admin .admin-main main { padding: 0 !important; }
 
-button,
-a,
-input,
-select,
-textarea {
-    touch-action: manipulation;
-}
+        /* Equal slots prevent the dock from squeezing labels or clipping More. */
+        .restaurant-admin nav.admin-navigation { left: max(.5rem, var(--safe-left)) !important; right: max(.5rem, var(--safe-right)) !important; bottom: max(.5rem, var(--safe-bottom)) !important; }
+        .restaurant-admin nav.admin-navigation .admin-navigation-shell { padding: .25rem !important; }
+        .restaurant-admin nav.admin-navigation .bottom-primary-links { display: flex !important; width: 100% !important; gap: 0 !important; }
+        .restaurant-admin nav.admin-navigation .bottom-primary-links > :is(a, .nav-more-menu) { flex: 1 1 0 !important; min-width: 0 !important; }
+        .restaurant-admin nav.admin-navigation .bottom-primary-links > .mobile-nav-overflow { display: none !important; }
+        .restaurant-admin .nav-mobile-only { display: flex !important; }
+        .restaurant-admin nav.admin-navigation .bottom-quick-link { width: 100% !important; min-width: 0 !important; min-height: 48px !important; height: auto !important; gap: .15rem !important; }
+        .restaurant-admin nav.admin-navigation .bottom-quick-link > span:not(.nav-more-count) { font-size: .6rem !important; letter-spacing: 0 !important; text-transform: none !important; }
+        .restaurant-admin nav.admin-navigation [data-mobile-label] { font-size: 0 !important; }
+        .restaurant-admin nav.admin-navigation [data-mobile-label]::after { content: attr(data-mobile-label); font-size: .65rem; }
+        .restaurant-admin nav.admin-navigation .nav-more-count { display: none !important; }
+        .restaurant-admin nav.admin-navigation .nav-more-heading small { display: none !important; }
+        .restaurant-admin nav.admin-navigation .nav-more-item { min-height: 48px !important; }
+        .restaurant-admin nav.admin-navigation .nav-more-dropdown { max-height: calc(var(--admin-viewport-height, 100dvh) - 9rem - var(--safe-top) - var(--safe-bottom)) !important; overscroll-behavior: contain; }
+        .restaurant-admin.admin-keyboard-open .admin-navigation { visibility: hidden !important; pointer-events: none !important; }
+        .restaurant-admin .mobile-profile-dropdown :is([data-pwa-install-button], [data-pwa-install-help]) { display: none !important; }
+        .restaurant-admin .mobile-profile-dropdown [data-pwa-install-button]:not([hidden]) { display: flex !important; }
+        .restaurant-admin .mobile-profile-dropdown [data-pwa-install-help]:not([hidden]) { display: block !important; padding: .6rem .7rem; color: #756459; font-size: .75rem; }
 
-input,
-textarea,
-select,
-img,
-svg,
-video {
-    max-width: 100%;
-}
-
-@media (max-width: 767px) {
-    input:not([type="checkbox"]):not([type="radio"]),
-    select,
-    textarea {
-        min-height: 48px;
-        font-size: 16px !important;
+        /* Restrict scrolling to the panel, preserving the backdrop and every action. */
+        .restaurant-admin :is(.fixed.inset-0:has(> form), .fixed.inset-0:has(> .relative), .restaurant-modal-wrap) {
+            top: var(--admin-viewport-top, 0px) !important;
+            bottom: auto !important;
+            height: var(--admin-viewport-height, 100dvh) !important;
+            max-height: var(--admin-viewport-height, 100dvh) !important;
+            padding: max(.5rem, var(--safe-top)) max(.5rem, var(--safe-right)) max(.5rem, var(--safe-bottom)) max(.5rem, var(--safe-left)) !important;
+            overscroll-behavior: contain;
+            z-index: 100 !important;
+        }
+        .restaurant-admin :is(.fixed.inset-0, .restaurant-modal-wrap) > :is(form, .relative, .glass, .restaurant-modal-card) {
+            max-height: calc(var(--admin-viewport-height, 100dvh) - max(1rem, var(--safe-top)) - max(1rem, var(--safe-bottom))) !important;
+            overflow-y: auto !important;
+            overscroll-behavior: contain;
+            margin-block: 0 !important;
+        }
+        .restaurant-admin .fixed.inset-y-0.overflow-y-auto {
+            top: var(--admin-viewport-top, 0px) !important;
+            bottom: auto !important;
+            height: var(--admin-viewport-height, 100dvh) !important;
+            padding-top: max(1rem, var(--safe-top)) !important;
+            padding-bottom: max(1rem, var(--safe-bottom)) !important;
+        }
+        .restaurant-admin .overflow-x-auto { max-width: 100%; min-width: 0; overscroll-behavior-inline: contain; -webkit-overflow-scrolling: touch; }
     }
 
-    button,
-    [role="button"],
-    input[type="submit"],
-    input[type="button"] {
-        min-height: 44px;
+    @media screen and (max-width: 767px) {
+        input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="range"]):not([type="color"]), select, textarea {
+            min-height: 44px !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            font-size: 16px !important;
+            padding: .65rem .75rem !important;
+            scroll-margin-block: 5rem !important;
+        }
+        select { padding-right: 2rem !important; }
+        .restaurant-admin :is(button, [role="button"], summary),
+        .restaurant-admin a:is(.btn-accent, .order-filter, .floor-history, .nav-more-item, .unpaid-row),
+        .restaurant-admin nav[role="navigation"] a {
+            min-height: 44px !important;
+        }
+        .restaurant-admin button:has(> svg:only-child),
+        .restaurant-admin button[title],
+        .restaurant-admin .order-detail button,
+        .restaurant-admin :is(.modal-close, .restaurant-modal-close, .finance-close) { min-width: 44px !important; }
+        .restaurant-admin .category-editor-form { grid-template-columns: minmax(0, 1fr) 4.5rem 44px !important; }
+        .restaurant-admin :is(input[type="checkbox"], input[type="radio"]) { flex-shrink: 0; }
+        .restaurant-admin label:has(> input:is([type="checkbox"], [type="radio"])) { min-height: 44px; display: flex; align-items: center; }
+
+        /* Stack actual field groups, retaining compact KPI, menu and table grids. */
+        .restaurant-admin form :is(.grid, .entry-fields, [data-mobile-fields]):has(> div > :is(input:not([type="hidden"]), select, textarea)),
+        .restaurant-admin form.grid:has(> div > :is(input:not([type="hidden"]), select, textarea)),
+        .restaurant-admin form.grid:has(> :is(input:not([type="hidden"]), select, textarea)),
+        .restaurant-admin form .grid:has(> .grid > div > :is(input:not([type="hidden"]), select, textarea)),
+        .restaurant-admin .refund-form {
+            grid-template-columns: minmax(0, 1fr) !important;
+            gap: .65rem !important;
+        }
+        .restaurant-admin form :is(.grid, [data-mobile-fields]):has(> div > :is(input:not([type="hidden"]), select, textarea)) > *,
+        .restaurant-admin form .grid:has(> .grid > div > :is(input:not([type="hidden"]), select, textarea)) > *,
+        .restaurant-admin form.grid:has(> :is(input:not([type="hidden"]), select, textarea), > div > :is(input:not([type="hidden"]), select, textarea)) > * { grid-column: auto !important; }
+        .restaurant-admin form .grid[class*="28px"]:has(> select) { grid-template-columns: minmax(0, 1fr) minmax(5rem, .65fr) 44px !important; }
+        .restaurant-admin :is(.register-hero, .floor-hero) { flex-wrap: wrap; gap: .6rem !important; }
+        .restaurant-admin .register-date { width: 100%; }
+        .restaurant-admin .register-date form { flex: 1; }
+        .restaurant-admin .register-date input { width: 100% !important; }
+        .restaurant-admin :is(.order-search, .refund-form, .ingredient-edit) :is(input, select, textarea) { width: 100% !important; }
+        .restaurant-admin .admin-main :is(.glass.p-8, .glass.p-10, .glass.p-12) { padding: 1rem !important; }
+        .restaurant-admin :is(.kpi-rail, .register-metrics) { grid-auto-flow: row !important; grid-auto-columns: auto !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; overflow: visible !important; }
+        .restaurant-admin .kpi-rail .kpi { min-height: 0 !important; padding: .7rem !important; }
+        .restaurant-admin .dashboard-insights { grid-auto-flow: row !important; grid-auto-columns: auto !important; grid-template-columns: minmax(0, 1fr) !important; overflow: visible !important; }
+        .restaurant-admin .dashboard-panel { min-height: 0 !important; }
+        .restaurant-admin .report-tabs { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+        .restaurant-admin .report-tabs button { padding-inline: .25rem !important; white-space: normal !important; }
+        .restaurant-admin .order-detail header > .overflow-x-auto { flex-wrap: wrap !important; }
+        .restaurant-admin .order-detail .status-step { min-width: 5rem; }
+
+        /* Simple data tables become labelled cards; complex tables keep their own
+           scroll container. No rows, values or action nodes are hidden or replaced. */
+        .restaurant-admin table.admin-mobile-table { display: block !important; width: 100% !important; min-width: 0 !important; max-width: 100% !important; }
+        .restaurant-admin .admin-mobile-table thead { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip-path: inset(50%) !important; }
+        .restaurant-admin .admin-mobile-table tbody { display: block !important; }
+        .restaurant-admin .admin-mobile-table tbody tr { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: .65rem !important; padding: .8rem !important; }
+        .restaurant-admin .admin-mobile-table tbody td { display: block !important; min-width: 0 !important; width: auto !important; padding: 0 !important; border: 0 !important; white-space: normal !important; overflow-wrap: anywhere; }
+        .restaurant-admin .admin-mobile-table td[data-cell-label]::before { content: attr(data-cell-label); display: block; margin-bottom: .2rem; font: 700 .65rem/1.3 system-ui, sans-serif; color: #756459; }
+        .restaurant-admin .admin-mobile-table td:is([colspan], :has(form, button, a), :last-child) { grid-column: 1 / -1; }
+        .restaurant-admin .admin-mobile-table td > .flex { flex-wrap: wrap; }
+        .restaurant-admin .admin-mobile-table tfoot { display: block !important; }
+        .restaurant-admin .admin-mobile-table tfoot tr { display: flex; flex-wrap: wrap; justify-content: space-between; padding: .8rem; }
+        .restaurant-admin .admin-mobile-table tfoot td { padding: .25rem !important; }
     }
 
-    table {
-        display: block;
-        width: 100%;
-        max-width: 100%;
-        overflow-x: auto;
-        overscroll-behavior-inline: contain;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    [role="dialog"],
-    dialog {
-        max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 1rem);
-        overscroll-behavior: contain;
-    }
-
-    .fixed.top-0 {
-        top: var(--safe-top) !important;
-    }
-
-    .fixed.bottom-0 {
-        bottom: var(--safe-bottom) !important;
-    }
-
-    .overflow-x-auto {
-        overscroll-behavior-inline: contain;
-        -webkit-overflow-scrolling: touch;
-    }
-}
-
-@media (display-mode: fullscreen), (display-mode: standalone) {
-    html {
-        background: #17110c;
-    }
-
-    body {
-        padding-right: var(--safe-right);
-        padding-left: var(--safe-left);
-    }
-
-    body > header,
-    .sticky.top-0 {
-        top: var(--safe-top) !important;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+    @media screen and (max-width: 1023px) and (prefers-reduced-motion: reduce), screen and (max-width: 767px) {
+        .restaurant-admin *, .restaurant-admin *::before, .restaurant-admin *::after {
+            scroll-behavior: auto !important;
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+        }
     }
 }
