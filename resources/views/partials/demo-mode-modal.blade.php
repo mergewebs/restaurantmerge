@@ -106,14 +106,10 @@
 
         contactForm.addEventListener('submit', async (event) => {
             event.preventDefault();
+            if (!window.RestaurantFormSubmit.handle(contactForm)) return;
             contactForm.querySelectorAll('.demo-contact-error').forEach((error) => error.remove());
             contactForm.querySelectorAll('[aria-invalid="true"]').forEach((input) => input.removeAttribute('aria-invalid'));
             contactFeedback.hidden = true;
-
-            const submit = contactForm.querySelector('[type="submit"]');
-            const originalLabel = submit.textContent;
-            submit.disabled = true;
-            submit.textContent = 'Sending…';
 
             try {
                 const response = await fetch(contactForm.action, {
@@ -143,13 +139,12 @@
                 contactFeedback.classList.remove('is-error');
                 contactFeedback.textContent = data.message || 'Thanks! We’ll contact you shortly.';
                 contactFeedback.hidden = false;
+                window.RestaurantFormSubmit.complete(contactForm, 'Request sent');
             } catch (error) {
+                window.RestaurantFormSubmit.fail(contactForm);
                 contactFeedback.classList.add('is-error');
                 contactFeedback.textContent = error.message || 'Unable to send your request right now.';
                 contactFeedback.hidden = false;
-            } finally {
-                submit.disabled = false;
-                submit.textContent = originalLabel;
             }
         });
 

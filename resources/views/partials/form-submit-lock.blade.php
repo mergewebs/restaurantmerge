@@ -1,14 +1,28 @@
 <style>
-    form[data-submitting="true"] button[type="submit"],
-    form[data-submitting="true"] input[type="submit"],
-    button[data-submit-loading="true"],
-    input[data-submit-loading="true"] {
+    [data-submit-loading="true"] {
         cursor: wait !important;
+        opacity: 0.72;
     }
 
-    button[data-submit-loading="true"],
-    input[data-submit-loading="true"] {
-        opacity: 0.72;
+    .form-submit-spinner {
+        display: inline-block !important;
+        width: 1em !important;
+        height: 1em !important;
+        flex-shrink: 0;
+        margin-inline-end: 0.4em;
+        vertical-align: -0.125em;
+        border: 2px solid currentColor !important;
+        border-right-color: transparent !important;
+        border-radius: 50% !important;
+        animation: formSubmitSpin 0.75s linear infinite !important;
+    }
+
+    @keyframes formSubmitSpin {
+        to { transform: rotate(360deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .form-submit-spinner { animation-duration: 1.5s !important; }
     }
 </style>
 
@@ -22,6 +36,17 @@
 
         const nativeSubmit = HTMLFormElement.prototype.submit;
         const nativeRequestSubmit = HTMLFormElement.prototype.requestSubmit;
+        const submissions = new WeakMap();
+        let clickedControl = null;
+
+        // Safari does not always focus tapped buttons used to submit hidden delete forms.
+        document.addEventListener('click', (event) => {
+            const control = event.target instanceof Element ? event.target.closest('button') : null;
+            clickedControl = control;
+            setTimeout(() => {
+                if (clickedControl === control) clickedControl = null;
+            }, 0);
+        }, true);
 
         const normalizeLabel = (value) => (value || '').replace(/\s+/g, ' ').trim().toLowerCase();
 
@@ -33,29 +58,12 @@
             return control.tagName === 'INPUT' ? control.value : control.textContent;
         };
 
-        const setControlLabel = (control, label) => {
-            if (!control) {
-                return;
-            }
-
-            if (control.tagName === 'INPUT') {
-                control.value = label;
-                return;
-            }
-
-            control.textContent = label;
-        };
-
         const getAssociatedSubmitControls = (form) => {
-            const controls = new Set(form.querySelectorAll('button[type="submit"], input[type="submit"]'));
-
-            if (form.id && window.CSS && typeof window.CSS.escape === 'function') {
-                document
-                    .querySelectorAll(`button[form="${window.CSS.escape(form.id)}"][type="submit"], input[form="${window.CSS.escape(form.id)}"][type="submit"]`)
-                    .forEach((control) => controls.add(control));
-            }
-
-            return [...controls];
+            // form.elements includes default-type buttons and external form="..." controls.
+            return [...form.elements].filter((control) =>
+                (control instanceof HTMLButtonElement && control.type === 'submit') ||
+                (control instanceof HTMLInputElement && ['submit', 'image'].includes(control.type))
+            );
         };
 
         const inferLoadingText = (form, control) => {
@@ -88,44 +96,94 @@
         };
 
         const unlockForm = (form) => {
-            if (!(form instanceof HTMLFormElement)) {
+            const state = submissions.get(form);
+            if (!state) {
                 return;
             }
 
+            submissions.delete(form);
             delete form.dataset.submitting;
-            form.removeAttribute('aria-busy');
+            if (state.busy === null) form.removeAttribute('aria-busy');
+            else form.setAttribute('aria-busy', state.busy);
+            state.proxy?.remove();
 
-            getAssociatedSubmitControls(form).forEach((control) => {
-                if (control.dataset.originalLabel) {
-                    setControlLabel(control, control.dataset.originalLabel);
-                }
-
-                control.disabled = false;
-                control.removeAttribute('aria-disabled');
+            state.controls.forEach(({ control, nodes, value, ariaDisabled, spinner }) => {
+                if (nodes) control.replaceChildren(...nodes);
+                else control.value = value;
+                spinner.remove();
+                control.disabled = false; // Pre-disabled controls were never changed.
+                if (ariaDisabled === null) control.removeAttribute('aria-disabled');
+                else control.setAttribute('aria-disabled', ariaDisabled);
                 delete control.dataset.submitLoading;
             });
         };
 
         const lockForm = (form, submitter = null) => {
-            if (!(form instanceof HTMLFormElement) || form.dataset.submitting === 'true') {
+            if (!(form instanceof HTMLFormElement) || submissions.has(form)) {
                 return false;
             }
 
+            const state = { controls: [], busy: form.getAttribute('aria-busy'), handled: false, proxy: null };
+            submissions.set(form, state);
             form.dataset.submitting = 'true';
             form.setAttribute('aria-busy', 'true');
 
-            getAssociatedSubmitControls(form).forEach((control) => {
-                if (!control.dataset.originalLabel) {
-                    control.dataset.originalLabel = getControlLabel(control);
-                }
+            // Disabling a named submitter must not drop its value from the request.
+            if (submitter?.name && !submitter.disabled && submitter.type === 'submit') {
+                state.proxy = document.createElement('input');
+                state.proxy.type = 'hidden';
+                state.proxy.name = submitter.name;
+                state.proxy.value = submitter.value;
+                form.append(state.proxy);
+            }
 
-                setControlLabel(control, inferLoadingText(form, control === submitter ? submitter : control));
+            const controls = new Set(getAssociatedSubmitControls(form));
+            if (submitter) controls.add(submitter);
+            controls.forEach((control) => {
+                if (control.disabled) return;
+                const spinner = document.createElement('span');
+                spinner.className = 'form-submit-spinner';
+                spinner.setAttribute('aria-hidden', 'true');
+                const label = inferLoadingText(form, control);
+                const nodes = control instanceof HTMLButtonElement ? [...control.childNodes] : null;
+                state.controls.push({ control, nodes, value: control.value, ariaDisabled: control.getAttribute('aria-disabled'), spinner });
+                if (nodes) {
+                    const text = document.createElement('span');
+                    text.textContent = label;
+                    control.replaceChildren(spinner, text);
+                } else {
+                    control.value = label;
+                    control.after(spinner);
+                }
                 control.disabled = true;
                 control.dataset.submitLoading = 'true';
                 control.setAttribute('aria-disabled', 'true');
             });
 
             return true;
+        };
+
+        // AJAX handlers claim the captured submission, then report failure or success.
+        window.RestaurantFormSubmit = {
+            handle(form) {
+                const state = submissions.get(form);
+                if (!state || state.handled) return false;
+                state.handled = true;
+                return true;
+            },
+            fail: unlockForm,
+            complete(form, label = 'Submitted') {
+                const state = submissions.get(form);
+                if (!state) return;
+                form.removeAttribute('aria-busy');
+                state.controls.forEach(({ control, spinner }) => {
+                    spinner.remove();
+                    if (control instanceof HTMLButtonElement) control.textContent = label;
+                    else control.value = label;
+                    delete control.dataset.submitLoading;
+                });
+                // Keep the form and its buttons locked after a successful request.
+            },
         };
 
         document.addEventListener('submit', (event) => {
@@ -135,30 +193,41 @@
                 return;
             }
 
-            if (form.dataset.submitting === 'true') {
+            if (submissions.has(form)) {
                 event.preventDefault();
+                event.stopImmediatePropagation();
                 return;
             }
 
-            lockForm(form, event.submitter instanceof HTMLElement ? event.submitter : null);
-        });
+            lockForm(form, event.submitter);
+            const state = submissions.get(form);
+            // A task (not a microtask) runs after native event propagation finishes.
+            setTimeout(() => {
+                // Cancelled confirmation, demo restrictions, or client validation: no request ran.
+                if (event.defaultPrevented && !state.handled && submissions.get(form) === state) unlockForm(form);
+            }, 0);
+        }, true);
 
         HTMLFormElement.prototype.submit = function submitWithLock() {
-            if (this.dataset.submitting === 'true') {
-                return;
+            const active = clickedControl || document.activeElement;
+            const trigger = active instanceof HTMLButtonElement && active.type === 'button' ? active : null;
+            if (!lockForm(this, trigger)) return;
+            try {
+                nativeSubmit.call(this);
+            } catch (error) {
+                unlockForm(this);
+                throw error;
             }
-
-            lockForm(this);
-            nativeSubmit.call(this);
         };
 
         if (typeof nativeRequestSubmit === 'function') {
             HTMLFormElement.prototype.requestSubmit = function requestSubmitWithLock(submitter) {
-                if (this.dataset.submitting === 'true') {
+                if (submissions.has(this)) {
                     return;
                 }
 
-                nativeRequestSubmit.call(this, submitter);
+                if (submitter === undefined) nativeRequestSubmit.call(this);
+                else nativeRequestSubmit.call(this, submitter);
             };
         }
 
@@ -166,6 +235,9 @@
             document.querySelectorAll('form[data-submitting="true"]').forEach((form) => unlockForm(form));
         };
 
-        window.addEventListener('pageshow', resetSubmittingForms);
+        // Restoring a page from history begins a new interaction, not a retry in flight.
+        window.addEventListener('pageshow', (event) => {
+            if (event.persisted) resetSubmittingForms();
+        });
     })();
 </script>

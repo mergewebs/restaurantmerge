@@ -812,6 +812,7 @@
                         const nextRegion = documentFragment.querySelector(`[data-async-region="${regionName}"]`);
 
                         if (!nextRegion) {
+                            if (!response.ok) throw new Error('Section request failed');
                             window.location.assign(response.url || request.url);
                             return;
                         }
@@ -821,6 +822,7 @@
                         }
 
                         const replacedRegion = replaceRegion(region, nextRegion);
+                        if (!response.ok && request.form) window.RestaurantFormSubmit.fail(request.form);
                         window.history.replaceState({}, document.title, response.url || request.url);
 
                         window.RestaurantNotifications?.consumeFeedback(replacedRegion);
@@ -830,6 +832,7 @@
                             autofocusTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
                     } catch (error) {
+                        if (request.form) window.RestaurantFormSubmit.fail(request.form);
                         if (error.name !== 'AbortError') {
                             showToast('We could not update this section. Please try again.', 'error');
                         }
@@ -855,10 +858,12 @@
                             }
 
                             event.preventDefault();
+                            if (!window.RestaurantFormSubmit.handle(form)) return;
 
                             const method = (form.getAttribute('method') || 'GET').toUpperCase();
                             if (method === 'GET') {
                                 submitRegionRequest(region, {
+                                    form,
                                     method: 'GET',
                                     url: buildGetUrl(form),
                                 });
@@ -866,6 +871,7 @@
                             }
 
                             submitRegionRequest(region, {
+                                form,
                                 method,
                                 url: new URL(form.getAttribute('action') || window.location.href, window.location.href),
                                 body: new FormData(form),
