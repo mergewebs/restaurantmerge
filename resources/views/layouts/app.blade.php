@@ -398,6 +398,9 @@
                     </div>
                 </section>
                 {{ $slot }}
+                <footer class="mt-8 border-t border-[#e7dbcc] pt-4 text-center">
+                    @include('partials.developer-credit')
+                </footer>
             </main>
 
             @php
