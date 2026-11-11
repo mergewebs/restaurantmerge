@@ -172,6 +172,12 @@
                 return true;
             },
             fail: unlockForm,
+            releaseFilter(form) {
+                // Read-only filters remain reusable; mutation forms stay locked on success.
+                if (form instanceof HTMLFormElement && form.method.toUpperCase() === 'GET' && form.hasAttribute('data-auto-submit-form')) {
+                    unlockForm(form);
+                }
+            },
             complete(form, label = 'Submitted') {
                 const state = submissions.get(form);
                 if (!state) return;

@@ -189,7 +189,7 @@
 
         {{-- ─── Filter bar ─────────────────────────────── --}}
         <div class="glass rounded-2xl border border-white/5 p-1.5">
-            <form method="GET" action="{{ route('finance.stats') }}" id="filterForm">
+            <form method="GET" action="{{ route('finance.stats') }}" id="filterForm" data-auto-submit-form>
 
                 {{-- Mode tabs --}}
                 <div class="flex gap-1 mb-1.5">
@@ -204,30 +204,26 @@
                 </div>
 
                 <input type="hidden" name="mode" id="modeInput" value="{{ $mode }}">
-                <input type="hidden" name="date_from" id="dateFromInput" value="{{ $dateFrom }}">
-                <input type="hidden" name="date_to"   id="dateToInput"   value="{{ $dateTo }}">
 
                 {{-- Custom date range --}}
-                <div id="customRange" class="{{ $mode === 'custom' ? 'open' : '' }}">
+                <div id="customRange" data-filter-complete-range="custom" class="{{ $mode === 'custom' ? 'open' : '' }}">
                     <div class="grid grid-cols-2 gap-2 px-1 pb-1.5">
                         <div>
                             <label>From</label>
-                            <input type="date" id="pickerFrom"
-                                   value="{{ $dateFrom ?? $start->toDateString() }}"
-                                   onchange="document.getElementById('dateFromInput').value=this.value">
+                            <input type="date" id="pickerFrom" name="date_from"
+                                   value="{{ $dateFrom ?? $start->toDateString() }}">
                         </div>
                         <div>
                             <label>To</label>
-                            <input type="date" id="pickerTo"
-                                   value="{{ $dateTo ?? $end->toDateString() }}"
-                                   onchange="document.getElementById('dateToInput').value=this.value">
+                            <input type="date" id="pickerTo" name="date_to"
+                                   value="{{ $dateTo ?? $end->toDateString() }}">
                         </div>
                     </div>
-                    <button type="submit"
+                    <noscript><button type="submit"
                             class="w-full mb-1.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider"
                             style="background:rgba(255,92,0,0.15);color:#FF5C00;border:1px solid rgba(255,92,0,0.3);">
                         Apply Range
-                    </button>
+                    </button></noscript>
                 </div>
 
             </form>
@@ -552,7 +548,7 @@
             } else {
                 range.classList.remove('open');
                 // Submit immediately for non-custom modes
-                document.getElementById('filterForm').submit();
+                window.RestaurantFilters.submit(document.getElementById('filterForm'));
             }
         }
     </script>

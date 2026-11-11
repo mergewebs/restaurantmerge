@@ -26,7 +26,7 @@
             };
             this.showEditModal = true;
         }
-    }" class="space-y-6">
+    }" class="space-y-6" data-async-region="finance-history">
         {{-- ─── Header Section ─────────────────────────── --}}
         <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-6">
             <div class="flex items-center gap-3">
@@ -64,7 +64,7 @@
 
         {{-- ─── Search & Filters ────────────────────────── --}}
         <div class="glass p-4 rounded-3xl border border-white/5">
-            <form action="{{ route('finance.history') }}" method="GET" class="space-y-4">
+            <form action="{{ route('finance.history') }}" method="GET" class="space-y-4" id="finance-history-filters" data-auto-submit-form>
                 <div class="relative">
                     <input type="text" name="query" value="{{ $query }}" placeholder="Search description or amount..." 
                            class="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-xs font-bold text-white placeholder-white/20 focus:border-accent outline-none transition-all">
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <button type="submit" class="flex-1 btn-accent py-3 text-xs">Apply Filters</button>
+                    <noscript><button type="submit" class="flex-1 btn-accent py-3 text-xs">Apply Filters</button></noscript>
                     @if($query || $dateFrom || $dateTo)
                         <a href="{{ route('finance.history') }}" class="px-4 bg-white/5 border border-white/10 text-white rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all text-xs font-bold">Clear</a>
                     @endif
@@ -435,4 +435,3 @@
         }
     </style>
 </x-app-layout>
-

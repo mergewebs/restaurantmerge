@@ -16,7 +16,7 @@
         @media(max-width:639px){.orders-page{margin-inline:-.25rem}.orders-hero h1{font-size:1.5rem}.orders-hero .hero-copy{display:none}.orders-summary span:last-child{display:none}.orders-create{padding:.65rem}.orders-create .create-label{display:none}.order-modal-wrap{align-items:flex-end!important;padding:0!important}.order-modal-card{max-height:92dvh;border-radius:1.35rem 1.35rem 0 0!important;padding:1rem!important}.order-ticket-bottom>div:nth-child(2){text-align:center}}
     </style>
 
-    <div class="orders-page space-y-3" x-data="{ newOrder: {{ $errors->any() ? 'true' : 'false' }}, filters: {{ (request('search') || request('type')) ? 'true' : 'false' }}, type: @js(old('order_type', 'dine_in')) }">
+    <div class="orders-page space-y-3" data-async-region="orders-index" x-data="{ newOrder: {{ $errors->any() ? 'true' : 'false' }}, filters: {{ (request('search') || request('type')) ? 'true' : 'false' }}, type: @js(old('order_type', 'dine_in')) }">
         @if(session('success'))<div class="hidden" data-page-feedback data-feedback-level="success">{{ session('success') }}</div>@endif
         @if(session('error'))<div class="hidden" data-page-feedback data-feedback-level="error">{{ session('error') }}</div>@endif
 
@@ -36,11 +36,11 @@
         </nav>
 
         <div class="order-tools"><span class="order-tools-label">{{ $orders->total() }} {{ \Illuminate\Support\Str::plural('order', $orders->total()) }}</span><button type="button" @click="filters = !filters" class="order-filter-toggle"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-width="2" d="M4 6h16M7 12h10m-7 6h4"/></svg> Search & filters</button></div>
-        <form method="GET" x-show="filters" x-cloak class="order-search">
+        <form method="GET" id="orders-filters" data-auto-submit-form x-show="filters" x-cloak class="order-search">
             @if(request('status'))<input type="hidden" name="status" value="{{ request('status') }}">@endif
             <input name="search" value="{{ request('search') }}" placeholder="Order, guest, phone, or table">
             <select name="type"><option value="">All order types</option>@foreach(\App\Models\Order::ORDER_TYPES as $type)<option value="{{ $type }}" @selected(request('type') === $type)>{{ ucfirst(str_replace('_', ' ', $type)) }}</option>@endforeach</select>
-            <button class="min-h-[42px] rounded-xl bg-[#30251f] px-4 text-xs font-black text-white">Apply</button>
+            <noscript><button class="min-h-[42px] rounded-xl bg-[#30251f] px-4 text-xs font-black text-white">Apply</button></noscript>
         </form>
 
         <div class="order-board overflow-hidden">

@@ -32,9 +32,10 @@ $views = dirname(__DIR__, 2).'/resources/views/';
 <?php
 readfile($views.'partials/form-submit-lock.blade.php');
 readfile($views.'partials/public-contact-forms.blade.php');
+readfile($views.'partials/auto-filters.blade.php');
 preg_match_all('/<script>(.*?)<\/script>/s', file_get_contents($views.'layouts/app.blade.php'), $scripts);
 foreach ($scripts[0] as $script) {
-    if (str_contains($script, 'const autoSubmitTimers')) echo $script;
+    if (str_contains($script, 'const initializeAsyncRegions')) echo $script;
 }
 $demo = file_get_contents($views.'partials/demo-mode-modal.blade.php');
 preg_match('/<script>(.*?)<\/script>/s', $demo, $demoScript);
@@ -271,5 +272,6 @@ $demoScript = preg_replace('/@if\(session\(\'demo_action_blocked\'\)\).*?@endif/
         return { passed: results.filter((result) => result.passed).length, total: results.length, results };
     };
 </script>
+<script src="auto-filters.js"></script>
 </body>
 </html>

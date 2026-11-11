@@ -253,6 +253,10 @@
                 pointer-events: none;
             }
 
+            [data-async-region][data-async-method="GET"].is-async-loading form[data-auto-submit-form] {
+                pointer-events: auto;
+            }
+
             [data-async-region].is-async-loading > * {
                 opacity: 0.5;
                 transition: opacity 0.2s ease;
@@ -559,116 +563,9 @@
                 </div>
             </nav>
         </div>
+        @include('partials.auto-filters')
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const autoSubmitTimers = new WeakMap();
-
-                const getAutoSubmitTimerMap = (form) => {
-                    if (!autoSubmitTimers.has(form)) {
-                        autoSubmitTimers.set(form, new Map());
-                    }
-
-                    return autoSubmitTimers.get(form);
-                };
-
-                const submitAutoSubmitForm = (form) => {
-                    if (!(form instanceof HTMLFormElement)) {
-                        return;
-                    }
-
-                    if (typeof form.requestSubmit === 'function') {
-                        form.requestSubmit();
-                        return;
-                    }
-
-                    form.submit();
-                };
-
-                const toggleAutoSubmitPanels = (field) => {
-                    const targetName = field.dataset.rangeToggleTarget;
-                    if (!targetName) {
-                        return;
-                    }
-
-                    const targetValue = field.dataset.rangeToggleValue || 'custom';
-                    document.querySelectorAll(`[data-range-toggle-panel="${targetName}"]`).forEach((panel) => {
-                        panel.classList.toggle('hidden', field.value !== targetValue);
-                    });
-                };
-
-                const shouldDelayAutoSubmit = (field) => {
-                    const rangePanel = field.closest('[data-range-toggle-panel]');
-                    if (!rangePanel) {
-                        return false;
-                    }
-
-                    const rangeFields = Array.from(rangePanel.querySelectorAll('input[type="date"]'));
-                    return rangeFields.length > 1 && rangeFields.some((rangeField) => !rangeField.value);
-                };
-
-                const initializeAutoSubmitForms = (root = document) => {
-                    root.querySelectorAll('form[data-auto-submit-form]').forEach((form) => {
-                        form.querySelectorAll('[data-range-toggle-target]').forEach((field) => {
-                            if (field instanceof HTMLElement) {
-                                toggleAutoSubmitPanels(field);
-                            }
-                        });
-                    });
-                };
-
-                initializeAutoSubmitForms();
-
-                document.addEventListener('input', (event) => {
-                    const field = event.target;
-                    if (!(field instanceof HTMLElement) || !field.hasAttribute('data-auto-submit-search')) {
-                        return;
-                    }
-
-                    const form = field.closest('form[data-auto-submit-form]');
-                    if (!(form instanceof HTMLFormElement)) {
-                        return;
-                    }
-
-                    const defaultDelay = Number(form.dataset.autoSubmitDelay || 650);
-                    const fieldDelay = Number(field.dataset.autoSubmitDelay || defaultDelay);
-                    const timers = getAutoSubmitTimerMap(form);
-                    const key = field.getAttribute('name') || field.id || 'search';
-
-                    window.clearTimeout(timers.get(key));
-                    timers.set(key, window.setTimeout(() => submitAutoSubmitForm(form), fieldDelay));
-                });
-
-                document.addEventListener('change', (event) => {
-                    const field = event.target;
-                    if (!(field instanceof HTMLElement)) {
-                        return;
-                    }
-
-                    const form = field.closest('form[data-auto-submit-form]');
-                    if (!(form instanceof HTMLFormElement) || field.matches('input[type="hidden"]') || field.disabled) {
-                        return;
-                    }
-
-                    const skipValue = field.dataset.autoSubmitSkipOn;
-
-                    if (field.hasAttribute('data-range-toggle-target')) {
-                        toggleAutoSubmitPanels(field);
-                    }
-
-                    if (skipValue && 'value' in field && field.value === skipValue) {
-                        return;
-                    }
-
-                    if (field.hasAttribute('data-auto-submit-search')) {
-                        return;
-                    }
-
-                    if (shouldDelayAutoSubmit(field)) {
-                        return;
-                    }
-
-                    submitAutoSubmitForm(form);
-                });
                 const showToast = (message, level = 'info') => {
                     window.RestaurantNotifications?.show(message, level);
                 };
@@ -694,7 +591,7 @@
                         return false;
                     }
 
-                    return isSameOriginUrl(href);
+                    return isSameOriginUrl(href) && new URL(href, window.location.href).pathname === window.location.pathname;
                 };
 
                 const shouldInterceptForm = (form, region) => {
@@ -754,9 +651,45 @@
                 };
 
                 const replaceRegion = (currentRegion, nextRegion) => {
+                    const focused = document.activeElement;
+                    const focusedForm = focused?.form;
+                    const keepFocus = focusedForm?.matches('form[data-auto-submit-form]') && currentRegion.contains(focused);
+                    const focus = keepFocus ? {
+                        formId: focusedForm.id,
+                        name: focused.name,
+                        value: focused.value,
+                        start: focused.selectionStart,
+                        end: focused.selectionEnd,
+                    } : null;
+                    const form = focus ? [...nextRegion.querySelectorAll('form[data-auto-submit-form]')].find((item) => item.id === focus.formId) : null;
+                    const field = form?.elements.namedItem(focus.name);
+                    if (field instanceof HTMLInputElement && ['text', 'search'].includes(field.type)) {
+                        // Server-side trimming must not eat a slow typist's trailing space.
+                        field.value = focus.value;
+                        nextRegion.querySelectorAll('form[data-auto-submit-form] input[type="hidden"]').forEach((hidden) => {
+                            if (hidden.name === field.name) hidden.value = focus.value;
+                        });
+                    }
+
                     currentRegion.replaceWith(nextRegion);
                     reinitializeRegion(nextRegion);
+                    window.RestaurantFilters.initialize(nextRegion);
                     initializeAsyncRegions(nextRegion.parentElement || document);
+
+                    if (focus) {
+                        if (field instanceof HTMLElement) {
+                            // Keep a mobile search panel open even when its search was cleared.
+                            if (window.Alpine && form.getAttribute('x-show') === 'filters') window.Alpine.$data(form).filters = true;
+                            const restore = () => {
+                                field.focus({ preventScroll: true });
+                                if (focus.start !== null && typeof field.setSelectionRange === 'function') {
+                                    field.setSelectionRange(focus.start, focus.end);
+                                }
+                            };
+                            if (window.Alpine) window.Alpine.nextTick(restore);
+                            else restore();
+                        }
+                    }
 
                     return nextRegion;
                 };
@@ -786,12 +719,21 @@
                         return;
                     }
 
-                    if (region._asyncAbortController) {
-                        region._asyncAbortController.abort();
+                    const previous = region._asyncRequest;
+                    if (previous && previous.method !== 'GET') {
+                        // Changing a filter must never abort an in-flight save/payment.
+                        if (request.form) window.RestaurantFormSubmit.fail(request.form);
+                        return;
+                    }
+                    if (previous) {
+                        previous.controller.abort();
+                        window.RestaurantFormSubmit.releaseFilter(previous.form);
                     }
 
                     const controller = new AbortController();
-                    region._asyncAbortController = controller;
+                    const activeRequest = { controller, method: request.method, form: request.form };
+                    region._asyncRequest = activeRequest;
+                    region.dataset.asyncMethod = request.method;
 
                     ensureLoadingBadge(region);
                     region.classList.add('is-async-loading');
@@ -808,6 +750,8 @@
                         });
 
                         const html = await response.text();
+                        // Aborted/late responses must not overwrite newer filters or results.
+                        if (controller.signal.aborted || region._asyncRequest !== activeRequest || !region.isConnected) return;
                         const documentFragment = parseHtml(html);
                         const nextRegion = documentFragment.querySelector(`[data-async-region="${regionName}"]`);
 
@@ -832,12 +776,18 @@
                             autofocusTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }
                     } catch (error) {
-                        if (request.form) window.RestaurantFormSubmit.fail(request.form);
-                        if (error.name !== 'AbortError') {
-                            showToast('We could not update this section. Please try again.', 'error');
+                        if (region._asyncRequest === activeRequest) {
+                            if (request.form) window.RestaurantFormSubmit.fail(request.form);
+                            if (error.name !== 'AbortError') {
+                                showToast('We could not update this section. Please try again.', 'error');
+                            }
                         }
                     } finally {
-                        region.classList.remove('is-async-loading');
+                        if (region._asyncRequest === activeRequest) {
+                            region._asyncRequest = null;
+                            delete region.dataset.asyncMethod;
+                            region.classList.remove('is-async-loading');
+                        }
                     }
                 };
 
