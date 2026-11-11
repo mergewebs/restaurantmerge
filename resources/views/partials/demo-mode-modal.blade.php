@@ -28,9 +28,6 @@
     .demo-contact-error { color: #f3a18e; font-size: .67rem; font-weight: 700; }
     .demo-contact-submit { grid-column: 1 / -1; min-height: 3.1rem; border: 0; border-radius: .85rem; background: #d5a744; color: #17110c; font-weight: 850; cursor: pointer; }
     .demo-contact-submit:disabled { cursor: wait; opacity: .7; }
-    .demo-contact-feedback { margin-top: 1.25rem; border: 1px solid rgba(125,196,139,.28); border-radius: .9rem; padding: 1rem; background: rgba(72,139,84,.13); color: #dff5e3; font-size: .82rem; line-height: 1.5; }
-    .demo-contact-feedback.is-error { border-color: rgba(233,139,118,.35); background: rgba(166,67,48,.14); color: #ffd8cf; }
-    .demo-contact-feedback[hidden] { display: none; }
     #demo-mode-modal .demo-modal-eyebrow { color: #f1c866 !important; }
     #demo-mode-modal .demo-modal-title { color: #fffaf1 !important; font-family: 'Cormorant Garamond',Georgia,serif !important; opacity: 1 !important; }
     #demo-mode-modal .demo-modal-copy { color: #eee3d6 !important; }
@@ -62,7 +59,6 @@
                 <div class="demo-contact-field"><label for="admin_demo_telephone">Telephone</label><input id="admin_demo_telephone" name="telephone" type="tel" maxlength="30" autocomplete="tel" required placeholder="+34 600 000 000"></div>
                 <button class="demo-contact-submit" type="submit">Request my demo</button>
             </form>
-            <div class="demo-contact-feedback" role="status" aria-live="polite" hidden></div>
         </div>
     </section>
 </div>
@@ -71,7 +67,6 @@
     (() => {
         const modal = document.getElementById('demo-mode-modal');
         const contactForm = modal.querySelector('.demo-contact-form');
-        const contactFeedback = modal.querySelector('.demo-contact-feedback');
         const logoutUrl = @json(route('logout'));
         const contactUrl = @json(route('contact-submissions.store'));
         const unsafeMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
@@ -109,7 +104,6 @@
             if (!window.RestaurantFormSubmit.handle(contactForm)) return;
             contactForm.querySelectorAll('.demo-contact-error').forEach((error) => error.remove());
             contactForm.querySelectorAll('[aria-invalid="true"]').forEach((input) => input.removeAttribute('aria-invalid'));
-            contactFeedback.hidden = true;
 
             try {
                 const response = await fetch(contactForm.action, {
@@ -136,15 +130,11 @@
                 }
 
                 contactForm.reset();
-                contactFeedback.classList.remove('is-error');
-                contactFeedback.textContent = data.message || 'Thanks! We’ll contact you shortly.';
-                contactFeedback.hidden = false;
+                window.RestaurantNotifications.show(data.message || 'Thanks! We’ll contact you shortly.', 'success', { title: 'Request sent' });
                 window.RestaurantFormSubmit.complete(contactForm, 'Request sent');
             } catch (error) {
                 window.RestaurantFormSubmit.fail(contactForm);
-                contactFeedback.classList.add('is-error');
-                contactFeedback.textContent = error.message || 'Unable to send your request right now.';
-                contactFeedback.hidden = false;
+                window.RestaurantNotifications.show(error.message || 'Unable to send your request right now.', 'error');
             }
         });
 

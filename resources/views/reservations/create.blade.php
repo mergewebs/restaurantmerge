@@ -11,21 +11,6 @@
             </a>
         </div>
         
-        @if(session('error') || $errors->any())
-            <div class="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-sm font-bold uppercase tracking-wider space-y-2">
-                @if(session('error'))
-                    <p>{{ session('error') }}</p>
-                @endif
-                @if($errors->any())
-                    <ul class="list-disc list-inside">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-        @endif
-
         <form action="{{ route('reservations.store') }}" method="POST" class="space-y-4" 
             x-data="{ 
                 date: '{{ old('reservation_time') ? substr(old('reservation_time'), 0, 10) : date('Y-m-d') }}',

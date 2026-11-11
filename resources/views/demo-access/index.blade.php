@@ -5,10 +5,6 @@
     @endphp
 
     <div class="space-y-5" data-async-region="demo-access-index">
-        @if(session('success'))
-            <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">{{ session('success') }}</div>
-        @endif
-
         <section class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Demo access summary">
             @foreach([
                 ['label' => 'Unique IP addresses', 'value' => $summary['unique'], 'note' => 'All recorded demo visitors'],

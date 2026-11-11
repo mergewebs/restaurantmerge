@@ -31,13 +31,6 @@
             </div>
         </div>
 
-        {{-- Success/Error Messages --}}
-        @if(session('success'))
-            <div class="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl text-xs font-bold uppercase tracking-wider">
-                {{ session('success') }}
-            </div>
-        @endif
-
         {{-- ─── Categories List ────────────────────────── --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             {{-- Income Categories --}}
@@ -168,5 +161,4 @@
         </div>
     </div>
 </x-app-layout>
-
 

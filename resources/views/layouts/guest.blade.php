@@ -291,6 +291,7 @@
         @include('partials.mobile-form-styles')
     </head>
     <body class="font-sans antialiased text-gray-100">
+        @include('partials.notification-feedback')
         <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
             <div class="guest-brand-lockup mb-6 w-full max-w-sm">
                 <x-application-logo class="w-28 h-auto rounded-2xl" />

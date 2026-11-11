@@ -21,9 +21,6 @@
         </label>
         <div class="flex flex-col-reverse gap-3 pt-1 sm:flex-row sm:items-center">
             <x-primary-button class="profile-save sm:w-auto sm:px-7">{{ __('Update passcode') }}</x-primary-button>
-            @if (session('status') === 'passcode-updated')
-                <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)" class="flex items-center gap-1.5 text-sm font-semibold text-emerald-700" role="status"><svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>{{ __('Passcode updated') }}</p>
-            @endif
         </div>
     </form>
 </div>

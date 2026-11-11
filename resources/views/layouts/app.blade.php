@@ -324,6 +324,7 @@
         @include('partials.mobile-form-styles')
     </head>
     <body class="restaurant-admin font-sans antialiased relative">
+        @include('partials.notification-feedback')
         <div class="bg-glow-container">
             <div class="bg-glow-blob bg-glow-1"></div>
             <div class="bg-glow-blob bg-glow-2"></div>
@@ -769,6 +770,7 @@
                         if (!response.ok && request.form) window.RestaurantFormSubmit.fail(request.form);
                         window.history.replaceState({}, document.title, response.url || request.url);
 
+                        window.RestaurantNotifications?.consumeFeedback(documentFragment);
                         window.RestaurantNotifications?.consumeFeedback(replacedRegion);
 
                         const autofocusTarget = replacedRegion.querySelector('[data-async-autofocus], .text-red-500, .text-red-600, .text-red-700, [aria-invalid="true"]');

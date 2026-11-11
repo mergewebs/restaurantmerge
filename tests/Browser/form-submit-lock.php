@@ -31,6 +31,7 @@ $views = dirname(__DIR__, 2).'/resources/views/';
 </script>
 <?php
 readfile($views.'partials/form-submit-lock.blade.php');
+readfile($views.'partials/toast-notifications.blade.php');
 readfile($views.'partials/public-contact-forms.blade.php');
 readfile($views.'partials/auto-filters.blade.php');
 preg_match_all('/<script>(.*?)<\/script>/s', file_get_contents($views.'layouts/app.blade.php'), $scripts);

@@ -55,13 +55,6 @@
             </div>
         </div>
 
-        {{-- Success/Error Messages --}}
-        @if(session('success'))
-            <div class="mb-4 p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-2xl text-xs font-bold uppercase tracking-wider">
-                {{ session('success') }}
-            </div>
-        @endif
-
         {{-- ─── Search & Filters ────────────────────────── --}}
         <div class="glass p-4 rounded-3xl border border-white/5">
             <form action="{{ route('finance.history') }}" method="GET" class="space-y-4" id="finance-history-filters" data-auto-submit-form>
@@ -168,22 +161,6 @@
                     </button>
                 </div>
 
-                @if (session('success') && (session('keep_finance_modal') || request()->boolean('finance_modal')))
-                    <div class="mb-4 bg-emerald-500/20 border border-emerald-500/50 p-3 rounded-xl text-xs text-emerald-200 font-bold uppercase tracking-wider">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if ($errors->any() && old('amount') && !old('finance_id'))
-                    <div class="mb-4 bg-red-500/20 border border-red-500/50 p-3 rounded-xl text-xs text-red-200">
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
                 <form action="{{ route('finance.store') }}" method="POST" class="space-y-4">
                     @csrf
                     <div>
@@ -263,16 +240,6 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-
-                @if ($errors->any() && old('finance_id'))
-                    <div class="mb-4 bg-red-500/20 border border-red-500/50 p-3 rounded-xl text-xs text-red-200">
-                        <ul class="list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
 
                 <form :action="@js(route('finance.update', ['id' => '__FINANCE__'])).replace('__FINANCE__', editingFinance.id)" method="POST" class="space-y-4">
                     @csrf

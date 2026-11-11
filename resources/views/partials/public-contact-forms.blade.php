@@ -1,12 +1,8 @@
 <script>
     (() => {
-        const notice = document.getElementById('contact-notification');
-        if (!notice) return;
-
         const modal = document.getElementById('demo-request');
         const panel = modal?.querySelector('.demo-request-panel');
         let returnFocus = null;
-        let noticeTimer;
 
         const close = () => {
             modal?.classList.remove('is-open');
@@ -16,16 +12,10 @@
         };
 
         const showNotice = (error, text, demo) => {
-            clearTimeout(noticeTimer);
-            notice.classList.toggle('is-error', error);
-            notice.querySelector('.contact-notification-icon').textContent = error ? '!' : '✓';
-            notice.querySelector('strong').textContent = error ? 'Could not send enquiry' : (demo ? 'Demo requested' : 'Enquiry sent');
-            notice.querySelector('p').textContent = text;
-            notice.classList.add('is-visible');
-            noticeTimer = setTimeout(() => notice.classList.remove('is-visible'), 6000);
+            window.RestaurantNotifications.show(text, error ? 'error' : 'success', {
+                title: error ? 'Could not send enquiry' : (demo ? 'Demo requested' : 'Enquiry sent'),
+            });
         };
-
-        notice.querySelector('button').addEventListener('click', () => notice.classList.remove('is-visible'));
 
         document.querySelectorAll('a[href="#demo-request"]').forEach((link) => {
             link.addEventListener('click', (event) => {

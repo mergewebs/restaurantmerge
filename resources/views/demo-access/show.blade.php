@@ -5,7 +5,6 @@
             <form method="POST" action="{{ route('demo-access.block', $ipAddress) }}">@csrf @method('PATCH')<button class="rounded-xl px-5 py-2.5 text-xs font-black uppercase tracking-wider {{ $ipAddress->is_blocked ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800' }}" onclick="return confirm('{{ $ipAddress->is_blocked ? 'Unblock' : 'Block' }} this IP address?')">{{ $ipAddress->is_blocked ? 'Unblock IP' : 'Block IP' }}</button></form>
         </div>
 
-        @if(session('success'))<div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">{{ session('success') }}</div>@endif
 
         <section class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             @foreach([

@@ -580,21 +580,6 @@
                         </button>
                     </div>
 
-                    @if (($errors->any() || session('error')) && old('customer_name') && !old('reservation_id'))
-                        <div class="mb-4 bg-red-500/20 border border-red-500/50 p-3 rounded-xl text-xs text-red-200">
-                            @if(session('error'))
-                                <p class="mb-2 font-bold">{{ session('error') }}</p>
-                            @endif
-                            @if($errors->any())
-                                <ul class="list-disc list-inside">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
-                    @endif
-
                     <form action="{{ route('reservations.store') }}" method="POST" class="space-y-3 sm:space-y-4 text-left"
                         x-data="{ 
                             date: '{{ old('reservation_time') ? substr(old('reservation_time'), 0, 10) : date('Y-m-d') }}',
@@ -771,21 +756,6 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                         </button>
                     </div>
-
-                    @if (($errors->any() || session('error')) && old('reservation_id'))
-                        <div class="mb-4 bg-red-500/20 border border-red-500/50 p-3 rounded-xl text-xs text-red-200">
-                            @if(session('error'))
-                                <p class="mb-2 font-bold">{{ session('error') }}</p>
-                            @endif
-                            @if($errors->any())
-                                <ul class="list-disc list-inside">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
-                    @endif
 
                     <form :action="@js(route('reservations.update', ['reservation' => '__RESERVATION__'])).replace('__RESERVATION__', editingReservation.id)" method="POST" class="space-y-3 sm:space-y-4 text-left"
                         x-data="{ 
@@ -1155,27 +1125,6 @@
                         </button>
                     </div>
 
-                    @if (session('success') && (session('keep_finance_modal') || request()->boolean('finance_modal')))
-                        <div class="mb-4 bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-800 font-bold uppercase tracking-wider">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    @if (($errors->any() || session('error')) && old('amount') && !old('finance_id'))
-                        <div class="mb-4 bg-red-50 border border-red-200 p-3 rounded-xl text-xs text-red-800">
-                            @if(session('error'))
-                                <p class="mb-2 font-bold">{{ session('error') }}</p>
-                            @endif
-                            @if($errors->any())
-                                <ul class="list-disc list-inside">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
-                    @endif
-
                     <form action="{{ route('finance.store') }}" method="POST" class="finance-add-form space-y-3 sm:space-y-4 text-left">
                         @csrf
                         
@@ -1268,21 +1217,6 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-
-                @if (($errors->any() || session('error')) && old('finance_id'))
-                    <div class="mb-4 bg-red-50 border border-red-200 p-3 rounded-xl text-xs text-red-800">
-                        @if(session('error'))
-                            <p class="mb-2 font-bold">{{ session('error') }}</p>
-                        @endif
-                        @if($errors->any())
-                            <ul class="list-disc list-inside">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                @endif
 
                 <form :action="@js(route('finance.update', ['id' => '__FINANCE__'])).replace('__FINANCE__', editingFinance.id)" method="POST" class="space-y-3 sm:space-y-4">
                     @csrf
