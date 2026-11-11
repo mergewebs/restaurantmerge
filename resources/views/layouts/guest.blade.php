@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         @include('partials.seo', ['seo' => \App\Support\Seo::noIndex(['title' => 'Admin Login | '.config('app.name')])])
@@ -288,6 +288,7 @@
                 box-shadow: 0 0 0 4px rgba(184, 79, 50, 0.11) !important;
             }
         </style>
+        @include('partials.mobile-form-styles')
     </head>
     <body class="font-sans antialiased text-gray-100">
         <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
